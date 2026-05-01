@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lendline — Mortgage Loan Servicing Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:    #f5f0e8;
+  --cream2:   #ede7d9;
+  --cream3:   #e4ddd0;
+  --ink:      #1a1610;
+  --ink2:     #2e2820;
+  --ink3:     #47403a;
+  --dim:      #7a7068;
+  --muted:    #9e958a;
+  --border:   rgba(26,22,16,0.12);
+  --border2:  rgba(26,22,16,0.20);
+  --sienna:   #9b4a1f;
+  --sienna2:  #c25c24;
+  --sienna-bg:rgba(155,74,31,0.08);
+  --green:    #2a5c3a;
+  --green-bg: rgba(42,92,58,0.08);
+  --red:      #8b1a1a;
+  --red-bg:   rgba(139,26,26,0.08);
+  --amber:    #7d5000;
+  --amber-bg: rgba(125,80,0,0.08);
+  --navy:     #1a2e4a;
+  --serif:    'Playfair Display', Georgia, serif;
+  --mono:     'JetBrains Mono', 'Courier New', monospace;
+  --sans:     'Lato', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Paper texture overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--cream2); }
+::-webkit-scrollbar-thumb { background: var(--cream3); border-radius: 2px; }
+
+/* ── HEADER ── */
+.ll-header {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 2px solid var(--sienna);
+}
+.ll-logo {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+}
+.ll-logo span {
+  color: var(--sienna2);
+}
+.ll-tagline {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: rgba(245,240,232,0.4);
+  text-transform: uppercase;
+}
+.ll-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.ll-nav-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 3px;
+  border: none;
+  background: none;
+  color: rgba(245,240,232,0.5);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.ll-nav-btn:hover { color: var(--cream); background: rgba(255,255,255,0.06); }
+.ll-nav-btn.active { color: var(--cream); background: rgba(155,74,31,0.25); }
+
+/* ── SHELL ── */
+.ll-shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px 80px;
+}
+
+/* ── VIEWS ── */
+.view { display: none; }
+.view.active { display: block; animation: viewIn 0.2s ease; }
+@keyframes viewIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* ── PAGE HEADER ── */
+.page-hdr {
+  padding: 36px 0 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.page-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--sienna);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.page-title {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.page-sub {
+  font-size: 13px;
+  color: var(--dim);
+  margin-top: 6px;
+  max-width: 540px;
+  line-height: 1.65;
+}
+.page-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-align: right;
+  line-height: 1.9;
+}
+
+/* ── LEDGER TABLE (dispatch board) ── */
+.ledger-wrap {
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  overflow: hidden;
+  background: white;
+}
+.ledger-head {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px 160px 140px 120px;
+  background: var(--ink);
+  color: var(--cream);
+}
+.ledger-head-cell {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  color: rgba(245,240,232,0.6);
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.ledger-head-cell:last-child { border-right: none; }
+
+.ledger-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px 160px 140px 120px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+  align-items: center;
+}
+.ledger-row:last-child { border-bottom: none; }
+.ledger-row:hover { background: var(--cream); }
+.ledger-row.selected { background: var(--cream2); }
+
+.ledger-cell {
+  padding: 14px 16px;
+  border-right: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--ink3);
+}
+.ledger-cell:last-child { border-right: none; }
+
+.lc-code {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--sienna);
+  letter-spacing: 0.06em;
+}
+.lc-label {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 13px;
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+.lc-desc {
+  font-size: 11px;
+  color: var(--dim);
+  line-height: 1.5;
+}
+.tier-pill {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+.tier-I   { background: var(--green-bg);  color: var(--green);  border: 1px solid rgba(42,92,58,0.2); }
+.tier-II  { background: var(--amber-bg);  color: var(--amber);  border: 1px solid rgba(125,80,0,0.2); }
+.tier-III { background: var(--red-bg);    color: var(--red);    border: 1px solid rgba(139,26,26,0.2); }
+
+.lc-sys {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--navy);
+  font-weight: 500;
+}
+.lc-freq {
+  font-size: 11px;
+  color: var(--dim);
+}
+.lc-action {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--sienna);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(155,74,31,0.3);
+}
+
+/* Ledger tier section dividers */
+.ledger-divider {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px 160px 140px 120px;
+  background: var(--cream2);
+  border-bottom: 1px solid var(--border);
+}
+.ledger-div-cell {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  color: var(--muted);
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border);
+}
+
+/* ── STEP PANEL ── */
+.step-view {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.step-sidebar {
+  position: sticky;
+  top: 76px;
+}
+
+.step-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--sienna);
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border: none;
+  background: none;
+  padding: 0;
+}
+.step-back-btn:hover { color: var(--sienna2); }
+
+.step-case-card {
+  background: white;
+  border: 1px solid var(--border2);
+  border-top: 3px solid var(--sienna);
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+.scc-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.scc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+.scc-key { color: var(--dim); font-weight: 400; }
+.scc-val { color: var(--ink); font-weight: 700; text-align: right; max-width: 160px; line-height: 1.4; }
+.scc-note {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--dim);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.step-path-nav {
+  background: white;
+  border: 1px solid var(--border2);
+  overflow: hidden;
+}
+.spn-head {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  text-transform: uppercase;
+  padding: 10px 16px;
+  background: var(--cream2);
+  border-bottom: 1px solid var(--border);
+}
+.spn-item {
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--dim);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.spn-item:last-child { border-bottom: none; }
+.spn-item:hover { background: var(--cream); color: var(--ink); }
+.spn-item.active { background: var(--ink); color: var(--cream); }
+.spn-item.active .spn-dot { background: var(--sienna2); }
+.spn-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+  transition: background 0.12s;
+}
+
+/* Step content */
+.step-content {
+  min-height: 600px;
+}
+.step-hdr {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.step-hdr-title {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.step-hdr-code {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--sienna);
+  text-transform: uppercase;
+}
+
+/* Step timeline */
+.step-timeline { position: relative; padding-left: 32px; margin-bottom: 32px; }
+.step-timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px; top: 16px; bottom: 16px;
+  width: 1px;
+  background: var(--border2);
+}
+
+.step-item { position: relative; margin-bottom: 0; }
+.step-connector {
+  position: absolute;
+  left: -32px;
+  top: 16px;
+  width: 16px;
+  height: 1px;
+  background: var(--border2);
+}
+.step-marker {
+  position: absolute;
+  left: -24px;
+  top: 10px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: white;
+  border: 1.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 7px;
+  font-weight: 600;
+  color: var(--dim);
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.step-item.done .step-marker {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+
+.step-body {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+  margin-bottom: 8px;
+  transition: border-color 0.15s;
+  cursor: pointer;
+}
+.step-body:hover { border-color: var(--border2); }
+.step-item.done .step-body { border-color: rgba(42,92,58,0.25); background: rgba(42,92,58,0.02); }
+
+.step-body-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.step-body-label {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.step-sys-badge {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 2px 7px;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sys-msp     { background: rgba(26,46,74,0.08); color: var(--navy); border: 1px solid rgba(26,46,74,0.15); }
+.sys-crm     { background: var(--sienna-bg);    color: var(--sienna); border: 1px solid rgba(155,74,31,0.2); }
+.sys-loansphere { background: rgba(42,92,58,0.08); color: var(--green); border: 1px solid rgba(42,92,58,0.2); }
+.sys-portal  { background: var(--amber-bg);     color: var(--amber); border: 1px solid rgba(125,80,0,0.2); }
+.sys-default { background: var(--cream2);       color: var(--dim); border: 1px solid var(--border); }
+
+.step-body-detail {
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.65;
+  margin-top: 8px;
+  display: none;
+}
+.step-item.open .step-body-detail { display: block; }
+
+/* Hard stop */
+.hard-stop {
+  border-left: 3px solid var(--red);
+  background: var(--red-bg);
+  padding: 10px 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--red);
+  line-height: 1.6;
+  margin: 6px 0 8px;
+  position: relative;
+}
+.hard-stop::before {
+  content: '— STOP —';
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+
+/* Branch / decision */
+.branch-block {
+  border-left: 3px solid var(--amber);
+  background: var(--amber-bg);
+  padding: 10px 14px;
+  font-size: 11px;
+  color: var(--amber);
+  line-height: 1.65;
+  margin: 6px 0 8px;
+  position: relative;
+}
+.branch-block::before {
+  content: '◆ DECISION';
+  display: block;
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  margin-bottom: 4px;
+}
+
+/* Progress */
+.step-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.sp-bar { flex: 1; height: 2px; background: var(--cream3); }
+.sp-fill { height: 100%; background: var(--sienna); transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+.sp-label { font-family: var(--mono); font-size: 9px; color: var(--muted); white-space: nowrap; }
+.sp-end-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border: 1px solid var(--green);
+  background: none;
+  color: var(--green);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s;
+  display: none;
+}
+.sp-end-btn.show { display: block; }
+.sp-end-btn:hover { background: var(--green); color: white; }
+
+/* Info panels below steps */
+.info-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+.info-panel {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+}
+.ip-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.ip-body {
+  font-size: 11px;
+  color: var(--dim);
+  line-height: 1.75;
+  white-space: pre-line;
+}
+
+/* Case note template */
+.case-note-wrap {
+  margin-top: 16px;
+  background: white;
+  border: 1px solid var(--border);
+}
+.cn-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--cream2);
+  border-bottom: 1px solid var(--border);
+}
+.cn-head-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.cn-copy-btn {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border: 1px solid var(--border2);
+  background: white;
+  color: var(--sienna);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s;
+}
+.cn-copy-btn:hover { background: var(--sienna); color: white; border-color: var(--sienna); }
+.cn-body {
+  padding: 14px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink3);
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+/* Escalation panel */
+.escalation-panel {
+  margin-top: 16px;
+  border-left: 3px solid var(--red);
+  background: white;
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 16px;
+}
+.ep-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+.ep-body {
+  font-size: 11px;
+  color: var(--dim);
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+/* ── REFERENCE VIEW ── */
+.ref-layout { display: grid; grid-template-columns: 200px 1fr; gap: 24px; }
+.ref-nav {
+  position: sticky;
+  top: 76px;
+  align-self: start;
+}
+.ref-nav-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.12s;
+  border-left: 2px solid transparent;
+  margin-bottom: 2px;
+}
+.ref-nav-item:hover { color: var(--ink); background: var(--cream2); }
+.ref-nav-item.active { color: var(--sienna); border-left-color: var(--sienna); background: var(--sienna-bg); }
+
+.ref-panel { display: none; }
+.ref-panel.active { display: block; }
+
+/* Mission rules */
+.rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+.rule-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 3px solid;
+  padding: 16px 18px;
+}
+.rule-code {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.rule-text { font-size: 12px; color: var(--ink3); line-height: 1.65; }
+
+/* Scripts */
+.script-stack { display: flex; flex-direction: column; gap: 8px; }
+.script-card {
+  background: white;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.script-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.script-head:hover { background: var(--cream); }
+.script-label-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+  background: var(--cream2);
+  color: var(--dim);
+}
+.script-chevron {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  transition: transform 0.15s;
+}
+.script-card.open .script-chevron { transform: rotate(180deg); }
+.script-body {
+  display: none;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--cream);
+  font-size: 13px;
+  color: var(--ink3);
+  line-height: 1.7;
+  font-style: italic;
+}
+.script-card.open .script-body { display: block; }
+
+/* Connects / transfer board */
+.connects-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid var(--border2);
+}
+.connects-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--ink);
+  color: rgba(245,240,232,0.5);
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.connects-table th:last-child { border-right: none; }
+.connects-table td {
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--ink3);
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  vertical-align: top;
+}
+.connects-table td:last-child { border-right: none; }
+.connects-table tr:last-child td { border-bottom: none; }
+.ct-team { font-weight: 700; color: var(--ink); font-size: 13px; }
+.ct-qc {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--sienna);
+  cursor: pointer;
+  border-bottom: 1px dotted var(--sienna);
+}
+.ct-qc:hover { color: var(--sienna2); }
+.ct-use { font-size: 11px; color: var(--dim); line-height: 1.6; }
+
+/* ── QUIZ VIEW ── */
+.quiz-wrap { max-width: 680px; }
+.quiz-prog-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+}
+.qp-bar { flex: 1; height: 2px; background: var(--cream3); }
+.qp-fill { height: 100%; background: var(--sienna); transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+.qp-label { font-family: var(--mono); font-size: 9px; color: var(--muted); white-space: nowrap; }
+.quiz-cat {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sienna);
+  margin-bottom: 10px;
+}
+.quiz-q {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+.quiz-opt {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid var(--border2);
+  cursor: pointer;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--ink3);
+  line-height: 1.55;
+  transition: all 0.12s;
+}
+.quiz-opt:hover { background: var(--cream); border-color: var(--border2); }
+.quiz-opt-letter {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--muted);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.quiz-opt.correct { background: var(--green-bg); border-color: rgba(42,92,58,0.3); }
+.quiz-opt.correct .quiz-opt-letter { color: var(--green); }
+.quiz-opt.wrong { background: var(--red-bg); border-color: rgba(139,26,26,0.3); }
+.quiz-opt.wrong .quiz-opt-letter { color: var(--red); }
+.quiz-feedback {
+  margin-top: 10px;
+  padding: 12px 16px;
+  font-size: 12px;
+  line-height: 1.65;
+  display: none;
+  border-left: 3px solid;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+.quiz-feedback.wrong-fb { border-color: var(--sienna); background: var(--sienna-bg); color: var(--sienna); }
+.quiz-next-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 9px 20px;
+  border: none;
+  background: var(--ink);
+  color: var(--cream);
+  cursor: pointer;
+  margin-top: 14px;
+  display: none;
+  transition: background 0.15s;
+}
+.quiz-next-btn.show { display: inline-block; }
+.quiz-next-btn:hover { background: var(--sienna); }
+.quiz-restart-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 6px 14px;
+  border: 1px solid var(--border2);
+  background: white;
+  color: var(--dim);
+  cursor: pointer;
+  border-radius: 2px;
+  margin-top: 20px;
+  transition: all 0.12s;
+}
+.quiz-restart-btn:hover { border-color: var(--sienna); color: var(--sienna); }
+
+/* ── TOASTS ── */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 10px 18px;
+  border-left: 3px solid var(--sienna);
+  z-index: 9998;
+  animation: toastIn 0.2s ease;
+  pointer-events: none;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="ll-header">
+  <div>
+    <div class="ll-logo">Lend<span>line</span></div>
+  </div>
+  <div class="ll-tagline">MORTGAGE LOAN SERVICING · CUSTOMER SERVICE REFERENCE GUIDE</div>
+  <nav class="ll-nav">
+    <button class="ll-nav-btn active" onclick="showView('dispatch')">Dispatch</button>
+    <button class="ll-nav-btn" onclick="showView('reference')">Reference</button>
+    <button class="ll-nav-btn" onclick="showView('quiz')">Quiz</button>
+  </nav>
+</header>
+
+<div class="ll-shell">
+
+<!-- ══ DISPATCH VIEW ══ -->
+<div class="view active" id="view-dispatch">
+  <div id="ledger-pane">
+    <div class="page-hdr">
+      <div>
+        <div class="page-eyebrow">Situation Dispatch</div>
+        <div class="page-title">Select a Situation</div>
+        <div class="page-sub">Every call type, every path. Select a row to open the step-by-step procedure for that situation.</div>
+      </div>
+      <div class="page-meta">
+        LoanCare · Carrington Mortgage Services<br>
+        McCalla Raymer Leibert Pierce<br>
+        10 situations · 14 step paths · FDCPA compliant
+      </div>
+    </div>
+
+    <div class="ledger-wrap">
+      <div class="ledger-head">
+        <div class="ledger-head-cell">Code</div>
+        <div class="ledger-head-cell">Situation</div>
+        <div class="ledger-head-cell">Tier</div>
+        <div class="ledger-head-cell">System</div>
+        <div class="ledger-head-cell">Frequency</div>
+        <div class="ledger-head-cell">Open</div>
+      </div>
+      <div id="ledger-body"></div>
+    </div>
+  </div>
+
+  <div id="step-pane" style="display:none">
+    <div class="page-hdr" style="margin-bottom:24px">
+      <div>
+        <div class="page-eyebrow" id="sp-eyebrow">Step Procedure</div>
+        <div class="page-title" id="sp-title">—</div>
+      </div>
+      <div class="page-meta" id="sp-meta"></div>
+    </div>
+    <div class="step-view">
+      <div class="step-sidebar" id="sp-sidebar"></div>
+      <div class="step-content" id="sp-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ REFERENCE VIEW ══ -->
+<div class="view" id="view-reference">
+  <div class="page-hdr">
+    <div>
+      <div class="page-eyebrow">Reference</div>
+      <div class="page-title">Operational Reference</div>
+      <div class="page-sub">Mission rules, call scripts, transfer board, and compliance fundamentals.</div>
+    </div>
+  </div>
+  <div class="ref-layout">
+    <nav class="ref-nav">
+      <div class="ref-nav-item active" onclick="showRef('rules')">Mission Rules</div>
+      <div class="ref-nav-item" onclick="showRef('scripts')">Call Scripts</div>
+      <div class="ref-nav-item" onclick="showRef('connects')">Transfer Board</div>
+      <div class="ref-nav-item" onclick="showRef('compliance')">Compliance</div>
+    </nav>
+    <div>
+      <div class="ref-panel active" id="ref-rules"></div>
+      <div class="ref-panel" id="ref-scripts"></div>
+      <div class="ref-panel" id="ref-connects"></div>
+      <div class="ref-panel" id="ref-compliance"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ QUIZ VIEW ══ -->
+<div class="view" id="view-quiz">
+  <div class="page-hdr">
+    <div>
+      <div class="page-eyebrow">Knowledge Check</div>
+      <div class="page-title">Assessment</div>
+      <div class="page-sub">15 questions drawn from FDCPA requirements, MSP workflows, and Carrington / LoanCare operational standards.</div>
+    </div>
+  </div>
+  <div class="quiz-wrap">
+    <div class="quiz-prog-row">
+      <div class="qp-bar"><div class="qp-fill" id="qpFill" style="width:0%"></div></div>
+      <span class="qp-label" id="qpLabel">1 / 15</span>
+    </div>
+    <div id="quizArea"></div>
+    <button class="quiz-restart-btn" onclick="resetQuiz()">↺ Restart</button>
+  </div>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────────────
+
+var SITUATIONS = [
+  {id:"payment",    code:"PMT", label:"Payment Inquiry",              tier:"I",   sys:"MSP",            freq:"Highest volume",   desc:"Borrower asking about payment amount, due date, history, or processing status",
+   paths:[{key:"payment-history",label:"Path A — History / Status"},{key:"payment-process",label:"Path B — Take Payment"}]},
+  {id:"payoff",     code:"PYF", label:"Payoff / Reinstatement Quote", tier:"I",   sys:"MSP",            freq:"Daily",            desc:"Request for exact amount to pay off loan or bring delinquent account current",
+   paths:[{key:"payoff-quote",label:"Path A — Payoff Quote"},{key:"payoff-reinstatement",label:"Path B — Reinstatement Quote"}]},
+  {id:"escrow",     code:"ESC", label:"Escrow Inquiry",               tier:"I",   sys:"MSP",            freq:"High volume",      desc:"Escrow balance, shortage, refund, tax or insurance disbursement questions",
+   paths:[{key:"escrow-inquiry",label:"Path A — Balance / Shortage"},{key:"escrow-insurance",label:"Path B — Insurance Lapse"}]},
+  {id:"portal",     code:"PRT", label:"Portal Access / Password",     tier:"I",   sys:"Web Portal",     freq:"Regular",          desc:"Cannot log in, forgot password, payment submission issues on website",
+   paths:[{key:"portal-access",label:"Path A — Password Reset"},{key:"portal-payment",label:"Path B — Payment Issue"}]},
+  {id:"forbearance",code:"FBR", label:"Forbearance / Repayment Plan", tier:"II",  sys:"MSP + RMA",      freq:"High stakes",      desc:"Borrower experiencing hardship — initiate assistance intake and document options",
+   paths:[{key:"forbearance-intake",label:"Path A — Hardship Intake"}]},
+  {id:"modification",code:"MOD",label:"Loan Modification Request",   tier:"II",  sys:"MSP + RMA",      freq:"Complex",          desc:"Borrower requests permanent loan restructuring — collect financial data, initiate RMA",
+   paths:[{key:"modification-request",label:"Path A — Modification Intake"}]},
+  {id:"shortsale",  code:"SSD", label:"Short Sale / Deed in Lieu",    tier:"III", sys:"Loss Mitigation",freq:"Low / high stakes", desc:"Borrower cannot retain home — escalate to licensed Loss Mitigation specialist",
+   paths:[{key:"shortsale-intake",label:"Path A — Exit Strategy Intake"}]},
+  {id:"complaint",  code:"CMP", label:"Complaint — Log and Route",    tier:"I",   sys:"White Label CRM",freq:"Regular",          desc:"Borrower or third party complaint — document verbatim, route to correct team",
+   paths:[{key:"complaint-log",label:"Path A — Log and Route"}]},
+  {id:"document",   code:"DOC", label:"Document Request",             tier:"I",   sys:"LoanSphere",     freq:"Regular",          desc:"Request for loan documents, statements, correspondence, modification letters",
+   paths:[{key:"document-request",label:"Path A — Locate and Deliver"}]},
+  {id:"foreclosure",code:"FCL", label:"Foreclosure Status Inquiry",   tier:"II",  sys:"MSP / Tempo",    freq:"Sensitive",        desc:"Borrower asking about foreclosure timeline, status, or options to halt process",
+   paths:[{key:"foreclosure-status",label:"Path A — Status and Options"}]},
+];
+
+var RULES = [
+  {code:"FDCPA FIRST",    col:"#8b1a1a", text:"This is a regulated collection environment. Never threaten, harass, or misrepresent. Every call may be recorded."},
+  {code:"VERIFY FIRST",   col:"#1a2e4a", text:"Verify borrower identity with loan number, last four SSN, and property address before any account access."},
+  {code:"DOCUMENT ALL",   col:"#2a5c3a", text:"Every interaction requires a call log entry — nature of call, action taken, commitments made, follow-up date."},
+  {code:"NO PROMISES",    col:"#7d5000", text:"Never promise outcomes on modifications, short sales, or foreclosure halts. You present options — Loss Mitigation decides."},
+  {code:"ESCALATE EARLY", col:"#4a1a6e", text:"When in doubt, escalate. A premature escalation is recoverable. A missed escalation is not."},
+  {code:"CASE NUMBER",    col:"#1a5c4a", text:"Give the borrower a case or interaction reference before ending every call."},
+];
+
+var SCRIPTS = [
+  {label:"GREET",    col:"#1a2e4a", text:"Thank you for calling Lendline Mortgage Servicing. This is [NAME]. May I have your loan number to get started?"},
+  {label:"VERIFY",   col:"#2a5c3a", text:"For security purposes, can you confirm the last four digits of your Social Security Number and the property address on the loan?"},
+  {label:"HOLD",     col:"#7d5000", text:"I need to place you on a brief hold to research this. I will be back in under two minutes — please hold."},
+  {label:"60 SEC",   col:"#8b1a1a", text:"Thank you for your patience. I am still researching your account. I want to make sure I give you accurate information."},
+  {label:"HARDSHIP", col:"#4a1a6e", text:"I understand you are going through a difficult time. I want to make sure we explore every option available to help you keep your home. Can you walk me through your current situation?"},
+  {label:"TRANSFER", col:"#1a5c4a", text:"I am going to connect you with a specialist who handles [TOPIC]. I will brief them on your situation so you do not have to repeat yourself."},
+  {label:"WRAP",     col:"#1a2e4a", text:"Is there anything else I can help you with today? Your reference number is [CASE NUMBER]. Thank you for calling Lendline."},
+];
+
+var CONNECTS = [
+  {team:"Loss Mitigation",    qc:"LossMit-Queue",    use:"Loan modification, short sale, deed in lieu, foreclosure alternatives"},
+  {team:"Escrow Department",  qc:"Escrow-Dept",      use:"Escrow shortages, refunds, disbursement disputes, insurance claims"},
+  {team:"Default Operations", qc:"Default-Ops",      use:"Foreclosure status, legal inquiries, law firm coordination"},
+  {team:"Client Relations",   qc:"Client-Relations", use:"White label client issues, complaint escalations, investor inquiries"},
+  {team:"Supervisor",         qc:"Supervisor-Line",  use:"Escalations, borrower demands, FDCPA concerns, irate callers"},
+  {team:"Collections Senior", qc:"Collections-Sr",   use:"Complex delinquency, payment arrangement disputes, 60+ day accounts"},
+];
+
+var STEPS = {
+  "payment-history":{
+    title:"Payment Inquiry — History / Status",code:"PMT-A",
+    setup:{type:"Servicing Inquiry",sub:"Payment — History / Status",origin:"Phone / Chat",note:"Log call before accessing account — note loan number and verification completed"},
+    retrieve:"Loan number · Payment confirmation number if disputed · Next due date · Current balance",
+    template:"Interaction Type: Payment Inquiry\nLoan #: _____\nBorrower verified: Yes\nInquiry: [ISSUE]\nMSP accessed: Yes\nInformation provided: _____\nFollow-up required: Yes / No\nRef #: [CASE NUMBER]",
+    escalate:"Payment shows posted but borrower disputes → open payment dispute case\nPayment missing for 5+ business days → Escrow or Payment Processing team\nBorrower alleges unauthorized payment taken → Supervisor immediately",
+    flow:[
+      {sys:"crm",label:"Verify borrower identity",detail:"Loan number + last four SSN + property address. All three required. Document verification completed in call log before proceeding.",isStop:true,stopText:"FDCPA: Do not access or discuss account details without completed identity verification."},
+      {sys:"msp",label:"Pull loan in MSP — payment history screen",detail:"Navigate to loan number. Open Payment History. Identify the payment in question — date, amount, method, confirmation number."},
+      {sys:"msp",label:"Confirm current balance and next due date",detail:"Read the exact payment amount due, due date, and any late fee if applicable. Do not estimate — read from the screen."},
+      {sys:"crm",label:"Document and provide reference number",detail:"Log: loan accessed, payment status confirmed, information provided to borrower. Close call with reference number."},
+    ]
+  },
+  "payment-process":{
+    title:"Payment Inquiry — Process / Take Payment",code:"PMT-B",
+    setup:{type:"Servicing Inquiry",sub:"Payment — Process / Take Payment",origin:"Phone",note:"Verbal consent required before processing any payment. Document consent in call log."},
+    retrieve:"Confirmation number · Amount processed · Account last four · Processing timeline given",
+    template:"Interaction Type: Payment Processed\nLoan #: _____\nBorrower verified: Yes — Consent obtained: Yes\nPayment amount: _____\nAccount last four: _____\nConfirmation #: _____\nProcessing timeline: 1-3 business days\nRef #: [CASE NUMBER]",
+    escalate:"Borrower disputes a previously processed payment → Supervisor + dispute process\nSystem error during processing → Document and call back with resolution\nBorrower claims payment was unauthorized → Supervisor immediately",
+    flow:[
+      {sys:"crm",label:"Verify identity — full three-factor",detail:"Loan number + last four SSN + property address. All three. No exceptions for payment processing.",isStop:true,stopText:"FDCPA: Full verification mandatory before processing any financial transaction."},
+      {sys:"msp",label:"Confirm exact amount due",detail:"Read from MSP: principal + interest + escrow + any fees. Give borrower the exact total. Confirm which payment they are making — current month, past due, or specific amount."},
+      {sys:"msp",label:"Obtain payment details and verbal consent",detail:"Routing number, account number, payment amount. Read back all details. Obtain explicit verbal consent: Do you authorize Lendline to process this payment of $[AMOUNT] from account ending [XXXX] today? Document consent.",isStop:true,stopText:"Never process payment without explicit verbal authorization confirmed and documented."},
+      {sys:"msp",label:"Process payment and provide confirmation",detail:"Submit in MSP. Record confirmation number. Read confirmation number to borrower. Advise processing time — typically 1 to 3 business days to post."},
+      {sys:"crm",label:"Document full transaction",detail:"Log: amount, last four of account used, confirmation number, verbal consent obtained, processing timeline given."},
+    ]
+  },
+  "payoff-quote":{
+    title:"Payoff / Reinstatement — Payoff Quote",code:"PYF-A",
+    setup:{type:"Servicing Inquiry",sub:"Payoff Quote",origin:"Phone / Written",note:"Payoff quotes are valid for a specific number of days — always state the expiration date."},
+    retrieve:"Total payoff amount · Good-through date · Wire instructions · Accrued daily interest rate",
+    template:"Interaction Type: Payoff Quote\nLoan #: _____\nRequestor: Borrower / Third Party — Auth on file: [CONFIRMED]\nPayoff amount: $_____\nGood-through date: _____\nDaily interest rate: $_____\nWire instructions provided: Yes\nRef #: [CASE NUMBER]",
+    escalate:"Payoff amount disputed → Default Operations review\nPrepayment penalty dispute → Escalate to supervisor\nLegal or estate-related payoff → Client Relations + supervisor",
+    flow:[
+      {sys:"crm",label:"Verify identity and authorization",detail:"Full three-factor verification. Third party requesting payoff must have signed authorization on file.",isStop:true,stopText:"Third-party payoff requests require signed authorization on file before any figures are released."},
+      {sys:"msp",label:"Generate payoff quote in MSP",detail:"Navigate to Payoff Quote screen. Enter requested payoff date. System calculates: principal balance, accrued interest, fees, escrow balance, prepayment penalty if applicable."},
+      {sys:"msp",label:"Read all components to borrower",detail:"Principal · Accrued interest through payoff date · Outstanding fees · Escrow balance · Total payoff amount. State the good-through date clearly."},
+      {sys:"crm",label:"Advise on wire instructions",detail:"Provide wire routing and account information per investor guidelines. Confirm funds must arrive by close of business on the good-through date."},
+      {sys:"crm",label:"Document and confirm",detail:"Log all figures provided, good-through date, wire instructions given. Provide reference number."},
+    ]
+  },
+  "payoff-reinstatement":{
+    title:"Payoff / Reinstatement — Reinstatement Quote",code:"PYF-B",
+    setup:{type:"Servicing Inquiry",sub:"Reinstatement Quote",origin:"Phone",note:"Reinstatement brings a delinquent loan current — includes all past due payments, late fees, and costs to date."},
+    retrieve:"Total reinstatement amount · Good-through date · Number of payments past due · Whether foreclosure is active",
+    template:"Interaction Type: Reinstatement Quote\nLoan #: _____\nPayments past due: _____\nReinstatement amount: $_____\nGood-through date: _____\nForeclosure active: Yes / No\nLoss Mit options presented: Yes\nRef #: [CASE NUMBER]",
+    escalate:"Active foreclosure with attorney fees → Default Operations for exact figure\nBorrower cannot reinstate but wants to retain home → Forbearance / Modification path\nBorrower claims reinstatement was paid but loan not reinstated → Supervisor + Default Ops",
+    flow:[
+      {sys:"crm",label:"Verify identity — full three-factor",detail:"Loan number + last four SSN + property address.",isStop:true,stopText:"FDCPA: Full verification before discussing any delinquency or reinstatement figures."},
+      {sys:"msp",label:"Pull delinquency detail in MSP",detail:"Open loan. Note: number of payments past due, total unpaid principal, accrued interest, late charges, any attorney fees if foreclosure initiated."},
+      {sys:"msp",label:"Generate reinstatement figure",detail:"Calculate: all past due payments + late fees + any corporate advances + attorney fees if applicable. State the good-through date.",isBranch:true,branchText:"If foreclosure has been initiated: attorney fees and court costs may be included. Advise borrower that reinstatement amount may change as fees accrue. Recommend they confirm with Default Operations for exact figures if in active foreclosure."},
+      {sys:"crm",label:"Present Loss Mitigation options alongside",detail:"Do not provide reinstatement figure alone without also mentioning available assistance options — repayment plan, forbearance, modification. Document that options were discussed."},
+      {sys:"crm",label:"Document and provide reference",detail:"Log all figures, good-through date, options presented, borrower response."},
+    ]
+  },
+  "escrow-inquiry":{
+    title:"Escrow Inquiry — Balance / Shortage / Refund",code:"ESC-A",
+    setup:{type:"Servicing Inquiry",sub:"Escrow — Balance / Shortage / Refund",origin:"Phone",note:"Escrow questions require the annual escrow analysis — pull it before explaining any shortage."},
+    retrieve:"Escrow balance · Shortage amount · Which disbursement caused shortage · New monthly escrow payment",
+    template:"Interaction Type: Escrow Inquiry\nLoan #: _____\nEscrow balance: $_____\nShortage / surplus: $_____\nCause: _____\nNew escrow payment: $_____\nRefund initiated: Yes / No\nEscalated to Escrow Dept: Yes / No\nRef #: [CASE NUMBER]",
+    escalate:"Insurance lapsed due to missed disbursement → Escrow Department immediately\nTax lien filed due to missed disbursement → Escrow Department + Default Ops\nBorrower disputes escrow analysis figures → Escalate to Escrow Department for review",
+    flow:[
+      {sys:"crm",label:"Verify identity",detail:"Full three-factor verification.",isStop:true,stopText:"FDCPA: Verify before accessing any account details."},
+      {sys:"msp",label:"Pull escrow analysis in MSP",detail:"Navigate to Escrow Analysis screen. Identify: current escrow balance, projected disbursements, shortage amount if any, and new monthly escrow payment."},
+      {sys:"msp",label:"Explain the shortage calculation",detail:"Walk through: what was projected vs. what was actually disbursed. Identify which disbursement caused the shortage. Explain that shortage is spread over 12 months in the new payment.",isBranch:true,branchText:"Insurance disbursement not made and policy cancelled: HIGH PRIORITY. Escalate to Escrow Department immediately. Force-placed insurance may apply."},
+      {sys:"msp",label:"Address refund if applicable",detail:"If escrow has a surplus over the required cushion, a refund may be due. Confirm the refund amount and mailing address. Process or initiate per system workflow."},
+      {sys:"crm",label:"Document and provide reference",detail:"Log: what was reviewed, explanation provided, any action taken, follow-up needed."},
+    ]
+  },
+  "escrow-insurance":{
+    title:"Escrow — Insurance Lapse",code:"ESC-B",
+    setup:{type:"Servicing Inquiry",sub:"Escrow — Insurance Issue",origin:"Phone",note:"Insurance lapses are high-priority. Force-placed insurance is expensive and adversely affects the borrower."},
+    retrieve:"Insurance carrier · Policy number · Disbursement date and amount · Current insurance status",
+    template:"Interaction Type: Insurance / Escrow Issue — ESCALATED\nLoan #: _____\nCarrier: _____\nDisbursement sent: Yes / No — Date: _____\nForce-placed insurance applied: Yes / No\nEscalated to Escrow Dept: Yes\nRef #: [CASE NUMBER]",
+    escalate:"Always escalate to Escrow Department. Do not attempt to resolve insurance lapses at Tier I.",
+    flow:[
+      {sys:"crm",label:"Verify identity",detail:"Full three-factor.",isStop:true,stopText:"FDCPA: Verify before account access."},
+      {sys:"msp",label:"Check insurance disbursement history",detail:"Pull escrow disbursement history. Confirm whether payment was sent, to which carrier, and whether it was returned or cashed.",isStop:true,stopText:"If insurance has lapsed and force-placed insurance is or will be applied, this is a high-priority escalation — do not attempt to resolve at Tier I."},
+      {sys:"crm",label:"Escalate to Escrow Department",detail:"Warm transfer to Escrow-Dept with full context: loan number, borrower name, carrier name, disbursement history, current insurance status. Borrower should not have to re-explain."},
+    ]
+  },
+  "portal-access":{
+    title:"Portal Access — Password Reset",code:"PRT-A",
+    setup:{type:"Servicing Inquiry",sub:"Portal — Access / Password",origin:"Phone",note:"Walk borrower through self-service reset first. Only escalate if system error prevents reset."},
+    retrieve:"Email address on file · Whether email was updated",
+    template:"Interaction Type: Portal Access\nLoan #: _____\nIssue: Password reset / Email update / Login error\nEmail updated: Yes / No — New email: _____\nReset sent: Yes\nAccess confirmed: Yes / No\nRef #: [CASE NUMBER]",
+    escalate:"System error preventing reset after correct email → Technical escalation\nBorrower locked out after multiple attempts → Manual unlock by supervisor\nSuspected unauthorized access → Security escalation immediately",
+    flow:[
+      {sys:"crm",label:"Verify identity",detail:"Full three-factor verification before assisting with any portal account actions.",isStop:true,stopText:"FDCPA: Verify before accessing account or assisting with portal credentials."},
+      {sys:"portal",label:"Walk borrower through self-service reset",detail:"Navigate to servicer portal login page. Click Forgot Password. Enter email on file. Reset link sent to email. Walk borrower through each step verbally.",isBranch:true,branchText:"Email on file is no longer accessible: update email in servicing system first, then re-trigger reset. Confirm new email with borrower before updating."},
+      {sys:"msp",label:"Update email if needed",detail:"In MSP or White Label CRM: update email address on borrower record. Confirm spelling character by character. Save. Re-trigger password reset to new email."},
+      {sys:"crm",label:"Confirm access and document",detail:"Confirm borrower can log in successfully. Log: issue, resolution method, email updated if applicable."},
+    ]
+  },
+  "portal-payment":{
+    title:"Portal — Payment Submission Issue",code:"PRT-B",
+    setup:{type:"Servicing Inquiry",sub:"Portal — Payment Submission Issue",origin:"Phone",note:"Confirm whether payment actually processed before attempting any manual payment."},
+    retrieve:"Whether payment posted in MSP · Error message borrower received · Date and amount of attempted payment",
+    template:"Interaction Type: Portal Payment Issue\nLoan #: _____\nPayment attempted: $_____\nPosted in MSP: Yes / No\nError encountered: _____\nResolution: _____\nRef #: [CASE NUMBER]",
+    escalate:"Double payment posted due to portal error → Supervisor + payment adjustment request\nPayment taken from wrong account → Supervisor immediately",
+    flow:[
+      {sys:"crm",label:"Verify identity",detail:"Full three-factor.",isStop:true,stopText:"FDCPA: Verify before account access."},
+      {sys:"msp",label:"Check MSP for pending or posted payment",detail:"Before doing anything — confirm in MSP whether the payment the borrower attempted actually posted. If posted, confirm and close. If not posted, determine why."},
+      {sys:"portal",label:"Identify the portal error",detail:"Ask borrower what error message they received. Common issues: browser compatibility, session timeout, duplicate payment block, expired debit card.",isBranch:true,branchText:"Payment showing as pending in portal but not posted in MSP: advise 1-3 business day processing. Do NOT take a second payment. If truly failed: take payment by phone per Path B of PMT."},
+      {sys:"crm",label:"Document and confirm",detail:"Log: what they attempted, error encountered, resolution or action taken."},
+    ]
+  },
+  "forbearance-intake":{
+    title:"Forbearance / Repayment Plan — Hardship Intake",code:"FBR-A",
+    setup:{type:"Loss Mitigation Intake",sub:"Forbearance / Repayment Plan",origin:"Phone",note:"Document the hardship thoroughly. Do not promise outcomes. Your role is intake and options education."},
+    retrieve:"Hardship type and duration · Current income · Number of payments past due · Borrower intent · Whether RMA was initiated",
+    template:"Interaction Type: Hardship Intake\nLoan #: _____\nPayments past due: _____\nHardship type: [ISSUE]\nHardship began: _____\nTemporary or permanent: _____\nBorrower intent: Retain home / Exit\nOptions discussed: Forbearance / Repayment Plan / Modification / Short Sale\nRMA initiated: Yes / No\nEscalated to Loss Mit: Yes\nRef #: [CASE NUMBER]",
+    escalate:"Active foreclosure sale date within 30 days → Loss Mitigation urgent escalation\nBorrower mentions bankruptcy → Stop all collection activity · Supervisor immediately\nBorrower mentions attorney → Do not discuss details · Transfer to supervisor",
+    flow:[
+      {sys:"crm",label:"Verify identity — full three-factor",detail:"Loan number + last four SSN + property address.",isStop:true,stopText:"FDCPA: Full verification required before any loss mitigation discussion."},
+      {sys:"msp",label:"Pull loan status and delinquency detail",detail:"Current loan status, number of payments past due, any prior modifications or forbearances on record. Note whether loan is in active foreclosure."},
+      {sys:"crm",label:"Conduct hardship intake",detail:"Document: nature of hardship (job loss, medical, income reduction, divorce), when hardship began, whether it is temporary or permanent, current monthly income, and borrower intent.",isBranch:true,branchText:"Permanent hardship / no income recovery expected: Loan modification path. Temporary hardship with expected recovery: Forbearance or repayment plan. No intention to retain home: Short sale or Deed in Lieu path."},
+      {sys:"crm",label:"Explain available options — no promises",detail:"Forbearance: pause or reduce payments temporarily. Repayment plan: catch up past due amounts over time. Loan modification: permanent restructure. Final decisions belong to Loss Mitigation.",isStop:true,stopText:"Never promise approval of any modification, forbearance, or repayment plan. You present options. Loss Mitigation approves."},
+      {sys:"crm",label:"Initiate RMA package if applicable",detail:"If borrower is requesting modification or formal forbearance: explain RMA package requirements — hardship letter, two months bank statements, two months pay stubs, tax returns. Provide submission method."},
+      {sys:"crm",label:"Escalate to Loss Mitigation with full context",detail:"Warm transfer to LossMit-Queue. Brief the specialist: loan number, hardship type, delinquency status, options discussed, borrower intent. Do not cold transfer."},
+    ]
+  },
+  "modification-request":{
+    title:"Loan Modification — Intake",code:"MOD-A",
+    setup:{type:"Loss Mitigation Intake",sub:"Loan Modification Request",origin:"Phone",note:"Modification is a permanent restructure. Full financial intake required. All decisions belong to Loss Mitigation."},
+    retrieve:"Current loan balance and rate · Monthly income · Hardship documentation needed · Prior modification history",
+    template:"Interaction Type: Modification Request\nLoan #: _____\nCurrent rate: _____% · Balance: $_____\nPayments past due: _____\nMonthly income: $_____\nHardship: [ISSUE]\nRMA checklist provided: Yes\nPrior modification: Yes / No\nEscalated to Loss Mit: Yes\nRef #: [CASE NUMBER]",
+    escalate:"Bankruptcy mentioned → Stop immediately · Supervisor\nForeclosure sale within 30 days → Urgent Loss Mitigation escalation\nBorrower has active attorney representation → Do not take financial information · Supervisor",
+    flow:[
+      {sys:"crm",label:"Verify identity",detail:"Full three-factor verification.",isStop:true,stopText:"FDCPA: Full verification required."},
+      {sys:"msp",label:"Review loan history and prior modifications",detail:"Pull loan in MSP. Note: original loan terms, current balance, rate, payment, delinquency status, any prior modifications. A prior modification affects eligibility for new programs."},
+      {sys:"crm",label:"Conduct full financial intake",detail:"Monthly gross income from all sources, monthly expenses, household size, value of property if known, reason for hardship. Document all figures."},
+      {sys:"crm",label:"Explain modification process and timeline",detail:"Borrower submits RMA package. Loss Mitigation reviews for eligibility under investor guidelines. Timeline is typically 30 to 60 days after complete package received. Servicer cannot guarantee outcome.",isStop:true,stopText:"Never quote a specific modification rate, payment, or term. You do not know what Loss Mitigation will approve. Overpromising is a compliance violation."},
+      {sys:"crm",label:"Initiate RMA and escalate",detail:"Document all intake information. Provide RMA document checklist to borrower. Warm transfer to LossMit-Queue with complete intake summary."},
+    ]
+  },
+  "shortsale-intake":{
+    title:"Short Sale / Deed in Lieu — Exit Intake",code:"SSD-A",
+    setup:{type:"Loss Mitigation — Exit Strategy",sub:"Short Sale / Deed in Lieu",origin:"Phone",note:"Borrower cannot retain home. Tier III path — intake and immediate escalation to licensed specialist."},
+    retrieve:"Borrower intent confirmed · Property status · Whether offer exists · Whether property is listed",
+    template:"Interaction Type: Exit Strategy Intake\nLoan #: _____\nBorrower intent: Short Sale / Deed in Lieu\nProperty listed: Yes / No\nOffer received: Yes / No — Amount: $_____\nEscalated to Loss Mit Licensed Specialist: Yes\nRef #: [CASE NUMBER]",
+    escalate:"All short sale and DIL situations escalate to licensed Loss Mitigation. No exceptions.",
+    flow:[
+      {sys:"crm",label:"Verify identity",detail:"Full three-factor verification.",isStop:true,stopText:"FDCPA: Full verification before any account discussion."},
+      {sys:"crm",label:"Confirm borrower intent — exit only",detail:"Confirm borrower has made the decision they cannot retain the home. Acknowledge the difficulty. Do not pressure or suggest retention if borrower has clearly stated exit intent."},
+      {sys:"crm",label:"Document basic intake",detail:"Property address, estimated property value if known, whether property is listed for sale, outstanding liens or HOA, whether borrower has an offer."},
+      {sys:"crm",label:"Escalate to licensed Loss Mitigation immediately",detail:"Short sales and Deeds in Lieu require a licensed Loss Mitigation specialist. Warm transfer with all intake information.",isStop:true,stopText:"Tax implications of short sale or Deed in Lieu must NEVER be discussed by Tier I. This requires a licensed specialist."},
+    ]
+  },
+  "complaint-log":{
+    title:"Complaint — Log and Route",code:"CMP-A",
+    setup:{type:"Complaint",sub:"Log and Route",origin:"Phone / Written",note:"Document borrower complaint verbatim — exact words matter for regulatory reporting. Do not paraphrase."},
+    retrieve:"Verbatim complaint text · Category · Routing destination · Resolution timeline provided",
+    template:"Interaction Type: Complaint\nLoan #: _____\nComplaint (verbatim): [ISSUE]\nCategory: Payment / Escrow / Communication / Foreclosure / Conduct / Other\nRouted to: Client Relations\nResolution timeline given: _____\nRef #: [CASE NUMBER]",
+    escalate:"CFPB complaint already filed → Supervisor immediately\nLegal action threatened → Supervisor + Client Relations\nAllegation of FDCPA violation → Supervisor immediately · Document exact language",
+    flow:[
+      {sys:"crm",label:"Verify identity",detail:"Full three-factor before accessing account.",isStop:true,stopText:"FDCPA: Verify before account access."},
+      {sys:"crm",label:"Document complaint verbatim",detail:"Use the exact words the borrower uses. Do not paraphrase, summarize, or editorialize. Regulatory compliance depends on exact language. Include: what happened, when, who was involved, what outcome they want.",isStop:true,stopText:"Never dismiss, minimize, or argue with a complaint. Your role is accurate documentation and proper routing — not adjudication."},
+      {sys:"crm",label:"Assign complaint category and route",detail:"Categorize: payment handling · escrow error · communication issue · foreclosure process · employee conduct · other. Route to Client Relations per complaint routing matrix."},
+      {sys:"crm",label:"Provide complaint reference and timeline",detail:"Give borrower the complaint reference number. State the resolution timeline per departmental guidelines. Advise they will be contacted by Client Relations."},
+    ]
+  },
+  "document-request":{
+    title:"Document Request — Locate and Deliver",code:"DOC-A",
+    setup:{type:"Servicing Inquiry",sub:"Document Request",origin:"Phone / Written",note:"Verify authorization before releasing any documents. Third parties require signed authorization on file."},
+    retrieve:"Document type requested · Authorization confirmed · Delivery method and timeline",
+    template:"Interaction Type: Document Request\nLoan #: _____\nRequestor: Borrower / Third Party — Auth confirmed: [CONFIRMED]\nDocument requested: _____\nLocated in LoanSphere: Yes / No\nDelivery method: _____\nTimeline: _____\nRef #: [CASE NUMBER]",
+    escalate:"Document not in LoanSphere → Default Operations or Client Relations to locate\nLegal subpoena for records → Client Relations + supervisor immediately\nBorrower disputes content of a document → Supervisor",
+    flow:[
+      {sys:"crm",label:"Verify identity and authorization",detail:"Borrower: full three-factor. Third party: signed authorization must be on file and current. Attorney: authorization or court order required.",isStop:true,stopText:"Never release any documents to an unverified third party. Authorization must be confirmed in system before any document is sent."},
+      {sys:"loansphere",label:"Locate document in LoanSphere",detail:"Search by loan number and document type. Common requests: modification agreement, payment history, payoff confirmation, escrow analysis, note, mortgage or deed of trust."},
+      {sys:"loansphere",label:"Determine delivery method",detail:"Electronic via borrower portal: immediate. Mail: 5 to 7 business days. Fax: same day if available. Confirm preferred method and address or email."},
+      {sys:"crm",label:"Document and confirm",detail:"Log: document requested, authorization confirmed, delivery method, timeline given."},
+    ]
+  },
+  "foreclosure-status":{
+    title:"Foreclosure Status — Inquiry and Options",code:"FCL-A",
+    setup:{type:"Default Inquiry",sub:"Foreclosure Status",origin:"Phone",note:"Sensitive call. Provide factual status only — never speculate on timelines or outcomes."},
+    retrieve:"Current foreclosure stage · Sale date if set · Whether Loss Mitigation review is active · Days to sale if applicable",
+    template:"Interaction Type: Foreclosure Status Inquiry\nLoan #: _____\nForeclosure stage: _____\nSale date: _____\nLoss Mit active: Yes / No\nOptions presented: Yes\nEscalated to: Default Operations / Loss Mit\nRef #: [CASE NUMBER]",
+    escalate:"Sale date within 30 days → Loss Mitigation urgent escalation same call\nBorrower mentions bankruptcy → Stop all collection discussion · Supervisor immediately\nBorrower alleges improper notice → Document verbatim · Supervisor + Client Relations\nBorrower has attorney → Do not discuss details · Transfer to supervisor",
+    flow:[
+      {sys:"crm",label:"Verify identity",detail:"Full three-factor verification.",isStop:true,stopText:"FDCPA: Full verification required before any foreclosure discussion."},
+      {sys:"msp",label:"Pull foreclosure status in MSP or Tempo",detail:"Current foreclosure stage: referral, first legal, sale scheduled, suspended, dismissed. Note whether sale date is set. Note whether Loss Mitigation review is active.",isBranch:true,branchText:"Sale date set within 30 days: urgent escalation to Default Operations and Loss Mitigation after status is provided. Borrower must be connected to Loss Mitigation same call."},
+      {sys:"crm",label:"Provide status — factual only",detail:"State the current stage. Do not estimate remaining timeline. Do not speculate on outcomes. Do not promise delays or stops to the foreclosure process.",isStop:true,stopText:"Never promise the foreclosure will be stopped or delayed. You cannot make that commitment. Loss Mitigation and Default Operations make those decisions."},
+      {sys:"crm",label:"Present available options",detail:"Even in active foreclosure, options may exist: reinstatement, repayment plan, modification, short sale, Deed in Lieu. Present all of them. Connect borrower to Loss Mitigation if they want to pursue any option."},
+      {sys:"crm",label:"Escalate and document",detail:"Warm transfer to Default Operations for detailed questions. Document: status provided, options presented, borrower response, escalation destination."},
+    ]
+  },
+};
+
+var QUIZ = [
+  {cat:"FDCPA",q:"A borrower tells you to stop calling them. What is the correct action?",opts:["Continue calling — they still owe the debt","Note the cease communication request and stop all outbound contact except for specific legal notices","Transfer to a supervisor and let them decide","Ask the borrower to confirm in writing before stopping calls"],correct:1,exp:"Under FDCPA, a verbal cease communication request must be honored immediately. You may only contact them to confirm no further contact or to notify of specific legal action."},
+  {cat:"FDCPA",q:"Which of the following is a FDCPA violation?",opts:["I understand this is a difficult situation and I want to help you find options.","This debt will be reported to credit bureaus if not resolved.","If you do not pay, we will have you arrested.","I can connect you with our Loss Mitigation team to discuss your options."],correct:2,exp:"Threatening arrest for a civil debt is a clear FDCPA violation. Collectors cannot threaten actions they cannot legally take or do not intend to take."},
+  {cat:"Verification",q:"A caller provides their loan number and property address but cannot recall the last four of their SSN. What do you do?",opts:["Proceed — two out of three is sufficient","Do not access the account — offer to call back a verified number on file","Ask for their date of birth instead and proceed","Transfer to a supervisor"],correct:1,exp:"You must complete full verification before accessing any account. Offering a callback to a verified number on file is the correct path when verification cannot be completed."},
+  {cat:"Verification",q:"A caller says they are the borrower's attorney and need account information. What do you do?",opts:["Provide the information — attorneys have legal authority","Verify a signed third-party authorization is on file before releasing any information","Ask them to call back during business hours","Transfer to the legal department immediately"],correct:1,exp:"Third-party authorization must be on file and verified before any account information is released — even to attorneys. No exceptions."},
+  {cat:"Payment",q:"A borrower says their payment was made two weeks ago but still shows as unpaid. What is your first step?",opts:["Tell them to check with their bank","Pull up the payment history in MSP and identify the payment method and confirmation number","Create a payment dispute case immediately","Tell them payments take 30 days to post"],correct:1,exp:"Always pull the account first. Check payment history, method, and confirmation number before telling the borrower anything or creating a dispute case."},
+  {cat:"Payment",q:"Before processing a phone payment, what must you obtain?",opts:["Their loan number only","Verified identity, exact payment amount, and explicit verbal consent","Confirmation that they have sufficient funds","Routing and account number only"],correct:1,exp:"Identity must be verified first. Then confirm the exact amount, source of funds, and obtain explicit verbal consent before processing. Document the consent."},
+  {cat:"Loss Mitigation",q:"A borrower lost their job three months ago and cannot make payments. What is the correct response?",opts:["Advise them to sell the home","Transfer immediately to Loss Mitigation without any intake","Conduct hardship intake — document the situation, explain available options including forbearance and modification, then escalate to Loss Mitigation with full documentation","Tell them the loan will go to foreclosure if not paid"],correct:2,exp:"Hardship intake is your role. Document the situation, explain options professionally, then escalate with complete context. Never skip intake and never threaten foreclosure as a first response."},
+  {cat:"Loss Mitigation",q:"What is an RMA package?",opts:["A credit report the servicer pulls on the borrower","A Request for Mortgage Assistance — the financial document package required to apply for loan modification","A notice sent to the borrower when they enter foreclosure","A report generated by MSP when a loan becomes delinquent"],correct:1,exp:"RMA stands for Request for Mortgage Assistance. It is the standardized package of financial documents — hardship letter, income verification, bank statements, tax returns — required to apply for loss mitigation."},
+  {cat:"Escrow",q:"A borrower's escrow payment increased by $200 per month. They want an explanation. What do you do?",opts:["Tell them escrow amounts change every year and there is nothing you can do","Pull the escrow analysis in MSP, explain the shortage and how it was calculated, and review the disbursements that caused it","Transfer to the Escrow Department immediately","Reduce the escrow payment on the spot"],correct:1,exp:"You have the tools to explain an escrow analysis. Pull it up, walk through the shortage calculation, identify the disbursement that caused it, and explain how the shortage is spread over 12 months."},
+  {cat:"Escrow",q:"A borrower says their homeowner's insurance was cancelled because a disbursement was not made. What is the correct severity assessment?",opts:["Low — insurance gaps are common and temporary","High — force-placed insurance may apply, the property may be unprotected, and the escrow will be impacted","Medium — advise them to reinstate on their own","Low — escrow errors are corrected at year-end"],correct:1,exp:"An insurance lapse is a high-priority issue. Force-placed insurance is significantly more expensive, the property may be unprotected, and the borrower escrow will be affected. Escalate to Escrow Department for immediate resolution."},
+  {cat:"Foreclosure",q:"A borrower asks how many days until their home is sold at auction. What do you do?",opts:["Give them the exact timeline from the foreclosure file","Pull foreclosure status in MSP or Tempo, provide the current stage only, and connect them with Default Operations for detailed timeline and Loss Mitigation for options","Tell them you cannot discuss foreclosure matters","Advise them to contact their own attorney only"],correct:1,exp:"You can provide current stage information from MSP. You cannot guarantee or speculate on timelines. Always connect them with Default Operations for specifics and present available alternatives through Loss Mitigation."},
+  {cat:"Foreclosure",q:"A borrower says they were never notified about foreclosure proceedings. What do you do?",opts:["Tell them notices are mailed and that fulfills the obligation","Document the claim in full and escalate to Default Operations and your supervisor immediately — this is a potential RESPA/CFPB issue","Check the system for notice history and resolve it yourself","Advise them to file a complaint with CFPB on their own"],correct:1,exp:"A claim of missing foreclosure notice is a potential RESPA and CFPB compliance issue. Document verbatim, escalate to both Default Operations and supervisor. This cannot be resolved at Tier I."},
+  {cat:"Complaints",q:"A borrower uses profanity during a call. What is the correct response?",opts:["End the call immediately","Warn once professionally that you want to help but need the conversation to remain respectful. If it continues, advise you will end the call and document it.","Transfer to a supervisor without saying anything","Ignore it and continue the call"],correct:1,exp:"One professional warning, then document and disconnect if it continues. You are never required to tolerate abuse. Document the exact language used in the call log."},
+  {cat:"Complaints",q:"A borrower says they want to file a formal complaint. What is the process?",opts:["Tell them to file with CFPB themselves","Document the complaint verbatim in the CRM, provide a complaint reference number, advise of the resolution timeline, and route to Client Relations","Tell them complaints must be submitted in writing only","Transfer to a supervisor to handle"],correct:1,exp:"You handle complaint intake. Document every word, provide a reference number, give the resolution timeline, and route properly. The borrower should never feel dismissed."},
+  {cat:"Documents",q:"A borrower requests a copy of their loan modification agreement. Which system do you use?",opts:["MSP payment history screen","LoanSphere document management system","The White Label CRM","Microsoft Office file server"],correct:1,exp:"LoanSphere is the document management system. Modification agreements, correspondence, and legal documents are stored and retrieved there."},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+var currentStepKey = null;
+var stepDone = {};
+var quizIdx = 0, quizScore = 0, quizAnswered = false;
+
+// ── VIEW NAV ──────────────────────────────────────────────────────────────
+function showView(id) {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+  document.querySelectorAll('.ll-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('view-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── LEDGER RENDER ─────────────────────────────────────────────────────────
+function renderLedger() {
+  var body = document.getElementById('ledger-body');
+  var tiers = ['I','II','III'];
+  var tierLabels = {'I':'TIER I — AGENT HANDLES', 'II':'TIER II — COMPLEX / ESCALATE PATH', 'III':'TIER III — LICENSED SPECIALIST REQUIRED'};
+  var html = '';
+  tiers.forEach(function(t) {
+    var rows = SITUATIONS.filter(function(s){ return s.tier===t; });
+    if (!rows.length) return;
+    html += '<div class="ledger-divider"><div class="ledger-div-cell">'+tierLabels[t]+'</div></div>';
+    rows.forEach(function(sit) {
+      html += '<div class="ledger-row" onclick="openSituation(\''+sit.id+'\')">';
+      html += '<div class="ledger-cell"><span class="lc-code">'+sit.code+'</span></div>';
+      html += '<div class="ledger-cell"><div class="lc-label">'+sit.label+'</div><div class="lc-desc">'+sit.desc+'</div></div>';
+      html += '<div class="ledger-cell"><span class="tier-pill tier-'+t+'">'+t+'</span></div>';
+      html += '<div class="ledger-cell"><span class="lc-sys">'+sit.sys+'</span></div>';
+      html += '<div class="ledger-cell"><span class="lc-freq">'+sit.freq+'</span></div>';
+      html += '<div class="ledger-cell"><span class="lc-action">Open →</span></div>';
+      html += '</div>';
+    });
+  });
+  body.innerHTML = html;
+}
+
+// ── OPEN SITUATION ────────────────────────────────────────────────────────
+function openSituation(id) {
+  var sit = SITUATIONS.find(function(s){ return s.id===id; });
+  if (!sit) return;
+  document.getElementById('ledger-pane').style.display = 'none';
+  document.getElementById('step-pane').style.display = 'block';
+  document.getElementById('sp-eyebrow').textContent = sit.code + ' · ' + sit.tier === 'I' ? 'TIER I' : sit.tier === 'II' ? 'TIER II' : 'TIER III';
+  document.getElementById('sp-eyebrow').textContent = sit.code + ' — ' + (sit.tier==='I'?'TIER I — AGENT HANDLES':sit.tier==='II'?'TIER II — COMPLEX':' TIER III — LICENSED');
+  document.getElementById('sp-title').textContent = sit.label;
+  document.getElementById('sp-meta').innerHTML = 'System: '+sit.sys+'<br>Frequency: '+sit.freq+'<br>'+sit.paths.length+' path'+(sit.paths.length>1?'s':'');
+
+  // Build sidebar
+  var sb = document.getElementById('sp-sidebar');
+  var setupKey = sit.paths[0].key;
+  var setupData = STEPS[setupKey];
+  var sideHtml = '<button class="step-back-btn" onclick="closeSituation()">← Back to Dispatch</button>';
+  if (setupData) {
+    sideHtml += '<div class="step-case-card">';
+    sideHtml += '<div class="scc-label">Case Setup</div>';
+    sideHtml += '<div class="scc-row"><span class="scc-key">Type</span><span class="scc-val">'+setupData.setup.type+'</span></div>';
+    sideHtml += '<div class="scc-row"><span class="scc-key">Sub-Type</span><span class="scc-val">'+setupData.setup.sub+'</span></div>';
+    sideHtml += '<div class="scc-row"><span class="scc-key">Origin</span><span class="scc-val">'+setupData.setup.origin+'</span></div>';
+    sideHtml += '<div class="scc-note">'+setupData.setup.note+'</div>';
+    sideHtml += '</div>';
+  }
+  if (sit.paths.length > 1) {
+    sideHtml += '<div class="step-path-nav"><div class="spn-head">Paths</div>';
+    sit.paths.forEach(function(p, i) {
+      sideHtml += '<div class="spn-item'+(i===0?' active':'')+'" onclick="loadPath(\''+p.key+'\',this)">';
+      sideHtml += '<div class="spn-dot"></div>'+p.label;
+      sideHtml += '</div>';
+    });
+    sideHtml += '</div>';
+  }
+  sb.innerHTML = sideHtml;
+  loadPath(sit.paths[0].key, null);
+}
+
+function closeSituation() {
+  document.getElementById('ledger-pane').style.display = 'block';
+  document.getElementById('step-pane').style.display = 'none';
+  currentStepKey = null;
+}
+
+function loadPath(key, navEl) {
+  currentStepKey = key;
+  stepDone[key] = stepDone[key] || {};
+  if (navEl) {
+    document.querySelectorAll('.spn-item').forEach(function(n){ n.classList.remove('active'); });
+    navEl.classList.add('active');
+  }
+  renderStepContent(key);
+}
+
+// ── STEP CONTENT ──────────────────────────────────────────────────────────
+function renderStepContent(key) {
+  var data = STEPS[key];
+  if (!data) return;
+  var done = stepDone[key];
+  var total = data.flow.length;
+  var completed = Object.keys(done).filter(function(k){ return done[k]; }).length;
+  var pct = Math.round((completed/total)*100);
+
+  var html = '';
+  html += '<div class="step-hdr">';
+  html += '<div class="step-hdr-code">'+data.code+'</div>';
+  html += '<div class="step-hdr-title">'+data.title+'</div>';
+  html += '</div>';
+
+  html += '<div class="step-progress">';
+  html += '<div class="sp-bar"><div class="sp-fill" style="width:'+pct+'%"></div></div>';
+  html += '<span class="sp-label">'+completed+' / '+total+' steps</span>';
+  html += '<button class="sp-end-btn'+(pct===100?' show':'')+'" onclick="callComplete(\'' + key + '\')">' + 'Call Complete</button>';
+  html += '</div>';
+
+  html += '<div class="step-timeline">';
+  data.flow.forEach(function(step, i) {
+    var isDone = done[i];
+    var isOpen = !isDone;
+    var sysClass = 'sys-'+step.sys;
+    html += '<div class="step-item'+(isDone?' done':'')+(isOpen?' open':'')+'" id="si-'+key+'-'+i+'">';
+    html += '<div class="step-connector"></div>';
+    html += '<div class="step-marker" onclick="toggleStep(\''+key+'\','+i+')">'+( isDone ? '✓' : (i+1) )+'</div>';
+    html += '<div class="step-body" onclick="toggleStep(\''+key+'\','+i+')">';
+    html += '<div class="step-body-top">';
+    html += '<div class="step-body-label">'+step.label+'</div>';
+    html += '<span class="step-sys-badge '+sysClass+'">'+step.sys.toUpperCase()+'</span>';
+    html += '</div>';
+    html += '<div class="step-body-detail">'+step.detail;
+    if (step.isStop) html += '<div class="hard-stop">'+step.stopText+'</div>';
+    if (step.isBranch) html += '<div class="branch-block">'+step.branchText+'</div>';
+    html += '</div>';
+    html += '</div></div>';
+  });
+  html += '</div>';
+
+  // Retrieve row + case note
+  html += '<div class="info-row">';
+  html += '<div class="info-panel"><div class="ip-label">Retrieve from System</div><div class="ip-body">'+data.retrieve+'</div></div>';
+  html += '<div class="info-panel"><div class="ip-label">Escalation Triggers</div><div class="ip-body">'+data.escalate+'</div></div>';
+  html += '</div>';
+
+  html += '<div class="case-note-wrap">';
+  html += '<div class="cn-head"><div class="cn-head-label">Case Note Template</div><button class="cn-copy-btn" onclick="copyNote(\'cn-body-'+key+'\')">Copy</button></div>';
+  html += '<div class="cn-body" id="cn-body-'+key+'">'+data.template+'</div>';
+  html += '</div>';
+
+  document.getElementById('sp-content').innerHTML = html;
+}
+
+function toggleStep(key, idx) {
+  stepDone[key] = stepDone[key] || {};
+  stepDone[key][idx] = !stepDone[key][idx];
+  renderStepContent(key);
+}
+
+function copyNote(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(function(){
+    showToast('Template copied');
+  });
+}
+
+function showToast(msg) {
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 2000);
+}
+
+// ── REFERENCE ─────────────────────────────────────────────────────────────
+function showRef(id) {
+  document.querySelectorAll('.ref-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.ref-nav-item').forEach(function(n){ n.classList.remove('active'); });
+  document.getElementById('ref-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+function renderReference() {
+  // Rules
+  var rHtml = '<div class="rules-grid">';
+  RULES.forEach(function(r) {
+    rHtml += '<div class="rule-card" style="border-left-color:'+r.col+'">';
+    rHtml += '<div class="rule-code" style="color:'+r.col+'">'+r.code+'</div>';
+    rHtml += '<div class="rule-text">'+r.text+'</div></div>';
+  });
+  rHtml += '</div>';
+  document.getElementById('ref-rules').innerHTML = rHtml;
+
+  // Scripts
+  var scHtml = '<div class="script-stack">';
+  SCRIPTS.forEach(function(s, i) {
+    scHtml += '<div class="script-card" id="sc-'+i+'">';
+    scHtml += '<div class="script-head" onclick="toggleScript('+i+')">';
+    scHtml += '<span class="script-label-tag" style="background:'+s.col+'20;color:'+s.col+'">'+s.label+'</span>';
+    scHtml += '<span class="script-chevron">▾</span>';
+    scHtml += '</div>';
+    scHtml += '<div class="script-body">'+s.text+'</div>';
+    scHtml += '</div>';
+  });
+  scHtml += '</div>';
+  document.getElementById('ref-scripts').innerHTML = scHtml;
+
+  // Connects
+  var cnHtml = '<table class="connects-table"><thead><tr><th>Team</th><th>Quick Connect</th><th>Use When</th></tr></thead><tbody>';
+  CONNECTS.forEach(function(c) {
+    cnHtml += '<tr>';
+    cnHtml += '<td><div class="ct-team">'+c.team+'</div></td>';
+    cnHtml += '<td><span class="ct-qc" onclick="copyQC(\''+c.qc+'\')">'+c.qc+'</span></td>';
+    cnHtml += '<td><div class="ct-use">'+c.use+'</div></td>';
+    cnHtml += '</tr>';
+  });
+  cnHtml += '</tbody></table>';
+  document.getElementById('ref-connects').innerHTML = cnHtml;
+
+  // Compliance
+  var compHtml = '<div style="max-width:640px">';
+  compHtml += '<div class="rule-card" style="border-left-color:#8b1a1a;margin-bottom:12px"><div class="rule-code" style="color:#8b1a1a">FDCPA — FAIR DEBT COLLECTION PRACTICES ACT</div><div class="rule-text" style="font-size:12px;line-height:1.8">The FDCPA prohibits abusive, unfair, or deceptive practices in the collection of consumer debts. As a mortgage servicer agent, you are bound by these rules on every call.<br><br><strong>Prohibited actions:</strong> Threatening arrest or legal action you cannot take · Calling before 8am or after 9pm local time · Using profane or obscene language · Making false statements about the debt · Contacting a borrower after a cease communication request<br><br><strong>Required actions:</strong> Honor cease communication requests immediately · Provide validation of debt when requested in writing · Identify yourself and the company on every call · Disclose that the call is an attempt to collect a debt</div></div>';
+  compHtml += '<div class="rule-card" style="border-left-color:#1a2e4a;margin-bottom:12px"><div class="rule-code" style="color:#1a2e4a">RESPA — REAL ESTATE SETTLEMENT PROCEDURES ACT</div><div class="rule-text" style="font-size:12px;line-height:1.8">RESPA governs how mortgage servicers must handle borrower inquiries and complaints. Under RESPA, a Qualified Written Request (QWR) from a borrower must be acknowledged within 5 business days and resolved within 30 business days. Escrow accounts and disbursements are also regulated under RESPA. Failure to respond to a QWR is a federal violation.</div></div>';
+  compHtml += '<div class="rule-card" style="border-left-color:#2a5c3a"><div class="rule-code" style="color:#2a5c3a">CFPB — CONSUMER FINANCIAL PROTECTION BUREAU</div><div class="rule-text" style="font-size:12px;line-height:1.8">The CFPB enforces federal consumer financial laws and accepts borrower complaints. If a borrower mentions they have filed or intend to file a CFPB complaint, escalate to supervisor immediately and document verbatim. CFPB complaints trigger a formal regulatory response process — they cannot be handled at Tier I.</div></div>';
+  compHtml += '</div>';
+  document.getElementById('ref-compliance').innerHTML = compHtml;
+}
+
+function toggleScript(i) {
+  document.getElementById('sc-'+i).classList.toggle('open');
+}
+
+function copyQC(qc) {
+  navigator.clipboard.writeText(qc).then(function(){ showToast(qc + ' copied'); });
+}
+
+// ── QUIZ ──────────────────────────────────────────────────────────────────
+function renderQuiz() {
+  if (quizIdx >= QUIZ.length) { showQuizResult(); return; }
+  var q = QUIZ[quizIdx];
+  var pct = Math.round((quizIdx/QUIZ.length)*100);
+  document.getElementById('qpFill').style.width = pct+'%';
+  document.getElementById('qpLabel').textContent = (quizIdx+1)+' / '+QUIZ.length;
+  quizAnswered = false;
+  var letters = ['A','B','C','D'];
+  var html = '<div class="quiz-cat">'+q.cat+'</div>';
+  html += '<div class="quiz-q">'+q.q+'</div>';
+  q.opts.forEach(function(opt,i){
+    html += '<div class="quiz-opt" id="qo-'+i+'" onclick="answerQuiz('+i+')">';
+    html += '<span class="quiz-opt-letter">'+letters[i]+'</span>';
+    html += '<span>'+opt+'</span></div>';
+  });
+  html += '<div class="quiz-feedback" id="qFeedback"></div>';
+  html += '<button class="quiz-next-btn" id="qNext" onclick="nextQ()">Next Question →</button>';
+  document.getElementById('quizArea').innerHTML = html;
+}
+
+function answerQuiz(idx) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  var q = QUIZ[quizIdx];
+  if (idx === q.correct) quizScore++;
+  for (var i=0; i<q.opts.length; i++) {
+    var el = document.getElementById('qo-'+i);
+    if (i===q.correct) el.classList.add('correct');
+    else if (i===idx && idx!==q.correct) el.classList.add('wrong');
+  }
+  var fb = document.getElementById('qFeedback');
+  fb.textContent = (idx===q.correct?'Correct. ':'Incorrect. ')+q.exp;
+  fb.className = 'quiz-feedback show '+(idx===q.correct?'correct-fb':'wrong-fb');
+  document.getElementById('qNext').classList.add('show');
+}
+
+function nextQ() { quizIdx++; renderQuiz(); }
+
+function showQuizResult() {
+  var pct = Math.round((quizScore/QUIZ.length)*100);
+  document.getElementById('qpFill').style.width='100%';
+  document.getElementById('qpLabel').textContent='Complete';
+  var msg = pct>=90?'Excellent. You know this cold.':pct>=75?'Strong. Review the ones you missed.':pct>=60?'Getting there. Keep drilling.':'Review the reference material and try again.';
+  document.getElementById('quizArea').innerHTML =
+    '<div style="text-align:center;padding:40px 0">' +
+    '<div style="font-family:var(--serif);font-size:56px;font-weight:700;color:var(--ink);letter-spacing:-0.04em;line-height:1;margin-bottom:8px">'+pct+'%</div>'+
+    '<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--sienna);text-transform:uppercase;margin-bottom:6px">'+quizScore+' correct of '+QUIZ.length+'</div>'+
+    '<div style="font-size:14px;color:var(--dim)">'+msg+'</div>'+
+    '</div>';
+}
+
+function resetQuiz() { quizIdx=0; quizScore=0; quizAnswered=false; renderQuiz(); }
+
+
+function callComplete(key) {
+  // Reset step state for this path
+  stepDone[key] = {};
+  // Go back to dispatch
+  closeSituation();
+  // Show a brief toast
+  showToast('Call logged. Ready for next call.');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+renderLedger();
+renderReference();
+renderQuiz();
+</script>
+</body>
+</html>

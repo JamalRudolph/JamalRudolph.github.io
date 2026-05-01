@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Chartline · Medical Records & Legal Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --paper:#f4f6f9;--paper2:#eaecf2;--paper3:#dde1eb;
+  --ink:#0f1e35;--ink2:#1a2d45;
+  --t1:#1e3a5f;--t1-bg:#eef3fa;--t1-bdr:#b8cfe8;
+  --t2:#b45309;--t2-bg:#fffbeb;--t2-bdr:#fcd34d;
+  --t3:#dc2626;--t3-bg:#fff5f5;
+  --hipaa:#dc2626;--hipaa-bg:#fff5f5;
+  --txt1:#0f172a;--txt2:#1e293b;--txt3:#475569;--txt4:#94a3b8;
+  --bdr:rgba(30,58,95,0.08);--bdr2:rgba(30,58,95,0.14);
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono","SF Mono",monospace;
+  --nav-h:48px;--tabs-h:32px;
+}
+html,body{height:100%;overflow:hidden;background:var(--paper);color:var(--txt1);font-family:var(--sans)}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+#app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* NAV */
+#top-nav{height:var(--nav-h);flex-shrink:0;background:var(--ink);display:flex;align-items:center;border-bottom:2px solid #1e3a5f;z-index:100}
+.nav-brand{display:flex;align-items:center;gap:10px;padding:0 18px;border-right:1px solid rgba(255,255,255,0.07);height:100%;flex-shrink:0}
+.nav-logo{width:28px;height:28px;border-radius:5px;background:linear-gradient(135deg,#2563eb,#1e3a5f);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:500;color:#fff;letter-spacing:.04em;border:1px solid rgba(255,255,255,0.15)}
+.nav-title{font-size:14px;font-weight:600;color:#fff;letter-spacing:-.01em}
+.nav-sub{font-family:var(--mono);font-size:7px;letter-spacing:.12em;color:rgba(255,255,255,0.3);margin-top:1px}
+#nav-ticker{flex:1;overflow:hidden;padding:0 16px;display:flex;align-items:center;gap:10px}
+.ticker-badge{font-family:var(--mono);font-size:7px;font-weight:500;letter-spacing:.12em;padding:2px 7px;background:#dc2626;color:#fff;flex-shrink:0;border-radius:2px}
+.ticker-scroll{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.3);white-space:nowrap;letter-spacing:.04em;animation:ticker 60s linear infinite}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.nav-controls{display:flex;align-items:center;gap:10px;padding:0 16px;border-left:1px solid rgba(255,255,255,0.07);height:100%;flex-shrink:0}
+#nav-timer{font-family:var(--mono);font-size:14px;font-weight:300;color:rgba(255,255,255,0.35);letter-spacing:.08em}
+.nav-sit-btn{display:flex;align-items:center;gap:7px;padding:6px 14px;border-radius:5px;cursor:pointer;border:1px solid #2563eb;background:rgba(37,99,235,0.15);font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.1em;color:#60a5fa;transition:all .2s}
+.nav-sit-btn:hover{background:rgba(37,99,235,0.28)}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:#2563eb;animation:pdot 1.8s ease-in-out infinite}
+@keyframes pdot{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,.6)}70%{box-shadow:0 0 0 6px rgba(37,99,235,0)}}
+
+/* TABS BAR */
+#tabs-bar{height:var(--tabs-h);flex-shrink:0;background:var(--paper2);border-bottom:1px solid var(--bdr2);display:flex;align-items:center;padding:0 18px;gap:2px;overflow-x:auto}
+.nav-tab{padding:4px 12px;border-radius:4px;font-size:11px;font-weight:500;color:var(--txt3);cursor:pointer;border:none;background:none;white-space:nowrap;transition:all .12s;font-family:var(--sans)}
+.nav-tab:hover{color:var(--txt1);background:var(--paper3)}
+.nav-tab.active{color:var(--t1);background:#fff;border:0.5px solid var(--bdr2);font-weight:600}
+
+/* BODY */
+#body-wrap{display:flex;flex:1;min-height:0;overflow:hidden}
+
+/* SIDEBAR */
+#sidebar{width:198px;flex-shrink:0;border-right:1px solid var(--bdr2);background:var(--paper2);display:flex;flex-direction:column;overflow-y:auto}
+.sb-sec{padding:10px 12px;border-bottom:1px solid var(--bdr)}
+.sb-lbl{font-family:var(--mono);font-size:7px;font-weight:500;letter-spacing:.14em;color:var(--txt4);margin-bottom:7px;display:block}
+.sb-timers{display:flex;gap:5px}
+.sb-t{flex:1;background:#fff;border:0.5px solid var(--bdr2);border-radius:5px;padding:6px 8px}
+.sb-t-type{font-family:var(--mono);font-size:7px;color:var(--txt4);margin-bottom:2px}
+.sb-t-val{font-family:var(--mono);font-size:18px;font-weight:300;color:var(--txt2);line-height:1}
+.sb-t-btns{display:flex;gap:3px;margin-top:5px}
+.sb-btn{flex:1;font-size:9px;padding:3px;border-radius:3px;border:0.5px solid var(--bdr2);background:var(--paper);color:var(--txt3);cursor:pointer;transition:all .12s;font-family:var(--mono)}
+.sb-btn:hover{color:var(--txt1);background:var(--paper3)}
+.rule-item{display:flex;align-items:flex-start;gap:7px;margin-bottom:7px}
+.rule-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.rule-code{font-family:var(--mono);font-size:7px;font-weight:500;margin-bottom:2px}
+.rule-text{font-size:10px;color:var(--txt3);line-height:1.4}
+.script-item{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:4px;cursor:pointer;margin-bottom:2px;transition:all .12s}
+.script-item:hover{background:var(--paper3)}
+.script-box{width:12px;height:12px;border-radius:2px;border:1.5px solid currentColor;flex-shrink:0}
+.script-key{font-family:var(--mono);font-size:7px;font-weight:500;flex-shrink:0}
+.script-preview{font-size:10px;color:var(--txt3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* TRANSFER BOARD */
+#transfer-board{width:188px;flex-shrink:0;border-left:1px solid var(--bdr2);background:var(--paper2);display:flex;flex-direction:column;overflow-y:auto}
+.tb-hdr{padding:8px 12px;border-bottom:1px solid var(--bdr2);font-family:var(--mono);font-size:7px;font-weight:500;letter-spacing:.14em;color:var(--txt4);background:var(--paper3)}
+.tb-item{padding:8px 12px;border-bottom:1px solid var(--bdr)}
+.tb-name{font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:3px}
+.tb-qc{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:500;padding:2px 7px;border-radius:3px;background:#dbeafe;color:#1e3a5f;cursor:pointer;margin-bottom:3px;transition:background .12s}
+.tb-qc:hover{background:#bfdbfe}
+.tb-use{font-size:10px;color:var(--txt3);margin-bottom:4px;line-height:1.4}
+.tb-how{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.06em;color:var(--t1);cursor:pointer}
+.tb-how:hover{text-decoration:underline}
+
+/* ── MISSION CONTROL ── */
+#mission-control{flex:1;flex-direction:column;overflow:hidden}
+.mc-col-hdrs{display:grid;grid-template-columns:1fr 1fr;border-bottom:2px solid var(--bdr2);flex-shrink:0;background:var(--paper2)}
+.mc-col-hdr{padding:10px 18px;display:flex;align-items:center;gap:10px;border-right:1px solid var(--bdr2)}
+.mc-col-hdr:last-child{border-right:none}
+.mc-tier-badge{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.08em;padding:3px 9px;border-radius:3px;border:1.5px solid;flex-shrink:0}
+.mc-col-title{font-size:13px;font-weight:600;color:var(--txt1)}
+.mc-col-sub{font-family:var(--mono);font-size:9px;color:var(--txt4);margin-top:2px;letter-spacing:.06em}
+.mc-col-count{margin-left:auto;font-family:var(--mono);font-size:24px;font-weight:300;color:var(--txt3)}
+.mc-search-bar{display:flex;align-items:center;gap:12px;padding:7px 18px;border-bottom:1px solid var(--bdr2);background:#fff;flex-shrink:0}
+.mc-search-wrap{display:flex;align-items:center;gap:8px;flex:1;background:var(--paper);border:0.5px solid var(--bdr2);border-radius:5px;padding:5px 10px;transition:border-color .14s}
+.mc-search-wrap:focus-within{border-color:var(--t1)}
+.mc-search-wrap input{flex:1;background:none;border:none;outline:none;font-family:var(--mono);font-size:11px;color:var(--txt1);letter-spacing:.04em}
+.mc-search-wrap input::placeholder{color:var(--txt4)}
+.mc-stats{display:flex;gap:14px;flex-shrink:0}
+.mc-stat{display:flex;flex-direction:column;align-items:center;gap:1px}
+.mc-stat-n{font-family:var(--mono);font-size:15px;font-weight:300;line-height:1;color:var(--txt2)}
+.mc-stat-l{font-family:var(--mono);font-size:7px;letter-spacing:.1em;color:var(--txt4)}
+.mc-panels{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden}
+.mc-panel{display:flex;flex-direction:column;border-right:1px solid var(--bdr2);overflow:hidden}
+.mc-panel:last-child{border-right:none}
+.mc-panel-scroll{flex:1;overflow-y:auto}
+.mc-tbl-hdr{display:grid;grid-template-columns:56px 1fr 44px 40px 52px;padding:5px 16px;background:var(--paper3);border-bottom:1px solid var(--bdr2);position:sticky;top:0;z-index:10}
+.mc-tbl-hdr span{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.1em;color:var(--txt4)}
+.mc-row{display:grid;grid-template-columns:56px 1fr 44px 40px 52px;align-items:center;padding:0 16px;border-bottom:1px solid var(--bdr);border-left:4px solid transparent;cursor:pointer;transition:all .12s;background:#fff;min-height:52px}
+.mc-row:hover{background:var(--paper);border-left-color:var(--t1)}
+.mc-row.tier1{border-left-color:var(--t1-bdr)}
+.mc-row.tier2{border-left-color:var(--t2-bdr);background:#fffdf7}
+.mc-row.tier2:hover{background:#fff8e1}
+.mc-row-code{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.06em;color:var(--txt2)}
+.mc-row-name{font-size:13px;font-weight:600;color:var(--txt1);line-height:1.3}
+.mc-row-desc{font-size:10px;color:var(--txt3);margin-top:1px;line-height:1.3}
+.mc-row-hipaa{font-family:var(--mono);font-size:7px;font-weight:500;text-align:center;padding:2px 4px;border-radius:3px;background:#fee2e2;color:#dc2626;border:1px solid #fca5a5}
+.mc-row-tier{font-family:var(--mono);font-size:8px;font-weight:500;text-align:center;padding:2px 5px;border-radius:3px}
+.mc-row-tier.t1{background:var(--t1-bg);color:var(--t1)}
+.mc-row-tier.t2{background:var(--t2-bg);color:var(--t2)}
+.mc-row-paths{font-family:var(--mono);font-size:9px;color:var(--txt4);text-align:right}
+.mc-status-bar{background:var(--ink);padding:5px 18px;border-top:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:16px;flex-shrink:0}
+.mc-sb-stat{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.28);letter-spacing:.08em}
+.mc-sb-stat span{color:rgba(255,255,255,0.65)}
+.mc-sb-hipaa{margin-left:auto;font-family:var(--mono);font-size:8px;font-weight:500;color:#f87171;letter-spacing:.06em}
+
+/* ── SITUATION ROOM ── */
+#situation-room{flex:1;flex-direction:column;overflow:hidden}
+.sr-hdr{padding:10px 18px;border-bottom:1px solid var(--bdr2);background:#fff;flex-shrink:0;display:flex;align-items:center;gap:12px}
+.sr-back{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.06em;padding:5px 11px;border-radius:4px;border:0.5px solid var(--bdr2);background:var(--paper);color:var(--txt3);cursor:pointer;transition:all .14s;flex-shrink:0}
+.sr-back:hover{color:var(--txt1);background:var(--paper3)}
+.sr-icon{font-size:22px;flex-shrink:0}
+.sr-name{font-size:16px;font-weight:700;color:var(--txt1)}
+.sr-meta{font-family:var(--mono);font-size:8px;color:var(--txt4);margin-top:1px}
+.sr-paths{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto}
+.sr-path-btn{font-family:var(--mono);font-size:8px;font-weight:500;padding:3px 10px;border-radius:10px;cursor:pointer;border:1.5px solid var(--bdr2);background:none;color:var(--txt3);transition:all .14s}
+.sr-cs{padding:8px 18px;flex-shrink:0;display:flex;align-items:center;gap:18px;border-bottom:2px solid var(--t1)}
+.sr-cs-lbl{font-family:var(--mono);font-size:7px;font-weight:500;letter-spacing:.14em;color:var(--t1);flex-shrink:0}
+.sr-cs-field{display:flex;flex-direction:column;gap:1px}
+.sr-cs-fl{font-family:var(--mono);font-size:7px;letter-spacing:.08em;color:var(--txt4)}
+.sr-cs-fv{font-size:12px;font-weight:600;color:var(--txt1)}
+#cs-note{font-family:var(--mono);font-size:9px;color:#dc2626;background:#fff5f5;border:1px solid #fca5a5;border-radius:4px;padding:3px 8px;margin-left:auto;flex-shrink:0;max-width:200px;text-align:right}
+#sr-hipaa-banner{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.08em;padding:3px 10px;border-radius:4px;background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;flex-shrink:0}
+.sr-prog-bar{height:30px;padding:0 18px;border-bottom:1px solid var(--bdr);background:var(--paper2);flex-shrink:0;display:flex;align-items:center;gap:10px}
+.sr-prog-lbl{font-family:var(--mono);font-size:7px;font-weight:500;letter-spacing:.1em;color:var(--txt4);flex-shrink:0}
+.sr-prog-track{flex:1;height:3px;background:var(--bdr2);border-radius:2px;overflow:hidden}
+.sr-prog-fill{height:100%;width:0%;border-radius:2px;transition:width .4s cubic-bezier(0.4,0,0.2,1)}
+.sr-prog-count{font-family:var(--mono);font-size:8px;font-weight:500;color:var(--t1);flex-shrink:0}
+.sr-end-btn{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.06em;padding:4px 11px;border-radius:4px;flex-shrink:0;border:1px solid #86efac;background:#f0fdf4;color:#16a34a;cursor:pointer;transition:all .3s}
+.sr-end-ready{border-color:#16a34a!important;background:#dcfce7!important;box-shadow:0 0 0 3px rgba(22,163,74,0.1)!important}
+.sr-workspace{display:flex;flex:1;min-height:0;overflow:hidden}
+.sr-steps-col{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;border-right:1px solid var(--bdr2)}
+.sr-steps-hdr{padding:7px 14px;border-bottom:1px solid var(--bdr);background:var(--paper2);flex-shrink:0;display:flex;align-items:center;gap:7px}
+.sr-steps-dot{width:6px;height:6px;border-radius:50%;background:var(--t1);flex-shrink:0}
+.sr-steps-lbl{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.1em;color:var(--txt2)}
+.sr-steps-sub{font-size:10px;color:var(--txt3)}
+#sr-steps{flex:1;overflow-y:auto;padding:10px 12px;background:var(--paper)}
+.step-item{display:flex;gap:10px;padding:10px 12px;border-radius:7px;cursor:pointer;margin-bottom:5px;border:0.5px solid var(--bdr2);background:#fff;transition:all .25s;overflow:hidden}
+.step-item.s-current{border-color:var(--t1);background:var(--t1-bg);box-shadow:0 2px 12px rgba(30,58,95,0.1),0 0 0 1px rgba(30,58,95,0.15);transform:translateY(-1px)}
+.step-item.s-done{opacity:.36;background:var(--paper);transform:none}
+.step-item.s-upcoming{opacity:.7}
+.step-num{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:500;border:1.5px solid var(--bdr2);color:var(--txt4);background:#fff;transition:all .28s}
+.step-body{flex:1;min-width:0;overflow:hidden}
+.step-top-row{display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap}
+.step-lbl{font-size:13px;font-weight:700;color:var(--txt1)}
+.step-badge{font-family:var(--mono);font-size:7px;font-weight:500;padding:1px 5px;border-radius:3px}
+.badge-hipaa{background:#fee2e2;color:#dc2626;border:1px solid #fca5a5}
+.badge-sf{background:#dbeafe;color:#1e3a5f;border:1px solid #bfdbfe}
+.badge-rclc{background:#ede9fe;color:#7c3aed;border:1px solid #c4b5fd}
+.badge-both{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+.step-detail{font-size:12px;color:var(--txt3);line-height:1.6;word-wrap:break-word;overflow-wrap:break-word;white-space:normal}
+.step-stop{background:#fff5f5;border:1px solid #fca5a5;border-radius:6px;padding:8px 12px;margin-bottom:5px;font-family:var(--mono);font-size:9px;font-weight:500;color:#dc2626;letter-spacing:.04em;line-height:1.5}
+.step-branch{background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:8px 12px;margin-bottom:5px;font-size:11px;color:#92400e;line-height:1.5}
+.step-stop-inner{background:#fff5f5;border:1px solid #fca5a5;border-radius:5px;padding:7px 10px;margin-top:8px;font-family:var(--mono);font-size:9px;font-weight:500;color:#dc2626;letter-spacing:.04em;line-height:1.5}
+.step-branch-inner{background:#fffbeb;border:1px solid #fcd34d;border-radius:5px;padding:7px 10px;margin-top:8px;font-size:11px;color:#92400e;line-height:1.5}
+
+/* Case Comment Panel */
+.sr-cc-col{width:240px;flex-shrink:0;display:flex;flex-direction:column;overflow:hidden}
+.sr-cc-hdr{padding:7px 14px;border-bottom:1px solid var(--bdr);background:var(--paper2);flex-shrink:0;display:flex;align-items:center;gap:7px}
+.sr-cc-dot{width:6px;height:6px;border-radius:50%;background:#7c3aed;flex-shrink:0}
+.sr-cc-lbl{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.1em;color:var(--txt2)}
+#cc-fields{flex-shrink:0;overflow-y:auto;max-height:220px;padding:8px 12px;border-bottom:1px solid var(--bdr);background:#fff}
+.cc-fg{margin-bottom:8px}
+.cc-lbl{font-family:var(--mono);font-size:7px;font-weight:500;letter-spacing:.08em;color:var(--txt4);margin-bottom:3px}
+.cc-inp{width:100%;padding:5px 8px;border:0.5px solid var(--bdr2);border-radius:4px;font-family:var(--sans);font-size:11px;color:var(--txt1);background:#fff;outline:none;transition:border-color .12s}
+.cc-inp:focus{border-color:var(--t1)}
+.cc-assembled-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.cc-assembled-lbl{padding:6px 12px;font-family:var(--mono);font-size:7px;font-weight:500;letter-spacing:.1em;color:var(--txt4);background:var(--paper2);border-bottom:1px solid var(--bdr);flex-shrink:0}
+#cc-assembled{flex:1;overflow-y:auto;padding:10px 12px;font-family:var(--mono);font-size:10px;color:var(--txt2);line-height:1.7;white-space:pre-wrap;background:#fff}
+.cc-copy-bar{padding:8px 12px;border-top:1px solid var(--bdr);flex-shrink:0}
+#cc-copy-btn{width:100%;padding:7px;border-radius:5px;border:1px solid var(--bdr2);background:var(--paper);color:var(--txt3);font-family:var(--mono);font-size:9px;font-weight:500;cursor:pointer;letter-spacing:.06em;transition:all .2s}
+#cc-copy-btn.cc-ready{border-color:#7c3aed;background:#f5f3ff;color:#7c3aed}
+
+/* ── REF PANEL ── */
+#ref-panel{flex:1;flex-direction:column;overflow:hidden}
+.ref-hdr{padding:10px 18px;border-bottom:1px solid var(--bdr2);background:#fff;flex-shrink:0;display:flex;align-items:center;gap:12px}
+.ref-back{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.06em;padding:5px 11px;border-radius:4px;border:0.5px solid var(--bdr2);background:var(--paper);color:var(--txt3);cursor:pointer}
+.ref-back:hover{color:var(--txt1);background:var(--paper3)}
+.ref-title{font-size:15px;font-weight:700;color:var(--txt1)}
+#cl-ref-content{flex:1;overflow-y:auto;padding:24px 28px}
+.cl-rc h2{font-size:15px;font-weight:700;color:var(--txt1);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--t1)}
+.cl-rc table{width:100%;border-collapse:collapse;margin-bottom:12px;font-size:12px}
+.cl-rc th{background:var(--t1);color:#fff;padding:8px 12px;text-align:left;font-size:11px;font-weight:600;font-family:var(--sans)}
+.cl-rc td{padding:8px 12px;border-bottom:0.5px solid var(--bdr2);vertical-align:top;line-height:1.5;color:var(--txt2)}
+.cl-rc tr:nth-child(even) td{background:var(--paper)}
+.cl-tip{background:#eef3fa;border:1px solid var(--t1-bdr);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--t1);line-height:1.6;margin-bottom:8px}
+.cl-stop{background:#fff5f5;border:1px solid #fca5a5;border-radius:6px;padding:10px 14px;font-size:12px;color:#dc2626;line-height:1.6;margin-bottom:8px}
+
+/* ── STUDY PANEL ── */
+#study-panel{flex:1;flex-direction:column;overflow:hidden}
+.study-hdr{padding:10px 18px;border-bottom:1px solid var(--bdr2);background:#fff;flex-shrink:0;display:flex;align-items:center;gap:12px}
+.study-back{font-family:var(--mono);font-size:8px;font-weight:500;padding:5px 11px;border-radius:4px;border:0.5px solid var(--bdr2);background:var(--paper);color:var(--txt3);cursor:pointer}
+.study-back:hover{color:var(--txt1);background:var(--paper3)}
+.study-title{font-size:15px;font-weight:700;color:var(--txt1)}
+.study-tabs{display:flex;border-bottom:1px solid var(--bdr2);flex-shrink:0;background:#fff}
+.study-tab-btn{padding:8px 20px;border:none;border-bottom:2px solid transparent;background:none;font-size:12px;font-weight:500;color:var(--txt4);cursor:pointer;transition:all .14s;font-family:var(--sans)}
+.study-tab-btn:hover{color:var(--txt2)}
+.study-body{flex:1;overflow:hidden;display:flex}
+
+/* Quiz */
+#cl-study-quiz{flex:1;display:flex;overflow:hidden}
+#cl-quiz-setup{flex:1;overflow-y:auto;padding:20px 24px}
+.quiz-mode-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.quiz-mode-btn{padding:16px;border-radius:8px;border:1.5px solid var(--bdr2);background:#fff;cursor:pointer;text-align:left;transition:all .14s}
+.quiz-mode-btn:hover{border-color:var(--t1);background:var(--t1-bg)}
+.qmb-title{font-size:13px;font-weight:600;color:var(--txt1);margin-bottom:4px}
+.qmb-sub{font-size:11px;color:var(--txt3);font-family:var(--mono)}
+#cl-quiz-active{flex:1;display:none;flex-direction:column;overflow:hidden}
+.quiz-prog-bar{padding:12px 24px;border-bottom:1px solid var(--bdr);flex-shrink:0}
+.quiz-prog-row{display:flex;justify-content:space-between;margin-bottom:6px;font-family:var(--mono);font-size:10px;color:var(--txt3)}
+.quiz-prog-track{height:4px;background:var(--bdr2);border-radius:2px;overflow:hidden}
+.quiz-prog-fill{height:100%;background:var(--t1);border-radius:2px;transition:width .3s}
+.quiz-q-area{flex:1;overflow-y:auto;padding:20px 24px}
+.quiz-cat-pill{font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.12em;padding:2px 8px;border-radius:10px;background:var(--t1-bg);color:var(--t1);display:inline-block;margin-bottom:12px}
+.quiz-qtext{font-size:15px;font-weight:600;color:var(--txt1);line-height:1.55;margin-bottom:18px}
+#cl-qfeedback{border-radius:6px;padding:10px 14px;font-size:12px;line-height:1.55;display:none;margin-bottom:12px}
+#cl-qnext{padding:10px 24px;border:none;border-radius:6px;background:var(--t1);color:#fff;font-family:var(--mono);font-size:11px;font-weight:500;cursor:pointer;letter-spacing:.06em;margin-bottom:8px;width:fit-content;display:none}
+#cl-quiz-results{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
+.qr-score-ring{width:100px;height:100px;border-radius:50%;border:5px solid var(--t1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+#cl-rpct{font-family:var(--mono);font-size:28px;font-weight:500;color:var(--t1)}
+#cl-remoji{font-size:28px;margin-bottom:8px}
+#cl-rmsg{font-size:14px;color:var(--txt3);margin-bottom:24px;max-width:300px}
+.qr-stats{display:flex;gap:24px;margin-bottom:24px}
+.qr-stat{text-align:center}
+.qr-stat-n{font-family:var(--mono);font-size:22px;font-weight:300;display:block}
+.qr-stat-l{font-size:10px;color:var(--txt4)}
+.qr-btns{display:flex;gap:10px}
+.qr-btn{padding:10px 20px;border-radius:6px;border:none;font-family:var(--mono);font-size:10px;font-weight:500;cursor:pointer;letter-spacing:.06em}
+.qr-btn-primary{background:var(--t1);color:#fff}
+.qr-btn-sec{background:var(--paper2);color:var(--txt3)}
+
+/* Quick Ref */
+#cl-study-ref{flex:1;display:none;overflow:hidden}
+.qr-sidebar{width:160px;border-right:1px solid var(--bdr2);overflow-y:auto;padding:12px 0}
+.qr-sidebar-btn{display:block;width:100%;text-align:left;padding:9px 16px;font-size:11px;color:var(--txt3);border:none;background:none;cursor:pointer;border-left:2px solid transparent;transition:all .12s;font-family:var(--sans)}
+.qr-sidebar-btn:hover{color:var(--txt1);background:var(--paper)}
+.qr-content-wrap{flex:1;overflow-y:auto;padding:20px 24px}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- TOP NAV -->
+<div id="top-nav">
+  <div class="nav-brand">
+    <div class="nav-logo">CL</div>
+    <div>
+      <div class="nav-title">Chartline</div>
+      <div class="nav-sub">MEDICAL RECORDS &amp; LEGAL SERVICES</div>
+    </div>
+  </div>
+  <div id="nav-ticker">
+    <div class="ticker-badge">HIPAA</div>
+    <div class="ticker-scroll">VERIFY IDENTITY BEFORE ACCESSING PHI &nbsp;&nbsp;&bull;&nbsp;&nbsp; OPEN CASE BEFORE RECORDS SYSTEM &nbsp;&nbsp;&bull;&nbsp;&nbsp; AUTH REQUIRED BEFORE RELEASE &nbsp;&nbsp;&bull;&nbsp;&nbsp; WRONG-PATIENT RECORDS = HIPAA BREACH PROTOCOL &nbsp;&nbsp;&bull;&nbsp;&nbsp; GIVE CASE NUMBER BEFORE EVERY CALL END &nbsp;&nbsp;&bull;&nbsp;&nbsp; VERIFY IDENTITY BEFORE ACCESSING PHI &nbsp;&nbsp;&bull;&nbsp;&nbsp; OPEN CASE BEFORE RECORDS SYSTEM &nbsp;&nbsp;&bull;&nbsp;&nbsp; AUTH REQUIRED BEFORE RELEASE &nbsp;&nbsp;&bull;&nbsp;&nbsp; WRONG-PATIENT RECORDS = HIPAA BREACH PROTOCOL &nbsp;&nbsp;&bull;&nbsp;&nbsp; GIVE CASE NUMBER BEFORE EVERY CALL END</div>
+  </div>
+  <div class="nav-controls">
+    <div id="nav-timer">00:00</div>
+    <div class="nav-sit-btn" onclick="showView('mission-control');document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active')})">
+      <div class="pulse-dot"></div>
+      <span>SITUATIONS</span>
+    </div>
+  </div>
+</div>
+
+<!-- TABS BAR -->
+<div id="tabs-bar"><div id="cl-nav-tabs" style="display:flex;gap:2px"></div></div>
+
+<!-- BODY -->
+<div id="body-wrap">
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sb-sec">
+      <span class="sb-lbl">CALL TIMERS</span>
+      <div class="sb-timers">
+        <div class="sb-t">
+          <div class="sb-t-type">CALL</div>
+          <div class="sb-t-val" id="call-t">00:00</div>
+          <div class="sb-t-btns">
+            <button class="sb-btn" id="call-play" onclick="toggleCallTimer()">&#9654;</button>
+            <button class="sb-btn" onclick="resetCallTimer()">&#9632;</button>
+          </div>
+        </div>
+        <div class="sb-t">
+          <div class="sb-t-type">HOLD</div>
+          <div class="sb-t-val" id="hold-t">00:00</div>
+          <div class="sb-t-btns">
+            <button class="sb-btn" id="hold-btn" onclick="toggleHoldTimer()">&#9654;</button>
+            <button class="sb-btn" onclick="resetHoldTimer()">&#9632;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sb-sec">
+      <span class="sb-lbl">MISSION RULES</span>
+      <div id="rules-list"></div>
+    </div>
+    <div class="sb-sec">
+      <span class="sb-lbl">SCRIPTS</span>
+      <div id="scripts-list"></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- MISSION CONTROL -->
+    <div id="mission-control" style="display:flex">
+      <div class="mc-col-hdrs">
+        <div class="mc-col-hdr">
+          <div class="mc-tier-badge" style="border-color:#1e3a5f;color:#1e3a5f">TIER I</div>
+          <div><div class="mc-col-title">Standard Situations</div><div class="mc-col-sub">HIPAA · Auth · Status · Intake</div></div>
+          <div class="mc-col-count" id="mc-t1-ct">0</div>
+        </div>
+        <div class="mc-col-hdr">
+          <div class="mc-tier-badge" style="border-color:#b45309;color:#b45309">TIER II</div>
+          <div><div class="mc-col-title">Complex Situations</div><div class="mc-col-sub">Rush · Dispute · Billing</div></div>
+          <div class="mc-col-count" id="mc-t2-ct">0</div>
+        </div>
+      </div>
+      <div class="mc-search-bar">
+        <div class="mc-search-wrap">
+          <span style="font-family:var(--mono);font-size:11px;color:var(--txt4)">&#x2315;</span>
+          <input type="text" placeholder="Search situations..." oninput="filterSits(this.value)">
+        </div>
+        <div class="mc-stats">
+          <div class="mc-stat"><span class="mc-stat-n" id="mc-total-ct">0</span><span class="mc-stat-l">TOTAL</span></div>
+          <div class="mc-stat"><span class="mc-stat-n">16</span><span class="mc-stat-l">PATHS</span></div>
+          <div class="mc-stat"><span class="mc-stat-n">15</span><span class="mc-stat-l">QUIZ Q</span></div>
+        </div>
+      </div>
+      <div class="mc-panels">
+        <div class="mc-panel">
+          <div class="mc-tbl-hdr"><span>CODE</span><span>SITUATION</span><span>PHI</span><span>TIER</span><span style="text-align:right">PATHS</span></div>
+          <div class="mc-panel-scroll" id="mc-panel-t1"></div>
+        </div>
+        <div class="mc-panel">
+          <div class="mc-tbl-hdr"><span>CODE</span><span>SITUATION</span><span>PHI</span><span>TIER</span><span style="text-align:right">PATHS</span></div>
+          <div class="mc-panel-scroll" id="mc-panel-t23"></div>
+        </div>
+      </div>
+      <div class="mc-status-bar">
+        <div class="mc-sb-stat">SITUATIONS <span>8</span></div>
+        <div class="mc-sb-stat">PATHS <span>16</span></div>
+        <div class="mc-sb-stat">QUIZ <span>15 Q</span></div>
+        <div class="mc-sb-stat">SCRIPTS <span>7</span></div>
+        <div class="mc-sb-stat">CONNECTS <span>6</span></div>
+        <div class="mc-sb-hipaa">&#9888; HIPAA COMPLIANCE ACTIVE</div>
+      </div>
+    </div>
+
+    <!-- SITUATION ROOM -->
+    <div id="situation-room" style="display:none">
+      <div class="sr-hdr">
+        <button class="sr-back" onclick="exitSitRoom()">&#8592; DISPATCH</button>
+        <div class="sr-icon" id="sr-icon">📋</div>
+        <div><div class="sr-name" id="sr-name">Situation</div><div class="sr-meta" id="sr-meta"></div></div>
+        <div class="sr-paths" id="sr-paths"></div>
+      </div>
+      <div class="sr-cs" id="sr-case-setup">
+        <div class="sr-cs-lbl" id="sr-cs-lbl">CASE SETUP</div>
+        <div class="sr-cs-field"><div class="sr-cs-fl">TYPE</div><div class="sr-cs-fv" id="cs-type">—</div></div>
+        <div class="sr-cs-field"><div class="sr-cs-fl">SUB-TYPE</div><div class="sr-cs-fv" id="cs-sub">—</div></div>
+        <div class="sr-cs-field"><div class="sr-cs-fl">ORIGIN</div><div class="sr-cs-fv" id="cs-origin">—</div></div>
+        <div id="cs-note" style="display:none"></div>
+        <div id="sr-hipaa-banner" style="display:none">&#9888; HIPAA REQUIRED</div>
+      </div>
+      <div class="sr-prog-bar">
+        <span class="sr-prog-lbl">PROGRESS</span>
+        <div class="sr-prog-track"><div class="sr-prog-fill" id="sr-prog-fill"></div></div>
+        <span class="sr-prog-count" id="sr-prog-count">0/0</span>
+        <button class="sr-end-btn" id="sr-end-btn" onclick="endCall()">End Call</button>
+      </div>
+      <div class="sr-workspace">
+        <div class="sr-steps-col">
+          <div class="sr-steps-hdr"><div class="sr-steps-dot"></div><span class="sr-steps-lbl">STEPS</span><span class="sr-steps-sub">Click each step to mark complete</span></div>
+          <div id="sr-steps"></div>
+        </div>
+        <div class="sr-cc-col">
+          <div class="sr-cc-hdr"><div class="sr-cc-dot"></div><span class="sr-cc-lbl">CASE NOTE</span></div>
+          <div id="cc-fields"></div>
+          <div class="cc-assembled-wrap">
+            <div class="cc-assembled-lbl">ASSEMBLED NOTE</div>
+            <pre id="cc-assembled"></pre>
+          </div>
+          <div class="cc-copy-bar">
+            <button id="cc-copy-btn" onclick="copyComment()">Copy to Clipboard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REF PANEL -->
+    <div id="ref-panel" style="display:none">
+      <div class="ref-hdr">
+        <button class="ref-back" onclick="showView('mission-control');document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active')})">&#8592; Dispatch</button>
+        <div class="ref-title">Reference</div>
+      </div>
+      <div id="cl-ref-content"></div>
+    </div>
+
+    <!-- STUDY PANEL -->
+    <div id="study-panel" style="display:none">
+      <div class="study-hdr">
+        <button class="study-back" onclick="showView('mission-control');document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active')})">&#8592; Dispatch</button>
+        <div class="study-title">Study Mode</div>
+      </div>
+      <div class="study-tabs">
+        <button class="study-tab-btn" id="cl-stab-quiz" onclick="showStudyTab('quiz')">Knowledge Check</button>
+        <button class="study-tab-btn" id="cl-stab-ref" onclick="showStudyTab('ref')">Quick Reference</button>
+      </div>
+      <div class="study-body">
+        <!-- Quiz -->
+        <div id="cl-study-quiz" style="display:flex;flex:1">
+          <div id="cl-quiz-setup" style="flex:1;overflow-y:auto;padding:20px 24px">
+            <div class="quiz-mode-btns">
+              <div class="quiz-mode-btn" onclick="startQuiz('all')"><div class="qmb-title">Full Quiz</div><div class="qmb-sub">All 15 questions</div></div>
+              <div class="quiz-mode-btn" onclick="startQuiz('quick')"><div class="qmb-title">Quick Fire</div><div class="qmb-sub">10 questions, randomized</div></div>
+            </div>
+            <div id="cl-quiz-cats"></div>
+          </div>
+          <div id="cl-quiz-active" style="display:none;flex:1;flex-direction:column">
+            <div class="quiz-prog-bar">
+              <div class="quiz-prog-row"><span id="cl-qprog-lbl">Q 1 / 15</span><span id="cl-qscore-lbl">0 correct</span></div>
+              <div class="quiz-prog-track"><div class="quiz-prog-fill" id="cl-qprog-fill" style="width:0%"></div></div>
+            </div>
+            <div class="quiz-q-area">
+              <div class="quiz-cat-pill" id="cl-qcat-lbl">HIPAA</div>
+              <div class="quiz-qtext" id="cl-qtext"></div>
+              <div id="cl-qopts"></div>
+              <div id="cl-qfeedback"></div>
+              <button id="cl-qnext" onclick="nextQ()">Next Question &rsaquo;</button>
+              <button onclick="endQuiz()" style="display:block;border:none;background:none;color:var(--txt4);font-size:11px;cursor:pointer;font-family:var(--mono);padding:4px 0">Exit Quiz</button>
+            </div>
+          </div>
+          <div id="cl-quiz-results" style="display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center">
+            <div id="cl-remoji" style="font-size:36px;margin-bottom:8px">🎯</div>
+            <div class="qr-score-ring"><span id="cl-rpct">0%</span></div>
+            <div id="cl-rmsg" style="font-size:14px;color:var(--txt3);margin-bottom:20px;max-width:300px"></div>
+            <div class="qr-stats">
+              <div class="qr-stat"><span class="qr-stat-n" style="color:#16a34a" id="cl-rcorrect">0</span><span class="qr-stat-l">Correct</span></div>
+              <div class="qr-stat"><span class="qr-stat-n" style="color:#dc2626" id="cl-rwrong">0</span><span class="qr-stat-l">Wrong</span></div>
+              <div class="qr-stat"><span class="qr-stat-n" id="cl-rtotal">0</span><span class="qr-stat-l">Total</span></div>
+            </div>
+            <div class="qr-btns">
+              <button class="qr-btn qr-btn-primary" onclick="endQuiz()">Try Again</button>
+              <button class="qr-btn qr-btn-sec" onclick="showView('mission-control');document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active')})">Back to Dispatch</button>
+            </div>
+          </div>
+        </div>
+        <!-- Quick Ref -->
+        <div id="cl-study-ref" style="display:none;flex:1">
+          <div class="qr-sidebar">
+            <button class="qr-sidebar-btn" id="cl-qrbtn-escalation" onclick="showQuickRef('escalation')">Escalation Guide</button>
+            <button class="qr-sidebar-btn" id="cl-qrbtn-casetypes" onclick="showQuickRef('casetypes')">Case Types</button>
+            <button class="qr-sidebar-btn" id="cl-qrbtn-callflow" onclick="showQuickRef('callflow')">7-Step Call Flow</button>
+          </div>
+          <div class="qr-content-wrap" id="cl-qrcontent"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- TRANSFER BOARD -->
+  <div id="transfer-board">
+    <div class="tb-hdr">QUICK CONNECTS</div>
+    <div id="tb-list"></div>
+  </div>
+
+</div><!-- /body-wrap -->
+</div><!-- /app -->
+
+<script>
+var CL_SITUATIONS = [{"id": "status", "icon": "📋", "label": "Request Status Inquiry", "tier": "I", "tc": "t1", "desc": "Attorney or adjuster checking request status", "freq": "Most frequent", "paths": [{"id": "status-check", "label": "Status Check"}, {"id": "status-deadline", "label": "Court Deadline"}]}, {"id": "intake", "icon": "📥", "label": "New Records Request", "tier": "I", "tc": "t1", "desc": "Opening a new request, gathering required information", "freq": "High frequency", "paths": [{"id": "intake-standard", "label": "Standard Request"}, {"id": "intake-rush", "label": "Rush / Urgent"}]}, {"id": "hipaa", "icon": "🔒", "label": "HIPAA Verification Failure", "tier": "I", "tc": "t1", "desc": "Caller cannot verify identity to access PHI", "freq": "Regular", "paths": [{"id": "hipaa-fail", "label": "Cannot Verify"}, {"id": "hipaa-partial", "label": "Partial Verification"}]}, {"id": "rush", "icon": "⚡", "label": "Rush / Court Deadline", "tier": "II", "tc": "t2", "desc": "Urgent request with legal deadline — escalate path", "freq": "Regular", "paths": [{"id": "rush-court", "label": "Court Deadline"}, {"id": "rush-urgent", "label": "General Rush"}]}, {"id": "dispute", "icon": "⚠️", "label": "Records Incomplete or Wrong", "tier": "II", "tc": "t2", "desc": "Request fulfilled but records missing or wrong", "freq": "Moderate", "paths": [{"id": "dispute-missing", "label": "Missing Records"}, {"id": "dispute-wrong", "label": "Wrong Patient"}]}, {"id": "unauth", "icon": "🚫", "label": "Unauthorized Requester", "tier": "I", "tc": "t1", "desc": "Caller requesting records without authorization", "freq": "Moderate", "paths": [{"id": "unauth-noauth", "label": "No Authorization"}, {"id": "unauth-expired", "label": "Expired Auth"}]}, {"id": "billing", "icon": "💳", "label": "Invoice / Billing Question", "tier": "II", "tc": "t2", "desc": "Billing disputes, invoice copies, payment questions", "freq": "Moderate", "paths": [{"id": "billing-invoice", "label": "Invoice Copy"}, {"id": "billing-dispute", "label": "Billing Dispute"}]}, {"id": "canvass", "icon": "🗺️", "label": "Medical Canvassing Request", "tier": "I", "tc": "t1", "desc": "Request to locate and identify treating providers", "freq": "Lower", "paths": [{"id": "canvass-new", "label": "New Canvass"}, {"id": "canvass-status", "label": "Canvass Status"}]}];
+var CL_RULES = [{"code": "HIPAA FIRST", "col": "#dc2626", "text": "Verify caller identity before accessing or discussing any PHI"}, {"code": "CASE OPEN", "col": "#2563eb", "text": "Open a case in Salesforce before accessing the records system"}, {"code": "CALLER TYPE", "col": "#7c3aed", "text": "Identify: attorney, insurance, TPA, provider, or DDS first"}, {"code": "AUTH CHECK", "col": "#d97706", "text": "Confirm valid authorization exists before releasing records"}, {"code": "DOCUMENT", "col": "#16a34a", "text": "Every call gets a case note — even if no action taken"}, {"code": "CASE NUMBER", "col": "#0891b2", "text": "Give the caller a reference number before ending call"}];
+var CL_SCRIPTS = [{"label": "GREET", "col": "#1e3a5f", "text": "Thank you for calling Chartline Medical Records. My name is [NAME], how can I help you today?"}, {"label": "VERIFY", "col": "#7c3aed", "text": "Before I can access any records information, I need to verify your identity. Can you confirm your name, your organization, and the authorization reference number?"}, {"label": "HOLD", "col": "#d97706", "text": "I am going to place you on a brief hold while I look that up — please hold for just one moment."}, {"label": "60 SEC", "col": "#dc2626", "text": "I appreciate your patience. Our specialist is currently assisting other callers. Would you like me to have someone call you back within one business day?"}, {"label": "HIPAA DECLINE", "col": "#dc2626", "text": "I am not able to provide that information without proper authorization on file. I can note your inquiry and have the appropriate team follow up once authorization is confirmed."}, {"label": "TRANSFER", "col": "#0891b2", "text": "I am going to connect you with our [TEAM] who can best assist you with that. Please hold while I make that connection."}, {"label": "WRAP", "col": "#16a34a", "text": "Is there anything else I can help you with today? Your reference number is [CASE NUMBER]. Thank you for calling Chartline."}];
+var CL_CONNECTS = [{"t": "Records Fulfillment", "qc": "Records-Fulfillment", "u": "Active request issues, fulfillment, missing records"}, {"t": "Authorization Team", "qc": "Auth-Team", "u": "Authorization questions, expired auth, disputes"}, {"t": "Billing & Invoices", "qc": "Billing-Queue", "u": "Invoice copies, billing disputes, payments"}, {"t": "Legal / Compliance", "qc": "Legal-Compliance", "u": "Court orders, subpoenas, HIPAA escalations"}, {"t": "Supervisor", "qc": "Supervisor-Line", "u": "Escalations, complex disputes, irate callers"}, {"t": "Canvassing Team", "qc": "Canvass-Queue", "u": "Canvassing requests and status"}];
+var CL_QUIZ = [{"cat": "HIPAA", "q": "A caller says they have an urgent court deadline and cannot wait for verification. What do you do?", "opts": ["Proceed without verification given the urgency", "Verify identity before proceeding — urgency does not override HIPAA", "Ask a supervisor if you can skip verification", "Tell them to call back when they have verification info"], "correct": 1, "explanation": "HIPAA requires identity verification before accessing PHI regardless of urgency."}, {"cat": "HIPAA", "q": "A caller partially verifies — they have name and organization but not the authorization number. What is the correct next step?", "opts": ["Proceed since they have most of the required information", "Deny access completely and end the call", "Allow a brief hold for them to retrieve the authorization number then re-verify", "Transfer to a supervisor without re-attempting"], "correct": 2, "explanation": "Partial verification allows a brief hold for retrieval. If still unresolvable, proceed to access denied."}, {"cat": "HIPAA", "q": "You delivered records and the caller says they received records for the wrong patient. Your FIRST action?", "opts": ["Apologize and start new fulfillment immediately", "Stop and escalate to Supervisor and Legal/Compliance immediately", "Open a standard dispute case and transfer to Records Fulfillment", "Ask the caller to destroy the wrong records"], "correct": 1, "explanation": "Wrong-patient delivery is a potential HIPAA breach. Supervisor and Legal/Compliance must be notified before any other action."}, {"cat": "HIPAA", "q": "What information can you confirm to an unverified caller?", "opts": ["General status of any request if they provide the patient name", "That Chartline received a request related to a matter in general terms only", "Patient name and dates of service if they provide the case number", "Nothing — end the call immediately"], "correct": 1, "explanation": "Without verification you may only confirm in general that Chartline received a request. No PHI can be confirmed."}, {"cat": "HIPAA", "q": "A caller's authorization expired 30 days ago. Can you process their request?", "opts": ["Yes — 30 days is within an acceptable grace period", "No — an expired authorization has the same effect as no authorization", "Only if a supervisor approves it", "Yes — if the records were retrieved before expiration"], "correct": 1, "explanation": "Expired authorization equals no authorization. A new HIPAA-compliant authorization must be submitted."}, {"cat": "Records Requests", "q": "A new records request is missing the signed authorization. What do you tell the caller?", "opts": ["Process the request and follow up on authorization later", "Cannot process without authorization — provide submission instructions", "Ask the caller to email records directly to you", "Transfer to Records Fulfillment to decide"], "correct": 1, "explanation": "No authorization means no processing. Provide secure portal or fax options for submission."}, {"cat": "Records Requests", "q": "A court deadline is 2 business days away. Which path applies?", "opts": ["Standard status inquiry path", "Rush/Court Deadline path — escalate immediately after intake", "Billing dispute path", "Standard intake with an urgency note"], "correct": 1, "explanation": "2 business days remaining means Court Deadline Rush. Escalate to Records Fulfillment after intake."}, {"cat": "Records Requests", "q": "What should you NOT commit to on a rush records request?", "opts": ["Documenting the urgency in case notes", "Warm transferring to Records Fulfillment", "Promising a specific delivery date", "Capturing the court date in case notes"], "correct": 2, "explanation": "Only the Records Fulfillment team can commit to delivery timelines. Never over-promise on deadlines."}, {"cat": "Records Requests", "q": "When must a case be opened in Salesforce?", "opts": ["After the call is resolved", "Before accessing any records or discussing any PHI", "Only for new records requests", "When the caller requests a reference number"], "correct": 1, "explanation": "A case must be opened before accessing the records system — every caller interaction requires a case."}, {"cat": "Records Requests", "q": "An attorney claims a court order grants immediate access without authorization. What do you do?", "opts": ["Process the request — court orders override HIPAA", "Transfer to Legal/Compliance — do not act on the caller's claim alone", "Request a copy of the court order then proceed immediately", "Deny the request and advise them to get proper authorization"], "correct": 1, "explanation": "Court orders may grant access but must be reviewed by Legal/Compliance. Never act on a verbal claim alone."}, {"cat": "Caller Types", "q": "Which caller type is primarily concerned with completeness across all providers?", "opts": ["Insurance carriers", "Attorneys", "DDS — Disability Determination Services", "TPAs"], "correct": 2, "explanation": "DDS needs comprehensive records across all providers for Social Security disability determinations."}, {"cat": "Caller Types", "q": "An insurance adjuster calls to check on a records request. Their primary concern is?", "opts": ["Speed — court deadline", "Accuracy — exactly what was requested", "Cost — dispute the invoice", "Volume — many concurrent requests"], "correct": 1, "explanation": "Insurance callers are primarily concerned with accuracy — they need what was requested, precisely delivered."}, {"cat": "Case Management", "q": "Every Chartline case note must include:", "opts": ["The patient's full SSN and date of birth", "Caller name, organization, action taken, reference numbers, and case status", "A copy of the authorization document", "The agent's supervisor name and shift ID"], "correct": 1, "explanation": "Case notes: caller name, organization, what was requested, action taken, reference numbers given, case status on close."}, {"cat": "Case Management", "q": "Which case type is used when a caller cannot verify their identity?", "opts": ["Records Dispute — Access Denied", "New Records Request — Unauthorized", "HIPAA Verification Failure — Access Denied", "Status Inquiry — Verification Issue"], "correct": 2, "explanation": "HIPAA Verification Failure documents the access attempt without entering any patient PHI."}, {"cat": "Canvassing", "q": "What is the deliverable of a medical canvassing request?", "opts": ["A complete copy of all patient medical records", "Identification of treating providers during a specified date range", "A list of all healthcare facilities in the patient area", "A summary of the patient's medical diagnosis history"], "correct": 1, "explanation": "Canvassing identifies who treated the patient during a specified date range — not the records themselves."}];
+var CL_STEPS = {"status-check": {"caseSetup": {"type": "Service Case", "subtype": "Status Inquiry", "origin": "Phone / Email", "note": "Open case BEFORE accessing any records system"}, "sfrlcFlow": [{"sys": "sf", "label": "Verify caller identity — HIPAA required", "detail": "Confirm caller name, organization, and authorization reference or case number before accessing anything.", "isStop": true, "stopText": "HIPAA HARD STOP: Never access or discuss PHI without identity verification. Cannot verify → follow HIPAA Verification Failure path."}, {"sys": "sf", "label": "Open case in Salesforce", "detail": "Case: Service Case / Status Inquiry. Add caller name and org to notes before proceeding."}, {"sys": "sf", "label": "Locate the records request", "detail": "Search by: authorization number, case number, or patient name + DOB. Confirm the right request before reading any status."}, {"sys": "sf", "label": "Communicate status using exact system language", "detail": "Do not paraphrase. Pending = explain meaning. Received = confirm date. In Process = give turnaround range. Completed = confirm delivery method and date sent.", "isBranch": true, "branchText": "Completed but caller says not received → open Dispute case. Court deadline under 5 days → switch to Rush path."}, {"sys": "sf", "label": "Give reference number and set expectations", "detail": "\"Your request is [STATUS]. Typical turnaround is [X] business days. Your reference number is [CASE NUMBER].\""}, {"sys": "sf", "label": "Document and close", "detail": "Notes: caller name, org, request located, status communicated, commitments. Close: Resolved."}], "retrieve": "Request or authorization number · Patient name · Organization · Date submitted", "template": "Summary: Status inquiry — [CALLER TYPE]\nOrganization: _____\nAuth / Case #: _____\nPatient: _____\nStatus communicated: _____\nExpected completion: _____\nCase Status: Resolved", "escalate": "Completed but not received → Dispute path\nCourt deadline under 5 days → Rush path\nStatus disputed → Records Fulfillment warm transfer"}, "status-deadline": {"caseSetup": {"type": "Service Case", "subtype": "Status Inquiry — Court Deadline", "origin": "Phone", "note": "Court deadline = urgency flag. Do NOT close without escalation confirmation."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity — HIPAA required", "detail": "Full identity verification before any PHI discussion.", "isStop": true, "stopText": "HIPAA: Identity must be verified before any case or records information is discussed."}, {"sys": "sf", "label": "Capture the deadline date immediately", "detail": "\"What is the court date or filing deadline?\" Write it in case notes first. Calculate business days remaining from today.", "isStop": true, "stopText": "Deadline is 3 or fewer business days away = RUSH. Escalate to Records Fulfillment after this step."}, {"sys": "sf", "label": "Locate request and check status", "detail": "Note current status, date received, date in process, estimated completion. If already completed — confirm delivery details immediately."}, {"sys": "sf", "label": "Warm transfer to Records Fulfillment", "detail": "Transfer to Records-Fulfillment: case number, patient name, court date, current status. Do not promise the deadline will be met — only fulfillment can commit.", "isBranch": true, "branchText": "Warm transfer required. Brief the team completely. Customer should not re-explain anything."}, {"sys": "sf", "label": "Document and set On Hold", "detail": "Notes: deadline date, days remaining, current status, what was communicated, whether escalated. Status: On Hold — Escalated."}], "retrieve": "Court date · Request / case number · Current status · Days remaining", "template": "Summary: Status inquiry with court deadline\nOrganization: _____\nCase / Auth #: _____\nPatient: _____\nCourt Deadline: _____\nBusiness days remaining: _____\nCurrent status: _____\nEscalated to Records Fulfillment: Yes / No\nCase Status: On Hold — Escalated", "escalate": "Deadline within 5 business days → Records Fulfillment warm transfer\nDeadline passed and not received → Supervisor\nLegal action threatened → Legal/Compliance"}, "intake-standard": {"caseSetup": {"type": "Service Case", "subtype": "New Records Request — Standard", "origin": "Phone / Email", "note": "Collect ALL required fields before ending call. Incomplete intake = processing delays."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify caller identity — HIPAA required", "detail": "Name, organization, and role. Confirm they are authorized to request records for this patient.", "isStop": true, "stopText": "HIPAA: Do not accept a records request from anyone who cannot verify identity and authorization to request."}, {"sys": "sf", "label": "Open new case in Salesforce", "detail": "Case: New Records Request — Standard. Enter caller name and org immediately. Do not gather information without an open case."}, {"sys": "sf", "label": "Collect all required intake fields", "detail": "Required: Patient full legal name, Date of birth, Date(s) of service, Treating provider or facility, Records type (medical, billing, imaging, all), Delivery format and address or email, Authorization — confirm on file or request upload.", "isBranch": true, "branchText": "Authorization NOT on file: request secure portal upload or fax immediately. Do not process without confirmed authorization."}, {"sys": "sf", "label": "Confirm turnaround expectation", "detail": "\"Standard processing time is [X] business days from authorization confirmation. You will receive notification when records are available.\" Give a range — not a specific date."}, {"sys": "sf", "label": "Give reference number and close", "detail": "Read case number. Confirm delivery contact. If auth pending: explain next steps — \"Once authorization is confirmed, processing begins.\""}, {"sys": "sf", "label": "Document and close or hold", "detail": "Notes: all intake fields, auth status, turnaround communicated, delivery method. If auth pending: On Hold — Awaiting Authorization."}], "retrieve": "Patient full name + DOB · Dates of service · Provider or facility · Records type · Delivery format and address · Authorization status", "template": "Summary: New records request — [CALLER TYPE]\nOrganization: _____\nPatient: _____\nDOB: _____\nDates of service: _____\nProvider / Facility: _____\nRecords type: _____\nDelivery: [OPTION]\nAuthorization on file: [CONFIRMED]\nEstimated turnaround: _____\nCase Status: In Process / On Hold — Awaiting Auth", "escalate": "Auth not received within 5 days → follow up contact\nSensitive records (mental health, substance abuse, HIV) → Legal/Compliance review before processing\nRequester disputes available records → Records Fulfillment"}, "intake-rush": {"caseSetup": {"type": "Service Case", "subtype": "New Records Request — RUSH", "origin": "Phone", "note": "Rush requires same-day escalation to Records Fulfillment. Do not treat as standard."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity — HIPAA required", "detail": "Full verification before proceeding.", "isStop": true, "stopText": "HIPAA: Identity verification required before any PHI discussion, including rush intake."}, {"sys": "sf", "label": "Capture deadline immediately", "detail": "\"What is the court date or deadline?\" Document the exact date first. Assess business days remaining."}, {"sys": "sf", "label": "Open case and flag RUSH", "detail": "Case: New Records Request — RUSH. First line of notes: RUSH — Deadline [DATE], [X] business days remaining."}, {"sys": "sf", "label": "Collect intake fields at pace", "detail": "Same fields as standard: patient name, DOB, dates of service, provider, records type, delivery. Authorization must be on file or submitted now.", "isStop": true, "stopText": "Authorization must exist or be submitted NOW. No authorization = no rush processing. Do not promise deadline will be met without confirmed auth."}, {"sys": "sf", "label": "Warm transfer to Records Fulfillment", "detail": "Brief them: case number, patient name, deadline date, records type, auth status. Do not end call without confirming the handoff was successful."}], "retrieve": "Deadline date · Patient info · Authorization status · Records type and delivery format", "template": "Summary: RUSH records request — deadline driven\nRequester: [CALLER TYPE]\nOrganization: _____\nPatient: _____\nDeadline: _____\nRecords type: _____\nAuthorization confirmed: [CONFIRMED]\nEscalated to Records Fulfillment: Yes\nCase Status: On Hold — Rush Processing", "escalate": "Auth not on file → advise immediate upload — cannot proceed without\nDeadline passed → Supervisor\nLegal action threatened → Legal/Compliance"}, "hipaa-fail": {"caseSetup": {"type": "Service Case", "subtype": "HIPAA Verification Failure", "origin": "Phone", "note": "Do NOT access any records. Do NOT confirm patient information. Document the attempt only."}, "sfrlcFlow": [{"sys": "sf", "label": "STOP — do not access any PHI", "detail": "Caller cannot verify identity: you must not look up, confirm, or discuss any patient information. This is a federal HIPAA requirement.", "isStop": true, "stopText": "HIPAA HARD STOP: Accessing PHI for an unverified caller is a HIPAA violation. Do not proceed regardless of urgency or pressure."}, {"sys": "sf", "label": "Open a case to document the attempt", "detail": "Case: HIPAA Verification Failure. Enter only caller name and organization — these are not PHI. Do not enter any patient information."}, {"sys": "sf", "label": "Explain the requirement calmly", "detail": "Federal privacy law requires identity verification before accessing patient records. State this as fact, not apology. This protects the patient as well as the requesting organization."}, {"sys": "sf", "label": "Offer paths to resolution", "detail": "Option 1: Caller provides verification now — re-attempt. Option 2: Caller contacts their team for the reference number and calls back. Option 3: Submit authorization documentation via secure portal for manual review."}, {"sys": "sf", "label": "Document and close", "detail": "Notes: caller name, org, what they could not provide, options offered, outcome. No patient information. Close as: HIPAA — Access Denied."}], "retrieve": "Caller name and organization only — no patient info without verification", "template": "Summary: HIPAA verification failure — access denied\nCaller: _____\nOrganization: _____\nVerification attempted: Yes\nVerification result: Failed — [ISSUE]\nOptions offered: _____\nPatient information accessed: NO\nCase Status: Closed — HIPAA Access Denied", "escalate": "Caller aggressive or threatening → Supervisor immediately\nCaller claims court order grants immediate access → Legal/Compliance\nSame caller multiple failed attempts → flag to Supervisor"}, "hipaa-partial": {"caseSetup": {"type": "Service Case", "subtype": "HIPAA Verification — Partial", "origin": "Phone", "note": "Partial verification: may confirm receipt of a request in general only. No PHI without full verification."}, "sfrlcFlow": [{"sys": "sf", "label": "Assess what the caller has provided", "detail": "Document exactly what was provided and what is missing. This determines what you can and cannot confirm."}, {"sys": "sf", "label": "Determine what can be confirmed without full verification", "detail": "Without full verification you may ONLY confirm that Chartline received a request related to a matter in general terms. No patient name, dates, records content, status, or any PHI.", "isBranch": true, "branchText": "Caller has 2 of 3 fields and can get the third on hold → allow brief hold, then re-verify. Still cannot provide → proceed to access denied."}, {"sys": "sf", "label": "Escalate to supervisor for judgment call", "detail": "Partial cases that are not clear-cut must be escalated. Brief supervisor: what was provided, what is missing, what is being requested. Supervisor decides."}, {"sys": "sf", "label": "Document verification attempt and outcome", "detail": "Notes: what was provided, what was missing, supervisor decision, what was communicated. Close appropriately."}], "retrieve": "What verification fields caller provided · What is missing · Supervisor decision if escalated", "template": "Summary: Partial HIPAA verification\nCaller: _____\nOrganization: _____\nFields provided: _____\nFields missing: _____\nSupervisor consulted: Yes / No\nOutcome: _____\nPHI accessed: Yes / No\nCase Status: _____", "escalate": "Any uncertainty → Supervisor. Do not make PHI access judgment calls without supervisor approval."}, "rush-court": {"caseSetup": {"type": "Service Case", "subtype": "Rush Request — Court Deadline", "origin": "Phone", "note": "Court deadline = immediate warm transfer to Records Fulfillment. Do not handle solo."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity — HIPAA required", "detail": "Full verification before any records discussion.", "isStop": true, "stopText": "HIPAA: Urgency does not override identity verification. Verify first, always."}, {"sys": "sf", "label": "Capture court date and case details", "detail": "\"What is the exact court date?\" Document: court date, jurisdiction, case number if available. Calculate business days remaining.", "isStop": true, "stopText": "Court date TODAY or TOMORROW — escalate to Supervisor immediately after this step."}, {"sys": "sf", "label": "Locate existing request or open new case", "detail": "If request exists: check status and flag court date. If new: open as Rush — Court Deadline. Flag court date prominently in notes."}, {"sys": "sf", "label": "Warm transfer to Records Fulfillment", "detail": "Brief them: case number, patient name, court date, records needed, auth status. Confirm receipt of case before ending hold."}, {"sys": "sf", "label": "Communicate next steps to caller", "detail": "\"I have connected you with our fulfillment team who handles court deadline requests. Your case number is [CASE NUMBER]. They will be your point of contact.\""}], "retrieve": "Court date · Case number · Patient name · Authorization status · Records type", "template": "Summary: Rush request — court deadline\nRequester: [CALLER TYPE]\nOrganization: _____\nPatient: _____\nCourt Date: _____\nBusiness days remaining: _____\nRecords type: _____\nAuthorization on file: [CONFIRMED]\nTransferred to Records Fulfillment: Yes\nCase Status: On Hold — Court Rush", "escalate": "Court date today or tomorrow → Supervisor first then Records Fulfillment\nAuth not on file → cannot process — advise immediate submission\nCourt order demanding records → Legal/Compliance"}, "rush-urgent": {"caseSetup": {"type": "Service Case", "subtype": "Rush Request — General Urgent", "origin": "Phone", "note": "Urgent without court date — expedited handling applies. Do not over-promise timeline."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity", "detail": "Full HIPAA verification before proceeding.", "isStop": true, "stopText": "HIPAA: Verify before discussing any records or case details."}, {"sys": "sf", "label": "Understand the urgency driver", "detail": "\"What is the deadline or event driving the urgency?\" Capture the specific date or reason. Without a concrete deadline this is a standard request with expedited handling."}, {"sys": "sf", "label": "Locate or open the request", "detail": "Check if a request already exists. If yes: update with urgency flag. If new: open as Rush — Urgent. Note urgency driver in case notes."}, {"sys": "sf", "label": "Set accurate expectations", "detail": "\"I am flagging this as urgent in our system. Our expedited processing time is [X] business days. I cannot guarantee a specific date but this will be prioritized.\" Do not over-promise."}, {"sys": "sf", "label": "Escalate if deadline is concrete", "detail": "Concrete deadline (deposition, filing, treatment): warm transfer to Records Fulfillment with full context.", "isBranch": true, "branchText": "Concrete deadline → warm transfer to Records-Fulfillment. No concrete deadline → document urgency and let expedited process apply."}], "retrieve": "Urgency reason and deadline · Request details · Authorization status", "template": "Summary: Urgent records request\nRequester: [CALLER TYPE]\nOrganization: _____\nPatient: _____\nUrgency reason: _____\nDeadline: _____\nExpedited processing communicated: Yes\nTransferred to fulfillment: Yes / No\nCase Status: In Process — Rush", "escalate": "Court date mentioned → Court Deadline path\nAuth missing for urgent → advise immediate submission\nCaller aggressive about timeline → Supervisor"}, "dispute-missing": {"caseSetup": {"type": "Service Case", "subtype": "Records Dispute — Missing Records", "origin": "Phone", "note": "Do NOT promise re-fulfillment. Records Fulfillment owns that commitment."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity — HIPAA required", "detail": "Full verification before discussing any records content or case details.", "isStop": true, "stopText": "HIPAA: Verify identity before accessing or discussing case details."}, {"sys": "sf", "label": "Locate original request and delivery confirmation", "detail": "Find original case. Check: delivery date, method, address, confirmation receipt. Confirm what was sent matches what was requested."}, {"sys": "sf", "label": "Document specifically what is missing", "detail": "\"What records did you receive and what did you expect?\" Capture the exact gap: missing dates, provider, record type. This detail is critical for fulfillment."}, {"sys": "sf", "label": "Open dispute case linked to original", "detail": "New case: Records Dispute — Missing. Link to original case number. Document discrepancy specifically. Do not close the original case."}, {"sys": "sf", "label": "Warm transfer to Records Fulfillment", "detail": "Brief them: original case number, what was sent, what is missing, deadline implications. Do not promise resolution timeline — fulfillment owns that."}, {"sys": "sf", "label": "Give dispute reference number", "detail": "\"Your dispute case number is [CASE NUMBER]. You will hear from our fulfillment team within [X] business days.\""}], "retrieve": "Original case / auth number · What was received · What is missing · Delivery confirmation details", "template": "Summary: Records dispute — missing records\nRequester: [CALLER TYPE]\nOrganization: _____\nOriginal case #: _____\nPatient: _____\nRecords received: _____\nRecords missing: _____\nDispute case #: _____\nTransferred to Records Fulfillment: Yes\nCase Status: On Hold — Dispute In Review", "escalate": "Missing records affect court deadline → escalate as Court Rush simultaneously\nDelivery confirmed but records lost in transit → Records Fulfillment re-delivery\nRecords allegedly tampered → Legal/Compliance immediately"}, "dispute-wrong": {"caseSetup": {"type": "Service Case", "subtype": "Records Dispute — WRONG PATIENT", "origin": "Phone", "note": "Wrong patient records = potential HIPAA breach. Supervisor and Legal/Compliance must be notified immediately."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity", "detail": "Full HIPAA verification before proceeding.", "isStop": true, "stopText": "HIPAA: Verify before discussing any records details."}, {"sys": "sf", "label": "STOP — potential HIPAA breach", "detail": "Wrong patient records delivered = another patient PHI released to unauthorized party. Potential HIPAA breach requiring immediate escalation.", "isStop": true, "stopText": "Do NOT minimize this. Do NOT attempt to resolve it yourself. Wrong-patient delivery requires Supervisor and Legal/Compliance notification BEFORE any other action."}, {"sys": "sf", "label": "Document what was received vs what was expected", "detail": "\"Can you confirm — what patient name appears on the records you received?\" Do not ask them to read PHI aloud. Just confirm if it is a different patient name."}, {"sys": "sf", "label": "Escalate to Supervisor immediately", "detail": "Inform supervisor: caller received wrong-patient records, case details, caller information. Supervisor initiates breach assessment protocol."}, {"sys": "sf", "label": "Advise caller to secure the records", "detail": "\"Please do not share, use, or dispose of those records. Our team will follow up with instructions on secure return. Your reference number is [CASE NUMBER].\""}], "retrieve": "Original case number · What patient name appears on received records · Caller contact info", "template": "Summary: WRONG PATIENT records received — potential HIPAA breach\nRequester: [CALLER TYPE]\nOrganization: _____\nOriginal case #: _____\nRecords received for: _____ (WRONG PATIENT)\nExpected patient: _____\nSupervisor notified: Yes — [NAME]\nLegal/Compliance notified: Yes / Pending\nCase Status: On Hold — Breach Review", "escalate": "ALWAYS escalate to Supervisor and Legal/Compliance. This is not a standard dispute."}, "unauth-noauth": {"caseSetup": {"type": "Service Case", "subtype": "Unauthorized Request — No Authorization", "origin": "Phone", "note": "Cannot process without authorization. Do not release records or confirm record details."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity — HIPAA required", "detail": "Verify caller identity even for conversations about authorization requirements.", "isStop": true, "stopText": "HIPAA: Identity verification required even to discuss authorization requirements."}, {"sys": "sf", "label": "Confirm no valid authorization exists", "detail": "Check system for any existing authorization. Nothing exists = proceed. Expired = use expired auth path."}, {"sys": "sf", "label": "Explain authorization requirement clearly", "detail": "\"Medical records can only be released with a valid signed authorization from the patient or a court order. We do not have an authorization on file.\" State as policy, not personal refusal."}, {"sys": "sf", "label": "Provide authorization submission options", "detail": "Option 1: Submit HIPAA-compliant authorization via secure portal. Option 2: Fax signed authorization. Option 3: Court-ordered records — upload court order to Legal/Compliance queue."}, {"sys": "sf", "label": "Open case and document", "detail": "Case: Unauthorized Request — No Auth. Notes: requester, patient as stated by caller, what was requested, options provided. Case stays open until auth arrives."}], "retrieve": "Requester name and org · Patient name as stated by caller · What records were being requested", "template": "Summary: Unauthorized request — no authorization on file\nRequester: [CALLER TYPE]\nOrganization: _____\nPatient (as stated): _____\nAuthorization on file: No\nOptions provided: _____\nCase Status: Open — Awaiting Authorization", "escalate": "Caller claims court order grants immediate access → Legal/Compliance\nCaller becomes aggressive → Supervisor\nMultiple unauthorized requests from same party → Supervisor and Legal flag"}, "unauth-expired": {"caseSetup": {"type": "Service Case", "subtype": "Unauthorized Request — Expired Authorization", "origin": "Phone", "note": "Expired auth = no auth. New authorization required. No exceptions."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity", "detail": "Full HIPAA verification before proceeding.", "isStop": true, "stopText": "HIPAA: Verify before accessing any authorization or case details."}, {"sys": "sf", "label": "Locate the expired authorization", "detail": "Pull up the authorization record. Confirm expiration date. Note what records it covered and when it expired."}, {"sys": "sf", "label": "Explain the expiration clearly", "detail": "\"The authorization we have on file expired on [DATE]. HIPAA requires a current authorization — an expired authorization has the same effect as no authorization.\" Provide the exact expiration date."}, {"sys": "sf", "label": "Guide through re-authorization", "detail": "New HIPAA-compliant authorization required. Submit via secure portal or fax. Patient must sign a new one.", "isBranch": true, "branchText": "Patient is now deceased: different authorization requirements. Transfer to Legal/Compliance for guidance."}, {"sys": "sf", "label": "Document and hold", "detail": "Case: Expired Authorization. Notes: what was on file, when expired, what was communicated, re-auth instructions provided. On Hold — Awaiting New Authorization."}], "retrieve": "Expiration date · What authorization covered · Patient name", "template": "Summary: Expired authorization — new auth required\nRequester: [CALLER TYPE]\nOrganization: _____\nPatient: _____\nAuthorization expired: _____\nNew authorization options provided: _____\nCase Status: On Hold — Awaiting New Authorization", "escalate": "Patient is deceased → Legal/Compliance for authorization guidance\nCaller claims authorization renewed elsewhere → request proof\nCourt order with expired auth → Legal/Compliance"}, "billing-invoice": {"caseSetup": {"type": "Service Case", "subtype": "Billing — Invoice Copy", "origin": "Phone / Email", "note": "Invoice copies handled by Billing team. Warm transfer after intake."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity", "detail": "Verify caller name, organization, and confirm billing contact role."}, {"sys": "sf", "label": "Identify the invoice in question", "detail": "Get: invoice number if available, date of request, approximate amount."}, {"sys": "sf", "label": "Confirm delivery method", "detail": "Email or mail? Get the correct billing contact email or mailing address. Confirm this is an existing invoice not a new billing inquiry."}, {"sys": "sf", "label": "Warm transfer to Billing team", "detail": "Transfer to Billing-Queue with: caller name, org, invoice reference, delivery method. Billing team fulfills the copy request."}], "retrieve": "Invoice number or date · Organization · Billing contact email or address", "template": "Summary: Invoice copy request\nRequester: _____\nOrganization: _____\nInvoice reference: _____\nDelivery method: [OPTION]\nTransferred to Billing: Yes\nCase Status: Transferred — Billing", "escalate": "Caller disputes invoice amount → Billing Dispute path\nInvoice involves PHI implications → confirm with Legal before sending"}, "billing-dispute": {"caseSetup": {"type": "Service Case", "subtype": "Billing — Dispute", "origin": "Phone", "note": "Do not commit to adjustments or credits. Billing team owns that decision."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity", "detail": "Name, organization, confirm billing contact role."}, {"sys": "sf", "label": "Capture the dispute details", "detail": "What specific charge are they disputing? Why? What amount do they believe is correct? Invoice number.", "isBranch": true, "branchText": "Caller disputing charge for records never received → this is also a Records Dispute. Handle both paths."}, {"sys": "sf", "label": "Open billing dispute case", "detail": "Case: Billing Dispute. Link to original invoice. Document the dispute specifically — amount, reason, what caller believes correct charge should be."}, {"sys": "sf", "label": "Set expectations — do not commit", "detail": "\"I am documenting this dispute and connecting you with our billing team. I am not able to make billing decisions on this call.\" Do not promise credits or adjustments."}, {"sys": "sf", "label": "Warm transfer to Billing team", "detail": "Brief billing: dispute case number, invoice disputed, amount, reason. Confirm handoff before ending call."}], "retrieve": "Invoice number · Disputed amount · Reason for dispute · Billing contact info", "template": "Summary: Billing dispute\nRequester: _____\nOrganization: _____\nInvoice #: _____\nDisputed amount: _____\nReason: _____\nTransferred to Billing: Yes\nCase Status: On Hold — Billing Review", "escalate": "Records quality issue drives dispute → Records Fulfillment and Billing both\nLegal action threatened → Legal/Compliance\nLarge account dispute → Supervisor before transfer"}, "canvass-new": {"caseSetup": {"type": "Service Case", "subtype": "Canvassing — New Request", "origin": "Phone / Email", "note": "Canvassing delivers identification of treating providers — not the records themselves."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity", "detail": "Canvassing clients are typically insurance carriers or law firms. Verify name, organization, and authorization to request canvassing."}, {"sys": "sf", "label": "Open canvassing request case", "detail": "Case: Canvassing — New. Collect: patient name, DOB, SSN last 4, date range, geographic area if known, deliverable type."}, {"sys": "sf", "label": "Confirm scope and deliverable", "detail": "Confirm: date range, geography, whether provider contact information should be included in the report."}, {"sys": "sf", "label": "Set turnaround expectation", "detail": "\"Canvassing requests typically take [X] business days depending on geography and date range. You will receive a canvassing report listing identified providers.\" Do not commit to specific dates."}, {"sys": "sf", "label": "Warm transfer to Canvassing team", "detail": "Transfer to Canvass-Queue with case number and full intake details."}], "retrieve": "Patient name + DOB + SSN last 4 · Date range · Geographic scope · Deliverable type", "template": "Summary: New canvassing request\nRequester: [CALLER TYPE]\nOrganization: _____\nPatient: _____\nDOB: _____\nDate range: _____\nGeography: _____\nDeliverable: _____\nTransferred to Canvassing: Yes\nCase Status: In Process — Canvassing", "escalate": "Sensitive provider types (mental health, substance abuse) → Legal/Compliance before processing\nClient disputes prior canvass results → Canvass Status path"}, "canvass-status": {"caseSetup": {"type": "Service Case", "subtype": "Canvassing — Status Inquiry", "origin": "Phone", "note": "Check with Canvassing team for current status — do not estimate from intake date alone."}, "sfrlcFlow": [{"sys": "sf", "label": "Verify identity", "detail": "Name, organization, authorization reference."}, {"sys": "sf", "label": "Locate the canvassing case", "detail": "Search by canvassing case number or patient name. Confirm the right request. Note date submitted and current status."}, {"sys": "sf", "label": "Check status — contact team if needed", "detail": "If status is unclear or not updated: place caller on brief hold and contact Canvassing-Queue. Do not guess at status.", "isBranch": true, "branchText": "Canvass complete → confirm delivery of report. In process → give realistic remaining timeline. Delayed → escalate to Canvassing team for explanation."}, {"sys": "sf", "label": "Communicate status and reference number", "detail": "Clear status, expected completion, reference number. If delayed: \"I have flagged your inquiry with our canvassing team and they will be in contact within [X] business days.\""}], "retrieve": "Canvassing case number · Date submitted · Current status from system or team", "template": "Summary: Canvassing status inquiry\nOrganization: _____\nCanvass case #: _____\nPatient: _____\nStatus: _____\nExpected completion: _____\nCase Status: Resolved / On Hold", "escalate": "Significantly delayed → Canvassing team supervisor\nClient has deadline tied to canvass results → Rush escalation"}};
+
+
+
+// ── Chartline App ─────────────────────────────────────────────────────────
+var TC = {t1:'#1e3a5f', t2:'#b45309', t3:'#dc2626'};
+var currentSit = null, currentPath = null, stepsCompleted = 0, totalSteps = 0;
+var callSec = 0, holdSec = 0, callRunning = false, holdRunning = false;
+var callTimer = null, holdTimer = null;
+var quizQueue = [], quizIdx = 0, quizCorrect = 0, lastMode = 'all';
+var currentAc = '#1e3a5f';
+var currentView = 'mission';
+var currentRefSection = 'callertypes';
+
+// ── Timer helpers ─────────────────────────────────────────────────────────
+function fmt(s) { return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0'); }
+function toggleCallTimer() {
+  if (callRunning) { clearInterval(callTimer); callRunning=false; document.getElementById('call-play').textContent='▶'; }
+  else { callTimer=setInterval(function(){callSec++;document.getElementById('call-t').textContent=fmt(callSec);document.getElementById('nav-timer').textContent=fmt(callSec);},1000); callRunning=true; document.getElementById('call-play').textContent='⏸'; }
+}
+function resetCallTimer() { clearInterval(callTimer); callRunning=false; callSec=0; document.getElementById('call-t').textContent='00:00'; document.getElementById('nav-timer').textContent='00:00'; document.getElementById('call-play').textContent='▶'; }
+function toggleHoldTimer() {
+  if (holdRunning) { clearInterval(holdTimer); holdRunning=false; document.getElementById('hold-btn').textContent='▶ HOLD'; document.getElementById('hold-t').style.color=''; }
+  else { holdTimer=setInterval(function(){holdSec++;document.getElementById('hold-t').textContent=fmt(holdSec);if(holdSec>=60)document.getElementById('hold-t').style.color='#dc2626';},1000); holdRunning=true; document.getElementById('hold-btn').textContent='⏸ HOLD'; }
+}
+function resetHoldTimer() { clearInterval(holdTimer); holdRunning=false; holdSec=0; document.getElementById('hold-t').textContent='00:00'; document.getElementById('hold-t').style.color=''; document.getElementById('hold-btn').textContent='▶ HOLD'; }
+
+// ── Build sidebar ─────────────────────────────────────────────────────────
+function buildSidebar() {
+  var rl = document.getElementById('rules-list');
+  CL_RULES.forEach(function(r) {
+    var d = document.createElement('div'); d.className='rule-item';
+    d.innerHTML='<div class="rule-dot" style="background:'+r.col+'"></div><div><div class="rule-code" style="color:'+r.col+'">'+r.code+'</div><div class="rule-text">'+r.text+'</div></div>';
+    rl.appendChild(d);
+  });
+  var sl = document.getElementById('scripts-list');
+  CL_SCRIPTS.forEach(function(s) {
+    var d = document.createElement('div'); d.className='script-item';
+    d.innerHTML='<div class="script-box" style="border-color:'+s.col+'"></div><div class="script-key" style="color:'+s.col+'">'+s.label+'</div><div class="script-preview">'+s.text.substring(0,35)+'...</div>';
+    (function(scr){ d.onclick=function(){ showScriptModal(scr); }; })(s);
+    sl.appendChild(d);
+  });
+}
+
+// ── Build transfer board ──────────────────────────────────────────────────
+function buildTransferBoard() {
+  var list = document.getElementById('tb-list');
+  CL_CONNECTS.forEach(function(c, idx) {
+    var d = document.createElement('div'); d.className='tb-item';
+    var qid = 'clqc_'+idx;
+    d.innerHTML='<div class="tb-name">'+c.t+'</div><div class="tb-qc" id="'+qid+'" title="Click to copy">'+c.qc+'</div><div class="tb-use">'+c.u+'</div><div class="tb-how">How to transfer &rsaquo;</div>';
+    (function(conn, eid){
+      d.querySelector('.tb-qc').onclick=function(){
+        navigator.clipboard.writeText(conn.qc).catch(function(){});
+        var el=document.getElementById(eid); if(!el) return;
+        var orig=el.textContent; el.textContent='Copied!'; el.style.background='#d1fae5'; el.style.color='#16a34a';
+        setTimeout(function(){ el.textContent=orig; el.style.background=''; el.style.color=''; },2000);
+      };
+      d.querySelector('.tb-how').onclick=function(){ showTransferModal(conn.t, conn.qc, conn.u); };
+    })(c, qid);
+    list.appendChild(d);
+  });
+}
+
+// ── Build nav tabs ────────────────────────────────────────────────────────
+function buildNavTabs() {
+  var wrap = document.getElementById('cl-nav-tabs');
+  if (!wrap) return;
+  var tabs = [
+    {id:'callertypes',label:'Caller Types'},
+    {id:'hipaaref',   label:'HIPAA Ref'},
+    {id:'caseguide',  label:'Case Guide'},
+    {id:'glossary',   label:'Glossary'},
+    {id:'study',      label:'Study',special:true},
+  ];
+  tabs.forEach(function(t) {
+    var btn = document.createElement('button');
+    btn.className='nav-tab'; btn.dataset.section=t.id;
+    btn.textContent=t.label;
+    if (t.special) btn.style.fontWeight='600';
+    btn.onclick=function(){ openSection(t.id); };
+    wrap.appendChild(btn);
+  });
+}
+
+// ── Show view ─────────────────────────────────────────────────────────────
+function showView(id) {
+  ['mission-control','situation-room','ref-panel','study-panel'].forEach(function(v) {
+    var el=document.getElementById(v);
+    if (el) { el.style.display = v===id ? 'flex' : 'none'; }
+  });
+  currentView = id;
+}
+
+// ── Open section (reference or study) ────────────────────────────────────
+function openSection(sectionId) {
+  document.querySelectorAll('.nav-tab').forEach(function(b){ b.classList.toggle('active', b.dataset.section===sectionId); });
+  if (sectionId==='study') { showView('study-panel'); initStudy(); return; }
+  showView('ref-panel');
+  var content = document.getElementById('cl-ref-content');
+  var REF = {
+    callertypes: {html:'<h2>Who Calls Chartline</h2><table><tr><th>Caller Type</th><th>Why They Call</th><th>Urgency</th><th>Key Concern</th></tr><tr><td><strong>Attorneys</strong></td><td>Litigation, personal injury, workers comp, disability</td><td style="color:#dc2626">HIGH — deadline driven</td><td>Speed and completeness</td></tr><tr><td><strong>Insurance Carriers</strong></td><td>Claim validation, coverage determination</td><td style="color:#d97706">MODERATE</td><td>Accuracy — exactly what was requested</td></tr><tr><td><strong>TPAs</strong></td><td>Benefits administration, claims management</td><td style="color:#d97706">MODERATE</td><td>Volume and process consistency</td></tr><tr><td><strong>Healthcare Providers</strong></td><td>Patient records, referrals, continuity of care</td><td style="color:#16a34a">LOWER</td><td>Accuracy and HIPAA compliance</td></tr><tr><td><strong>DDS</strong></td><td>Social Security disability evaluations</td><td style="color:#d97706">MODERATE</td><td>Completeness across all providers</td></tr></table><h2 style="margin-top:16px">Communication by Caller Type</h2><table><tr><th>With Attorneys</th><th>With Insurance</th><th>With Providers</th></tr><tr><td>Acknowledge urgency immediately. Give timeline. Never say "should be."</td><td>Be precise. Confirm exactly what was requested and delivered.</td><td>HIPAA first. Confirm authorization before anything. Accuracy over speed.</td></tr></table>'},
+    hipaaref: {html:'<h2>HIPAA Quick Reference</h2><div class="cl-tip"><strong>What is PHI?</strong> Protected Health Information — any information that can identify a patient and relates to their health, care, or payment. Includes: name, DOB, SSN, address, dates of service, medical record numbers.</div><div class="cl-stop" style="margin-top:8px"><strong>Hard Rule:</strong> Never access, confirm, or discuss PHI without verifying caller identity AND confirming valid authorization exists.</div><h2 style="margin-top:16px">Verification by Caller Type</h2><table><tr><th>Caller Type</th><th>Required Fields</th></tr><tr><td>Attorney</td><td>Name, firm, authorization reference or case number</td></tr><tr><td>Insurance Adjuster</td><td>Name, carrier, claim number, authorization reference</td></tr><tr><td>TPA</td><td>Name, TPA org, employer client, authorization reference</td></tr><tr><td>Healthcare Provider</td><td>Name, NPI, facility name, purpose of request</td></tr><tr><td>DDS</td><td>Name, state agency, DDS case number, authorization reference</td></tr></table><h2 style="margin-top:16px">Authorization Types</h2><table><tr><th>Type</th><th>Valid If</th></tr><tr><td>Patient-signed HIPAA authorization</td><td>Signed, dated, not expired, covers records and requesting party</td></tr><tr><td>Court order / Subpoena</td><td>Issued by court of competent jurisdiction — review by Legal/Compliance</td></tr></table>'},
+    caseguide: {html:'<h2>Chartline Case Types</h2><table><tr><th>Case Type</th><th>Sub-Type</th><th>When to Use</th></tr><tr><td>Status Inquiry</td><td>Standard / Court Deadline</td><td>Caller checking on existing request</td></tr><tr><td>New Records Request</td><td>Standard / Rush / Court Deadline</td><td>Intake of new records request</td></tr><tr><td>HIPAA Verification Failure</td><td>Access Denied / Partial</td><td>Caller fails identity verification</td></tr><tr><td>Records Dispute</td><td>Missing Records / Wrong Patient</td><td>Records received incorrectly</td></tr><tr><td>Unauthorized Request</td><td>No Authorization / Expired Auth</td><td>Request without valid authorization</td></tr><tr><td>Billing</td><td>Invoice Copy / Billing Dispute</td><td>Invoice and billing questions</td></tr><tr><td>Canvassing</td><td>New Canvass / Canvass Status</td><td>Medical canvassing requests</td></tr></table><div class="cl-tip" style="margin-top:12px">Every case note must include: caller name, organization, what was requested, action taken, reference numbers given, and case status.</div><div class="cl-stop" style="margin-top:8px">Wrong-patient disputes always require Supervisor and Legal/Compliance notification before any other action.</div>'},
+    glossary: {html:'<h2>Medical Records & Legal Terminology</h2><table><tr><th>Term</th><th>Definition</th></tr><tr><td><strong>PHI</strong></td><td>Protected Health Information — individually identifiable health information protected by HIPAA</td></tr><tr><td><strong>Authorization</strong></td><td>Signed document granting permission to release specific PHI to a specific party for a specific purpose</td></tr><tr><td><strong>ROI</strong></td><td>Release of Information — the process of fulfilling a records request</td></tr><tr><td><strong>TPA</strong></td><td>Third Party Administrator — manages insurance claims on behalf of a self-insured employer</td></tr><tr><td><strong>IME</strong></td><td>Independent Medical Examination — medical evaluation requested by insurer or attorney</td></tr><tr><td><strong>DDS</strong></td><td>Disability Determination Services — state agencies evaluating Social Security disability claims</td></tr><tr><td><strong>Canvassing</strong></td><td>Process of identifying all treating providers for a patient during a specified date range</td></tr><tr><td><strong>Chain of Custody</strong></td><td>Documentation of who handled records at each step — critical for legal admissibility</td></tr><tr><td><strong>Subpoena</strong></td><td>Legal order compelling production of records, issued by court or attorney</td></tr><tr><td><strong>HIPAA Breach</strong></td><td>Unauthorized access, use, or disclosure of PHI — reportable event requiring immediate escalation</td></tr><tr><td><strong>NPI</strong></td><td>National Provider Identifier — unique 10-digit number for healthcare providers</td></tr></table>'},
+  };
+  if (REF[sectionId]) {
+    content.innerHTML = '<div class="cl-rc">' + REF[sectionId].html + '</div>';
+  }
+}
+
+// ── Mission Control ───────────────────────────────────────────────────────
+function buildGrid(sits) {
+  var t1p = document.getElementById('mc-panel-t1');
+  var t2p = document.getElementById('mc-panel-t23');
+  if (!t1p || !t2p) return;
+  t1p.innerHTML = ''; t2p.innerHTML = '';
+  var t1 = sits.filter(function(s){ return s.tier==='I'; });
+  var t2 = sits.filter(function(s){ return s.tier!=='I'; });
+  var c1 = document.getElementById('mc-t1-ct'); var c2 = document.getElementById('mc-t2-ct'); var ct = document.getElementById('mc-total-ct');
+  if(c1) c1.textContent=t1.length; if(c2) c2.textContent=t2.length; if(ct) ct.textContent=sits.length;
+
+  function makeRow(sit, panel) {
+    var ac = TC[sit.tc]||'#1e3a5f';
+    var isT3 = sit.tier==='III', isT2 = sit.tier==='II';
+    var row = document.createElement('div');
+    row.className = 'mc-row ' + (isT3?'tier3':isT2?'tier2':'tier1');
+    var code = sit.id.toUpperCase().substring(0,8);
+    var tierLbl = isT3?'T III':isT2?'T II':'T I';
+    var tierCls = isT3?'t3':isT2?'t2':'t1';
+    var isHipaa = sit.id==='hipaa'||sit.id==='dispute';
+    row.innerHTML =
+      '<div class="mc-row-code">' + code + '</div>' +
+      '<div><div class="mc-row-name">' + sit.icon + ' ' + sit.label + '</div>' +
+        (sit.desc?'<div class="mc-row-desc">'+sit.desc.substring(0,52)+(sit.desc.length>52?'&hellip;':'')+'</div>':'') +
+      '</div>' +
+      (isHipaa?'<div class="mc-row-hipaa">PHI</div>':'<div></div>') +
+      '<div class="mc-row-tier '+tierCls+'">'+tierLbl+'</div>' +
+      '<div class="mc-row-paths">'+sit.paths.length+' path'+(sit.paths.length!==1?'s':'')+'</div>';
+    row.onclick = function(){ openSituation(sit); };
+    panel.appendChild(row);
+  }
+  t1.forEach(function(s){ makeRow(s, t1p); });
+  t2.forEach(function(s){ makeRow(s, t2p); });
+}
+
+function filterSits(val) {
+  var filtered = val ? CL_SITUATIONS.filter(function(s){ return s.label.toLowerCase().includes(val.toLowerCase())||s.id.includes(val.toLowerCase()); }) : CL_SITUATIONS;
+  buildGrid(filtered);
+}
+
+// ── Situation Room ────────────────────────────────────────────────────────
+function openSituation(sit) {
+  currentSit = sit; currentPath = sit.paths[0]; stepsCompleted = 0;
+  if (!callRunning) toggleCallTimer();
+  showView('situation-room');
+  document.getElementById('sr-icon').textContent = sit.icon;
+  document.getElementById('sr-name').textContent = sit.label;
+  document.getElementById('sr-meta').textContent = sit.tier + ' · ' + sit.freq;
+  var ac = TC[sit.tc]||'#1e3a5f';
+  document.getElementById('sr-case-setup').style.borderBottomColor = ac;
+  document.getElementById('sr-case-setup').style.background = ac+'12';
+  document.getElementById('sr-cs-lbl').style.color = ac;
+  renderPaths(sit, ac);
+  renderSteps(currentPath.id, ac);
+}
+
+function renderPaths(sit, ac) {
+  var wrap = document.getElementById('sr-paths');
+  wrap.innerHTML = '';
+  sit.paths.forEach(function(p) {
+    var btn = document.createElement('button');
+    btn.className = 'sr-path-btn' + (p.id===currentPath.id?' active':'');
+    if (p.id===currentPath.id) { btn.style.setProperty('--ac',ac); btn.style.borderColor=ac; btn.style.background=ac; btn.style.color='#fff'; }
+    btn.textContent = p.label;
+    (function(path){
+      btn.onclick = function() {
+        currentPath = path; stepsCompleted = 0;
+        document.querySelectorAll('.sr-path-btn').forEach(function(b){ b.classList.remove('active'); b.style.borderColor=''; b.style.background=''; b.style.color=''; });
+        btn.classList.add('active'); btn.style.borderColor=ac; btn.style.background=ac; btn.style.color='#fff';
+        renderSteps(path.id, ac);
+      };
+    })(p);
+    wrap.appendChild(btn);
+  });
+}
+
+function renderSteps(pathKey, ac) {
+  var data = CL_STEPS[pathKey];
+  if (!data) { document.getElementById('sr-steps').innerHTML='<div style="padding:24px;color:#94a3b8;font-family:var(--mono);font-size:11px">No steps found for path: '+pathKey+'</div>'; return; }
+  // Case setup
+  var cs = data.caseSetup;
+  document.getElementById('cs-type').textContent = cs.type||'—';
+  document.getElementById('cs-sub').textContent  = cs.subtype||'—';
+  document.getElementById('cs-origin').textContent = cs.origin||'—';
+  var noteEl = document.getElementById('cs-note');
+  if (cs.note) { noteEl.textContent=cs.note; noteEl.style.display='block'; } else { noteEl.style.display='none'; }
+  // HIPAA banner
+  var hipaaEl = document.getElementById('sr-hipaa-banner');
+  var hasHipaa = (data.sfrlcFlow||[]).some(function(st){ return st.isStop; });
+  if (hipaaEl) hipaaEl.style.display = hasHipaa ? 'block' : 'none';
+  // Steps
+  totalSteps = (data.sfrlcFlow||[]).length;
+  stepsCompleted = 0;
+  // currentAc stored for re-use in completeStep
+  currentAc = ac;
+  var stepsWrap = document.getElementById('sr-steps');
+  stepsWrap.innerHTML = '';
+  (data.sfrlcFlow||[]).forEach(function(step, i) {
+    var item = document.createElement('div');
+    item.className = 'step-item ' + (i===0?'s-current':'s-upcoming');
+    item.dataset.idx = i;
+    var sysLabel = step.sys==='sf'?'Salesforce':step.sys==='rclc'?'Records System':'Both';
+    var sysCls   = step.sys==='sf'?'badge-sf':step.sys==='rclc'?'badge-rclc':'badge-both';
+    var hasHipaaFlag = step.isStop && (step.stopText||'').toLowerCase().includes('hipaa');
+    var inner = '<div class=\"step-num\">'+(i+1)+'</div><div class=\"step-body\">';
+    inner += '<div class=\"step-top-row\">';
+    inner += '<span class=\"step-lbl\">'+step.label+'</span>';
+    inner += '<span class=\"step-badge '+sysCls+'\">'+sysLabel+'</span>';
+    if (hasHipaaFlag) inner += '<span class=\"step-badge badge-hipaa\">HIPAA</span>';
+    inner += '</div>';
+    inner += '<div class=\"step-detail\">'+step.detail+'</div>';
+    if (step.isStop && step.stopText) {
+      inner += '<div class=\"step-stop-inner\">&#9888; '+step.stopText+'</div>';
+    }
+    if (step.isBranch && step.branchText) {
+      inner += '<div class=\"step-branch-inner\">&#9670; DECISION: '+step.branchText+'</div>';
+    }
+    if (step.isRetrieve && step.retrieveText) {
+      inner += '<div class=\"step-retrieve\">&#128203; Capture: '+step.retrieveText+'</div>';
+    }
+    inner += '</div>';
+    item.innerHTML = inner;
+    (function(el, idx) {
+      el.onclick = function() { completeStep(el, idx, currentAc); };
+    })(item, i);
+    stepsWrap.appendChild(item);
+  });
+  // Case comment
+  buildCaseComment(data, ac);
+  updateProgress(ac);
+}
+
+function completeStep(el, idx, ac) {
+  var numEl = el.querySelector('.step-num');
+  if (el.classList.contains('s-done')) {
+    // Un-complete: toggle back to upcoming
+    el.classList.remove('s-done'); el.classList.add('s-upcoming');
+    if (numEl) { numEl.style.background=''; numEl.style.borderColor=''; numEl.style.color=''; }
+  } else {
+    // Complete this step
+    el.classList.remove('s-upcoming','s-current'); el.classList.add('s-done');
+    if (numEl) { numEl.style.background=ac; numEl.style.borderColor=ac; numEl.style.color='#fff'; }
+    // Activate the next uncompleted step
+    var container = el.parentNode;
+    if (container) {
+      // Remove s-current from all, then set on next s-upcoming
+      container.querySelectorAll('.step-item.s-current').forEach(function(s){ s.classList.remove('s-current'); });
+      var nextUp = container.querySelector('.step-item.s-upcoming');
+      if (nextUp) nextUp.classList.add('s-current');
+    }
+  }
+  // Recount done items accurately from DOM
+  var container2 = el.parentNode;
+  if (container2) {
+    stepsCompleted = container2.querySelectorAll('.step-item.s-done').length;
+  }
+  updateProgress(ac);
+}
+
+function updateProgress(ac) {
+  var useAc = ac || currentAc || '#1e3a5f';
+  var pct = totalSteps>0 ? Math.round((stepsCompleted/totalSteps)*100) : 0;
+  var fill = document.getElementById('sr-prog-fill');
+  var ct   = document.getElementById('sr-prog-count');
+  var btn  = document.getElementById('sr-end-btn');
+  if (fill) { fill.style.width=pct+'%'; fill.style.background=useAc; }
+  if (ct)   ct.textContent = stepsCompleted+'/'+totalSteps;
+  if (btn) {
+    if (pct>=100) {
+      btn.classList.add('sr-end-ready');
+      btn.textContent = '✓ All Done — End Call';
+    } else {
+      btn.classList.remove('sr-end-ready');
+      btn.textContent = 'End Call';
+    }
+  }
+}
+
+function exitSitRoom() { showView('mission-control'); resetCallTimer(); resetHoldTimer(); }
+function endCall()     { exitSitRoom(); }
+
+// ── Case Comment Builder ──────────────────────────────────────────────────
+var FIELDMAP = {
+  'CALLER TYPE': {label:'Caller Type',options:['Attorney / Law Firm','Insurance Carrier','TPA','Healthcare Provider','DDS / Government']},
+  'CONFIRMED':   {label:'Authorization Status',options:['Yes — on file and current','No — pending submission','Expired — new auth requested']},
+  'OPTION':      {label:'Delivery Method',options:['Electronic — email','Paper — mail','Both electronic and paper']},
+  'ISSUE':       {label:'Issue Description',placeholder:'Brief description of issue'},
+  'NAME':        {label:'Agent Name',placeholder:'Your name'},
+  'CASE NUMBER': {label:'Case / Reference Number',placeholder:'Case number from Salesforce'},
+  'TEAM':        {label:'Team Being Transferred To',placeholder:'e.g. Records Fulfillment'},
+  'ISSUE TYPE':  {label:'Issue Type',placeholder:'e.g. Status / Return / Wrong Patient'},
+  'MATTER':      {label:'Legal Matter',placeholder:'e.g. Personal injury case Smith v. Johnson'},
+};
+
+function buildCaseComment(data, ac) {
+  var tmpl = data.template || '';
+  var fieldsEl = document.getElementById('cc-fields');
+  var assembledEl = document.getElementById('cc-assembled');
+  if (!fieldsEl || !assembledEl) return;
+  fieldsEl.innerHTML = ''; assembledEl.textContent = tmpl;
+  // Extract tokens
+  var tokens = [], seen = {};
+  var rx = /\[([A-Z][A-Z0-9 _/#]+)\]/g, m;
+  while ((m=rx.exec(tmpl))!==null) { if (!seen[m[1]]) { seen[m[1]]=true; tokens.push(m[1]); } }
+  // Count blanks
+  var blanks = (tmpl.match(/_____/g)||[]).length;
+  if (!tokens.length && !blanks) { fieldsEl.innerHTML='<div style="padding:8px;font-size:11px;color:#94a3b8">No fillable fields in this template</div>'; return; }
+  var vals = {};
+  // Build inputs for tokens
+  tokens.forEach(function(tok) {
+    var fm = FIELDMAP[tok];
+    var fg = document.createElement('div'); fg.className='cc-fg';
+    var lbl = document.createElement('div'); lbl.className='cc-lbl'; lbl.textContent = fm ? fm.label : tok;
+    fg.appendChild(lbl);
+    if (fm && fm.options) {
+      var sel = document.createElement('select'); sel.className='cc-inp';
+      sel.innerHTML='<option value="">— select —</option>';
+      fm.options.forEach(function(o){ var opt=document.createElement('option'); opt.value=o; opt.textContent=o; sel.appendChild(opt); });
+      (function(t, el){ el.onchange=function(){ vals[t]=el.value; updateComment(tmpl, vals, assembledEl); }; })(tok, sel);
+      fg.appendChild(sel);
+    } else {
+      var inp = document.createElement('input'); inp.className='cc-inp'; inp.placeholder=(fm&&fm.placeholder)||'Fill in...';
+      (function(t, el){ el.oninput=function(){ vals[t]=el.value; updateComment(tmpl, vals, assembledEl); }; })(tok, inp);
+      fg.appendChild(inp);
+    }
+    fieldsEl.appendChild(fg);
+  });
+  // Blank fields — extract label from the template line
+  var tmplLines = tmpl.split('\n');
+  var blankIdx = 0;
+  tmplLines.forEach(function(line) {
+    if (line.indexOf('_____') === -1) return;
+    // Skip lines that already have a token handled above
+    var hasToken = false;
+    tokens.forEach(function(t){ if(line.indexOf('['+t+']')!==-1) hasToken=true; });
+    if (hasToken) return;
+    var label = line.replace('_____','').replace(':','').replace('(WRONG PATIENT)','').trim();
+    if (!label) label = 'Field '+(blankIdx+1);
+    var fg2 = document.createElement('div'); fg2.className='cc-fg';
+    var lbl2 = document.createElement('div'); lbl2.className='cc-lbl'; lbl2.textContent=label;
+    var inp2 = document.createElement('input'); inp2.className='cc-inp'; inp2.placeholder='Fill in '+label.toLowerCase()+'...';
+    (function(idx, el){ el.oninput=function(){ vals['__blank__'+idx]=el.value; updateComment(tmpl, vals, assembledEl); }; })(blankIdx, inp2);
+    fg2.appendChild(lbl2); fg2.appendChild(inp2); fieldsEl.appendChild(fg2);
+    blankIdx++;
+  });
+}
+
+function updateComment(tmpl, vals, el) {
+  var result = tmpl;
+  Object.keys(vals).forEach(function(k) {
+    if (!k.startsWith('__blank__') && vals[k]) {
+      result = result.replace('['+k+']', vals[k]);
+    }
+  });
+  // Blanks — sorted by index to match template line order
+  var bkeys = Object.keys(vals).filter(function(k){ return k.startsWith('__blank__'); });
+  bkeys.sort(function(a,b){ return parseInt(a.split('__blank__')[1])-parseInt(b.split('__blank__')[1]); });
+  bkeys.forEach(function(k){ if(vals[k]) result=result.replace('_____',vals[k]); });
+  el.textContent = result;
+  // Check all filled
+  var allFilled = !result.includes('[') && !result.includes('_____');
+  var copyBtn = document.getElementById('cc-copy-btn');
+  if (copyBtn) { copyBtn.classList.toggle('cc-ready', allFilled); }
+}
+
+function copyComment() {
+  var el = document.getElementById('cc-assembled');
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).catch(function(){});
+  var btn = document.getElementById('cc-copy-btn');
+  var orig = btn.textContent; btn.textContent='✓ Copied!'; btn.style.background='#d1fae5'; btn.style.color='#16a34a';
+  setTimeout(function(){ btn.textContent=orig; btn.style.background=''; btn.style.color=''; },2500);
+}
+
+// ── Study Mode ────────────────────────────────────────────────────────────
+function initStudy() { showStudyTab('quiz'); buildQuizSetup(); }
+
+function showStudyTab(tab) {
+  ['quiz','ref'].forEach(function(t) {
+    var el = document.getElementById('cl-study-'+t);
+    var btn = document.getElementById('cl-stab-'+t);
+    if (!el||!btn) return;
+    if (t===tab) { el.style.display='flex'; btn.style.borderBottomColor='var(--t1)'; btn.style.color='var(--t1)'; }
+    else          { el.style.display='none'; btn.style.borderBottomColor='transparent'; btn.style.color='var(--txt4)'; }
+  });
+  if (tab==='ref') showQuickRef('escalation');
+}
+
+function buildQuizSetup() {
+  var catList = document.getElementById('cl-quiz-cats');
+  if (!catList) return;
+  var cats = {};
+  CL_QUIZ.forEach(function(q){ cats[q.cat]=(cats[q.cat]||0)+1; });
+  catList.innerHTML='<div style="font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.12em;color:var(--txt4);margin-bottom:8px">BY CATEGORY</div>';
+  Object.entries(cats).forEach(function(e) {
+    var btn=document.createElement('button');
+    btn.style.cssText='display:flex;align-items:center;justify-content:space-between;width:100%;padding:10px 14px;margin-bottom:5px;border-radius:6px;border:0.5px solid var(--bdr2);background:#fff;color:var(--txt1);font-size:12px;cursor:pointer;text-align:left;transition:all .12s';
+    btn.innerHTML='<span>'+e[0]+'</span><span style="font-family:var(--mono);font-size:10px;color:var(--txt3)">'+e[1]+' q &rsaquo;</span>';
+    btn.onmouseover=function(){this.style.borderColor='var(--t1)';this.style.background='var(--t1-bg)';};
+    btn.onmouseout=function(){this.style.borderColor='';this.style.background='#fff';};
+    (function(cat){ btn.onclick=function(){ startQuiz('cat',cat); }; })(e[0]);
+    catList.appendChild(btn);
+  });
+}
+
+function startQuiz(mode, cat) {
+  lastMode=mode; quizIdx=0; quizCorrect=0;
+  var pool = CL_QUIZ.slice();
+  if (mode==='cat'&&cat) pool=pool.filter(function(q){ return q.cat===cat; });
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+  quizQueue = mode==='quick'?pool.slice(0,10):pool;
+  document.getElementById('cl-quiz-setup').style.display='none';
+  document.getElementById('cl-quiz-active').style.display='block';
+  document.getElementById('cl-quiz-results').style.display='none';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  var q = quizQueue[quizIdx];
+  if (!q) { showResults(); return; }
+  var total = quizQueue.length;
+  document.getElementById('cl-qprog-lbl').textContent='Q '+(quizIdx+1)+' / '+total;
+  document.getElementById('cl-qscore-lbl').textContent=quizCorrect+' correct';
+  document.getElementById('cl-qprog-fill').style.width=((quizIdx/total)*100).toFixed(0)+'%';
+  document.getElementById('cl-qcat-lbl').textContent=q.cat.toUpperCase();
+  document.getElementById('cl-qtext').textContent=q.q;
+  document.getElementById('cl-qfeedback').style.display='none';
+  document.getElementById('cl-qnext').style.display='none';
+  var correctText = typeof q.correct==='number' ? q.opts[q.correct] : q.correct;
+  var opts = q.opts.slice();
+  for(var i=opts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=opts[i];opts[i]=opts[j];opts[j]=t;}
+  var optsEl = document.getElementById('cl-qopts');
+  optsEl.innerHTML='';
+  opts.forEach(function(opt) {
+    var btn=document.createElement('button');
+    btn.style.cssText='display:block;width:100%;text-align:left;padding:12px 16px;border-radius:7px;border:1.5px solid var(--bdr2);background:#fff;color:var(--txt1);font-size:13px;cursor:pointer;transition:all .12s;line-height:1.45;margin-bottom:6px;font-family:var(--sans)';
+    btn.textContent=opt;
+    btn.onmouseover=function(){if(!this.dataset.answered)this.style.borderColor='var(--t1)';};
+    btn.onmouseout=function(){if(!this.dataset.answered)this.style.borderColor='';};
+    (function(o, ct){ btn.onclick=function(){ answerQ(o, ct, q, optsEl); }; })(opt, correctText);
+    optsEl.appendChild(btn);
+  });
+}
+
+function answerQ(chosen, correctText, q, optsEl) {
+  var correct = chosen===correctText;
+  if(correct) quizCorrect++;
+  document.getElementById('cl-qscore-lbl').textContent=quizCorrect+' correct';
+  optsEl.querySelectorAll('button').forEach(function(btn){
+    btn.dataset.answered='1'; btn.style.cursor='default';
+    if(btn.textContent===correctText){btn.style.background='#f0fdf4';btn.style.borderColor='#16a34a';btn.style.color='#15803d';}
+    else if(btn.textContent===chosen&&!correct){btn.style.background='#fff5f5';btn.style.borderColor='#dc2626';btn.style.color='#dc2626';}
+    btn.onmouseover=null; btn.onmouseout=null;
+  });
+  var fb=document.getElementById('cl-qfeedback');
+  fb.style.display='block';
+  fb.style.background=correct?'#f0fdf4':'#fff5f5';
+  fb.style.border='1px solid '+(correct?'#86efac':'#fca5a5');
+  fb.style.color=correct?'#15803d':'#dc2626';
+  fb.innerHTML=(correct?'<strong>Correct.</strong> ':'<strong>Not quite.</strong> ')+(q.explanation||'');
+  document.getElementById('cl-qnext').style.display='block';
+}
+
+function nextQ() { quizIdx++; if(quizIdx>=quizQueue.length){showResults();return;} renderQuestion(); }
+function showResults() {
+  var total=quizQueue.length, pct=Math.round((quizCorrect/total)*100);
+  document.getElementById('cl-quiz-active').style.display='none';
+  document.getElementById('cl-quiz-results').style.display='flex';
+  document.getElementById('cl-rpct').textContent=pct+'%';
+  document.getElementById('cl-rcorrect').textContent=quizCorrect;
+  document.getElementById('cl-rwrong').textContent=total-quizCorrect;
+  document.getElementById('cl-rtotal').textContent=total;
+  document.getElementById('cl-remoji').textContent=pct>=90?'🏆':pct>=75?'🎯':pct>=60?'📈':'📚';
+  document.getElementById('cl-rmsg').textContent=pct>=90?'Excellent. You know this cold.':pct>=75?'Strong. Review the ones you missed.':pct>=60?'Getting there. Keep practicing.':'Keep studying. The quiz randomizes each time.';
+}
+function endQuiz() {
+  quizQueue=[]; quizIdx=0; quizCorrect=0;
+  document.getElementById('cl-quiz-setup').style.display='block';
+  document.getElementById('cl-quiz-active').style.display='none';
+  document.getElementById('cl-quiz-results').style.display='none';
+  buildQuizSetup();
+}
+
+function showQuickRef(section) {
+  ['escalation','casetypes','callflow'].forEach(function(s){
+    var btn=document.getElementById('cl-qrbtn-'+s);
+    if(!btn)return;
+    if(s===section){btn.style.borderLeftColor='var(--t1)';btn.style.background='var(--t1-bg)';btn.style.color='var(--t1)';btn.style.fontWeight='600';}
+    else{btn.style.borderLeftColor='transparent';btn.style.background='none';btn.style.color='var(--txt3)';btn.style.fontWeight='400';}
+  });
+  var c=document.getElementById('cl-qrcontent');
+  if(!c)return;
+  var content = {
+    escalation:'<h2>Escalation Guide</h2><table><tr><th>Situation</th><th>Action</th><th>Route To</th></tr><tr><td>Wrong-patient records delivered</td><td>STOP — potential HIPAA breach</td><td>Supervisor + Legal/Compliance immediately</td></tr><tr><td>Court deadline within 5 days</td><td>Escalate after intake</td><td>Records Fulfillment warm transfer</td></tr><tr><td>Caller cannot verify identity</td><td>Access denied — document only</td><td>HIPAA Verification Failure path</td></tr><tr><td>Court order claimed verbally</td><td>Do not act on verbal claim</td><td>Legal/Compliance</td></tr><tr><td>Caller aggressive or threatening</td><td>De-escalate — do not engage</td><td>Supervisor immediately</td></tr><tr><td>Multiple failed verification attempts</td><td>Document and flag</td><td>Supervisor</td></tr><tr><td>Sensitive records (mental health, HIV)</td><td>Pause before processing</td><td>Legal/Compliance review</td></tr><tr><td>Billing dispute — large account</td><td>Brief supervisor before transfer</td><td>Supervisor + Billing</td></tr></table>',
+    casetypes:'<h2>Case Type Quick Reference</h2><table><tr><th>Case Type</th><th>Sub-Type</th><th>When</th><th>Close Status</th></tr><tr><td>Status Inquiry</td><td>Standard / Court Deadline</td><td>Caller checking existing request</td><td>Resolved / On Hold — Escalated</td></tr><tr><td>New Records Request</td><td>Standard / Rush</td><td>New intake</td><td>In Process / On Hold — Awaiting Auth</td></tr><tr><td>HIPAA Verification Failure</td><td>Access Denied / Partial</td><td>Caller fails verification</td><td>Closed — HIPAA Access Denied</td></tr><tr><td>Records Dispute</td><td>Missing / Wrong Patient</td><td>Records received incorrectly</td><td>On Hold — Dispute In Review</td></tr><tr><td>Unauthorized Request</td><td>No Auth / Expired Auth</td><td>No valid authorization</td><td>Open — Awaiting Authorization</td></tr><tr><td>Billing</td><td>Invoice Copy / Dispute</td><td>Billing questions</td><td>Transferred — Billing</td></tr><tr><td>Canvassing</td><td>New / Status</td><td>Canvassing requests</td><td>In Process / Resolved</td></tr></table>',
+    callflow:'<h2>Call Flow — Every Call</h2><div style="display:flex;flex-direction:column;gap:10px">' + [
+      {n:1,t:'Greet','d':'Thank you for calling Chartline Medical Records. My name is [NAME], how can I help you today?'},
+      {n:2,t:'Identify Caller Type','d':'Determine: attorney, insurance, TPA, healthcare provider, or DDS. This shapes everything that follows.'},
+      {n:3,t:'Verify Identity — HIPAA','d':'Verify name, organization, and authorization reference before accessing anything. No exceptions.'},
+      {n:4,t:'Open Case in Salesforce','d':'Open a case before accessing the records system. Every interaction gets a case.'},
+      {n:5,t:'Understand the Need','d':'Listen fully. Understand what they need and why. Is there a deadline? Is there urgency?'},
+      {n:6,t:'Work the Situation','d':'Follow the appropriate Situation Room path. Every step matters. Document as you go.'},
+      {n:7,t:'Give Reference Number and Wrap','d':'Your reference number is [CASE NUMBER]. Is there anything else? Thank you for calling Chartline.'},
+    ].map(function(s){ return '<div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:0.5px solid var(--bdr)"><div style="width:28px;height:28px;border-radius:50%;background:var(--t1);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0">'+s.n+'</div><div><div style="font-size:14px;font-weight:600;color:var(--txt1);margin-bottom:3px">'+s.t+'</div><div style="font-size:12px;color:var(--txt3);line-height:1.5">'+s.d+'</div></div></div>'; }).join('') + '</div>',
+  };
+  c.innerHTML='<div class="cl-rc">'+(content[section]||'')+'</div>';
+}
+
+// ── Modals ────────────────────────────────────────────────────────────────
+function showScriptModal(scr) {
+  var existing=document.getElementById('cl-script-modal'); if(existing)existing.remove();
+  var overlay=document.createElement('div');
+  overlay.id='cl-script-modal';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:9999;display:flex;align-items:center;justify-content:center';
+  overlay.onclick=function(e){if(e.target===overlay)overlay.remove();};
+  var modal=document.createElement('div');
+  modal.style.cssText='background:#fff;border-radius:10px;max-width:520px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2);overflow:hidden;font-family:var(--sans)';
+  modal.innerHTML=
+    '<div style="background:'+scr.col+';padding:14px 20px;display:flex;align-items:center;justify-content:space-between">'+
+      '<div style="font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.14em;color:#fff">'+scr.label+' SCRIPT</div>'+
+      '<button id="sm-close" style="background:rgba(255,255,255,0.25);border:none;border-radius:4px;color:#fff;font-size:16px;width:28px;height:28px;cursor:pointer">&times;</button>'+
+    '</div>'+
+    '<div style="padding:20px 24px">'+
+      '<div style="font-size:15px;line-height:1.8;color:#111827;font-style:italic;border-left:3px solid '+scr.col+';padding:12px 16px;background:'+scr.col+'18;border-radius:0 8px 8px 0;margin-bottom:16px">&ldquo;'+scr.text+'&rdquo;</div>'+
+      '<div style="display:flex;gap:10px">'+
+        '<button id="sm-copy" style="flex:1;padding:10px;border-radius:5px;border:1.5px solid '+scr.col+';background:'+scr.col+'12;color:'+scr.col+';font-family:var(--mono);font-size:10px;font-weight:500;cursor:pointer">Copy Script</button>'+
+        '<button id="sm-close2" style="padding:10px 18px;border-radius:5px;border:0.5px solid #e5e7eb;background:#f9fafb;color:#6b7280;font-size:12px;cursor:pointer">Close</button>'+
+      '</div>'+
+    '</div>';
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  modal.querySelector('#sm-close').onclick=function(){overlay.remove();};
+  modal.querySelector('#sm-close2').onclick=function(){overlay.remove();};
+  modal.querySelector('#sm-copy').onclick=function(){
+    navigator.clipboard.writeText(scr.text).catch(function(){});
+    var btn=modal.querySelector('#sm-copy'); var orig=btn.textContent; btn.textContent='Copied!';
+    setTimeout(function(){btn.textContent=orig;},2000);
+  };
+  var esc=function(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}};
+  document.addEventListener('keydown',esc);
+}
+
+function showTransferModal(teamName, qcName, useCase) {
+  var existing=document.getElementById('cl-transfer-modal'); if(existing)existing.remove();
+  var overlay=document.createElement('div');
+  overlay.id='cl-transfer-modal';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:9999;display:flex;align-items:center;justify-content:center';
+  overlay.onclick=function(e){if(e.target===overlay)overlay.remove();};
+  var steps=['Tell caller: &ldquo;Please hold while I connect you with a specialist.&rdquo;','In Salesforce: click Transfer → Queues → search Quick Connect name below','Introduce caller: their name, case number, and brief issue summary','If hold &gt; 60 seconds: &ldquo;Our specialist is unavailable. May I have someone call you back within one business day?&rdquo;'];
+  var stepsHtml=steps.map(function(s,i){return '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px"><span style="font-family:var(--mono);font-size:11px;font-weight:500;color:#fff;background:#0f1e35;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+(i+1)+'</span><span style="font-size:13px;color:#374151;line-height:1.55">'+s+'</span></div>';}).join('');
+  var modal=document.createElement('div');
+  modal.style.cssText='background:#fff;border-radius:10px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2);overflow:hidden;font-family:var(--sans)';
+  modal.innerHTML=
+    '<div style="background:#0f1e35;padding:14px 20px;display:flex;align-items:center;justify-content:space-between">'+
+      '<div><div style="font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:rgba(255,255,255,0.4);margin-bottom:3px">WARM TRANSFER TO</div><div style="font-size:16px;font-weight:600;color:#fff">'+teamName+'</div></div>'+
+      '<button id="tg-close" style="background:rgba(255,255,255,0.1);border:none;border-radius:4px;color:#fff;font-size:16px;width:28px;height:28px;cursor:pointer">&times;</button>'+
+    '</div>'+
+    '<div style="padding:20px 24px">'+
+      '<div style="background:#f4f6f9;border-radius:6px;padding:10px 14px;margin-bottom:16px"><div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:#9ca3af;margin-bottom:3px">HANDLES</div><div style="font-size:13px;color:#374151">'+useCase+'</div></div>'+
+      '<div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:#9ca3af;margin-bottom:12px">HOW TO TRANSFER</div>'+
+      stepsHtml+
+      '<div style="border:1.5px solid #dc2626;border-radius:6px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-top:6px">'+
+        '<div><div style="font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:#dc2626;margin-bottom:4px">QUICK CONNECT NAME — type this in Salesforce Queues</div><div style="font-family:var(--mono);font-size:16px;font-weight:500;color:#111827">'+qcName+'</div></div>'+
+        '<button id="tg-copy" style="font-family:var(--mono);font-size:10px;font-weight:500;padding:9px 16px;border-radius:5px;border:1.5px solid #dc2626;background:#fff5f5;color:#dc2626;cursor:pointer">Copy Name</button>'+
+      '</div>'+
+    '</div>';
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  modal.querySelector('#tg-close').onclick=function(){overlay.remove();};
+  modal.querySelector('#tg-copy').onclick=function(){
+    navigator.clipboard.writeText(qcName).catch(function(){});
+    var btn=modal.querySelector('#tg-copy'); var orig=btn.textContent; btn.textContent='Copied!'; btn.style.background='#d1fae5'; btn.style.color='#16a34a'; btn.style.borderColor='#16a34a';
+    setTimeout(function(){btn.textContent=orig;btn.style.background='';btn.style.color='';btn.style.borderColor='';},2000);
+  };
+  var esc=function(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}};
+  document.addEventListener('keydown',esc);
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  buildSidebar();
+  buildTransferBoard();
+  buildNavTabs();
+  buildGrid(CL_SITUATIONS);
+  showView('mission-control');
+});
+
+</script>
+</body>
+</html>

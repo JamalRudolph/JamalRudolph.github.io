@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rudolph CX — Interactive Training Tools for Customer Service Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:      #0f0e0c;
+  --ink2:     #2a2620;
+  --ink3:     #4a453e;
+  --dim:      #8a8278;
+  --muted:    #b5afa6;
+  --cream:    #f7f4ee;
+  --cream2:   #ede9e0;
+  --cream3:   #e2ddd3;
+  --red:      #b83224;
+  --red2:     #d94030;
+  --red-bg:   rgba(184,50,36,0.07);
+  --gold:     #c49a3c;
+  --serif:    'Cormorant Garamond', Georgia, serif;
+  --mono:     'DM Mono', monospace;
+  --sans:     'DM Sans', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  width: 10px; height: 10px;
+  background: var(--red);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+  mix-blend-mode: multiply;
+}
+.cursor.hovering { width: 28px; height: 28px; opacity: 0.4; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--cream2); }
+::-webkit-scrollbar-thumb { background: var(--red); }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 20px 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  mix-blend-mode: multiply;
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.nav-logo span { color: var(--red); }
+.nav-links {
+  display: flex; gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--red); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 120px 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grain texture */
+.hero::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.7;
+}
+
+.hero-left { position: relative; z-index: 1; }
+
+.hero-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-label::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--red);
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(52px, 6vw, 84px);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 32px;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--red);
+}
+
+.hero-body {
+  font-size: 16px;
+  color: var(--ink3);
+  line-height: 1.75;
+  max-width: 480px;
+  margin-bottom: 48px;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+}
+.btn-primary {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  background: var(--ink);
+  color: var(--cream);
+  border: none; cursor: none;
+  text-decoration: none;
+  transition: all 0.2s;
+  position: relative; overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--red);
+  transform: translateX(-101%);
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.btn-primary:hover::after { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+
+.btn-secondary {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+  transition: color 0.15s;
+}
+.btn-secondary:hover { color: var(--red); }
+.btn-secondary svg { transition: transform 0.2s; }
+.btn-secondary:hover svg { transform: translateX(4px); }
+
+/* Hero right — visual */
+.hero-right {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px;
+}
+
+.hero-visual {
+  position: relative;
+  width: 100%; max-width: 460px;
+}
+
+/* Floating stat cards */
+.stat-card {
+  background: white;
+  border: 1px solid var(--cream3);
+  padding: 18px 22px;
+  position: absolute;
+  animation: floatCard 6s ease-in-out infinite;
+  box-shadow: 0 4px 24px rgba(15,14,12,0.08);
+}
+.stat-card:nth-child(1) { top: -20px; left: -30px; animation-delay: 0s; }
+.stat-card:nth-child(2) { top: 40%; right: -40px; animation-delay: -2s; }
+.stat-card:nth-child(3) { bottom: -20px; left: 20px; animation-delay: -4s; }
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.stat-n {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-n span { color: var(--red); }
+.stat-l {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.hero-center-card {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 36px;
+  margin: 40px auto;
+  position: relative;
+}
+.hcc-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red2);
+  margin-bottom: 14px;
+}
+.hcc-title {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--cream);
+  margin-bottom: 20px;
+  line-height: 1.3;
+  font-style: italic;
+}
+.hcc-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: rgba(247,244,238,0.65);
+  margin-bottom: 8px;
+  font-weight: 300;
+}
+.hcc-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--red2); flex-shrink: 0; margin-top: 5px;
+}
+
+/* ── MARQUEE ── */
+.marquee-wrap {
+  border-top: 1px solid var(--cream3);
+  border-bottom: 1px solid var(--cream3);
+  padding: 14px 0;
+  overflow: hidden;
+  background: var(--cream2);
+  position: relative; z-index: 1;
+}
+.marquee-track {
+  display: flex; gap: 0;
+  animation: marquee 28s linear infinite;
+  width: max-content;
+}
+.marquee-item {
+  display: flex; align-items: center; gap: 28px;
+  padding: 0 28px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  white-space: nowrap;
+}
+.marquee-item::after {
+  content: '·';
+  color: var(--red);
+}
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── PROBLEM / SOLUTION ── */
+.section {
+  padding: 120px 60px;
+  position: relative;
+}
+
+.section-inner { max-width: 1200px; margin: 0 auto; }
+
+.section-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-eyebrow::before {
+  content: '';
+  display: block; width: 24px; height: 1px;
+  background: var(--red);
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 32px;
+}
+
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+  margin-top: 64px;
+}
+
+.split-text {
+  font-size: 15px;
+  color: var(--ink3);
+  line-height: 1.8;
+  font-weight: 300;
+}
+.split-text p { margin-bottom: 20px; }
+.split-text strong { color: var(--ink); font-weight: 600; }
+
+/* Pull quote */
+.pull-quote {
+  border-left: 2px solid var(--red);
+  padding: 24px 32px;
+  background: white;
+  margin: 40px 0;
+}
+.pq-text {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.45;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+.pq-attr {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* Feature list */
+.feature-list { list-style: none; }
+.feature-item {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--cream3);
+}
+.feature-item:first-child { border-top: 1px solid var(--cream3); }
+.feature-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 28px;
+}
+.feature-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.feature-desc {
+  font-size: 13px;
+  color: var(--dim);
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* ── DEMOS SECTION ── */
+.demos-section {
+  padding: 120px 60px;
+  background: var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+.demos-section::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,50,36,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.demos-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red2);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.demos-eyebrow::before {
+  content: '';
+  display: block; width: 24px; height: 1px;
+  background: var(--red2);
+}
+
+.demos-title {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+}
+.demos-sub {
+  font-size: 15px;
+  color: rgba(247,244,238,0.5);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 560px;
+  margin-bottom: 72px;
+}
+
+.demos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.demo-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: block;
+}
+.demo-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.demo-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.1);
+  transform: translateY(-3px);
+}
+.demo-card:hover::before { transform: scaleX(1); }
+
+/* Per-card accent colors */
+.demo-card.arc::before    { background: var(--red); }
+.demo-card.chart::before  { background: #2d7dd2; }
+.demo-card.lend::before   { background: var(--gold); }
+
+.demo-tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+.arc  .demo-tag { background: rgba(184,50,36,0.2);  color: #ff7070; }
+.chart .demo-tag { background: rgba(45,125,210,0.2); color: #70b0ff; }
+.lend .demo-tag { background: rgba(196,154,60,0.2);  color: #f0c060; }
+
+.demo-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.demo-role {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(247,244,238,0.4);
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+}
+.demo-desc {
+  font-size: 13px;
+  color: rgba(247,244,238,0.55);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 28px;
+}
+
+.demo-stats {
+  display: flex; gap: 20px;
+  margin-bottom: 32px;
+}
+.ds-item {
+  text-align: center;
+}
+.ds-n {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.ds-l {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(247,244,238,0.3);
+}
+
+.demo-cta {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(247,244,238,0.5);
+  transition: color 0.15s;
+}
+.demo-card:hover .demo-cta { color: var(--cream); }
+.demo-cta-arrow {
+  transition: transform 0.2s;
+}
+.demo-card:hover .demo-cta-arrow { transform: translateX(6px); }
+
+/* ── HOW IT WORKS ── */
+.how-section {
+  padding: 120px 60px;
+  background: white;
+}
+
+.steps-layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 72px;
+  border: 1px solid var(--cream3);
+}
+.step {
+  padding: 48px 40px;
+  border-right: 1px solid var(--cream3);
+  position: relative;
+  transition: background 0.2s;
+}
+.step:last-child { border-right: none; }
+.step:hover { background: var(--cream); }
+
+.step-num {
+  font-family: var(--serif);
+  font-size: 72px;
+  font-weight: 600;
+  color: var(--cream3);
+  line-height: 1;
+  margin-bottom: 20px;
+  letter-spacing: -0.04em;
+  transition: color 0.2s;
+}
+.step:hover .step-num { color: var(--red); opacity: 0.25; }
+.step-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+.step-desc {
+  font-size: 13px;
+  color: var(--dim);
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+/* ── PRICING ── */
+.pricing-section {
+  padding: 120px 60px;
+  background: var(--cream2);
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 64px;
+}
+.price-card {
+  background: white;
+  padding: 48px 40px;
+  position: relative;
+  border: 1px solid var(--cream3);
+  transition: all 0.25s ease;
+}
+.price-card.featured {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.price-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(15,14,12,0.1); }
+
+.price-tier {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 20px;
+}
+.price-card.featured .price-tier { color: var(--red2); }
+
+.price-amount {
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -0.03em;
+}
+.price-card.featured .price-amount { color: var(--cream); }
+
+.price-note {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  margin-bottom: 32px;
+}
+.price-card.featured .price-note { color: rgba(247,244,238,0.4); }
+
+.price-divider {
+  height: 1px;
+  background: var(--cream3);
+  margin-bottom: 28px;
+}
+.price-card.featured .price-divider { background: rgba(255,255,255,0.1); }
+
+.price-features { list-style: none; }
+.price-feature {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 13px;
+  color: var(--ink3);
+  margin-bottom: 12px;
+  font-weight: 300;
+}
+.price-card.featured .price-feature { color: rgba(247,244,238,0.65); }
+.price-check {
+  color: var(--red); font-size: 12px; flex-shrink: 0; margin-top: 1px;
+}
+.price-card.featured .price-check { color: var(--red2); }
+
+.featured-badge {
+  position: absolute;
+  top: 24px; right: 24px;
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--red);
+  color: white;
+  padding: 4px 10px;
+}
+
+/* ── CONTACT ── */
+.contact-section {
+  padding: 120px 60px;
+  background: var(--cream);
+  text-align: center;
+}
+.contact-title {
+  font-family: var(--serif);
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+}
+.contact-title em { font-style: italic; color: var(--red); }
+.contact-sub {
+  font-size: 16px;
+  color: var(--dim);
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto 48px;
+  font-weight: 300;
+}
+.contact-details {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 12px;
+  margin-top: 48px;
+}
+.contact-item {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+}
+.contact-item a {
+  color: var(--red);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(184,50,36,0.3);
+  transition: border-color 0.15s;
+}
+.contact-item a:hover { border-color: var(--red); }
+
+/* ── FOOTER ── */
+footer {
+  padding: 28px 60px;
+  border-top: 1px solid var(--cream3);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--cream);
+}
+.footer-logo {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink3);
+}
+.footer-logo span { color: var(--red); }
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+/* ── ANIMATIONS ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding: 100px 28px 60px; }
+  .hero-right { display: none; }
+  .split-layout, .demos-grid, .steps-layout, .pricing-grid { grid-template-columns: 1fr; }
+  nav { padding: 16px 28px; }
+  .section, .demos-section, .how-section, .pricing-section, .contact-section { padding: 80px 28px; }
+  footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: center; }
+  .steps-layout .step { border-right: none; border-bottom: 1px solid var(--cream3); }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Rudolph<span>CX</span></div>
+  <ul class="nav-links">
+    <li><a href="#what">What We Build</a></li>
+    <li><a href="#demos">Demos</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-label reveal">Customer Service Operations</div>
+    <h1 class="hero-title reveal reveal-delay-1">
+      Built for the<br>
+      moment the<br>
+      call is <em>live.</em>
+    </h1>
+    <p class="hero-body reveal reveal-delay-2">
+      Role-specific interactive reference guides that tell agents exactly what to do, exactly what to say, and exactly what case to create — without leaving the screen.
+    </p>
+    <div class="hero-actions reveal reveal-delay-3">
+      <a href="#demos" class="btn-primary"><span>View Live Demos</span></a>
+      <a href="#contact" class="btn-secondary">
+        Get in Touch
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right reveal reveal-delay-2">
+    <div class="hero-visual">
+      <div class="stat-card">
+        <div class="stat-n"><span>20</span></div>
+        <div class="stat-l">Call situations covered</div>
+      </div>
+      <div class="hero-center-card">
+        <div class="hcc-label">Live Assist — Active Call</div>
+        <div class="hcc-title">"I cannot find my certificate anywhere."</div>
+        <div class="hcc-item"><div class="hcc-dot"></div>Case: Service Case → Certificates → PDF Sent</div>
+        <div class="hcc-item"><div class="hcc-dot"></div>SF: Search by email → Achievement Assignments → check status</div>
+        <div class="hcc-item"><div class="hcc-dot"></div>Say: "Let me pull up your account right now..."</div>
+        <div class="hcc-item"><div class="hcc-dot"></div>Hard stop: AA must show Acquired before sending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n"><span>3</span></div>
+        <div class="stat-l">Industries covered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">2<span>col</span></div>
+        <div class="stat-l">Agent steps + customer script</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">Call Center Operations</div>
+    <div class="marquee-item">Healthcare Revenue Cycle</div>
+    <div class="marquee-item">Mortgage Loan Servicing</div>
+    <div class="marquee-item">Government Contractor BPO</div>
+    <div class="marquee-item">FDCPA Compliance</div>
+    <div class="marquee-item">HIPAA Compliance</div>
+    <div class="marquee-item">Salesforce Integration</div>
+    <div class="marquee-item">Live Call Reference</div>
+    <div class="marquee-item">QA Performance</div>
+    <div class="marquee-item">First Call Resolution</div>
+    <div class="marquee-item">Call Center Operations</div>
+    <div class="marquee-item">Healthcare Revenue Cycle</div>
+    <div class="marquee-item">Mortgage Loan Servicing</div>
+    <div class="marquee-item">Government Contractor BPO</div>
+    <div class="marquee-item">FDCPA Compliance</div>
+    <div class="marquee-item">HIPAA Compliance</div>
+    <div class="marquee-item">Salesforce Integration</div>
+    <div class="marquee-item">Live Call Reference</div>
+    <div class="marquee-item">QA Performance</div>
+    <div class="marquee-item">First Call Resolution</div>
+  </div>
+</div>
+
+<!-- WHAT WE BUILD -->
+<section class="section" id="what">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">The Problem</div>
+    <h2 class="section-title reveal">Agents finish training.<br>They still don't know what to do.</h2>
+
+    <div class="split-layout">
+      <div class="split-text reveal">
+        <p>Companies invest in onboarding programs, knowledge bases, and training videos. Agents complete them, pass the assessments, and go live.</p>
+        <p>Then the calls start. They search through Confluence while the customer waits. They ask the same question for the fifth time this week. They create the wrong case type. They miss the escalation trigger.</p>
+        <p><strong>This is not a training failure. It is a design failure.</strong> Agents were given documents when they needed a decision engine.</p>
+
+        <div class="pull-quote">
+          <div class="pq-text">"Existing tools are organized by information category. They require the agent to know what to look for before they can find it."</div>
+          <div class="pq-attr">The gap Rudolph CX fills</div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-1">
+        <ul class="feature-list">
+          <li class="feature-item">
+            <div class="feature-num">01</div>
+            <div>
+              <div class="feature-title">Situation-first design</div>
+              <div class="feature-desc">Type what the customer said. The guide surfaces the complete response — case type, agent steps, customer script, and escalation triggers in one panel.</div>
+            </div>
+          </li>
+          <li class="feature-item">
+            <div class="feature-num">02</div>
+            <div>
+              <div class="feature-title">Two-column step layout</div>
+              <div class="feature-desc">Agent actions in the left column. Word-for-word customer script in the right. Both visible simultaneously. No tab-switching, no scrolling.</div>
+            </div>
+          </li>
+          <li class="feature-item">
+            <div class="feature-num">03</div>
+            <div>
+              <div class="feature-title">Case setup before anything else</div>
+              <div class="feature-desc">Record type, case type, sub-type, and do-not warnings appear before step one. Agents create the right case before touching anything in the system.</div>
+            </div>
+          </li>
+          <li class="feature-item">
+            <div class="feature-num">04</div>
+            <div>
+              <div class="feature-title">Built from inside the role</div>
+              <div class="feature-desc">Every guide is built from official job aids, verified source documents, and live call experience — not assumptions made from the outside.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMOS -->
+<section class="demos-section" id="demos">
+  <div class="section-inner">
+    <div class="demos-eyebrow reveal">Live Demos</div>
+    <h2 class="demos-title reveal">Three guides.<br>Three industries.</h2>
+    <p class="demos-sub reveal">Each demo is fully functional. Click any situation, work through the steps, see exactly what an agent would see on a live call.</p>
+
+    <div class="demos-grid">
+
+      <a href="arc_guide_v16.html" class="demo-card arc reveal" target="_blank">
+        <div class="demo-tag">Nonprofit · Government BPO</div>
+        <div class="demo-title">ARC Agent Guide</div>
+        <div class="demo-role">Tier I Call Center Agent — Training Support Center</div>
+        <div class="demo-desc">Built during active employment at the American Red Cross. 20 situations covering every Tier I call type from certificate lookup to high-priority escalations.</div>
+        <div class="demo-stats">
+          <div class="ds-item"><div class="ds-n">20</div><div class="ds-l">Situations</div></div>
+          <div class="ds-item"><div class="ds-n">2col</div><div class="ds-l">Step layout</div></div>
+          <div class="ds-item"><div class="ds-n">SF</div><div class="ds-l">Salesforce</div></div>
+        </div>
+        <div class="demo-cta">Open Live Demo <span class="demo-cta-arrow">→</span></div>
+      </a>
+
+      <a href="chartline_guide.html" class="demo-card chart reveal reveal-delay-1" target="_blank">
+        <div class="demo-tag">Healthcare · Legal Services</div>
+        <div class="demo-title">Chartline</div>
+        <div class="demo-role">Customer Service Specialist — Medical Records</div>
+        <div class="demo-desc">HIPAA-compliant guide for medical records and legal services operations. Covers records request lifecycle, caller identification, rush and court deadline handling.</div>
+        <div class="demo-stats">
+          <div class="ds-item"><div class="ds-n">8</div><div class="ds-l">Situations</div></div>
+          <div class="ds-item"><div class="ds-n">16</div><div class="ds-l">Step paths</div></div>
+          <div class="ds-item"><div class="ds-n">HIPAA</div><div class="ds-l">Compliant</div></div>
+        </div>
+        <div class="demo-cta">Open Live Demo <span class="demo-cta-arrow">→</span></div>
+      </a>
+
+      <a href="lendline.html" class="demo-card lend reveal reveal-delay-2" target="_blank">
+        <div class="demo-tag">Financial Services</div>
+        <div class="demo-title">Lendline</div>
+        <div class="demo-role">Customer Service Specialist — Mortgage Loan Servicing</div>
+        <div class="demo-desc">FDCPA-compliant guide for mortgage loan servicing operations. Covers payment inquiries, loss mitigation intake, foreclosure status, escrow, and complaint handling.</div>
+        <div class="demo-stats">
+          <div class="ds-item"><div class="ds-n">10</div><div class="ds-l">Situations</div></div>
+          <div class="ds-item"><div class="ds-n">14</div><div class="ds-l">Step paths</div></div>
+          <div class="ds-item"><div class="ds-n">FDCPA</div><div class="ds-l">Compliant</div></div>
+        </div>
+        <div class="demo-cta">Open Live Demo <span class="demo-cta-arrow">→</span></div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">The Process</div>
+    <h2 class="section-title reveal">From intake to delivery<br>in three stages.</h2>
+
+    <div class="steps-layout">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Intake</div>
+        <div class="step-desc">A structured discovery process collects everything needed before a single line is written. Job descriptions, SOPs, knowledge base exports, CRM workflows, onboarding materials. A 20-minute discovery call identifies the highest-frequency call types and the most common failure points.</div>
+      </div>
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">02</div>
+        <div class="step-title">Build</div>
+        <div class="step-desc">Content is organized by call situation, not by information category. Every situation is built with the full case setup, two-column steps, customer scripts, hard stops, and case note templates. Draft delivered within two to three weeks.</div>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">03</div>
+        <div class="step-title">Delivery</div>
+        <div class="step-desc">Client reviews via a recorded walkthrough. One round of revisions included. Final guide delivered as a single HTML file — host on any internal server, SharePoint, or share directly with agents. No additional software required for initial deployment.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Investment</div>
+    <h2 class="section-title reveal">Simple pricing.<br>No hidden complexity.</h2>
+
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <div class="price-tier">Starter</div>
+        <div class="price-amount">$1,500</div>
+        <div class="price-note">to $2,500 per project</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="price-feature"><span class="price-check">✓</span>Single role</li>
+          <li class="price-feature"><span class="price-check">✓</span>Up to 5 core situations</li>
+          <li class="price-feature"><span class="price-check">✓</span>Basic quiz set</li>
+          <li class="price-feature"><span class="price-check">✓</span>Case setup blocks</li>
+          <li class="price-feature"><span class="price-check">✓</span>One revision round</li>
+          <li class="price-feature"><span class="price-check">✓</span>Pilot programs and small operations</li>
+        </ul>
+      </div>
+
+      <div class="price-card featured reveal reveal-delay-1">
+        <div class="featured-badge">Most Popular</div>
+        <div class="price-tier">Standard</div>
+        <div class="price-amount">$4,000</div>
+        <div class="price-note">to $7,500 per project</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="price-feature"><span class="price-check">✓</span>Full role coverage</li>
+          <li class="price-feature"><span class="price-check">✓</span>10–20 situations</li>
+          <li class="price-feature"><span class="price-check">✓</span>Two-column step layout</li>
+          <li class="price-feature"><span class="price-check">✓</span>Phrase search entry point</li>
+          <li class="price-feature"><span class="price-check">✓</span>Full quiz and scenario set</li>
+          <li class="price-feature"><span class="price-check">✓</span>Case note templates</li>
+          <li class="price-feature"><span class="price-check">✓</span>One revision round</li>
+        </ul>
+      </div>
+
+      <div class="price-card reveal reveal-delay-2">
+        <div class="price-tier">Enterprise</div>
+        <div class="price-amount">$10k+</div>
+        <div class="price-note">or $1,500–$2,500/month retainer</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="price-feature"><span class="price-check">✓</span>Multiple roles</li>
+          <li class="price-feature"><span class="price-check">✓</span>Ongoing updates as processes change</li>
+          <li class="price-feature"><span class="price-check">✓</span>White-label options</li>
+          <li class="price-feature"><span class="price-check">✓</span>Onboarding support</li>
+          <li class="price-feature"><span class="price-check">✓</span>Priority turnaround</li>
+          <li class="price-feature"><span class="price-check">✓</span>Recurring revenue model</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-eyebrow reveal" style="justify-content:center">Get Started</div>
+  <h2 class="contact-title reveal">
+    Ready to see what this<br>
+    looks like for <em>your role?</em>
+  </h2>
+  <p class="contact-sub reveal">
+    A custom demo built from your own job descriptions and content is available on request. All three live demos above are fully functional and ready to explore now.
+  </p>
+  <a href="mailto:j.rudolph.bey@gmail.com" class="btn-primary reveal" style="display:inline-block">
+    <span>Request a Demo</span>
+  </a>
+  <div class="contact-details reveal">
+    <div class="contact-item">Jamal Rudolph — Founder, Rudolph CX</div>
+    <div class="contact-item"><a href="mailto:j.rudolph.bey@gmail.com">j.rudolph.bey@gmail.com</a></div>
+    <div class="contact-item"><a href="tel:9196955004">(919) 695-5004</a></div>
+    <div class="contact-item">Durham, North Carolina — Remote delivery nationwide</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Rudolph<span>CX</span></div>
+  <div class="footer-copy">© 2026 Rudolph Financial LLC · Rudolph CX · Durham, NC</div>
+</footer>
+
+<script>
+// Custom cursor
+var cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', function(e) {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a, button').forEach(function(el) {
+  el.addEventListener('mouseenter', function() { cursor.classList.add('hovering'); });
+  el.addEventListener('mouseleave', function() { cursor.classList.remove('hovering'); });
+});
+
+// Scroll reveal
+var reveals = document.querySelectorAll('.reveal');
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(function(el) { observer.observe(el); });
+
+// Trigger hero reveals immediately
+setTimeout(function() {
+  document.querySelectorAll('.hero .reveal').forEach(function(el) {
+    el.classList.add('visible');
+  });
+}, 100);
+</script>
+</body>
+</html>
