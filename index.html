@@ -799,6 +799,155 @@ footer {
 .reveal-delay-3 { transition-delay: 0.3s; }
 .reveal-delay-4 { transition-delay: 0.4s; }
 
+/* ── FIRSTSTEP COMPANION SECTION ── */
+.firststep-section {
+  padding: 140px 60px;
+  background: var(--cream2);
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--cream3);
+  border-bottom: 1px solid var(--cream3);
+}
+.firststep-section::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle at center, rgba(196,154,60,0.08), transparent 70%);
+  pointer-events: none;
+}
+.fs-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.fs-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.fs-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--gold);
+}
+.fs-title {
+  font-family: var(--serif);
+  font-size: clamp(38px, 4.2vw, 56px);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+.fs-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+.fs-body {
+  font-size: 16px;
+  color: var(--ink3);
+  line-height: 1.75;
+  margin-bottom: 20px;
+  font-weight: 300;
+  max-width: 540px;
+}
+.fs-body strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.fs-cta {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  margin-top: 16px;
+  transition: all 0.2s;
+  cursor: none;
+}
+.fs-cta:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+.fs-cta svg { transition: transform 0.2s; }
+.fs-cta:hover svg { transform: translateX(4px); }
+
+.fs-card {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 48px 40px;
+  position: relative;
+  border-left: 3px solid var(--gold);
+}
+.fs-card-label {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.fs-card-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+}
+.fs-card-line {
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+  margin-bottom: 28px;
+}
+.fs-card-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 32px;
+}
+.fs-stat-num {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.fs-stat-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.fs-card-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--cream2);
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; padding: 100px 28px 60px; }
   .hero-right { display: none; }
@@ -807,6 +956,11 @@ footer {
   .section, .demos-section, .how-section, .pricing-section, .contact-section { padding: 80px 28px; }
   footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: center; }
   .steps-layout .step { border-right: none; border-bottom: 1px solid var(--cream3); }
+  .firststep-section { padding: 80px 28px; }
+  .fs-grid { grid-template-columns: 1fr; gap: 40px; }
+  .fs-card { padding: 36px 28px; }
+  .fs-card-stats { gap: 12px; }
+  .fs-stat-num { font-size: 28px; }
 }
 </style>
 </head>
@@ -820,6 +974,7 @@ footer {
   <ul class="nav-links">
     <li><a href="#what">What We Build</a></li>
     <li><a href="#demos">Demos</a></li>
+    <li><a href="#firststep">FirstStep</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -1006,7 +1161,45 @@ footer {
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
+<!-- FIRSTSTEP COMPANION BLOCK -->
+<section class="firststep-section" id="firststep">
+  <div class="section-inner">
+    <div class="fs-grid">
+      <div class="fs-left">
+        <div class="fs-eyebrow reveal">A Companion Project</div>
+        <h2 class="fs-title reveal">The same methodology,<br>built free for <em>everyone else.</em></h2>
+        <p class="fs-body reveal">Every enterprise tool starts with the same insight: most people fail in hard moments not because they lack intelligence or will — but because nobody gave them a clear path through it. <strong>FirstStep</strong> is the public-facing version of that idea. Free. Open to anyone. Built for the moments when a worker, a tenant, a citizen has to navigate something hard with no script and no support.</p>
+        <p class="fs-body reveal">Same methodology that powers the enterprise demos above. Different audience. No paywall, no signup, no friction — just the tool that lives inside the moment.</p>
+        <a href="https://getfirststep.org" target="_blank" rel="noopener" class="fs-cta reveal">
+          <span>Visit getfirststep.org</span>
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="fs-right reveal">
+        <div class="fs-card">
+          <div class="fs-card-label">FirstStep</div>
+          <div class="fs-card-tag">Free · For workers and communities</div>
+          <div class="fs-card-line"></div>
+          <div class="fs-card-stats">
+            <div class="fs-stat">
+              <div class="fs-stat-num">14</div>
+              <div class="fs-stat-label">Situations</div>
+            </div>
+            <div class="fs-stat">
+              <div class="fs-stat-num">3</div>
+              <div class="fs-stat-label">Tracks</div>
+            </div>
+            <div class="fs-stat">
+              <div class="fs-stat-num">$0</div>
+              <div class="fs-stat-label">To use</div>
+            </div>
+          </div>
+          <div class="fs-card-quote">"He builds the tool that lives inside the moment — and there is nothing else like it."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 <section class="how-section" id="how">
   <div class="section-inner">
     <div class="section-eyebrow reveal">The Process</div>
@@ -1105,7 +1298,7 @@ footer {
   <div class="contact-details reveal">
     <div class="contact-item">Jamal Rudolph — Founder, Rudolph CX</div>
     <div class="contact-item"><a href="mailto:jamal@rudolphcx.com">jamal@rudolphcx.com</a></div>
-    <div class="contact-item"><a href="tel:9196955004">(919) 695-5004</a></div>
+    <div class="contact-item"><a href="tel:9108020961">(910) 802-0961</a></div>
     <div class="contact-item">Durham, North Carolina — Remote delivery nationwide</div>
   </div>
 </section>
@@ -1113,7 +1306,7 @@ footer {
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">Rudolph<span>CX</span></div>
-  <div class="footer-copy">© 2026 Rudolph Financial LLC · Rudolph CX · Durham, NC</div>
+  <div class="footer-copy">© 2026 Rudolph CX LLC · Durham, NC</div>
 </footer>
 
 <script>
