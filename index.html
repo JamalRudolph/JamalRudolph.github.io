@@ -206,34 +206,34 @@ nav {
 .stat-card {
   background: white;
   border: 1px solid var(--cream3);
-  padding: 18px 22px;
+  padding: 20px 24px;
   position: absolute;
-  animation: floatCard 6s ease-in-out infinite;
-  box-shadow: 0 4px 24px rgba(15,14,12,0.08);
+  animation: floatCard 7s ease-in-out infinite;
+  box-shadow: 0 6px 28px rgba(15,14,12,0.1);
 }
-.stat-card:nth-child(1) { top: -20px; left: -30px; animation-delay: 0s; }
-.stat-card:nth-child(2) { top: 40%; right: -40px; animation-delay: -2s; }
-.stat-card:nth-child(3) { bottom: -20px; left: 20px; animation-delay: -4s; }
+.stat-card:nth-child(1) { top: -20px; left: -30px; animation-delay: 0s; animation-duration: 6.5s; }
+.stat-card:nth-child(2) { top: 40%; right: -40px; animation-delay: -1.6s; animation-duration: 7.5s; }
+.stat-card:nth-child(3) { bottom: -20px; left: 20px; animation-delay: -3.4s; animation-duration: 6.8s; }
 
 @keyframes floatCard {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-16px); }
 }
 
 .stat-n {
   font-family: var(--serif);
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 600;
   color: var(--ink);
   line-height: 1;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .stat-n span { color: var(--red); }
 .stat-l {
   font-family: var(--mono);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--dim);
 }
@@ -581,6 +581,7 @@ nav {
   transition: transform 0.2s;
 }
 .demo-card:hover .demo-cta-arrow { transform: translateX(6px); }
+.demo-request-btn:hover { color: var(--red2) !important; }
 
 /* ── HOW IT WORKS ── */
 .how-section {
@@ -717,6 +718,200 @@ nav {
   background: var(--red);
   color: white;
   padding: 4px 10px;
+}
+
+/* ── PRICING — FPF model additions ── */
+.pricing-philosophy {
+  max-width: 760px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+.pricing-philosophy p {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink2);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+.pricing-philosophy p + p {
+  margin-top: 18px;
+  font-size: 15px;
+  font-style: normal;
+  font-family: var(--sans);
+  color: var(--ink3);
+  font-weight: 300;
+  line-height: 1.7;
+}
+.pricing-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 32px;
+}
+.price-card .price-fit {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 14px;
+}
+.price-card.featured .price-fit { color: var(--red2); }
+.price-card .price-rangeline {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.price-card.featured .price-rangeline { color: var(--cream); }
+.price-card .price-rangelabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  margin-bottom: 28px;
+  letter-spacing: 0.06em;
+}
+.price-card.featured .price-rangelabel { color: rgba(247,244,238,0.4); }
+.descriptors-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 14px;
+}
+.price-card.featured .descriptors-label { color: rgba(247,244,238,0.45); }
+.descriptor-list {
+  list-style: none;
+  margin-bottom: 24px;
+}
+.descriptor-list li {
+  font-size: 13px;
+  color: var(--ink3);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 10px;
+  padding-left: 14px;
+  position: relative;
+}
+.descriptor-list li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 9px;
+  width: 6px; height: 1px;
+  background: var(--red);
+}
+.price-card.featured .descriptor-list li { color: rgba(247,244,238,0.7); }
+.price-card.featured .descriptor-list li::before { background: var(--red2); }
+.price-redistribute {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--ink3);
+  line-height: 1.6;
+  font-style: italic;
+  font-weight: 300;
+  padding-top: 16px;
+  border-top: 1px solid var(--cream3);
+  margin-top: 8px;
+}
+.price-card.featured .price-redistribute {
+  color: rgba(247,244,238,0.55);
+  border-color: rgba(255,255,255,0.1);
+}
+
+/* Pro bono door — full-width warm gold band */
+.probono-door {
+  margin-top: 2px;
+  background: linear-gradient(180deg, rgba(196,154,60,0.08) 0%, rgba(196,154,60,0.12) 100%);
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  border-left: 1px solid rgba(196,154,60,0.3);
+  border-right: 1px solid rgba(196,154,60,0.3);
+  padding: 64px 56px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+}
+.probono-label {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.probono-label::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--gold);
+  margin-bottom: 14px;
+}
+.probono-text {
+  font-size: 17px;
+  color: var(--ink2);
+  line-height: 1.65;
+  font-weight: 400;
+}
+.probono-text .probono-lede {
+  display: block;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--red);
+  line-height: 1.4;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.probono-text strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* Honor system note — closing weight */
+.honor-note {
+  margin-top: 56px;
+  padding: 36px 48px;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-style: italic;
+  color: var(--ink2);
+  line-height: 1.55;
+  font-weight: 400;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  letter-spacing: -0.005em;
+}
+.honor-note::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--gold);
+  margin: 0 auto 24px;
+}
+
+@media (max-width: 960px) {
+  .pricing-grid-3 { grid-template-columns: 1fr; }
+  .probono-door { grid-template-columns: 1fr; gap: 24px; padding: 44px 32px; }
+  .probono-label { font-size: 24px; }
+  .probono-text { font-size: 15px; }
+  .probono-text .probono-lede { font-size: 19px; }
+  .honor-note { font-size: 16px; padding: 28px 24px; }
 }
 
 /* ── CONTACT ── */
@@ -933,6 +1128,262 @@ footer {
   .form-row { grid-template-columns: 1fr; gap: 20px; margin-bottom: 20px; }
 }
 
+/* ── CUSTOM DEMO OFFER BAND ── */
+.custom-demo-section {
+  padding: 120px 60px;
+  background: var(--ink);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.custom-demo-section::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(196,154,60,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.custom-demo-section::after {
+  content: '';
+  position: absolute;
+  bottom: -150px; left: -150px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(184,50,36,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.custom-demo-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.custom-demo-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.custom-demo-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--gold);
+}
+.custom-demo-headline {
+  font-family: var(--serif);
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 32px;
+  max-width: 900px;
+}
+.custom-demo-headline em {
+  font-style: italic;
+  color: var(--gold);
+}
+.custom-demo-lede {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2vw, 26px);
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(247,244,238,0.85);
+  line-height: 1.5;
+  max-width: 780px;
+  margin-bottom: 56px;
+  letter-spacing: -0.01em;
+}
+.custom-demo-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+  margin-bottom: 56px;
+}
+.cd-block {
+  background: rgba(247,244,238,0.04);
+  border: 1px solid rgba(247,244,238,0.1);
+  padding: 40px;
+  position: relative;
+}
+.cd-block.featured {
+  background: rgba(196,154,60,0.08);
+  border: 1px solid rgba(196,154,60,0.3);
+}
+.cd-block-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.cd-block-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.cd-block-price {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.cd-block-pricelabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(247,244,238,0.5);
+  letter-spacing: 0.06em;
+  margin-bottom: 24px;
+}
+.cd-block-desc {
+  font-size: 15px;
+  color: rgba(247,244,238,0.8);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+.cd-block-desc strong {
+  color: var(--cream);
+  font-weight: 500;
+}
+.cd-list {
+  list-style: none;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(247,244,238,0.1);
+}
+.cd-list li {
+  font-size: 14px;
+  color: rgba(247,244,238,0.75);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 12px;
+  padding-left: 18px;
+  position: relative;
+}
+.cd-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0; top: 0;
+  color: var(--gold);
+  font-size: 12px;
+}
+.cd-cap {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 6px 12px;
+  border: 1px solid rgba(196,154,60,0.4);
+  background: rgba(196,154,60,0.06);
+  margin-top: 20px;
+}
+.cd-howto {
+  background: rgba(247,244,238,0.03);
+  border-left: 3px solid var(--gold);
+  padding: 36px 44px;
+  margin-top: 0;
+}
+.cd-howto-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.cd-howto-intro {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1.4;
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+.cd-howto-list {
+  list-style: none;
+  counter-reset: cd-counter;
+}
+.cd-howto-list li {
+  font-size: 15px;
+  color: rgba(247,244,238,0.85);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 14px;
+  padding-left: 28px;
+  position: relative;
+}
+.cd-howto-list li::before {
+  content: counter(cd-counter);
+  counter-increment: cd-counter;
+  position: absolute;
+  left: 0; top: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold);
+}
+.cd-howto-list li strong {
+  color: var(--cream);
+  font-weight: 500;
+}
+.cd-howto-cta {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(247,244,238,0.1);
+  display: flex; align-items: center; flex-wrap: wrap; gap: 18px;
+}
+.cd-howto-cta a.cd-primary {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  background: var(--gold);
+  color: var(--ink);
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.cd-howto-cta a.cd-primary:hover { background: #d8a943; transform: translateY(-2px); }
+.cd-howto-cta-email {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: rgba(247,244,238,0.6);
+  letter-spacing: 0.04em;
+}
+.cd-howto-cta-email span {
+  color: var(--gold);
+  user-select: all;
+}
+@media (max-width: 960px) {
+  .custom-demo-section { padding: 80px 28px; }
+  .custom-demo-grid { grid-template-columns: 1fr; gap: 24px; }
+  .cd-block { padding: 32px 28px; }
+  .cd-howto { padding: 28px 24px; }
+  .cd-howto-cta { flex-direction: column; align-items: flex-start; }
+}
+
 /* ── FIRSTSTEP COMPANION SECTION ── */
 .firststep-section {
   padding: 140px 60px;
@@ -1093,6 +1544,7 @@ footer {
   <ul class="nav-links">
     <li><a href="#what">What We Build</a></li>
     <li><a href="#demos">Demos</a></li>
+    <li><a href="#custom-demo">Custom Demo</a></li>
     <li><a href="#firststep">FirstStep</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -1237,46 +1689,128 @@ footer {
 
     <div class="demos-grid">
 
-      <div class="demo-card arc reveal" style="cursor:default">
-        <div class="demo-tag">Nonprofit · Government BPO</div>
-        <div class="demo-title">ARC Agent Guide</div>
-        <div class="demo-role">Tier I Call Center Agent — Training Support Center</div>
-        <div class="demo-desc">Built during active employment at the American Red Cross. 20 situations covering every Tier I call type from certificate lookup to high-priority escalations.</div>
-        <div class="demo-stats">
-          <div class="ds-item"><div class="ds-n">20</div><div class="ds-l">Situations</div></div>
-          <div class="ds-item"><div class="ds-n">2col</div><div class="ds-l">Step layout</div></div>
-          <div class="ds-item"><div class="ds-n">SF</div><div class="ds-l">Salesforce</div></div>
+      <div class="demo-card arc reveal">
+        <a href="https://rudolphcx.com/arc-agent-guide/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block">
+          <div class="demo-tag">Nonprofit · Government BPO</div>
+          <div class="demo-title">ARC Agent Guide</div>
+          <div class="demo-role">Tier I Call Center Agent — Training Support Center</div>
+          <div class="demo-desc">Built during active employment at the American Red Cross. 20 situations covering every Tier I call type from certificate lookup to high-priority escalations.</div>
+          <div class="demo-stats">
+            <div class="ds-item"><div class="ds-n">20</div><div class="ds-l">Situations</div></div>
+            <div class="ds-item"><div class="ds-n">2col</div><div class="ds-l">Step layout</div></div>
+            <div class="ds-item"><div class="ds-n">SF</div><div class="ds-l">Salesforce</div></div>
+          </div>
+          <div class="demo-cta" style="margin-top:24px;color:var(--cream)">Open Live Demo <span class="demo-cta-arrow">→</span></div>
+        </a>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)">
+          <a href="#contact" class="demo-request-btn" data-demo="ARC Agent Guide" style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(247,244,238,0.55);text-decoration:none;transition:color 0.15s">Request a custom version for your role →</a>
         </div>
-        <div class="demo-cta" style="margin-top:16px"><a href="#contact" class="demo-request-btn" data-demo="ARC Agent Guide" style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;padding:8px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--cream);text-decoration:none;display:inline-block;transition:all 0.15s">Request Demo Access →</a></div>
       </div>
 
-      <div class="demo-card chart reveal reveal-delay-1" style="cursor:default">
-        <div class="demo-tag">Healthcare · Legal Services</div>
-        <div class="demo-title">Chartline</div>
-        <div class="demo-role">Customer Service Specialist — Medical Records</div>
-        <div class="demo-desc">HIPAA-compliant guide for medical records and legal services operations. Covers records request lifecycle, caller identification, rush and court deadline handling.</div>
-        <div class="demo-stats">
-          <div class="ds-item"><div class="ds-n">8</div><div class="ds-l">Situations</div></div>
-          <div class="ds-item"><div class="ds-n">16</div><div class="ds-l">Step paths</div></div>
-          <div class="ds-item"><div class="ds-n">HIPAA</div><div class="ds-l">Compliant</div></div>
+      <div class="demo-card chart reveal reveal-delay-1">
+        <a href="chartline_guide.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block">
+          <div class="demo-tag">Healthcare · Legal Services</div>
+          <div class="demo-title">Chartline</div>
+          <div class="demo-role">Customer Service Specialist — Medical Records</div>
+          <div class="demo-desc">HIPAA-compliant guide for medical records and legal services operations. Covers records request lifecycle, caller identification, rush and court deadline handling.</div>
+          <div class="demo-stats">
+            <div class="ds-item"><div class="ds-n">8</div><div class="ds-l">Situations</div></div>
+            <div class="ds-item"><div class="ds-n">16</div><div class="ds-l">Step paths</div></div>
+            <div class="ds-item"><div class="ds-n">HIPAA</div><div class="ds-l">Compliant</div></div>
+          </div>
+          <div class="demo-cta" style="margin-top:24px;color:var(--cream)">Open Live Demo <span class="demo-cta-arrow">→</span></div>
+        </a>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)">
+          <a href="#contact" class="demo-request-btn" data-demo="Chartline" style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(247,244,238,0.55);text-decoration:none;transition:color 0.15s">Request a custom version for your role →</a>
         </div>
-        <div class="demo-cta" style="margin-top:16px"><a href="#contact" class="demo-request-btn" data-demo="Chartline" style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;padding:8px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--cream);text-decoration:none;display:inline-block;transition:all 0.15s">Request Demo Access →</a></div>
       </div>
 
-      <div class="demo-card lend reveal reveal-delay-2" style="cursor:default">
-        <div class="demo-tag">Financial Services</div>
-        <div class="demo-title">Lendline</div>
-        <div class="demo-role">Customer Service Specialist — Mortgage Loan Servicing</div>
-        <div class="demo-desc">FDCPA-compliant guide for mortgage loan servicing operations. Covers payment inquiries, loss mitigation intake, foreclosure status, escrow, and complaint handling.</div>
-        <div class="demo-stats">
-          <div class="ds-item"><div class="ds-n">10</div><div class="ds-l">Situations</div></div>
-          <div class="ds-item"><div class="ds-n">14</div><div class="ds-l">Step paths</div></div>
-          <div class="ds-item"><div class="ds-n">FDCPA</div><div class="ds-l">Compliant</div></div>
+      <div class="demo-card lend reveal reveal-delay-2">
+        <a href="lendline.html" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block">
+          <div class="demo-tag">Financial Services</div>
+          <div class="demo-title">Lendline</div>
+          <div class="demo-role">Customer Service Specialist — Mortgage Loan Servicing</div>
+          <div class="demo-desc">FDCPA-compliant guide for mortgage loan servicing operations. Covers payment inquiries, loss mitigation intake, foreclosure status, escrow, and complaint handling.</div>
+          <div class="demo-stats">
+            <div class="ds-item"><div class="ds-n">10</div><div class="ds-l">Situations</div></div>
+            <div class="ds-item"><div class="ds-n">14</div><div class="ds-l">Step paths</div></div>
+            <div class="ds-item"><div class="ds-n">FDCPA</div><div class="ds-l">Compliant</div></div>
+          </div>
+          <div class="demo-cta" style="margin-top:24px;color:var(--cream)">Open Live Demo <span class="demo-cta-arrow">→</span></div>
+        </a>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)">
+          <a href="#contact" class="demo-request-btn" data-demo="Lendline" style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(247,244,238,0.55);text-decoration:none;transition:color 0.15s">Request a custom version for your role →</a>
         </div>
-        <div class="demo-cta" style="margin-top:16px"><a href="#contact" class="demo-request-btn" data-demo="Lendline" style="font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;padding:8px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--cream);text-decoration:none;display:inline-block;transition:all 0.15s">Request Demo Access →</a></div>
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- CUSTOM DEMO OFFER -->
+<section class="custom-demo-section" id="custom-demo">
+  <div class="custom-demo-inner">
+    <div class="custom-demo-eyebrow reveal">See It In Your World</div>
+    <h2 class="custom-demo-headline reveal">
+      Send us your work.<br>
+      We'll build a sample <em>in your world.</em>
+    </h2>
+    <p class="custom-demo-lede reveal">
+      The shape of the work stays the same. The content comes from you. Send two of your most common call types and the source material you have — we'll build a sample of each, side by side, so you can see exactly what this looks like in your operation before you commit to anything.
+    </p>
+
+    <div class="custom-demo-grid">
+
+      <div class="cd-block featured reveal">
+        <div class="cd-block-tag">The Free Build</div>
+        <div class="cd-block-title">2 custom situations,<br>side by side.</div>
+        <div class="cd-block-price">Free</div>
+        <div class="cd-block-pricelabel">No card. No contract. No catch.</div>
+        <div class="cd-block-desc">
+          Pick your two most common call types. Send what you have — job descriptions, SOPs, knowledge base excerpts, anything. <strong>We build a working sample of each, in your branding, in your words, in the same structure as the demos above.</strong> Yours to keep, whether or not we end up working together.
+        </div>
+        <ul class="cd-list">
+          <li>Two situations, full case setup, two-column step layout</li>
+          <li>Customer scripts and case note templates included</li>
+          <li>Delivered as a single HTML file — open it anywhere</li>
+          <li>Typical turnaround: one to two weeks from receipt of source material</li>
+        </ul>
+        <div class="cd-cap">Currently accepting 2 free sample builds per month</div>
+      </div>
+
+      <div class="cd-block reveal reveal-delay-1">
+        <div class="cd-block-tag">If You Want More Before You Commit</div>
+        <div class="cd-block-title">Additional samples,<br>creditable to your project.</div>
+        <div class="cd-block-price">$500</div>
+        <div class="cd-block-pricelabel">per additional situation · up to 2 more</div>
+        <div class="cd-block-desc">
+          Some buyers want to see one or two more situations before signing for a full engagement. Fair. <strong>Every dollar you spend on additional samples is fully credited toward your engagement when we sign a contract.</strong> So if you end up working with us, the samples cost you nothing.
+        </div>
+        <ul class="cd-list">
+          <li>Up to 2 additional situations beyond the free 2</li>
+          <li>$500 per situation, billed only when work begins</li>
+          <li>100% credited to your project total upon contract signing</li>
+          <li>After 4 total samples, the next step is full engagement scoping</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="cd-howto reveal">
+      <div class="cd-howto-title">How to Request Your Free Build</div>
+      <div class="cd-howto-intro">Use the form below — or send a thoughtful email. Either works.</div>
+      <ol class="cd-howto-list">
+        <li><strong>Tell us who you are</strong> — your name, your role, your organization, and roughly what you do.</li>
+        <li><strong>Describe two of your most common call types</strong> in a few sentences each. Why they're frequent, where agents get stuck, what a good outcome looks like.</li>
+        <li><strong>Attach or link any source material</strong> you'd want considered — job descriptions, SOPs, knowledge base exports, training docs. Whatever you have. If you don't have anything formal, that's fine — describe it.</li>
+        <li><strong>Tell us what success looks like</strong> for your operation. One or two lines is enough.</li>
+      </ol>
+      <div class="cd-howto-cta">
+        <a href="#contact" class="cd-primary demo-request-btn" data-demo="Custom Build">Use the Form Below ↓</a>
+        <div class="cd-howto-cta-email">or email directly: <span>jamal@rudolphcx.com</span></div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1348,56 +1882,81 @@ footer {
 <section class="pricing-section" id="pricing">
   <div class="section-inner">
     <div class="section-eyebrow reveal">Investment</div>
-    <h2 class="section-title reveal">Simple pricing.<br>No hidden complexity.</h2>
+    <h2 class="section-title reveal">Pricing that names<br>who it's for.</h2>
 
-    <div class="pricing-grid">
+    <div class="pricing-philosophy reveal">
+      <p>The work is the same at every tier. The deliverable is the same at every tier. The price reflects what an organization can sustainably pay — not the value of the guide.</p>
+      <p>Select the tier where the most descriptors apply to your organization. We operate on the honor system. Larger operations paying their full tier is what makes the lower tiers possible.</p>
+    </div>
+
+    <div class="pricing-grid-3">
+
       <div class="price-card reveal">
-        <div class="price-tier">Starter</div>
-        <div class="price-amount">$1,500</div>
-        <div class="price-note">to $2,500 per project</div>
+        <div class="price-tier">Enterprise</div>
+        <div class="price-fit">For scaled operations</div>
+        <div class="price-rangeline">$10,000+</div>
+        <div class="price-rangelabel">per engagement · or retainer</div>
         <div class="price-divider"></div>
-        <ul class="price-features">
-          <li class="price-feature"><span class="price-check">✓</span>Single role</li>
-          <li class="price-feature"><span class="price-check">✓</span>Up to 5 core situations</li>
-          <li class="price-feature"><span class="price-check">✓</span>Basic quiz set</li>
-          <li class="price-feature"><span class="price-check">✓</span>Case setup blocks</li>
-          <li class="price-feature"><span class="price-check">✓</span>One revision round</li>
-          <li class="price-feature"><span class="price-check">✓</span>Pilot programs and small operations</li>
+        <div class="descriptors-label">If most of these describe you</div>
+        <ul class="descriptor-list">
+          <li>Contact center with 200+ agents, or multi-site operations</li>
+          <li>Fortune 1000, large BPO, or federal prime contractor</li>
+          <li>Annual operating budget over $50M</li>
+          <li>Multiple roles or business lines need coverage</li>
+          <li>Ongoing process updates expected as a recurring need</li>
         </ul>
+        <div class="price-redistribute">Paying your full tier is what funds the work at Solidarity and Pro Bono levels.</div>
       </div>
 
       <div class="price-card featured reveal reveal-delay-1">
-        <div class="featured-badge">Most Popular</div>
+        <div class="featured-badge">Most Common</div>
         <div class="price-tier">Standard</div>
-        <div class="price-amount">$4,000</div>
-        <div class="price-note">to $7,500 per project</div>
+        <div class="price-fit">For established operations</div>
+        <div class="price-rangeline">$4,000–$7,500</div>
+        <div class="price-rangelabel">per engagement</div>
         <div class="price-divider"></div>
-        <ul class="price-features">
-          <li class="price-feature"><span class="price-check">✓</span>Full role coverage</li>
-          <li class="price-feature"><span class="price-check">✓</span>10–20 situations</li>
-          <li class="price-feature"><span class="price-check">✓</span>Two-column step layout</li>
-          <li class="price-feature"><span class="price-check">✓</span>Phrase search entry point</li>
-          <li class="price-feature"><span class="price-check">✓</span>Full quiz and scenario set</li>
-          <li class="price-feature"><span class="price-check">✓</span>Case note templates</li>
-          <li class="price-feature"><span class="price-check">✓</span>One revision round</li>
+        <div class="descriptors-label">If most of these describe you</div>
+        <ul class="descriptor-list">
+          <li>Contact center with 25–200 agents</li>
+          <li>Established healthcare, financial services, or legal services operation</li>
+          <li>Regional BPO or mid-market services firm</li>
+          <li>State or county government agency with budgeted training line</li>
+          <li>One full role or department needs coverage</li>
         </ul>
+        <div class="price-redistribute">The middle of the range. Most engagements land here.</div>
       </div>
 
       <div class="price-card reveal reveal-delay-2">
-        <div class="price-tier">Enterprise</div>
-        <div class="price-amount">$10k+</div>
-        <div class="price-note">or $1,500–$2,500/month retainer</div>
+        <div class="price-tier">Solidarity</div>
+        <div class="price-fit">For mission-aligned operations</div>
+        <div class="price-rangeline">$1,500–$3,500</div>
+        <div class="price-rangelabel">per engagement</div>
         <div class="price-divider"></div>
-        <ul class="price-features">
-          <li class="price-feature"><span class="price-check">✓</span>Multiple roles</li>
-          <li class="price-feature"><span class="price-check">✓</span>Ongoing updates as processes change</li>
-          <li class="price-feature"><span class="price-check">✓</span>White-label options</li>
-          <li class="price-feature"><span class="price-check">✓</span>Onboarding support</li>
-          <li class="price-feature"><span class="price-check">✓</span>Priority turnaround</li>
-          <li class="price-feature"><span class="price-check">✓</span>Recurring revenue model</li>
+        <div class="descriptors-label">If most of these describe you</div>
+        <ul class="descriptor-list">
+          <li>Workforce development board, NCWorks affiliate, or reentry program</li>
+          <li>Community-based nonprofit or community college</li>
+          <li>Smaller government program or municipal department</li>
+          <li>Annual operating budget under $5M</li>
+          <li>Pilot project, single role, focused situation set</li>
         </ul>
+        <div class="price-redistribute">This tier exists because the work matters most where the budget is tightest.</div>
+      </div>
+
+    </div>
+
+    <div class="probono-door reveal">
+      <div class="probono-label">Pro Bono<br>Door</div>
+      <div class="probono-text">
+        <span class="probono-lede">If your operating budget is below the Solidarity tier and your work directly supports workers, returning citizens, or job seekers — reach out anyway.</span>
+        <strong>A small number of pro bono engagements are reserved each year for organizations doing this kind of work.</strong> No application form. No tax-status questionnaire. A real conversation, on a real call.
       </div>
     </div>
+
+    <p class="honor-note reveal">
+      Tiers are self-selected. There is no income verification. The honor system is part of how this stays simple — and how it stays accessible to organizations that need it most.
+    </p>
+
   </div>
 </section>
 
@@ -1409,7 +1968,7 @@ footer {
     looks like for <em>your role?</em>
   </h2>
   <p class="contact-sub reveal">
-    A custom demo built from your own job descriptions and content is available on request. All three live demos above are fully functional and ready to explore now.
+    Use the form below to start a custom build, ask a question, or kick off a conversation. The custom demo offer above explains exactly what to send if you want a sample built in your world — or just write whatever you've got and we'll figure it out.
   </p>
 
   <form class="contact-form reveal" id="demoRequestForm" novalidate>
