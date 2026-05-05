@@ -59,10 +59,21 @@ body {
 /* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 20px 60px;
+  padding: 16px 60px;
   display: flex; align-items: center; justify-content: space-between;
-  mix-blend-mode: multiply;
+  background: rgba(247, 244, 238, 0.78);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border-bottom: 1px solid rgba(15, 14, 12, 0.06);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
+nav.over-dark {
+  background: rgba(15, 14, 12, 0.72);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+nav.over-dark .nav-logo { color: var(--cream); }
+nav.over-dark .nav-links a { color: rgba(247, 244, 238, 0.7); }
+nav.over-dark .nav-links a:hover { color: var(--gold); }
 .nav-logo {
   font-family: var(--serif);
   font-size: 22px;
@@ -86,6 +97,76 @@ nav {
   transition: color 0.15s;
 }
 .nav-links a:hover { color: var(--red); }
+
+/* ── SIDE DOTS NAVIGATOR ── */
+.side-dots {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 10px 6px;
+}
+.side-dot {
+  position: relative;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: rgba(15, 14, 12, 0.18);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s ease;
+}
+.side-dot:hover {
+  background: var(--red);
+  transform: scale(1.35);
+}
+.side-dot.active {
+  background: var(--red);
+  transform: scale(1.55);
+  box-shadow: 0 0 0 4px rgba(184, 50, 36, 0.12);
+}
+.side-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 6px 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.side-dot:hover::after { opacity: 1; }
+/* Side-dots adapt over dark sections */
+.side-dots.over-dark .side-dot {
+  background: rgba(247, 244, 238, 0.25);
+}
+.side-dots.over-dark .side-dot:hover,
+.side-dots.over-dark .side-dot.active {
+  background: var(--gold);
+}
+.side-dots.over-dark .side-dot.active {
+  box-shadow: 0 0 0 4px rgba(196, 154, 60, 0.18);
+}
+.side-dots.over-dark .side-dot::after {
+  background: var(--gold);
+  color: var(--ink);
+}
+@media (max-width: 900px) {
+  .side-dots { display: none; }
+}
 
 /* ── HERO ── */
 .hero {
@@ -1551,8 +1632,20 @@ footer {
   </ul>
 </nav>
 
+<!-- SIDE DOTS NAVIGATOR -->
+<aside class="side-dots" id="sideDots" aria-label="Page navigation">
+  <button class="side-dot" data-target="hero" data-label="Top"></button>
+  <button class="side-dot" data-target="what" data-label="What We Build"></button>
+  <button class="side-dot" data-target="demos" data-label="Demos"></button>
+  <button class="side-dot" data-target="custom-demo" data-label="Custom Demo"></button>
+  <button class="side-dot" data-target="firststep" data-label="FirstStep"></button>
+  <button class="side-dot" data-target="how" data-label="Process"></button>
+  <button class="side-dot" data-target="pricing" data-label="Pricing"></button>
+  <button class="side-dot" data-target="contact" data-label="Contact"></button>
+</aside>
+
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero">
   <div class="hero-left">
     <div class="hero-label reveal">Customer Service Operations</div>
     <h1 class="hero-title reveal reveal-delay-1">
@@ -2072,6 +2165,87 @@ setTimeout(function() {
     el.classList.add('visible');
   });
 }, 100);
+
+// ── Side-dots active state tracking ──
+var sideDots = document.querySelectorAll('.side-dot');
+var dotMap = {};
+sideDots.forEach(function(dot) {
+  dotMap[dot.getAttribute('data-target')] = dot;
+});
+
+// IntersectionObserver to track which section is most in view
+var sectionEls = [];
+sideDots.forEach(function(dot) {
+  var el = document.getElementById(dot.getAttribute('data-target'));
+  if (el) sectionEls.push(el);
+});
+
+var sectionObserver = new IntersectionObserver(function(entries) {
+  // Find the entry with the largest intersection ratio
+  var maxRatio = 0;
+  var activeId = null;
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
+      maxRatio = entry.intersectionRatio;
+      activeId = entry.target.id;
+    }
+  });
+  if (activeId && dotMap[activeId]) {
+    sideDots.forEach(function(d) { d.classList.remove('active'); });
+    dotMap[activeId].classList.add('active');
+  }
+}, { threshold: [0.25, 0.5, 0.75], rootMargin: '-80px 0px -40% 0px' });
+
+sectionEls.forEach(function(el) { sectionObserver.observe(el); });
+
+// Side-dot click → smooth scroll to section
+sideDots.forEach(function(dot) {
+  dot.addEventListener('click', function() {
+    var target = document.getElementById(this.getAttribute('data-target'));
+    if (target) {
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 60;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  });
+});
+
+// ── Nav + side-dots: swap to over-dark mode when over the Custom Demo (ink) section ──
+var navEl = document.querySelector('nav');
+var sideDotsEl = document.getElementById('sideDots');
+var darkSection = document.getElementById('custom-demo');
+
+if (darkSection && navEl) {
+  var darkObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      // Section is "over" the nav when its top has scrolled past the nav and bottom hasn't yet passed
+      var rect = entry.target.getBoundingClientRect();
+      var navHeight = 60;
+      var isOverNav = rect.top <= navHeight && rect.bottom >= navHeight;
+      if (isOverNav) {
+        navEl.classList.add('over-dark');
+        if (sideDotsEl) sideDotsEl.classList.add('over-dark');
+      } else {
+        navEl.classList.remove('over-dark');
+        if (sideDotsEl) sideDotsEl.classList.remove('over-dark');
+      }
+    });
+  }, { threshold: [0, 0.1, 0.5, 0.9, 1], rootMargin: '0px' });
+  darkObserver.observe(darkSection);
+
+  // Also re-check on scroll for smooth transitions
+  window.addEventListener('scroll', function() {
+    var rect = darkSection.getBoundingClientRect();
+    var navHeight = 60;
+    var isOverNav = rect.top <= navHeight && rect.bottom >= navHeight;
+    if (isOverNav) {
+      navEl.classList.add('over-dark');
+      if (sideDotsEl) sideDotsEl.classList.add('over-dark');
+    } else {
+      navEl.classList.remove('over-dark');
+      if (sideDotsEl) sideDotsEl.classList.remove('over-dark');
+    }
+  }, { passive: true });
+}
 
 // ── Demo card buttons → pre-select the dropdown ──
 document.querySelectorAll('.demo-request-btn').forEach(function(btn) {
