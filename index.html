@@ -151,11 +151,13 @@ nav.over-dark .nav-links a:hover { color: var(--gold); }
 .side-dot:hover::after { opacity: 1; }
 /* Side-dots adapt over dark sections */
 .side-dots.over-dark .side-dot {
-  background: rgba(247, 244, 238, 0.25);
+  background: rgba(247, 244, 238, 0.55);
+  box-shadow: 0 0 0 1px rgba(196, 154, 60, 0.35);
 }
 .side-dots.over-dark .side-dot:hover,
 .side-dots.over-dark .side-dot.active {
   background: var(--gold);
+  box-shadow: none;
 }
 .side-dots.over-dark .side-dot.active {
   box-shadow: 0 0 0 4px rgba(196, 154, 60, 0.18);
