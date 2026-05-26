@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Rudolph CX</title>
+<meta name="description" content="Rudolph CX builds plain-language guidance for the moments that decide outcomes. About the founder, the methodology, and the AI-coordinated production team behind every deliverable.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink:    #0f0e0c;
+  --ink2:   #1a1816;
+  --ink3:   #2c2a26;
+  --cream:  #f7f4ee;
+  --cream2: #f1ece2;
+  --cream3: #e8e1d1;
+  --red:    #c8362a;
+  --red2:   #e04438;
+  --red-dim:#9b2419;
+  --gold:   #c49a3c;
+  --muted:  #8a8478;
+  --dim:    #5c574e;
+  --line:   rgba(15,14,12,0.08);
+  --serif:  'Lora', Georgia, serif;
+  --sans:   'Plus Jakarta Sans', system-ui, sans-serif;
+  --mono:   'JetBrains Mono', Menlo, monospace;
+}
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a { color: inherit; text-decoration: none; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream2); }
+::-webkit-scrollbar-thumb { background: var(--ink3); border-radius: 3px; }
+
+/* NAV — matches index */
+nav {
+  position: sticky;
+  top: 0;
+  background: rgba(247,244,238,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  z-index: 100;
+  padding: 18px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.nav-logo .cx {
+  color: var(--red);
+  font-style: italic;
+  font-weight: 700;
+  margin-left: 2px;
+}
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink3);
+  letter-spacing: 0.01em;
+  transition: color 0.15s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--red); }
+.nav-cta {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 9px 18px;
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+.nav-cta:hover { background: var(--red); }
+
+/* HERO */
+.hero {
+  padding: 120px 48px 80px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--line);
+}
+.hero-inner {
+  max-width: 880px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--red);
+}
+.hero-h {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 28px;
+}
+.hero-h em { font-style: italic; color: var(--red); }
+.hero-sub {
+  font-family: var(--sans);
+  font-size: clamp(16px, 1.8vw, 19px);
+  color: var(--dim);
+  line-height: 1.75;
+  max-width: 720px;
+  font-weight: 400;
+}
+.hero-sub strong { color: var(--ink); font-weight: 600; }
+
+/* SECTION */
+section.content {
+  padding: 90px 48px;
+  border-bottom: 1px solid var(--line);
+}
+section.content.dark {
+  background: var(--ink);
+  color: var(--cream);
+}
+section.content.cream2 { background: var(--cream2); }
+.content-inner {
+  max-width: 880px;
+  margin: 0 auto;
+}
+.section-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.section-eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--red);
+}
+section.content.dark .section-eyebrow { color: var(--red2); }
+section.content.dark .section-eyebrow::before { background: var(--red2); }
+
+.section-h {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.8vw, 40px);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+}
+section.content.dark .section-h { color: var(--cream); }
+.section-h em { font-style: italic; color: var(--red); }
+section.content.dark .section-h em { color: var(--red2); }
+
+.body-p {
+  font-size: 16px;
+  color: var(--dim);
+  line-height: 1.8;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+section.content.dark .body-p { color: rgba(247,244,238,0.72); }
+.body-p strong { color: var(--ink); font-weight: 600; }
+section.content.dark .body-p strong { color: var(--cream); }
+
+.body-p.first-person {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-style: italic;
+  color: var(--ink2);
+  line-height: 1.75;
+  padding-left: 24px;
+  border-left: 3px solid var(--red);
+}
+.body-p.first-person strong {
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* TEAM ROSTER */
+.roster {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+.roster-item {
+  background: rgba(247,244,238,0.04);
+  border: 1px solid rgba(247,244,238,0.08);
+  border-left: 3px solid var(--red2);
+  border-radius: 3px;
+  padding: 20px 22px;
+}
+.roster-name {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+}
+.roster-role {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red2);
+  margin-bottom: 10px;
+}
+.roster-desc {
+  font-size: 13px;
+  color: rgba(247,244,238,0.68);
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+/* WON'T DO LIST */
+.wontlist {
+  list-style: none;
+  margin-top: 20px;
+}
+.wontlist li {
+  font-size: 16px;
+  color: var(--ink2);
+  padding: 14px 0 14px 36px;
+  border-top: 1px solid var(--line);
+  position: relative;
+  font-weight: 400;
+  line-height: 1.65;
+}
+.wontlist li:last-child { border-bottom: 1px solid var(--line); }
+.wontlist li::before {
+  content: '✕';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  color: var(--red);
+  font-weight: 700;
+  font-size: 14px;
+}
+.wontlist li strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* CTA */
+.cta-end {
+  padding: 100px 48px;
+  background: var(--red);
+  color: var(--cream);
+  text-align: center;
+}
+.cta-end-h {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.5vw, 38px);
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 22px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  letter-spacing: -0.015em;
+}
+.cta-end-h em { font-style: italic; }
+.cta-end-sub {
+  font-size: 16px;
+  color: rgba(247,244,238,0.85);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.cta-end-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 16px 36px;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.cta-end-btn:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+/* FOOTER */
+footer {
+  background: var(--ink);
+  color: rgba(247,244,238,0.55);
+  padding: 56px 48px 36px;
+  font-size: 13px;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 40px;
+}
+.footer-brand .nav-logo { color: var(--cream); font-size: 20px; }
+.footer-brand .nav-logo .cx { color: var(--red2); }
+.footer-tagline {
+  margin-top: 14px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: rgba(247,244,238,0.5);
+  line-height: 1.6;
+  max-width: 320px;
+}
+.footer-col h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(247,244,238,0.4);
+  margin-bottom: 16px;
+}
+.footer-col a {
+  display: block;
+  font-size: 13px;
+  color: rgba(247,244,238,0.65);
+  margin-bottom: 10px;
+  transition: color 0.15s;
+}
+.footer-col a:hover { color: var(--red2); }
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 28px;
+  border-top: 1px solid rgba(247,244,238,0.08);
+  font-size: 11px;
+  color: rgba(247,244,238,0.35);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-legal {
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  nav { padding: 14px 24px; }
+  .nav-links { display: none; }
+  .nav-logo { font-size: 18px; }
+  .hero, section.content, .cta-end { padding: 64px 24px; }
+  .roster { grid-template-columns: 1fr; gap: 12px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+  .hero-h { font-size: 32px; }
+  .section-h { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Rudolph<span class="cx">CX</span></a>
+  <ul class="nav-links">
+    <li><a href="/#serve">Who We Serve</a></li>
+    <li><a href="/#build">What We Build</a></li>
+    <li><a href="/#method">Methodology</a></li>
+    <li><a href="/#pricing">Pricing</a></li>
+    <li><a href="/about.html" class="active">About</a></li>
+    <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
+  </ul>
+  <a href="/#contact" class="nav-cta">Contact</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">About</div>
+    <h1 class="hero-h">A small firm built around <em>one methodology</em> and the discipline to hold it.</h1>
+    <p class="hero-sub"><strong>Rudolph CX LLC is a North Carolina limited liability company building plain-language guidance for the moments that decide outcomes.</strong> Enterprise customer service operations on one side. Community-facing tools on the other. Same methodology. Same person on both sides of the conversation.</p>
+  </div>
+</section>
+
+<!-- THE FOUNDER -->
+<section class="content">
+  <div class="content-inner">
+    <div class="section-eyebrow">The Founder</div>
+    <h2 class="section-h">Jamal Rudolph. <em>Durham, NC.</em></h2>
+    <p class="body-p">Rudolph CX was founded in 2026 by Jamal Rudolph after years of contract work in large nonprofit Tier I call center operations. The company's first product was a personal job aid the founder built for himself, on his own time and equipment, to do his own job better. It turned out the same architecture worked for other people. The company exists because that observation kept being true.</p>
+
+    <p class="body-p first-person">I built the first version of what's now the Rudolph CX methodology while I was working a Tier I call center contract. I kept watching agents around me get stuck in the same moments, over and over — moments where they knew the customer needed help but couldn't find the path through the systems fast enough to deliver it. <strong>The problem wasn't the people. It was that nobody had built the tool that lives inside the moment.</strong> So I built one. Then I noticed the same pattern in other places — caseworkers, mortgage servicers, medical records teams, and especially the everyday person walking into the system from the other side. Same architecture every time. So Rudolph CX exists to build that tool, for both sides of the call line.</p>
+  </div>
+</section>
+
+<!-- THE TEAM ARCHITECTURE -->
+<section class="content dark">
+  <div class="content-inner">
+    <div class="section-eyebrow">The Team Architecture</div>
+    <h2 class="section-h">An AI-coordinated production methodology, <em>with humans on the seam.</em></h2>
+    <p class="body-p"><strong>Rudolph CX uses an AI-coordinated production methodology</strong> — what we internally call a six-voice paired-team architecture. Each voice has a scoped discipline. Each pair has cross-functional review responsibility. The founder coordinates, authors, and is accountable for every deliverable. Every output is reviewed across five paired teams before ship.</p>
+
+    <p class="body-p">This is not the same as "a consultant who uses AI." This is a documented production system with named roles, written protocols, locked review gates, and a continuity substrate that makes the work auditable. The architecture exists because the founder believes solo consulting work fails most often not from lack of skill, but from lack of structural review discipline. Most one-person firms cannot afford five-paired-team review. Rudolph CX can — because the team is AI-coordinated.</p>
+
+    <div class="roster">
+      <div class="roster-item">
+        <div class="roster-name">Atlas</div>
+        <div class="roster-role">Systems &amp; Architecture</div>
+        <div class="roster-desc">Architecture of every deliverable. Contract logistics. Financial tech stack.</div>
+      </div>
+      <div class="roster-item">
+        <div class="roster-name">Sage</div>
+        <div class="roster-role">Methodology &amp; Governance</div>
+        <div class="roster-desc">Methodology integrity. Corporate legal frameworks. Financial strategy.</div>
+      </div>
+      <div class="roster-item">
+        <div class="roster-name">Bree</div>
+        <div class="roster-role">Voice &amp; Brand</div>
+        <div class="roster-desc">Growth marketing. Social strategy. Brand voice authorship.</div>
+      </div>
+      <div class="roster-item">
+        <div class="roster-name">Wit</div>
+        <div class="roster-role">Market Intelligence</div>
+        <div class="roster-desc">Competitive positioning. Demographics research. Sector fluency.</div>
+      </div>
+      <div class="roster-item">
+        <div class="roster-name">Ray</div>
+        <div class="roster-role">Adversarial Review</div>
+        <div class="roster-desc">Devil's advocate. Sales objection handling. Expense auditing.</div>
+      </div>
+      <div class="roster-item">
+        <div class="roster-name">Cee</div>
+        <div class="roster-role">Compilation &amp; Operations</div>
+        <div class="roster-desc">Lead scribe. Operations. Sales asset production. Bookkeeping execution.</div>
+      </div>
+    </div>
+
+    <p class="body-p" style="margin-top: 32px;">Paired into five teams for cross-functional review: <strong>Legal/Compliance</strong> (Atlas + Sage), <strong>Marketing</strong> (Bree + Wit), <strong>Sales</strong> (Ray + Cee), <strong>Financial Strategy</strong> (Sage + Ray), <strong>Bookkeeping/Operations</strong> (Atlas + Cee). No deliverable ships without review across all five. Founder authors and is accountable. Client data is not fed to public LLMs. Methodology and structural review are the AI's job. Human judgment, authorship, and accountability are the founder's.</p>
+  </div>
+</section>
+
+<!-- WHAT WE WON'T DO -->
+<section class="content cream2">
+  <div class="content-inner">
+    <div class="section-eyebrow">What We Won't Do</div>
+    <h2 class="section-h">A short list. <em>Kept short on purpose.</em></h2>
+    <p class="body-p">The discipline that protects a client is the discipline a firm names publicly. Here is what Rudolph CX will not do, regardless of fee:</p>
+
+    <ul class="wontlist">
+      <li><strong>No outcome guarantees.</strong> The methodology produces working tools. The tools work when teams use them. We don't promise revenue lifts, NPS shifts, or AHT reductions we can't substantiate.</li>
+      <li><strong>No training videos. No LMS modules. No "consulting decks."</strong> We build working tools your agents actually use on live calls. Not learning content.</li>
+      <li><strong>No inflated case studies.</strong> Demonstration content names what was built and what wasn't. We don't claim methodology success on engagements that didn't run.</li>
+      <li><strong>No testimonials we can't verify.</strong> If a quote is on our site, it came from someone we can name and who agreed to be named.</li>
+      <li><strong>No client data fed to public AI models.</strong> Production work uses scoped tooling with client-specific data isolation. Any AI use in client work is disclosed in scope of work.</li>
+      <li><strong>No engagement we don't have the capacity to deliver.</strong> When the calendar is full, we say so and recommend later or refer out.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-end">
+  <h2 class="cta-end-h">If the discipline matches what you're <em>looking for</em> — let's talk.</h2>
+  <p class="cta-end-sub">A real conversation, on a real call. Tell us what your team faces. We'll tell you what we'd build.</p>
+  <a href="/#contact" class="cta-end-btn">Contact →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="nav-logo">Rudolph<span class="cx">CX</span></a>
+      <p class="footer-tagline">Built for the people inside the system. And the people walking into it.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Site</h4>
+      <a href="/#serve">Who We Serve</a>
+      <a href="/#build">What We Build</a>
+      <a href="/#method">Methodology</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/about.html">About</a>
+      <a href="/#contact">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Surfaces</h4>
+      <a href="/#build">Aidline</a>
+      <a href="/chartline_guide.html" target="_blank" rel="noopener">Chartline</a>
+      <a href="/lendline.html" target="_blank" rel="noopener">Lendline</a>
+      <a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a>
+      <a href="https://getfirststep.org/partners.html" target="_blank" rel="noopener">FirstStep Partners</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:jamal@rudolphcx.com">jamal@rudolphcx.com</a>
+      <a href="tel:+19108020961">(910) 802-0961</a>
+      <a>Durham, NC</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-legal">© 2026 Rudolph CX LLC · A North Carolina Limited Liability Company in active standing.</div>
+    <div>Built in Durham, NC.</div>
+  </div>
+</footer>
+
+</body>
+</html>
