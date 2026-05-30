@@ -30,26 +30,19 @@ body { cursor: none; }
 
 /* ─── TOKENS ─────────────────────────────────────────────── */
 :root {
-  --ink:     #1a1612;
-  --cream:   #f5f0e8;
-  --red:     #b83224;
-  --gold:    #c49a3c;
-  --muted:   #6b6258;
-  --border:  #d8d0c4;
-  --ff:      'Cormorant Garamond', Georgia, serif;
+  --ink:    #1a1612;
+  --cream:  #f5f0e8;
+  --red:    #b83224;
+  --gold:   #c49a3c;
+  --muted:  #6b6258;
+  --border: #d8d0c4;
+  --ff:     'Cormorant Garamond', Georgia, serif;
 }
 
 /* ─── BASE ───────────────────────────────────────────────── */
 html { scroll-behavior: smooth; }
-body {
-  font-family: var(--ff);
-  background: var(--cream);
-  color: var(--ink);
-  font-size: 18px;
-  line-height: 1.6;
-}
+body { font-family: var(--ff); background: var(--cream); color: var(--ink); font-size: 18px; line-height: 1.6; }
 a { color: inherit; text-decoration: none; }
-img { display: block; max-width: 100%; }
 
 /* ─── NAV ────────────────────────────────────────────────── */
 nav {
@@ -59,221 +52,146 @@ nav {
   background: var(--cream);
   border-bottom: 1px solid var(--border);
 }
-.nav-logo {
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink);
-}
+.nav-logo { font-size: 1rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
 .nav-logo span { color: var(--red); }
 nav ul { display: flex; gap: 2rem; list-style: none; }
-nav ul a {
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-  transition: color 0.2s;
-}
+nav ul a { font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
 nav ul a:hover { color: var(--red); }
-.nav-cta {
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.55rem 1.4rem;
-  border: 1px solid var(--red);
-  color: var(--red);
-  transition: background 0.2s, color 0.2s;
-}
+.nav-cta { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.55rem 1.4rem; border: 1px solid var(--red); color: var(--red); transition: background 0.2s, color 0.2s; }
 .nav-cta:hover { background: var(--red); color: var(--cream); }
 
 /* ─── HERO ───────────────────────────────────────────────── */
 .hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-  padding: 6rem 4vw 5rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  padding: 6rem 4vw 5rem; max-width: 1200px; margin: 0 auto;
 }
-.hero-text h1 {
-  font-size: clamp(2.6rem, 5vw, 4rem);
-  font-weight: 300;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  margin-bottom: 1.5rem;
-}
-.hero-text h1 em {
-  font-style: italic;
-  color: var(--red);
-}
-.hero-text p {
-  font-size: 1.1rem;
-  color: var(--muted);
-  max-width: 42ch;
-  margin-bottom: 2rem;
-  line-height: 1.7;
-}
+.hero-text h1 { font-size: clamp(2.6rem,5vw,4rem); font-weight: 300; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 1.5rem; }
+.hero-text h1 em { font-style: italic; color: var(--red); }
+.hero-text p { font-size: 1.1rem; color: var(--muted); max-width: 42ch; margin-bottom: 2rem; line-height: 1.7; }
 .hero-links { display: flex; gap: 1rem; flex-wrap: wrap; }
-.btn-primary {
-  display: inline-block;
-  padding: 0.7rem 1.8rem;
-  background: var(--red);
-  color: var(--cream);
-  font-family: var(--ff);
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border: 1px solid var(--red);
-  transition: background 0.2s, color 0.2s;
-}
+.btn-primary { display: inline-block; padding: 0.7rem 1.8rem; background: var(--red); color: var(--cream); font-family: var(--ff); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--red); transition: background 0.2s, color 0.2s; }
 .btn-primary:hover { background: transparent; color: var(--red); }
-.btn-ghost {
-  display: inline-block;
-  padding: 0.7rem 1.8rem;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: var(--ff);
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition: border-color 0.2s, color 0.2s;
-}
+.btn-ghost { display: inline-block; padding: 0.7rem 1.8rem; border: 1px solid var(--border); color: var(--muted); font-family: var(--ff); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; transition: border-color 0.2s, color 0.2s; }
 .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
 
-/* ─── DEMO CARD (hero) ───────────────────────────────────── */
-.demo-card {
-  background: var(--ink);
-  color: var(--cream);
-  border-radius: 4px;
-  overflow: hidden;
-  font-size: 0.82rem;
-  box-shadow: 0 24px 64px rgba(26,22,18,0.2);
+/* ─── ANIMATION WIDGET ───────────────────────────────────── */
+.anim-shell {
+  background: var(--ink); border-radius: 4px; overflow: hidden;
+  font-size: 0.82rem; box-shadow: 0 24px 64px rgba(26,22,18,0.2);
+  font-family: var(--ff);
 }
-.demo-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+.anim-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.6rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-.demo-card-logo { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.5; }
-.demo-card-badge {
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.25rem 0.6rem;
-  border: 1px solid var(--red);
-  color: var(--red);
+.anim-logo { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.35); }
+.anim-badge { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.2rem 0.55rem; border: 1px solid var(--red); color: var(--red); }
+.anim-label {
+  font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(245,240,232,0.3); padding: 0.35rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
 }
-.demo-tabs {
-  display: flex;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  overflow-x: auto;
+.anim-label span { color: rgba(245,240,232,0.5); }
+.sound-btn {
+  background: none; border: none; cursor: none;
+  font-size: 0.7rem; color: rgba(245,240,232,0.3);
+  letter-spacing: 0.05em; padding: 0; font-family: var(--ff);
+  transition: color 0.2s;
 }
-.demo-tab {
-  padding: 0.5rem 0.9rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
-  color: rgba(245,240,232,0.4);
-  white-space: nowrap;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
+.sound-btn:hover { color: rgba(245,240,232,0.6); }
+
+/* INCOMING CALL SCREEN */
+.call-screen {
+  padding: 1.2rem 1rem; display: none; flex-direction: column; align-items: center;
+  text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-.demo-tab.active { color: var(--cream); border-bottom-color: var(--red); }
-.demo-caller {
-  display: flex; align-items: center; gap: 0.6rem;
-  padding: 0.7rem 1rem;
-  background: rgba(255,255,255,0.03);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+.call-screen.visible { display: flex; }
+.ring-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--red); display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 600; color: var(--cream); margin-bottom: 0.6rem;
+  animation: ring-pulse 1.2s ease-in-out infinite;
 }
-.caller-avatar {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--red);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.65rem; font-weight: 600; color: var(--cream);
+@keyframes ring-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(184,50,36,0.4); }
+  50%      { box-shadow: 0 0 0 10px rgba(184,50,36,0); }
 }
-.caller-info { flex: 1; }
-.caller-name { font-size: 0.78rem; opacity: 0.9; }
-.caller-num { font-size: 0.68rem; opacity: 0.4; }
-.call-badge {
-  font-size: 0.65rem;
-  padding: 0.2rem 0.5rem;
-  background: rgba(184,50,36,0.15);
-  border: 1px solid rgba(184,50,36,0.3);
-  color: var(--red);
-  border-radius: 2px;
+.call-incoming-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 0.2rem; }
+.call-name { font-size: 0.95rem; color: var(--cream); margin-bottom: 0.15rem; }
+.call-number { font-size: 0.72rem; color: rgba(245,240,232,0.35); margin-bottom: 0.9rem; }
+.answer-btn {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #4caf50; border: 1px solid rgba(76,175,80,0.3);
+  padding: 0.35rem 0.9rem; background: none; cursor: none; font-family: var(--ff);
+  animation: answer-glow 2s ease-in-out infinite;
 }
-.demo-body { padding: 0.9rem 1rem; }
-.demo-situation {
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.5rem;
-  color: var(--gold);
+@keyframes answer-glow {
+  0%,100% { border-color: rgba(76,175,80,0.3); }
+  50%      { border-color: rgba(76,175,80,0.7); }
 }
-.demo-tier { font-size: 0.68rem; opacity: 0.4; margin-bottom: 0.8rem; }
-.chat-line {
-  display: flex; gap: 0.5rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-  line-height: 1.45;
+
+/* LIVE ASSIST PANEL */
+.live-panel { display: none; }
+.live-panel.visible { display: block; }
+.live-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.6rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-.chat-who { opacity: 0.4; flex-shrink: 0; width: 3.5rem; font-size: 0.68rem; padding-top: 0.1rem; }
-.chat-text { opacity: 0.85; }
-.demo-steps {
-  margin-top: 0.9rem;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  padding-top: 0.8rem;
+.live-badge { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); }
+.live-sit-title { font-size: 0.78rem; color: var(--gold); font-weight: 600; }
+.live-tier { font-size: 0.65rem; color: rgba(245,240,232,0.3); }
+.chat-area { padding: 0.75rem 1rem; min-height: 130px; }
+.bubble {
+  display: flex; gap: 0.5rem; margin-bottom: 0.55rem;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
-.demo-steps-label { font-size: 0.68rem; letter-spacing: 0.06em; opacity: 0.35; margin-bottom: 0.5rem; text-transform: uppercase; }
-.step-row {
-  display: flex; gap: 0.6rem; align-items: flex-start;
-  margin-bottom: 0.4rem;
-  font-size: 0.73rem;
-}
-.step-num {
-  width: 18px; height: 18px; border-radius: 50%;
+.bubble.show { opacity: 1; transform: translateY(0); }
+.bubble-who { font-size: 0.65rem; color: rgba(245,240,232,0.3); flex-shrink: 0; width: 3.2rem; padding-top: 0.1rem; }
+.bubble-who.agent { color: var(--gold); }
+.bubble-text { font-size: 0.75rem; color: rgba(245,240,232,0.82); line-height: 1.45; }
+
+/* STEP TRACKER */
+.step-tracker { padding: 0.6rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
+.step-tracker-label { font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(245,240,232,0.25); margin-bottom: 0.4rem; }
+.step-dots { display: flex; gap: 0.4rem; }
+.step-dot {
+  width: 6px; height: 6px; border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.15);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.62rem; flex-shrink: 0; opacity: 0.6;
+  transition: background 0.3s, border-color 0.3s;
 }
-.step-label { opacity: 0.7; }
-.step-sub { font-size: 0.67rem; opacity: 0.4; }
-.demo-card-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  opacity: 0.25;
-  padding: 0.5rem 1rem 0.7rem;
-  text-align: right;
+.step-dot.active { background: var(--red); border-color: var(--red); }
+.step-dot.done { background: rgba(245,240,232,0.2); border-color: rgba(245,240,232,0.2); }
+.step-current-label { font-size: 0.68rem; color: rgba(245,240,232,0.4); margin-top: 0.35rem; }
+
+/* NEXT CALL */
+.next-call {
+  padding: 0.5rem 1rem;
+  font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: rgba(245,240,232,0.2); border-top: 1px solid rgba(255,255,255,0.04);
+  display: none;
 }
+.next-call.visible { display: block; }
+
+/* DEMO TABS (decorative) */
+.demo-tabs-row {
+  display: flex; border-bottom: 1px solid rgba(255,255,255,0.06); overflow-x: auto;
+}
+.demo-tab-d {
+  padding: 0.45rem 0.85rem; font-size: 0.68rem; letter-spacing: 0.05em;
+  color: rgba(245,240,232,0.3); white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+.demo-tab-d.active { color: var(--cream); border-bottom-color: var(--red); }
 
 /* ─── SECTION SHELL ──────────────────────────────────────── */
 section { padding: 5rem 4vw; }
 .section-inner { max-width: 1100px; margin: 0 auto; }
-.section-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 1rem;
-}
-.section-title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 300;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
-}
+.section-label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 1rem; }
+.section-title { font-size: clamp(2rem,4vw,3rem); font-weight: 300; line-height: 1.2; margin-bottom: 1.5rem; }
 .section-title em { font-style: italic; color: var(--red); }
-.section-body {
-  font-size: 1.05rem;
-  color: var(--muted);
-  max-width: 60ch;
-  line-height: 1.75;
-}
+.section-body { font-size: 1.05rem; color: var(--muted); max-width: 60ch; line-height: 1.75; }
 hr.rule { border: none; border-top: 1px solid var(--border); margin: 0; }
 
 /* ─── HOW IT WORKS ───────────────────────────────────────── */
@@ -281,119 +199,39 @@ hr.rule { border: none; border-top: 1px solid var(--border); margin: 0; }
 #how .section-label { color: var(--gold); }
 #how .section-title { color: var(--cream); }
 #how .section-body { color: rgba(245,240,232,0.6); }
-.how-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2.5rem;
-  margin-top: 3.5rem;
-}
+.how-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 2.5rem; margin-top: 3.5rem; }
 .how-step { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; }
-.how-num {
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  color: var(--red);
-  margin-bottom: 0.75rem;
-}
-.how-step h3 {
-  font-size: 1.2rem;
-  font-weight: 400;
-  margin-bottom: 0.75rem;
-  color: var(--cream);
-}
+.how-num { font-size: 0.7rem; letter-spacing: 0.1em; color: var(--red); margin-bottom: 0.75rem; }
+.how-step h3 { font-size: 1.2rem; font-weight: 400; margin-bottom: 0.75rem; color: var(--cream); }
 .how-step p { font-size: 0.92rem; color: rgba(245,240,232,0.55); line-height: 1.7; }
 
-/* ─── PREVIEW (sit panels) ───────────────────────────────── */
-#preview { background: var(--cream); }
-.sit-tabs-row {
-  display: flex; gap: 0; margin-bottom: 2.5rem;
-  border-bottom: 1px solid var(--border);
-}
-.sit-tab {
-  padding: 0.65rem 1.4rem;
-  font-family: var(--ff);
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
-  background: none; border-top: none; border-left: none; border-right: none;
-}
+/* ─── PREVIEW ────────────────────────────────────────────── */
+.sit-tabs-row { display: flex; gap: 0; margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); }
+.sit-tab { padding: 0.65rem 1.4rem; font-family: var(--ff); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; background: none; border-top: none; border-left: none; border-right: none; }
 .sit-tab.active { color: var(--red); border-bottom-color: var(--red); }
 .sit-panel { display: none; }
 .sit-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
-.panel-card {
-  background: var(--ink);
-  color: var(--cream);
-  border-radius: 4px;
-  padding: 1.5rem;
-  font-size: 0.8rem;
-  box-shadow: 0 16px 48px rgba(26,22,18,0.15);
-}
-.panel-card-title {
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.3rem;
-}
+.panel-card { background: var(--ink); color: var(--cream); border-radius: 4px; padding: 1.5rem; font-size: 0.8rem; box-shadow: 0 16px 48px rgba(26,22,18,0.15); }
+.panel-card-title { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
 .panel-card-sub { font-size: 0.68rem; opacity: 0.35; margin-bottom: 1rem; }
-.op-row {
-  display: flex; gap: 0.75rem; align-items: flex-start;
-  padding: 0.65rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
+.op-row { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.65rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .op-row:last-child { border-bottom: none; }
-.op-num {
-  width: 20px; height: 20px; border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.15);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.62rem; flex-shrink: 0; color: rgba(245,240,232,0.5);
-}
-.op-content {}
+.op-num { width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.62rem; flex-shrink: 0; color: rgba(245,240,232,0.5); }
 .op-label { font-size: 0.78rem; margin-bottom: 0.15rem; }
 .op-sub { font-size: 0.68rem; opacity: 0.4; }
-.op-script {
-  font-size: 0.72rem;
-  font-style: italic;
-  color: var(--gold);
-  opacity: 0.8;
-  margin-top: 0.2rem;
-}
+.op-script { font-size: 0.72rem; font-style: italic; color: var(--gold); opacity: 0.8; margin-top: 0.2rem; }
 .panel-meta { padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 0.5rem; }
 .panel-meta-row { display: flex; justify-content: space-between; font-size: 0.68rem; opacity: 0.4; margin-bottom: 0.3rem; }
 .sit-desc h3 { font-size: 1.4rem; font-weight: 400; margin-bottom: 1rem; }
 .sit-desc p { font-size: 0.95rem; color: var(--muted); line-height: 1.75; margin-bottom: 1rem; }
-.sit-tag {
-  display: inline-block;
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.25rem 0.7rem;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  margin-right: 0.4rem;
-  margin-bottom: 0.4rem;
-}
+.sit-tag { display: inline-block; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.25rem 0.7rem; border: 1px solid var(--border); color: var(--muted); margin-right: 0.4rem; margin-bottom: 0.4rem; }
 
 /* ─── DELIVERABLES ───────────────────────────────────────── */
 #deliverables { background: #f0ebe0; }
-.del-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-}
+.del-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 2rem; margin-top: 3rem; }
 .del-item { border-top: 2px solid var(--border); padding-top: 1.25rem; }
 .del-item.featured { border-top-color: var(--red); }
-.del-label {
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.5rem;
-}
+.del-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); margin-bottom: 0.5rem; }
 .del-item h3 { font-size: 1.15rem; font-weight: 500; margin-bottom: 0.5rem; }
 .del-item p { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
 
@@ -402,165 +240,48 @@ hr.rule { border: none; border-top: 1px solid var(--border); margin: 0; }
 #builder .section-label { color: var(--gold); }
 #builder .section-title { color: var(--cream); }
 #builder .section-body { color: rgba(245,240,232,0.6); margin-bottom: 3rem; }
-.builder-stages {
-  display: flex; gap: 0; margin-bottom: 2.5rem;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-.stage-item {
-  padding: 0.6rem 1.4rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(245,240,232,0.35);
-  border-bottom: 2px solid transparent;
-}
+.builder-stages { display: flex; margin-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.stage-item { padding: 0.6rem 1.4rem; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(245,240,232,0.35); border-bottom: 2px solid transparent; }
 .stage-item.active { color: var(--cream); border-bottom-color: var(--gold); }
 .stage-item.done { color: rgba(245,240,232,0.5); }
 .builder-panel { display: none; }
 .builder-panel.active { display: block; }
 .builder-form { max-width: 560px; }
 .form-field { margin-bottom: 1.5rem; }
-.form-field label {
-  display: block;
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(245,240,232,0.5);
-  margin-bottom: 0.5rem;
-}
-.form-field input, .form-field textarea {
-  width: 100%;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: var(--cream);
-  font-family: var(--ff);
-  font-size: 1rem;
-  padding: 0.75rem 1rem;
-  outline: none;
-  transition: border-color 0.2s;
-  border-radius: 0;
-}
-.form-field input:focus, .form-field textarea:focus {
-  border-color: var(--gold);
-}
-.form-field input::placeholder, .form-field textarea::placeholder {
-  color: rgba(245,240,232,0.2);
-}
-.builder-btn {
-  display: inline-block;
-  padding: 0.7rem 1.8rem;
-  background: var(--gold);
-  color: var(--ink);
-  font-family: var(--ff);
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
+.form-field label { display: block; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(245,240,232,0.5); margin-bottom: 0.5rem; }
+.form-field input, .form-field textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--cream); font-family: var(--ff); font-size: 1rem; padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s; border-radius: 0; }
+.form-field input:focus, .form-field textarea:focus { border-color: var(--gold); }
+.form-field input::placeholder, .form-field textarea::placeholder { color: rgba(245,240,232,0.2); }
+.builder-btn { display: inline-block; padding: 0.7rem 1.8rem; background: var(--gold); color: var(--ink); font-family: var(--ff); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; border: none; cursor: pointer; transition: opacity 0.2s; }
 .builder-btn:hover { opacity: 0.85; }
-.builder-btn-ghost {
-  display: inline-block;
-  padding: 0.7rem 1.4rem;
-  background: transparent;
-  color: rgba(245,240,232,0.4);
-  font-family: var(--ff);
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  border: 1px solid rgba(255,255,255,0.1);
-  cursor: pointer;
-  margin-right: 0.75rem;
-  transition: color 0.2s, border-color 0.2s;
-}
+.builder-btn-ghost { display: inline-block; padding: 0.7rem 1.4rem; background: transparent; color: rgba(245,240,232,0.4); font-family: var(--ff); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; margin-right: 0.75rem; transition: color 0.2s, border-color 0.2s; }
 .builder-btn-ghost:hover { color: var(--cream); border-color: rgba(255,255,255,0.3); }
-.scope-result {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: 1.75rem;
-  max-width: 620px;
-}
+.scope-result { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 1.75rem; max-width: 620px; }
 .scope-result h3 { font-size: 1.1rem; font-weight: 400; margin-bottom: 0.5rem; }
 .scope-org { font-size: 0.8rem; color: var(--gold); margin-bottom: 1rem; }
 .scope-body { font-size: 0.9rem; color: rgba(245,240,232,0.6); line-height: 1.7; margin-bottom: 1.25rem; }
 .scope-sits { margin-bottom: 1.5rem; }
 .scope-sit-item { font-size: 0.82rem; color: rgba(245,240,232,0.7); padding: 0.35rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.scope-cta {
-  display: inline-block;
-  padding: 0.75rem 2rem;
-  background: var(--red);
-  color: var(--cream);
-  font-family: var(--ff);
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-}
+.scope-cta { display: inline-block; padding: 0.75rem 2rem; background: var(--red); color: var(--cream); font-family: var(--ff); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; }
 .scope-note { font-size: 0.75rem; color: rgba(245,240,232,0.3); }
 
 /* ─── FOUNDER ────────────────────────────────────────────── */
-#founder { background: var(--cream); }
-.founder-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5rem;
-  align-items: start;
-}
-.founder-industries {
-  margin-top: 2.5rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-}
+.founder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.founder-industries { margin-top: 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 .industry-item { border-top: 1px solid var(--border); padding-top: 1rem; }
 .industry-name { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); margin-bottom: 0.25rem; }
 .industry-role { font-size: 0.88rem; font-weight: 500; margin-bottom: 0.3rem; }
 .industry-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
-.crossroad-block {
-  border-left: 2px solid var(--red);
-  padding: 1.75rem 2rem;
-  background: rgba(184,50,36,0.04);
-  margin-top: 1rem;
-}
-.crossroad-block blockquote {
-  font-size: 1.15rem;
-  font-style: italic;
-  font-weight: 300;
-  line-height: 1.7;
-  color: var(--ink);
-  margin-bottom: 1rem;
-}
+.crossroad-block { border-left: 2px solid var(--red); padding: 1.75rem 2rem; background: rgba(184,50,36,0.04); margin-top: 1rem; }
+.crossroad-block blockquote { font-size: 1.15rem; font-style: italic; font-weight: 300; line-height: 1.7; color: var(--ink); margin-bottom: 1rem; }
 .crossroad-attr { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.04em; }
 
 /* ─── PRICING ────────────────────────────────────────────── */
 #pricing { background: #f0ebe0; }
-.pricing-intro { max-width: 56ch; margin-bottom: 3.5rem; }
-.pricing-intro p { font-size: 1.05rem; color: var(--muted); line-height: 1.75; }
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-.pricing-card {
-  border: 1px solid var(--border);
-  padding: 1.75rem;
-  background: var(--cream);
-  position: relative;
-}
-.pricing-card.featured {
-  border-color: var(--red);
-  background: var(--ink);
-  color: var(--cream);
-}
-.pricing-tag {
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 0.5rem;
-}
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+.pricing-card { border: 1px solid var(--border); padding: 1.75rem; background: var(--cream); }
+.pricing-card.featured { border-color: var(--red); background: var(--ink); color: var(--cream); }
+.pricing-tag { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 0.5rem; }
 .pricing-card.featured .pricing-tag { color: var(--gold); }
 .pricing-tier { font-size: 1.2rem; font-weight: 500; margin-bottom: 0.25rem; }
 .pricing-sits { font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem; }
@@ -568,43 +289,20 @@ hr.rule { border: none; border-top: 1px solid var(--border); margin: 0; }
 .pricing-amount { font-size: 2rem; font-weight: 300; margin-bottom: 1.25rem; }
 .pricing-amount sup { font-size: 1rem; vertical-align: super; }
 .pricing-list { list-style: none; }
-.pricing-list li {
-  font-size: 0.82rem;
-  color: var(--muted);
-  padding: 0.3rem 0;
-  border-bottom: 1px solid var(--border);
-  display: flex; gap: 0.5rem;
-}
+.pricing-list li { font-size: 0.82rem; color: var(--muted); padding: 0.3rem 0; border-bottom: 1px solid var(--border); display: flex; gap: 0.5rem; }
 .pricing-card.featured .pricing-list li { color: rgba(245,240,232,0.55); border-bottom-color: rgba(255,255,255,0.08); }
 .pricing-list li::before { content: '—'; color: var(--red); flex-shrink: 0; }
-.pricing-discovery {
-  border: 1px solid var(--border);
-  padding: 2rem 2.5rem;
-  max-width: 680px;
-  margin-bottom: 2.5rem;
-}
+.pricing-discovery { border: 1px solid var(--border); padding: 2rem 2.5rem; max-width: 680px; margin-bottom: 2.5rem; }
 .discovery-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 0.5rem; }
 .discovery-title { font-size: 1.4rem; font-weight: 400; margin-bottom: 0.75rem; }
 .discovery-desc { font-size: 0.92rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.25rem; }
-.discovery-price { font-size: 2.5rem; font-weight: 300; color: var(--ink); margin-bottom: 0.25rem; }
+.discovery-price { font-size: 2.5rem; font-weight: 300; margin-bottom: 0.25rem; }
 .discovery-note { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem; }
-.pricing-terms {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  border-top: 1px solid var(--border);
-  padding-top: 2rem;
-}
-.term-item { }
+.pricing-terms { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 1.5rem; border-top: 1px solid var(--border); padding-top: 2rem; }
 .term-label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); margin-bottom: 0.4rem; }
 .term-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.3rem; }
 .term-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
-.addon-block {
-  border: 1px solid var(--border);
-  padding: 1.5rem 2rem;
-  margin-top: 2rem;
-  max-width: 680px;
-}
+.addon-block { border: 1px solid var(--border); padding: 1.5rem 2rem; margin-top: 2rem; max-width: 680px; }
 .addon-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
 .addon-title { font-size: 1.1rem; font-weight: 500; margin-bottom: 0.5rem; }
 .addon-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
@@ -614,18 +312,7 @@ hr.rule { border: none; border-top: 1px solid var(--border); margin: 0; }
 #contact .section-label { color: var(--gold); }
 #contact .section-title { color: var(--cream); }
 #contact .section-body { color: rgba(245,240,232,0.6); margin: 0 auto 2.5rem; }
-.contact-cta {
-  display: inline-block;
-  padding: 1rem 3rem;
-  background: var(--red);
-  color: var(--cream);
-  font-family: var(--ff);
-  font-size: 1rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-  transition: opacity 0.2s;
-}
+.contact-cta { display: inline-block; padding: 1rem 3rem; background: var(--red); color: var(--cream); font-family: var(--ff); font-size: 1rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; transition: opacity 0.2s; }
 .contact-cta:hover { opacity: 0.85; }
 .contact-note { font-size: 0.82rem; color: rgba(245,240,232,0.35); margin-bottom: 3rem; }
 .contact-details { display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap; }
@@ -633,17 +320,7 @@ hr.rule { border: none; border-top: 1px solid var(--border); margin: 0; }
 .contact-detail strong { display: block; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,240,232,0.25); margin-bottom: 0.25rem; font-weight: 400; }
 
 /* ─── FOOTER ─────────────────────────────────────────────── */
-footer {
-  background: #111;
-  color: rgba(245,240,232,0.3);
-  padding: 1.5rem 4vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
+footer { background: #111; color: rgba(245,240,232,0.3); padding: 1.5rem 4vw; display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; flex-wrap: wrap; gap: 0.75rem; }
 footer a { color: rgba(245,240,232,0.4); transition: color 0.2s; }
 footer a:hover { color: var(--cream); }
 .footer-links { display: flex; gap: 1.5rem; }
@@ -661,7 +338,6 @@ footer a:hover { color: var(--cream); }
 </head>
 <body>
 
-<!-- CURSOR -->
 <div id="cursor"></div>
 
 <!-- NAV -->
@@ -676,7 +352,7 @@ footer a:hover { color: var(--cream); }
 </nav>
 
 <!-- HERO -->
-<section style="padding: 6rem 4vw 5rem;">
+<section style="padding:6rem 4vw 5rem;">
   <div class="hero">
     <div class="hero-text">
       <p class="section-label">Aidline℠ by Rudolph CX</p>
@@ -687,45 +363,53 @@ footer a:hover { color: var(--cream); }
         <a href="#preview" class="btn-ghost">See a live guide →</a>
       </div>
     </div>
-    <div>
-      <div class="demo-card">
-        <div class="demo-card-header">
-          <span class="demo-card-logo">RudolphCX / Aidline℠</span>
-          <span class="demo-card-badge">Live Assist</span>
+
+    <!-- ANIMATION WIDGET -->
+    <div class="anim-shell">
+      <div class="anim-topbar">
+        <span class="anim-logo">RudolphCX / Aidline℠</span>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔇 Tap for sound</button>
+          <span class="anim-badge">Live Assist</span>
         </div>
-        <div class="demo-tabs">
-          <div class="demo-tab active">Benefit Verification</div>
-          <div class="demo-tab">Claim Status</div>
-          <div class="demo-tab">Enrollment Change</div>
-          <div class="demo-tab">Payment Dispute</div>
-        </div>
-        <div class="demo-caller">
-          <div class="caller-avatar">MT</div>
-          <div class="caller-info">
-            <div class="caller-name">Maria Torres</div>
-            <div class="caller-num">(919) 555-0147</div>
-          </div>
-          <div class="call-badge">📞 Live Call</div>
-        </div>
-        <div class="demo-body">
-          <div class="demo-situation">FEHB — Benefit Verification</div>
-          <div class="demo-tier">Tier I</div>
-          <div class="chat-line"><span class="chat-who">Caller</span><span class="chat-text">Hi — calling about my benefits. Doctor's appointment tomorrow, want to confirm coverage is active.</span></div>
-          <div class="chat-line"><span class="chat-who">Agent</span><span class="chat-text">Of course. Name and last four of your Social?</span></div>
-          <div class="chat-line"><span class="chat-who">Caller</span><span class="chat-text">Maria Torres. 4-4-1-2.</span></div>
-          <div class="chat-line"><span class="chat-who">Agent</span><span class="chat-text">FEHB active through Dec 31. Blue Cross Standard. Deductible three-fifty.</span></div>
-          <div class="demo-steps">
-            <div class="demo-steps-label">Benefit Verification — Live Call Flow</div>
-            <div class="step-row"><div class="step-num">1</div><div><div class="step-label">Open</div><div class="step-sub">Greet — confirm caller identity</div></div></div>
-            <div class="step-row"><div class="step-num">2</div><div><div class="step-label">Verify</div><div class="step-sub">Pull account — confirm enrollment</div></div></div>
-            <div class="step-row"><div class="step-num">3</div><div><div class="step-label">Address</div><div class="step-sub">State coverage details</div></div></div>
-            <div class="step-row"><div class="step-num">4</div><div><div class="step-label">Document</div><div class="step-sub">Create case — Inquiry · Phone</div></div></div>
-            <div class="step-row"><div class="step-num">5</div><div><div class="step-label">Close</div><div class="step-sub">Provide case number — close call</div></div></div>
-          </div>
-        </div>
-        <div class="demo-card-label">rudolphcx.com / aidline</div>
       </div>
+      <div class="demo-tabs-row">
+        <div class="demo-tab-d active" id="dtab-0">Benefit Verification</div>
+        <div class="demo-tab-d" id="dtab-1">Claim Status</div>
+        <div class="demo-tab-d" id="dtab-2">Enrollment Change</div>
+        <div class="demo-tab-d" id="dtab-3">Payment Dispute</div>
+      </div>
+
+      <!-- INCOMING CALL -->
+      <div class="call-screen" id="callScreen">
+        <div class="ring-avatar" id="ringAvatar">MT</div>
+        <div class="call-incoming-label">Incoming Call</div>
+        <div class="call-name" id="callName">Maria Torres</div>
+        <div class="call-number" id="callNumber">(919) 555-0147</div>
+        <div class="answer-btn">↗ Answer</div>
+      </div>
+
+      <!-- LIVE ASSIST -->
+      <div class="live-panel" id="livePanel">
+        <div class="live-header">
+          <div>
+            <div class="live-badge">Live Assist</div>
+            <div class="live-sit-title" id="liveSitTitle">FEHB — Benefit Verification</div>
+            <div class="live-tier" id="liveTier">Tier I</div>
+          </div>
+          <div style="font-size:0.7rem;color:rgba(245,240,232,0.3);">⌕</div>
+        </div>
+        <div class="chat-area" id="chatArea"></div>
+        <div class="step-tracker">
+          <div class="step-tracker-label" id="stepTrackerLabel">Benefit Verification — Live Call Flow</div>
+          <div class="step-dots" id="stepDots"></div>
+          <div class="step-current-label" id="stepCurrentLabel"></div>
+        </div>
+      </div>
+
+      <div class="next-call" id="nextCallBar">Next call incoming…</div>
     </div>
+    <!-- END ANIMATION WIDGET -->
   </div>
 </section>
 
@@ -738,26 +422,10 @@ footer a:hover { color: var(--cream); }
     <h2 class="section-title">How a guide gets built.</h2>
     <p class="section-body">Done-for-you. You send the source material. We deliver a finished, deployable HTML guide. Your agents open it in any browser — no software required.</p>
     <div class="how-grid">
-      <div class="how-step">
-        <div class="how-num">01 — Scope</div>
-        <h3>Discovery Call</h3>
-        <p>We research your operation before we get on the call. You describe your most common situations. We scope the guide. You receive a written proposal.</p>
-      </div>
-      <div class="how-step">
-        <div class="how-num">02 — Source</div>
-        <h3>You Send the Material</h3>
-        <p>SOPs, job aids, knowledge base articles, call recordings — whatever you have. We work with what exists. We do not need it organized.</p>
-      </div>
-      <div class="how-step">
-        <div class="how-num">03 — Build</div>
-        <h3>We Structure It</h3>
-        <p>Every situation gets case setup, a step sequence, an agent script, and a case note template — built inside the Five-Operation Panel Architecture.</p>
-      </div>
-      <div class="how-step">
-        <div class="how-num">04 — Deliver</div>
-        <h3>You Receive the Guide</h3>
-        <p>A single HTML file. Opens in any browser. No internet required after delivery. Share it, pin it, deploy it. Your guide, your branding.</p>
-      </div>
+      <div class="how-step"><div class="how-num">01 — Scope</div><h3>Discovery Call</h3><p>We research your operation before we get on the call. You describe your most common situations. We scope the guide. You receive a written proposal.</p></div>
+      <div class="how-step"><div class="how-num">02 — Source</div><h3>You Send the Material</h3><p>SOPs, job aids, knowledge base articles, call recordings — whatever you have. We work with what exists. We do not need it organized.</p></div>
+      <div class="how-step"><div class="how-num">03 — Build</div><h3>We Structure It</h3><p>Every situation gets case setup, a step sequence, an agent script, and a case note template — built inside the Five-Operation Panel Architecture.</p></div>
+      <div class="how-step"><div class="how-num">04 — Deliver</div><h3>You Receive the Guide</h3><p>A single HTML file. Opens in any browser. No internet required after delivery. Share it, pin it, deploy it. Your guide, your branding.</p></div>
     </div>
   </div>
 </section>
@@ -775,77 +443,44 @@ footer a:hover { color: var(--cream); }
       <button class="sit-tab" onclick="showSit(1)">Claim Status Inquiry</button>
       <button class="sit-tab" onclick="showSit(2)">Enrollment Change</button>
     </div>
-    <!-- Panel 0 -->
-    <div class="sit-panel active" id="sit-0">
+    <div class="sit-panel active">
       <div class="panel-card">
         <div class="panel-card-title">Federal Employee Benefits — Verification</div>
         <div class="panel-card-sub">Tier I</div>
-        <div class="op-row"><div class="op-num">1</div><div class="op-content"><div class="op-label">Open</div><div class="op-sub">Greet and confirm caller identity — name + last four SSN</div><div class="op-script">"Thank you for calling. May I have your name and the last four of your Social?"</div></div></div>
-        <div class="op-row"><div class="op-num">2</div><div class="op-content"><div class="op-label">Verify</div><div class="op-sub">Pull account — confirm enrollment status and plan code</div></div></div>
-        <div class="op-row"><div class="op-num">3</div><div class="op-content"><div class="op-label">Address</div><div class="op-sub">State coverage period, carrier, and deductible to caller</div></div></div>
-        <div class="op-row"><div class="op-num">4</div><div class="op-content"><div class="op-label">Document</div><div class="op-sub">Create case — Inquiry · Benefit Verification · Phone</div></div></div>
-        <div class="op-row"><div class="op-num">5</div><div class="op-content"><div class="op-label">Close</div><div class="op-sub">Confirm no further questions — provide case number</div><div class="op-script">"Your case number is BV-20490. Have a great appointment tomorrow."</div></div></div>
-        <div class="panel-meta">
-          <div class="panel-meta-row"><span>Case Type</span><span>Inquiry · Benefit Verification</span></div>
-          <div class="panel-meta-row"><span>Origin</span><span>Phone</span></div>
-        </div>
+        <div class="op-row"><div class="op-num">1</div><div><div class="op-label">Open</div><div class="op-sub">Greet and confirm caller identity — name + last four SSN</div><div class="op-script">"Thank you for calling. May I have your name and the last four of your Social?"</div></div></div>
+        <div class="op-row"><div class="op-num">2</div><div><div class="op-label">Verify</div><div class="op-sub">Pull account — confirm enrollment status and plan code</div></div></div>
+        <div class="op-row"><div class="op-num">3</div><div><div class="op-label">Address</div><div class="op-sub">State coverage period, carrier, and deductible to caller</div></div></div>
+        <div class="op-row"><div class="op-num">4</div><div><div class="op-label">Document</div><div class="op-sub">Create case — Inquiry · Benefit Verification · Phone</div></div></div>
+        <div class="op-row"><div class="op-num">5</div><div><div class="op-label">Close</div><div class="op-sub">Confirm no further questions — provide case number</div><div class="op-script">"Your case number is BV-20490. Have a great appointment tomorrow."</div></div></div>
+        <div class="panel-meta"><div class="panel-meta-row"><span>Case Type</span><span>Inquiry · Benefit Verification</span></div><div class="panel-meta-row"><span>Origin</span><span>Phone</span></div></div>
       </div>
-      <div class="sit-desc">
-        <h3>Benefit Verification</h3>
-        <p>The most common Tier I call type for federal employee benefits operations. Agent confirms enrollment status, plan details, and deductible — then closes the case correctly before the caller hangs up.</p>
-        <p>Every step is pre-sequenced. Every script line is written. The agent reads, not improvises.</p>
-        <span class="sit-tag">FEHB</span>
-        <span class="sit-tag">Tier I</span>
-        <span class="sit-tag">Enrollment</span>
-        <span class="sit-tag">Blue Cross</span>
-      </div>
+      <div class="sit-desc"><h3>Benefit Verification</h3><p>The most common Tier I call type for federal employee benefits operations. Agent confirms enrollment status, plan details, and deductible — then closes the case correctly before the caller hangs up.</p><p>Every step is pre-sequenced. Every script line is written. The agent reads, not improvises.</p><span class="sit-tag">FEHB</span><span class="sit-tag">Tier I</span><span class="sit-tag">Enrollment</span></div>
     </div>
-    <!-- Panel 1 -->
-    <div class="sit-panel" id="sit-1">
+    <div class="sit-panel">
       <div class="panel-card">
         <div class="panel-card-title">Federal Benefits — Claim Status</div>
         <div class="panel-card-sub">Tier I</div>
-        <div class="op-row"><div class="op-num">1</div><div class="op-content"><div class="op-label">Open</div><div class="op-sub">Verify caller — name + DOB + claim number</div><div class="op-script">"I can help. Can I get your name, date of birth, and claim number?"</div></div></div>
-        <div class="op-row"><div class="op-num">2</div><div class="op-content"><div class="op-label">Locate</div><div class="op-sub">Pull claim record — confirm type and status code</div></div></div>
-        <div class="op-row"><div class="op-num">3</div><div class="op-content"><div class="op-label">Interpret</div><div class="op-sub">Translate status to plain language — give timeline</div></div></div>
-        <div class="op-row"><div class="op-num">4</div><div class="op-content"><div class="op-label">Document</div><div class="op-sub">Create case — Inquiry · Claim Status · Phone</div></div></div>
-        <div class="op-row"><div class="op-num">5</div><div class="op-content"><div class="op-label">Close</div><div class="op-sub">Confirm next steps — provide case number</div></div></div>
-        <div class="panel-meta">
-          <div class="panel-meta-row"><span>Case Type</span><span>Inquiry · Claim Status</span></div>
-          <div class="panel-meta-row"><span>Origin</span><span>Phone</span></div>
-        </div>
+        <div class="op-row"><div class="op-num">1</div><div><div class="op-label">Open</div><div class="op-sub">Verify caller — name + DOB + claim number</div><div class="op-script">"I can help. Can I get your name, date of birth, and claim number?"</div></div></div>
+        <div class="op-row"><div class="op-num">2</div><div><div class="op-label">Locate</div><div class="op-sub">Pull claim record — confirm type and status code</div></div></div>
+        <div class="op-row"><div class="op-num">3</div><div><div class="op-label">Interpret</div><div class="op-sub">Translate status to plain language — give timeline</div></div></div>
+        <div class="op-row"><div class="op-num">4</div><div><div class="op-label">Document</div><div class="op-sub">Create case — Inquiry · Claim Status · Phone</div></div></div>
+        <div class="op-row"><div class="op-num">5</div><div><div class="op-label">Close</div><div class="op-sub">Confirm next steps — provide case number</div></div></div>
+        <div class="panel-meta"><div class="panel-meta-row"><span>Case Type</span><span>Inquiry · Claim Status</span></div><div class="panel-meta-row"><span>Origin</span><span>Phone</span></div></div>
       </div>
-      <div class="sit-desc">
-        <h3>Claim Status Inquiry</h3>
-        <p>Callers want to know where their claim stands. This panel gives the agent a structured path from identity verification through status translation — without relying on the agent to interpret system codes on the fly.</p>
-        <span class="sit-tag">Claim</span>
-        <span class="sit-tag">Tier I</span>
-        <span class="sit-tag">Status</span>
-      </div>
+      <div class="sit-desc"><h3>Claim Status Inquiry</h3><p>Callers want to know where their claim stands. This panel gives the agent a structured path from identity verification through status translation — without relying on the agent to interpret system codes on the fly.</p><span class="sit-tag">Claim</span><span class="sit-tag">Tier I</span><span class="sit-tag">Status</span></div>
     </div>
-    <!-- Panel 2 -->
-    <div class="sit-panel" id="sit-2">
+    <div class="sit-panel">
       <div class="panel-card">
         <div class="panel-card-title">Federal Benefits — Enrollment Change</div>
         <div class="panel-card-sub">Tier II</div>
-        <div class="op-row"><div class="op-num">1</div><div class="op-content"><div class="op-label">Open</div><div class="op-sub">Verify caller — confirm qualifying life event doc</div><div class="op-script">"Changes outside open season require a qualifying life event. Do you have documentation?"</div></div></div>
-        <div class="op-row"><div class="op-num">2</div><div class="op-content"><div class="op-label">Verify</div><div class="op-sub">Confirm QLE type — marriage, birth, loss of coverage</div></div></div>
-        <div class="op-row"><div class="op-num">3</div><div class="op-content"><div class="op-label">Process</div><div class="op-sub">Walk change request — confirm new plan selection</div></div></div>
-        <div class="op-row"><div class="op-num">4</div><div class="op-content"><div class="op-label">Document</div><div class="op-sub">Create case — Change · Enrollment · QLE · Phone</div></div></div>
-        <div class="op-row"><div class="op-num">5</div><div class="op-content"><div class="op-label">Close</div><div class="op-sub">Confirm effective date — provide case number</div></div></div>
-        <div class="panel-meta">
-          <div class="panel-meta-row"><span>Case Type</span><span>Change · Enrollment · QLE</span></div>
-          <div class="panel-meta-row"><span>Tier</span><span>II — Escalation Ready</span></div>
-        </div>
+        <div class="op-row"><div class="op-num">1</div><div><div class="op-label">Open</div><div class="op-sub">Verify caller — confirm qualifying life event doc</div><div class="op-script">"Changes outside open season require a qualifying life event. Do you have documentation?"</div></div></div>
+        <div class="op-row"><div class="op-num">2</div><div><div class="op-label">Verify</div><div class="op-sub">Confirm QLE type — marriage, birth, loss of coverage</div></div></div>
+        <div class="op-row"><div class="op-num">3</div><div><div class="op-label">Process</div><div class="op-sub">Walk change request — confirm new plan selection</div></div></div>
+        <div class="op-row"><div class="op-num">4</div><div><div class="op-label">Document</div><div class="op-sub">Create case — Change · Enrollment · QLE · Phone</div></div></div>
+        <div class="op-row"><div class="op-num">5</div><div><div class="op-label">Close</div><div class="op-sub">Confirm effective date — provide case number</div></div></div>
+        <div class="panel-meta"><div class="panel-meta-row"><span>Case Type</span><span>Change · Enrollment · QLE</span></div><div class="panel-meta-row"><span>Tier</span><span>II — Escalation Ready</span></div></div>
       </div>
-      <div class="sit-desc">
-        <h3>Enrollment Change Request</h3>
-        <p>Mid-year changes require a qualifying life event. This panel walks the agent through confirmation before processing — preventing the most common Tier II error: changing enrollment without verifying the QLE first.</p>
-        <span class="sit-tag">Enrollment</span>
-        <span class="sit-tag">Tier II</span>
-        <span class="sit-tag">QLE</span>
-        <span class="sit-tag">Change</span>
-      </div>
+      <div class="sit-desc"><h3>Enrollment Change Request</h3><p>Mid-year changes require a qualifying life event. This panel walks the agent through confirmation before processing — preventing the most common Tier II error: changing enrollment without verifying the QLE first.</p><span class="sit-tag">Enrollment</span><span class="sit-tag">Tier II</span><span class="sit-tag">QLE</span></div>
     </div>
   </div>
 </section>
@@ -853,42 +488,18 @@ footer a:hover { color: var(--cream); }
 <hr class="rule">
 
 <!-- DELIVERABLES -->
-<section id="deliverables">
+<section id="deliverables" style="background:#f0ebe0;">
   <div class="section-inner">
     <p class="section-label">Deliverable</p>
     <h2 class="section-title">What every guide includes.</h2>
     <p class="section-body" style="margin-bottom:0;">Each situation is fully structured. No loose articles. No buried job aids. Everything an agent needs — in the moment the call is live.</p>
     <div class="del-grid">
-      <div class="del-item featured">
-        <div class="del-label">Case Setup</div>
-        <h3>Case Before Step One</h3>
-        <p>Case type, sub-type, origin, priority, and escalation path — pre-filled so agents open the correct case before touching anything in the system.</p>
-      </div>
-      <div class="del-item">
-        <div class="del-label">Step Sequence</div>
-        <h3>Numbered and Ordered</h3>
-        <p>Every situation built around your actual procedures — not a generic script. Agents follow steps in order; no judgment calls required.</p>
-      </div>
-      <div class="del-item">
-        <div class="del-label">Agent Script</div>
-        <h3>Word-for-Word Language</h3>
-        <p>Opening, empathy, and resolution language written for your operation and your callers. Two-column layout — agent steps left, script right.</p>
-      </div>
-      <div class="del-item">
-        <div class="del-label">Case Note Template</div>
-        <h3>Structured Documentation</h3>
-        <p>Pre-structured note format agents fill before the call closes. Consistent documentation across every agent, every shift.</p>
-      </div>
-      <div class="del-item">
-        <div class="del-label">Escalation Path</div>
-        <h3>When, Who, What</h3>
-        <p>When to escalate, who to escalate to, and what to have ready — built into each situation, not in a separate document.</p>
-      </div>
-      <div class="del-item">
-        <div class="del-label">Delivery Format</div>
-        <h3>Single HTML File</h3>
-        <p>Opens in any browser. No internet required after delivery. No software. No subscription. Your guide belongs to your operation.</p>
-      </div>
+      <div class="del-item featured"><div class="del-label">Case Setup</div><h3>Case Before Step One</h3><p>Case type, sub-type, origin, priority, and escalation path — pre-filled so agents open the correct case before touching anything in the system.</p></div>
+      <div class="del-item"><div class="del-label">Step Sequence</div><h3>Numbered and Ordered</h3><p>Every situation built around your actual procedures. Agents follow steps in order; no judgment calls required.</p></div>
+      <div class="del-item"><div class="del-label">Agent Script</div><h3>Word-for-Word Language</h3><p>Opening, empathy, and resolution language written for your operation and your callers. Two-column layout.</p></div>
+      <div class="del-item"><div class="del-label">Case Note Template</div><h3>Structured Documentation</h3><p>Pre-structured note format agents fill before the call closes. Consistent documentation across every shift.</p></div>
+      <div class="del-item"><div class="del-label">Escalation Path</div><h3>When, Who, What</h3><p>When to escalate, who to escalate to, and what to have ready — built into each situation.</p></div>
+      <div class="del-item"><div class="del-label">Delivery Format</div><h3>Single HTML File</h3><p>Opens in any browser. No internet required after delivery. No software. No subscription.</p></div>
     </div>
   </div>
 </section>
@@ -906,26 +517,15 @@ footer a:hover { color: var(--cream); }
       <div class="stage-item" id="stage-2">2 — Your Situations</div>
       <div class="stage-item" id="stage-3">3 — Your Scope</div>
     </div>
-    <!-- Step 1 -->
     <div class="builder-panel active" id="bp-1">
       <div class="builder-form">
         <p style="font-size:0.9rem;color:rgba(245,240,232,0.5);margin-bottom:1.5rem;">Step 1 of 2 — Tell us about your team.</p>
-        <div class="form-field">
-          <label>Organization</label>
-          <input type="text" id="b-org" placeholder="Company or department name">
-        </div>
-        <div class="form-field">
-          <label>Role / Department</label>
-          <input type="text" id="b-role" placeholder="e.g. Benefits Customer Service, Loan Servicing">
-        </div>
-        <div class="form-field">
-          <label>What does your team handle?</label>
-          <textarea id="b-handle" rows="3" placeholder="e.g. Inbound calls about health benefits, claims, and enrollment changes"></textarea>
-        </div>
+        <div class="form-field"><label>Organization</label><input type="text" id="b-org" placeholder="Company or department name"></div>
+        <div class="form-field"><label>Role / Department</label><input type="text" id="b-role" placeholder="e.g. Benefits Customer Service, Loan Servicing"></div>
+        <div class="form-field"><label>What does your team handle?</label><textarea id="b-handle" rows="3" placeholder="e.g. Inbound calls about health benefits, claims, and enrollment changes"></textarea></div>
         <button class="builder-btn" onclick="builderNext(2)">Next — Add Situations →</button>
       </div>
     </div>
-    <!-- Step 2 -->
     <div class="builder-panel" id="bp-2">
       <div class="builder-form">
         <p style="font-size:0.9rem;color:rgba(245,240,232,0.5);margin-bottom:1.5rem;">Step 2 of 2 — Name your most common call types.</p>
@@ -937,7 +537,6 @@ footer a:hover { color: var(--cream); }
         <button class="builder-btn" onclick="builderShow()">Show My Guide Scope →</button>
       </div>
     </div>
-    <!-- Step 3 -->
     <div class="builder-panel" id="bp-3">
       <div class="scope-result">
         <div class="scope-org" id="scope-org"></div>
@@ -962,29 +561,12 @@ footer a:hover { color: var(--cream); }
         <p class="section-label">The Work Behind the Work</p>
         <h2 class="section-title">Built from inside<br>the problem.</h2>
         <p style="font-size:1rem;color:var(--muted);line-height:1.75;margin-bottom:1rem;">Aidline was not designed in a conference room. It was built by someone who sat in the agent seat — handling federal employee FSA claims, navigating state unemployment systems, and working inside contact center environments where the calls came in faster than the training covered them.</p>
-        <p style="font-size:1rem;color:var(--muted);line-height:1.75;margin-bottom:1.5rem;">The gap was always the same: multiple systems, constantly shifting policies, high-stakes callers, and no single reference that met the agent where the call was actually happening.</p>
         <p style="font-size:1rem;color:var(--muted);line-height:1.75;">Rudolph CX exists because that guide should have existed — and now it does. Built to your operation. Structured to your situations. Delivered as a finished tool your agents can open the moment the call comes in.</p>
         <div class="founder-industries">
-          <div class="industry-item">
-            <div class="industry-name">Benefits</div>
-            <div class="industry-role">Federal FSA / FSAFEDS</div>
-            <div class="industry-desc">Enrollment, claims, identity verification, eligibility windows</div>
-          </div>
-          <div class="industry-item">
-            <div class="industry-name">Government</div>
-            <div class="industry-role">Unemployment Insurance</div>
-            <div class="industry-desc">Claim status, work search compliance, fact-finding, document requests</div>
-          </div>
-          <div class="industry-item">
-            <div class="industry-name">Healthcare</div>
-            <div class="industry-role">Contact Center Operations</div>
-            <div class="industry-desc">Training, certification, case management, escalation protocols</div>
-          </div>
-          <div class="industry-item">
-            <div class="industry-name">Financial</div>
-            <div class="industry-role">Mortgage Servicing</div>
-            <div class="industry-desc">Payment inquiries, account access, dispute handling, FDCPA compliance</div>
-          </div>
+          <div class="industry-item"><div class="industry-name">Benefits</div><div class="industry-role">Federal FSA / FSAFEDS</div><div class="industry-desc">Enrollment, claims, identity verification, eligibility windows</div></div>
+          <div class="industry-item"><div class="industry-name">Government</div><div class="industry-role">Unemployment Insurance</div><div class="industry-desc">Claim status, work search compliance, fact-finding, document requests</div></div>
+          <div class="industry-item"><div class="industry-name">Healthcare</div><div class="industry-role">Contact Center Operations</div><div class="industry-desc">Training, certification, case management, escalation protocols</div></div>
+          <div class="industry-item"><div class="industry-name">Financial</div><div class="industry-role">Mortgage Servicing</div><div class="industry-desc">Payment inquiries, account access, dispute handling, FDCPA compliance</div></div>
         </div>
       </div>
       <div>
@@ -1004,9 +586,7 @@ footer a:hover { color: var(--cream); }
   <div class="section-inner">
     <p class="section-label">Investment</p>
     <h2 class="section-title">Straightforward.<br>No surprises.</h2>
-    <div class="pricing-intro">
-      <p>Every engagement starts with a discovery call. We scope your guide, confirm the situations, and deliver a written proposal before a dollar of build work begins.</p>
-    </div>
+    <p class="section-body" style="margin-bottom:2.5rem;">Every engagement starts with a discovery call. We scope your guide, confirm the situations, and deliver a written proposal before a dollar of build work begins.</p>
     <div class="pricing-discovery">
       <div class="discovery-label">Start Here</div>
       <div class="discovery-title">Discovery Call</div>
@@ -1016,73 +596,15 @@ footer a:hover { color: var(--cream); }
       <a href="mailto:jamal@rudolphcx.com?subject=Discovery Call Request — Aidline" class="btn-primary">Book Your Call</a>
     </div>
     <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="pricing-tag">Starter</div>
-        <div class="pricing-tier">3 situations</div>
-        <div class="pricing-amount"><sup>$</sup>2,500</div>
-        <div class="pricing-sits">Done-for-you build</div>
-        <ul class="pricing-list">
-          <li>Case setup per situation</li>
-          <li>Full step sequence</li>
-          <li>Agent script</li>
-          <li>Case note template</li>
-          <li>Escalation path</li>
-          <li>Delivered as HTML file</li>
-        </ul>
-      </div>
-      <div class="pricing-card featured">
-        <div class="pricing-tag">Most Common</div>
-        <div class="pricing-tier">Standard — 5 situations</div>
-        <div class="pricing-amount"><sup>$</sup>3,750</div>
-        <div class="pricing-sits">Done-for-you build</div>
-        <ul class="pricing-list">
-          <li>Everything in Starter</li>
-          <li>Escalation paths built in</li>
-          <li>Quick reference index</li>
-          <li>Situation cross-reference</li>
-        </ul>
-      </div>
-      <div class="pricing-card">
-        <div class="pricing-tag">Professional</div>
-        <div class="pricing-tier">8 situations</div>
-        <div class="pricing-amount"><sup>$</sup>5,500</div>
-        <div class="pricing-sits">Done-for-you build</div>
-        <ul class="pricing-list">
-          <li>Everything in Standard</li>
-          <li>Situation cross-reference</li>
-          <li>Operational glossary</li>
-          <li>Priority routing map</li>
-        </ul>
-      </div>
-      <div class="pricing-card">
-        <div class="pricing-tag">Enterprise</div>
-        <div class="pricing-tier">12+ situations</div>
-        <div class="pricing-amount">$8,000<sup style="font-size:1rem">+</sup></div>
-        <div class="pricing-sits">Scoped at discovery</div>
-        <ul class="pricing-list">
-          <li>Everything in Professional</li>
-          <li>Multi-role coverage</li>
-          <li>Retainer option available</li>
-          <li>Custom payment schedule</li>
-        </ul>
-      </div>
+      <div class="pricing-card"><div class="pricing-tag">Starter</div><div class="pricing-tier">3 situations</div><div class="pricing-amount"><sup>$</sup>2,500</div><div class="pricing-sits">Done-for-you build</div><ul class="pricing-list"><li>Case setup per situation</li><li>Full step sequence</li><li>Agent script</li><li>Case note template</li><li>Escalation path</li><li>Delivered as HTML file</li></ul></div>
+      <div class="pricing-card featured"><div class="pricing-tag">Most Common</div><div class="pricing-tier">Standard — 5 situations</div><div class="pricing-amount"><sup>$</sup>3,750</div><div class="pricing-sits">Done-for-you build</div><ul class="pricing-list"><li>Everything in Starter</li><li>Escalation paths built in</li><li>Quick reference index</li><li>Situation cross-reference</li></ul></div>
+      <div class="pricing-card"><div class="pricing-tag">Professional</div><div class="pricing-tier">8 situations</div><div class="pricing-amount"><sup>$</sup>5,500</div><div class="pricing-sits">Done-for-you build</div><ul class="pricing-list"><li>Everything in Standard</li><li>Situation cross-reference</li><li>Operational glossary</li><li>Priority routing map</li></ul></div>
+      <div class="pricing-card"><div class="pricing-tag">Enterprise</div><div class="pricing-tier">12+ situations</div><div class="pricing-amount">$8,000<sup style="font-size:1rem">+</sup></div><div class="pricing-sits">Scoped at discovery</div><ul class="pricing-list"><li>Everything in Professional</li><li>Multi-role coverage</li><li>Retainer option available</li><li>Custom payment schedule</li></ul></div>
     </div>
     <div class="pricing-terms">
-      <div class="term-item">
-        <div class="term-label">50% deposit to start</div>
-        <div class="term-title">Build begins after deposit clears</div>
-        <div class="term-desc">Discovery fee credits to this invoice in full.</div>
-      </div>
-      <div class="term-item">
-        <div class="term-label">50% balance on delivery</div>
-        <div class="term-title">Guide delivered after final payment</div>
-        <div class="term-desc">No partial deliveries.</div>
-      </div>
-      <div class="term-item">
-        <div class="term-label">What you own</div>
-        <div class="term-title">The file is yours</div>
-        <div class="term-desc">No licensing. No subscription. No ongoing fees.</div>
-      </div>
+      <div class="term-item"><div class="term-label">50% deposit to start</div><div class="term-title">Build begins after deposit clears</div><div class="term-desc">Discovery fee credits to this invoice in full.</div></div>
+      <div class="term-item"><div class="term-label">50% balance on delivery</div><div class="term-title">Guide delivered after final payment</div><div class="term-desc">No partial deliveries.</div></div>
+      <div class="term-item"><div class="term-label">What you own</div><div class="term-title">The file is yours</div><div class="term-desc">No licensing. No subscription. No ongoing fees.</div></div>
     </div>
     <div class="addon-block">
       <div class="addon-label">Add-On</div>
@@ -1111,20 +633,14 @@ footer a:hover { color: var(--cream); }
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <div>
-    <a href="https://rudolphcx.com/">← Back to Rudolph CX</a>
-  </div>
-  <div class="footer-links">
-    <a href="https://rudolphcx.com/about.html">About</a>
-    <a href="mailto:jamal@rudolphcx.com">Contact</a>
-  </div>
+  <div><a href="https://rudolphcx.com/">← Back to Rudolph CX</a></div>
+  <div class="footer-links"><a href="https://rudolphcx.com/about.html">About</a><a href="mailto:jamal@rudolphcx.com">Contact</a></div>
   <div>Aidline℠ is a service mark of Rudolph CX LLC · Durham, NC · (910) 802-0961 · © 2026 Rudolph CX LLC</div>
 </footer>
 
 <script>
-// ─── CUSTOM CURSOR ──────────────────────────────────────────
+// ─── CURSOR ─────────────────────────────────────────────────
 var cursor = document.getElementById('cursor');
 document.addEventListener('mousemove', function(e) {
   cursor.style.left = e.clientX + 'px';
@@ -1135,55 +651,218 @@ document.querySelectorAll('a, button').forEach(function(el) {
   el.addEventListener('mouseleave', function() { cursor.classList.remove('hovering'); });
 });
 
-// ─── SIT TABS ──────────────────────────────────────────────
+// ─── SIT TABS ───────────────────────────────────────────────
 function showSit(i) {
-  document.querySelectorAll('.sit-panel').forEach(function(p, j) {
-    p.classList.toggle('active', i === j);
-  });
-  document.querySelectorAll('.sit-tab').forEach(function(t, j) {
-    t.classList.toggle('active', i === j);
-  });
+  document.querySelectorAll('.sit-panel').forEach(function(p,j){ p.classList.toggle('active', i===j); });
+  document.querySelectorAll('.sit-tab').forEach(function(t,j){ t.classList.toggle('active', i===j); });
 }
 
-// ─── BUILDER ───────────────────────────────────────────────
+// ─── BUILDER ────────────────────────────────────────────────
 function builderNext(n) {
-  document.querySelectorAll('.builder-panel').forEach(function(p, i) {
-    p.classList.toggle('active', i === n - 1);
-  });
-  document.querySelectorAll('.stage-item').forEach(function(s, i) {
-    s.classList.toggle('active', i === n - 1);
-    s.classList.toggle('done', i < n - 1);
-  });
+  document.querySelectorAll('.builder-panel').forEach(function(p,i){ p.classList.toggle('active', i===n-1); });
+  document.querySelectorAll('.stage-item').forEach(function(s,i){ s.classList.toggle('active', i===n-1); s.classList.toggle('done', i<n-1); });
 }
-
 function builderShow() {
-  var org  = document.getElementById('b-org').value.trim()   || 'Your Organization';
-  var role = document.getElementById('b-role').value.trim()  || 'Your Team';
-  var sits = [
-    document.getElementById('b-s1').value.trim(),
-    document.getElementById('b-s2').value.trim(),
-    document.getElementById('b-s3').value.trim(),
-    document.getElementById('b-s4').value.trim()
-  ].filter(function(s) { return s; });
-  if (sits.length === 0) sits = ['Your Primary Call Type', 'Your Secondary Call Type'];
+  var org  = document.getElementById('b-org').value.trim()  || 'Your Organization';
+  var role = document.getElementById('b-role').value.trim() || 'Your Team';
+  var sits = ['b-s1','b-s2','b-s3','b-s4'].map(function(id){ return document.getElementById(id).value.trim(); }).filter(Boolean);
+  if (!sits.length) sits = ['Your Primary Call Type','Your Secondary Call Type'];
   document.getElementById('scope-org').textContent = org + ' — ' + role;
-  document.getElementById('scope-body').textContent =
-    'Your guide would include ' + sits.length + ' fully built situation' +
-    (sits.length > 1 ? 's' : '') +
-    ', each with a Five-Operation Panel — case setup, step sequence, agent script, case note template, and escalation path. Delivered as a single HTML file your team opens in any browser.';
-  document.getElementById('scope-sits').innerHTML = sits.map(function(s, i) {
-    return '<div class="scope-sit-item">■ Situation ' + (i + 1) + ': ' + s + '</div>';
-  }).join('');
+  document.getElementById('scope-body').textContent = 'Your guide would include ' + sits.length + ' fully built situation' + (sits.length>1?'s':'') + ', each with a Five-Operation Panel — case setup, step sequence, agent script, case note template, and escalation path. Delivered as a single HTML file your team opens in any browser.';
+  document.getElementById('scope-sits').innerHTML = sits.map(function(s,i){ return '<div class="scope-sit-item">■ Situation '+(i+1)+': '+s+'</div>'; }).join('');
   builderNext(3);
 }
-
 function builderReset() {
-  ['b-org','b-role','b-handle','b-s1','b-s2','b-s3','b-s4'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.value = '';
-  });
+  ['b-org','b-role','b-handle','b-s1','b-s2','b-s3','b-s4'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
   builderNext(1);
 }
+
+// ─── ANIMATION ENGINE ────────────────────────────────────────
+var soundOn = false;
+var audioCtx = null;
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundBtn').textContent = soundOn ? '🔊 Sound on' : '🔇 Tap for sound';
+  if (soundOn && !audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+}
+
+function playTone(freq, dur, type) {
+  if (!soundOn || !audioCtx) return;
+  try {
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = type || 'sine';
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    o.start(); o.stop(audioCtx.currentTime + dur);
+  } catch(e) {}
+}
+
+function playRing() {
+  if (!soundOn || !audioCtx) return;
+  playTone(880, 0.15, 'sine');
+  setTimeout(function(){ playTone(660, 0.15, 'sine'); }, 180);
+}
+
+function playClick() { playTone(1200, 0.06, 'square'); }
+function playMessage() { playTone(440, 0.08, 'sine'); setTimeout(function(){ playTone(550, 0.08, 'sine'); }, 100); }
+
+var SCENARIOS = [
+  {
+    tab: 'Benefit Verification',
+    avatar: 'MT', caller: 'Maria Torres', number: '(919) 555-0147',
+    title: 'FEHB — Benefit Verification', tier: 'Tier I',
+    trackerLabel: 'Benefit Verification — Live Call Flow',
+    steps: ['Open','Verify','Address','Document','Close'],
+    dialogue: [
+      { who: 'Juniper', agent: false, text: 'Hi — calling about my benefits. Appointment tomorrow, want to confirm coverage is active.' },
+      { who: 'Leo',     agent: true,  text: 'Of course. Name and last four of your Social?' },
+      { who: 'Juniper', agent: false, text: 'Maria Torres. 4-4-1-2.' },
+      { who: 'Leo',     agent: true,  text: 'Thank you. One moment.' },
+      { who: 'Leo',     agent: true,  text: 'FEHB active through Dec 31. Blue Cross Standard. Deductible three-fifty.' },
+      { who: 'Juniper', agent: false, text: 'Perfect. Thank you so much.' },
+      { who: 'Leo',     agent: true,  text: 'Happy to help. Case BV-20490. Great appointment tomorrow.' },
+      { who: 'Juniper', agent: false, text: 'Thank you. Bye-bye.' }
+    ]
+  },
+  {
+    tab: 'Claim Status',
+    avatar: 'RJ', caller: 'R. Johnson', number: '(704) 555-0183',
+    title: 'Federal Benefits — Claim Status', tier: 'Tier I',
+    trackerLabel: 'Claim Status Inquiry — Live Call Flow',
+    steps: ['Open','Locate','Interpret','Document','Close'],
+    dialogue: [
+      { who: 'Juniper', agent: false, text: 'Hi, I submitted a claim three weeks ago and I haven\'t heard anything.' },
+      { who: 'Leo',     agent: true,  text: 'I can look into that. Name, date of birth, and claim number?' },
+      { who: 'Juniper', agent: false, text: 'Robert Johnson. March 12, 1978. Claim number is CLM-8821.' },
+      { who: 'Leo',     agent: true,  text: 'Got it. Pulling that now.' },
+      { who: 'Leo',     agent: true,  text: 'Claim is in processing — status code P2, which means secondary review. Estimated 5 to 7 business days.' },
+      { who: 'Juniper', agent: false, text: 'Okay, so it\'s still being reviewed?' },
+      { who: 'Leo',     agent: true,  text: 'That\'s correct. You\'ll receive written notice at the address on file. Case CS-44712.' },
+      { who: 'Juniper', agent: false, text: 'Alright. Thank you.' }
+    ]
+  },
+  {
+    tab: 'Enrollment Change',
+    avatar: 'AW', caller: 'A. Williams', number: '(919) 555-0309',
+    title: 'Federal Benefits — Enrollment Change', tier: 'Tier II',
+    trackerLabel: 'Enrollment Change Request — Live Call Flow',
+    steps: ['Open','Verify','Process','Document','Close'],
+    dialogue: [
+      { who: 'Juniper', agent: false, text: 'I just got married and I need to add my spouse to my coverage.' },
+      { who: 'Leo',     agent: true,  text: 'Congratulations. Changes outside open season require a qualifying life event. Do you have documentation?' },
+      { who: 'Juniper', agent: false, text: 'Yes, I have our marriage certificate.' },
+      { who: 'Leo',     agent: true,  text: 'Perfect. That qualifies. I\'ll walk you through the change. Which plan would you like to move to?' },
+      { who: 'Juniper', agent: false, text: 'Blue Cross Self Plus One.' },
+      { who: 'Leo',     agent: true,  text: 'Confirmed. Effective date will be the first of next month. You\'ll receive written confirmation.' },
+      { who: 'Juniper', agent: false, text: 'Great, thank you so much.' },
+      { who: 'Leo',     agent: true,  text: 'You\'re welcome. Case EC-30091. Have a great rest of your day.' }
+    ]
+  }
+];
+
+var currentScenario = 0;
+var animTimer = null;
+var loopTimer = null;
+
+function setActiveDemoTab(idx) {
+  document.querySelectorAll('.demo-tab-d').forEach(function(t,i){ t.classList.toggle('active', i===idx); });
+}
+
+function runScenario(idx) {
+  currentScenario = idx;
+  var s = SCENARIOS[idx];
+  setActiveDemoTab(idx);
+
+  // Reset
+  var callScreen = document.getElementById('callScreen');
+  var livePanel  = document.getElementById('livePanel');
+  var nextBar    = document.getElementById('nextCallBar');
+  var chatArea   = document.getElementById('chatArea');
+  callScreen.classList.remove('visible');
+  livePanel.classList.remove('visible');
+  nextBar.classList.remove('visible');
+  chatArea.innerHTML = '';
+
+  // Populate call screen
+  document.getElementById('ringAvatar').textContent = s.avatar;
+  document.getElementById('callName').textContent   = s.caller;
+  document.getElementById('callNumber').textContent = s.number;
+
+  // Populate live panel header
+  document.getElementById('liveSitTitle').textContent    = s.title;
+  document.getElementById('liveTier').textContent         = s.tier;
+  document.getElementById('stepTrackerLabel').textContent = s.trackerLabel;
+
+  // Build step dots
+  var dots = document.getElementById('stepDots');
+  dots.innerHTML = '';
+  s.steps.forEach(function(){ var d=document.createElement('div'); d.className='step-dot'; dots.appendChild(d); });
+
+  // Show incoming call
+  setTimeout(function(){
+    callScreen.classList.add('visible');
+    playRing();
+    setTimeout(function(){ playRing(); }, 1200);
+  }, 400);
+
+  // Answer — switch to live panel
+  setTimeout(function(){
+    callScreen.classList.remove('visible');
+    livePanel.classList.add('visible');
+    playClick();
+    showDialogue(s, 0);
+  }, 3200);
+}
+
+function showDialogue(s, dIdx) {
+  if (dIdx >= s.dialogue.length) {
+    // End of call — show next call bar, loop
+    setTimeout(function(){
+      document.getElementById('nextCallBar').classList.add('visible');
+    }, 800);
+    loopTimer = setTimeout(function(){
+      document.getElementById('nextCallBar').classList.remove('visible');
+      var next = (currentScenario + 1) % SCENARIOS.length;
+      runScenario(next);
+    }, 3000);
+    return;
+  }
+
+  var line = s.dialogue[dIdx];
+  var stepIdx = Math.min(Math.floor(dIdx / (s.dialogue.length / s.steps.length)), s.steps.length - 1);
+
+  // Update step dots
+  document.querySelectorAll('.step-dot').forEach(function(d,i){
+    d.classList.toggle('active', i === stepIdx);
+    d.classList.toggle('done', i < stepIdx);
+  });
+  document.getElementById('stepCurrentLabel').textContent = s.steps[stepIdx] + ' — ' + (line.agent ? 'Agent' : 'Caller');
+
+  // Add bubble
+  var bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = '<span class="bubble-who' + (line.agent?' agent':'') + '">' + line.who + '</span><span class="bubble-text">' + line.text + '</span>';
+  document.getElementById('chatArea').appendChild(bubble);
+
+  setTimeout(function(){ bubble.classList.add('show'); playMessage(); }, 50);
+
+  // Scroll chat
+  var ca = document.getElementById('chatArea');
+  ca.scrollTop = ca.scrollHeight;
+
+  // Next line delay
+  var delay = line.text.length * 38 + 600;
+  animTimer = setTimeout(function(){ showDialogue(s, dIdx + 1); }, delay);
+}
+
+// Start
+setTimeout(function(){ runScenario(0); }, 800);
 </script>
 </body>
 </html>
