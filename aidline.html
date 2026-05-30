@@ -47,9 +47,9 @@ body {
   z-index: 9999;
   transform: translate(-50%, -50%);
   transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-  mix-blend-mode: multiply;
+  box-shadow: 0 0 0 1.5px rgba(255,255,255,0.6), 0 0 0 2.5px rgba(184,50,36,0.3);
 }
-.cursor.hovering { width: 28px; height: 28px; opacity: 0.4; }
+.cursor.hovering { width: 28px; height: 28px; opacity: 0.55; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.5), 0 0 0 3px rgba(184,50,36,0.2); }
 
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--cream2); }
@@ -60,7 +60,6 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 20px 60px;
   display: flex; align-items: center; justify-content: space-between;
-  mix-blend-mode: multiply;
 }
 .nav-logo {
   font-family: var(--serif);
@@ -820,7 +819,7 @@ footer { padding: 28px 60px; border-top: 1px solid rgba(255,255,255,0.06); displ
         <div class="demo-bar">
           <div class="demo-dots"><div class="demo-dot dd-r"></div><div class="demo-dot dd-y"></div><div class="demo-dot dd-g"></div></div>
           <div class="demo-url">rudolphcx.com / aidline</div>
-          <button class="sound-btn" id="soundBtn"><span id="soundIcon">&#128263;</span> <span id="soundLabel">Tap for voice</span></button>
+          <button class="sound-btn" id="soundBtn"><span class="sound-icon">&#128263;</span> <span id="soundLabel">Tap for voice</span></button>
         </div>
         <div class="proto-progress"><div class="proto-fill" id="progressFill"></div></div>
         <div class="proto-guide">
