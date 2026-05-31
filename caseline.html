@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caseline — Performance Support Guides for Social Workers &amp; Case Managers | Rudolph CX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
+  --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
+  --red: #b83224; --red2: #d94030;
+  --gold: #c49a3c;
+  --teal: #2a6e5a;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', system-ui, sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; cursor: none; }
+.cursor { width: 10px; height: 10px; background: var(--teal); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.6), 0 0 0 2.5px rgba(42,110,90,0.3); }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--cream2); }
+::-webkit-scrollbar-thumb { background: var(--teal); }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; mix-blend-mode: multiply; }
+.nav-logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+.nav-logo span { color: var(--teal); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+.nav-links a:hover { color: var(--teal); }
+
+/* HERO */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 140px 60px 80px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.7; }
+.hero-left { position: relative; z-index: 1; }
+.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--teal); }
+.hero-title { font-family: var(--serif); font-size: clamp(48px,5.5vw,78px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 32px; }
+.hero-title em { font-style: italic; color: var(--teal); }
+.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 480px; margin-bottom: 48px; font-weight: 300; }
+.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-teal { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; background: var(--teal); color: var(--cream); border: none; cursor: none; text-decoration: none; transition: all 0.2s; position: relative; overflow: hidden; display: inline-block; }
+.btn-teal::after { content: ''; position: absolute; inset: 0; background: var(--ink); transform: translateX(-101%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
+.btn-teal:hover::after { transform: translateX(0); }
+.btn-teal span { position: relative; z-index: 1; }
+.btn-sec { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.15s; }
+.btn-sec:hover { color: var(--teal); }
+
+/* HERO RIGHT — Scenario Cards */
+.hero-right { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 16px; padding: 20px 20px 40px 40px; }
+.scenario-card { background: white; border: 1px solid var(--cream3); padding: 24px 28px; position: relative; opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.scenario-card.visible { opacity: 1; transform: none; }
+.scenario-card.active-sc { border-left: 3px solid var(--teal); }
+.sc-tag { font-family: var(--mono); font-size: 7.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
+.sc-situation { font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--ink); line-height: 1.4; margin-bottom: 10px; }
+.sc-outcome { font-size: 12px; color: var(--dim); line-height: 1.6; font-weight: 300; }
+.sc-guide-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--cream3); }
+
+/* MARQUEE */
+.marquee-wrap { border-top: 1px solid var(--cream3); border-bottom: 1px solid var(--cream3); padding: 14px 0; overflow: hidden; background: var(--cream2); position: relative; z-index: 1; }
+.marquee-track { display: flex; animation: marquee 32s linear infinite; width: max-content; }
+.marquee-item { display: flex; align-items: center; gap: 28px; padding: 0 28px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
+.marquee-item::after { content: '\00b7'; color: var(--teal); }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* SECTIONS */
+.section { padding: 120px 60px; position: relative; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--teal); }
+.section-title { font-family: var(--serif); font-size: clamp(34px,3.8vw,52px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 32px; }
+.section-title em { font-style: italic; color: var(--teal); }
+.split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 64px; }
+.split-text { font-size: 15px; color: var(--ink3); line-height: 1.8; font-weight: 300; }
+.split-text p { margin-bottom: 20px; }
+.split-text strong { color: var(--ink); font-weight: 600; }
+
+/* Pull quote */
+.pull-quote { border-left: 2px solid var(--teal); padding: 24px 32px; background: white; margin: 40px 0; }
+.pq-text { font-family: var(--serif); font-size: 21px; font-weight: 500; color: var(--ink); line-height: 1.45; font-style: italic; margin-bottom: 12px; }
+.pq-attr { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+
+/* Feature list */
+.feature-list { list-style: none; }
+.feature-item { display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid var(--cream3); }
+.feature-item:first-child { border-top: 1px solid var(--cream3); }
+.feature-num { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--teal); letter-spacing: 0.1em; flex-shrink: 0; margin-top: 2px; width: 28px; }
+.feature-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.feature-desc { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; }
+
+/* SITUATIONS SECTION */
+.situations-section { padding: 120px 60px; background: var(--ink); position: relative; overflow: hidden; }
+.situations-section::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(42,110,90,0.15) 0%, transparent 70%); pointer-events: none; }
+.sit-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.sit-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--teal); }
+.sit-title { font-family: var(--serif); font-size: clamp(32px,3.5vw,48px); font-weight: 500; color: var(--cream); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
+.sit-sub { font-size: 15px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; max-width: 560px; margin-bottom: 64px; }
+.sit-note { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.25); margin-bottom: 32px; }
+.sit-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.sit-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 32px 28px; position: relative; transition: all 0.3s ease; }
+.sit-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(42,110,90,0.4); }
+.sit-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--teal); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+.sit-card:hover::before { transform: scaleX(1); }
+.sit-card-n { font-family: var(--mono); font-size: 9px; font-weight: 600; color: var(--teal); letter-spacing: 0.1em; margin-bottom: 16px; }
+.sit-card-title { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 8px; letter-spacing: -0.01em; line-height: 1.2; }
+.sit-card-desc { font-size: 12px; color: rgba(247,244,238,0.5); line-height: 1.65; font-weight: 300; }
+
+/* PRICING */
+.pricing-section { padding: 120px 60px; background: var(--cream); border-top: 1px solid var(--cream3); }
+.pricing-block { max-width: 760px; margin: 0 auto; text-align: center; }
+.pb-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); margin-bottom: 20px; }
+.pb-title { font-family: var(--serif); font-size: clamp(36px,4vw,54px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
+.pb-sub { font-size: 15px; color: var(--ink3); line-height: 1.75; font-weight: 300; max-width: 560px; margin: 0 auto 48px; }
+.pb-discovery { background: white; border: 1px solid var(--cream3); padding: 40px; margin-bottom: 32px; text-align: left; }
+.pb-discovery-tag { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; }
+.pb-discovery-price { font-family: var(--serif); font-size: 48px; font-weight: 600; color: var(--ink); line-height: 1; margin-bottom: 8px; }
+.pb-discovery-note { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; max-width: 480px; }
+.pb-tiers-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-bottom: 20px; }
+.pb-tiers-range { font-family: var(--serif); font-size: 36px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+.pb-tiers-note { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; margin-bottom: 40px; }
+.pb-cta { display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 40px; background: var(--teal); color: var(--cream); text-decoration: none; transition: background 0.2s; }
+.pb-cta:hover { background: var(--ink); }
+
+/* CONTACT */
+.contact-section { padding: 120px 60px; background: var(--cream2); border-top: 1px solid var(--cream3); text-align: center; }
+.contact-title { font-family: var(--serif); font-size: clamp(36px,4.5vw,64px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
+.contact-title em { font-style: italic; color: var(--teal); }
+.contact-sub { font-size: 16px; color: var(--dim); line-height: 1.7; max-width: 500px; margin: 0 auto 48px; font-weight: 300; }
+.form-wrap { max-width: 560px; margin: 0 auto; text-align: left; }
+.form-group { margin-bottom: 20px; }
+.form-label { font-family: var(--mono); font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); display: block; margin-bottom: 8px; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--cream3); background: white; font-family: var(--sans); font-size: 14px; color: var(--ink); font-weight: 300; outline: none; transition: border-color 0.15s; appearance: none; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--teal); }
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-submit { width: 100%; padding: 16px; background: var(--teal); color: var(--cream); font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+.form-submit:hover { background: var(--ink); }
+.form-note { font-family: var(--mono); font-size: 9px; color: var(--dim); text-align: center; margin-top: 16px; line-height: 1.6; }
+
+/* FOOTER */
+footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex; align-items: center; justify-content: space-between; background: var(--cream); flex-wrap: wrap; gap: 12px; }
+.footer-logo { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--ink3); }
+.footer-logo span { color: var(--teal); }
+.footer-back { font-family: var(--mono); font-size: 9px; color: var(--dim); text-decoration: none; letter-spacing: 0.1em; transition: color 0.15s; }
+.footer-back:hover { color: var(--teal); }
+.footer-copy { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1); }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+@media (max-width: 900px) {
+  nav { padding: 16px 28px; }
+  .nav-links { gap: 16px; }
+  .hero { grid-template-columns: 1fr; padding: 100px 28px 60px; }
+  .hero-right { display: none; }
+  .split-layout { grid-template-columns: 1fr; gap: 40px; }
+  .sit-grid { grid-template-columns: 1fr; }
+  .section, .situations-section, .pricing-section, .contact-section { padding: 80px 28px; }
+  footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: center; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+
+<nav>
+  <div class="nav-logo">Rudolph<span>CX</span></div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/aidline.html">Aidline&#8480;</a></li>
+    <li><a href="#situations">Situations</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Book Discovery</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow reveal">Social Work &amp; Case Management</div>
+    <h1 class="hero-title reveal reveal-delay-1">
+      Built for the<br>
+      moment the<br>
+      case is <em>live.</em>
+    </h1>
+    <p class="hero-sub reveal reveal-delay-2">
+      Caseline&#8480; is a custom-built reference guide for social workers, case managers, and benefits navigators who face live, high-stakes moments with clients in need — and need the right move right now.
+    </p>
+    <div class="hero-actions reveal reveal-delay-3">
+      <a href="#contact" class="btn-teal"><span>Book Discovery Call &mdash; $300</span></a>
+      <a href="#situations" class="btn-sec">See What It Covers
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="scenario-card active-sc" id="sc1">
+      <div class="sc-tag">Caseline&#8480; &mdash; Live Situation</div>
+      <div class="sc-situation">&ldquo;Client is escalating. They&rsquo;re threatening to leave before the intake is complete. I don&rsquo;t know the de-escalation protocol off the top of my head.&rdquo;</div>
+      <div class="sc-outcome">The guide surfaces the de-escalation pathway in two taps. The worker stays calm. The client stays in the room.</div>
+      <div class="sc-guide-label">&#10003; Handled &mdash; Caseline found the right move</div>
+    </div>
+    <div class="scenario-card" id="sc2">
+      <div class="sc-tag">Caseline&#8480; &mdash; Live Situation</div>
+      <div class="sc-situation">&ldquo;Client discloses something I wasn&rsquo;t expecting. I need to know my mandatory reporting obligations right now, not tomorrow.&rdquo;</div>
+      <div class="sc-outcome">The guide surfaces the reporting threshold, the language, and the next step. The worker acts correctly. The client is protected.</div>
+      <div class="sc-guide-label">&#10003; Handled &mdash; Caseline found the right move</div>
+    </div>
+    <div class="scenario-card" id="sc3">
+      <div class="sc-tag">Caseline&#8480; &mdash; Live Situation</div>
+      <div class="sc-situation">&ldquo;Client doesn&rsquo;t qualify for the benefit they came in for. I need to know what I can offer them instead without making a promise I can&rsquo;t keep.&rdquo;</div>
+      <div class="sc-outcome">The guide surfaces the alternative pathways and the exact language. The worker redirects with confidence. The client leaves with a next step.</div>
+      <div class="sc-guide-label">&#10003; Handled &mdash; Caseline found the right move</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">Crisis Intervention</div><div class="marquee-item">Mandatory Reporting</div><div class="marquee-item">Benefits Navigation</div><div class="marquee-item">Client De-escalation</div><div class="marquee-item">Intake Protocols</div><div class="marquee-item">Referral Pathways</div><div class="marquee-item">Safety Assessment</div><div class="marquee-item">Documentation Standards</div><div class="marquee-item">Trauma-Informed Response</div><div class="marquee-item">Live Case Support</div><div class="marquee-item">Crisis Intervention</div><div class="marquee-item">Mandatory Reporting</div><div class="marquee-item">Benefits Navigation</div><div class="marquee-item">Client De-escalation</div><div class="marquee-item">Intake Protocols</div><div class="marquee-item">Referral Pathways</div><div class="marquee-item">Safety Assessment</div><div class="marquee-item">Documentation Standards</div><div class="marquee-item">Trauma-Informed Response</div><div class="marquee-item">Live Case Support</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section" id="what">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">The Problem</div>
+    <h2 class="section-title reveal">Social workers are trained for the case.<br>Not for the <em>moment inside it.</em></h2>
+    <div class="split-layout">
+      <div class="split-text reveal">
+        <p>Organizations invest in training, supervision, and policy manuals. Workers complete them, pass their certifications, and go into the field.</p>
+        <p>Then the moments start. A client escalates faster than expected. A disclosure requires a mandatory report and the worker isn&rsquo;t certain of the threshold. A benefit denial needs to be delivered with a redirect the worker can&rsquo;t fully remember.</p>
+        <p><strong>This is not a training failure. Training prepared the worker for the concept. It didn&rsquo;t prepare them for this specific moment, with this specific person, right now.</strong></p>
+        <p>Caseline&#8480; is built for that gap. Not a manual. Not an app. A guide that lives inside the moment &mdash; structured, specific, and ready the day the case is live.</p>
+      </div>
+      <div class="split-text reveal">
+        <div class="pull-quote">
+          <div class="pq-text">&ldquo;The moment doesn&rsquo;t wait for you to review your training materials or ask your supervisor for advice.&rdquo;</div>
+          <div class="pq-attr">Crisis Intervention in Social Work &mdash; Casebook.net, 2026</div>
+        </div>
+        <ul class="feature-list">
+          <li class="feature-item">
+            <div class="feature-num">01</div>
+            <div><div class="feature-title">Built from your policies and protocols</div><div class="feature-desc">Every situation in Caseline is built from your organization&rsquo;s actual source material &mdash; not generic best practices.</div></div>
+          </li>
+          <li class="feature-item">
+            <div class="feature-num">02</div>
+            <div><div class="feature-title">Role-specific to your workers</div><div class="feature-desc">Case managers, intake workers, and field staff face different moments. Caseline is built for the specific role you need.</div></div>
+          </li>
+          <li class="feature-item">
+            <div class="feature-num">03</div>
+            <div><div class="feature-title">Ready on the day the case is live</div><div class="feature-desc">Delivered as a single HTML file. No login. No app. No friction. Open it when the moment arrives.</div></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SITUATIONS -->
+<section class="situations-section" id="situations">
+  <div class="section-inner">
+    <div class="sit-eyebrow">What Caseline Covers</div>
+    <h2 class="sit-title">The situations your workers face every day.</h2>
+    <p class="sit-sub">Each Caseline guide is custom-built for your organization&rsquo;s specific situations, protocols, and population. These are illustrative examples of what a Caseline guide can cover.</p>
+    <div class="sit-note">Illustrative situations &mdash; your Caseline is built from your source material</div>
+    <div class="sit-grid">
+      <div class="sit-card">
+        <div class="sit-card-n">01</div>
+        <div class="sit-card-title">Client Crisis &amp; De-escalation</div>
+        <div class="sit-card-desc">Step-by-step de-escalation pathway for clients in acute distress. What to say, what not to say, when to involve a supervisor, when to call 911.</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-card-n">02</div>
+        <div class="sit-card-title">Mandatory Reporting Threshold</div>
+        <div class="sit-card-desc">Reporting obligations surfaced in real time. Threshold criteria, required language, documentation steps, and who to notify first.</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-card-n">03</div>
+        <div class="sit-card-title">Benefit Denial &amp; Redirect</div>
+        <div class="sit-card-desc">What to say when a client doesn&rsquo;t qualify. Alternative pathways, referral language, and how to close the conversation with a next step.</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-card-n">04</div>
+        <div class="sit-card-title">Intake with Resistant Client</div>
+        <div class="sit-card-desc">Protocols for completing intake when a client is unwilling, guarded, or combative. What questions to prioritize, what to defer, how to proceed.</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-card-n">05</div>
+        <div class="sit-card-title">Unexpected Disclosure</div>
+        <div class="sit-card-desc">When a client discloses something outside the scope of the current case. How to respond, what to document, whether to open a new case.</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-card-n">06</div>
+        <div class="sit-card-title">Safety Assessment</div>
+        <div class="sit-card-desc">Live safety assessment framework for domestic situations, child welfare concerns, or imminent risk. Structured questions. Clear escalation thresholds.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="pricing-block">
+      <div class="pb-eyebrow reveal">Pricing</div>
+      <h2 class="pb-title reveal">One process. One contract.<br>Built for your organization.</h2>
+      <p class="pb-sub reveal">Caseline follows the same proven build process as every Rudolph CX guide. It starts with a discovery call.</p>
+
+      <div class="pb-discovery reveal">
+        <div class="pb-discovery-tag">Discovery Call</div>
+        <div class="pb-discovery-price">$300</div>
+        <div class="pb-discovery-note">Non-refundable. Credits in full to your first invoice if you proceed. The discovery call is where we understand your organization, your workers, and the moments they face &mdash; so we can recommend the right build scope before you commit to anything.</div>
+      </div>
+
+      <div class="reveal">
+        <div class="pb-tiers-label">Build Tiers</div>
+        <div class="pb-tiers-range">$2,500 &mdash; $8,000+</div>
+        <div class="pb-tiers-note">Four tiers based on role complexity, number of situations, and scope. Your discovery call determines the right tier. 50% deposit before work begins. 50% on delivery.</div>
+        <a href="#contact" class="pb-cta">Book Discovery Call &mdash; $300</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-inner">
+    <h2 class="contact-title reveal">Ready to build a guide for<br>your <em>workers?</em></h2>
+    <p class="contact-sub reveal">Tell us about your organization and the moments your workers face. We&rsquo;ll take it from there.</p>
+    <div class="form-wrap reveal">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" type="text" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Organization</label>
+          <input class="form-input" type="text" placeholder="Organization name">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="Work email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Role Type</label>
+          <select class="form-select">
+            <option value="">Select worker role</option>
+            <option>Case Manager</option>
+            <option>Social Worker</option>
+            <option>Benefits Navigator</option>
+            <option>Intake Worker</option>
+            <option>Field Worker</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">What moments do your workers struggle with?</label>
+        <textarea class="form-textarea" placeholder="Describe the situations where your workers need better support..."></textarea>
+      </div>
+      <button class="form-submit" type="button">Book Discovery Call &mdash; $300</button>
+      <div class="form-note">We&rsquo;ll respond within one business day to schedule your discovery call.<br>The $300 fee is collected at scheduling and credits to your first invoice if you proceed.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Rudolph<span>CX</span></div>
+  <a href="/" class="footer-back">&larr; Back to rudolphcx.com</a>
+  <div class="footer-copy">&#169; 2026 Rudolph CX LLC &middot; Caseline&#8480; &middot; Durham, NC</div>
+</footer>
+
+<script>
+var cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', function(e) {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+
+// Reveal on scroll
+var reveals = document.querySelectorAll('.reveal');
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(function(el) { observer.observe(el); });
+
+// Hero reveals
+setTimeout(function() {
+  document.querySelectorAll('.hero .reveal').forEach(function(el) {
+    el.classList.add('visible');
+  });
+}, 100);
+
+// Scenario card cycle
+var cards = document.querySelectorAll('.scenario-card');
+var currentCard = 0;
+cards.forEach(function(c, i) {
+  if (i === 0) c.classList.add('visible');
+});
+setInterval(function() {
+  cards[currentCard].classList.remove('active-sc');
+  currentCard = (currentCard + 1) % cards.length;
+  cards.forEach(function(c, i) {
+    c.classList.toggle('visible', i <= currentCard);
+  });
+  cards[currentCard].classList.add('active-sc');
+}, 4000);
+</script>
+</body>
+</html>
