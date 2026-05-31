@@ -340,7 +340,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
   nav { padding: 16px 28px; }
   .nav-links { gap: 18px; }
   .hero { grid-template-columns: 1fr; padding: 100px 28px 60px; }
-  .hero-right { display: none; }
+  .hero-right{display:flex;}
   .split-layout, .demos-grid, .steps-layout { grid-template-columns: 1fr; }
   .section, .demos-section, .how-section, .pricing-section, .firststep-section, .contact-section { padding: 80px 28px; }
   footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: center; }
@@ -516,7 +516,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 60px;display:fl
 .btn-secondary{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.15s;}
 .btn-secondary:hover{color:var(--red);}
 @media(max-width:900px){
-  nav{padding:16px 24px;}.hero{padding:110px 24px 80px;}.hero-inner{grid-template-columns:1fr;}.hero-right{display:none;}
+  nav{padding:16px 24px;}.hero{padding:110px 24px 80px;}.hero-inner{grid-template-columns:1fr;}.hero-right{display:flex;}
   .section,.how-section,.pricing-section,.contact-section{padding:80px 24px;}
   .what-grid,.pricing-grid,.how-steps{grid-template-columns:1fr;}
   .how-step{border-right:none;border-bottom:1px solid var(--cream3);}
@@ -805,7 +805,7 @@ async function run(){
 
 setTimeout(run,2500);
 
-</script>
+
 </script>
 </body>
                                                 </html>
