@@ -6,6 +6,7 @@
 <title>Caseline — Performance Support Guides for Social Workers &amp; Case Managers | Rudolph CX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -342,21 +343,21 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Your Name</label>
-          <input class="form-input" type="text" placeholder="Full name">
+          <input class="form-input" id="cl-name" type="text" placeholder="Full name">
         </div>
         <div class="form-group">
           <label class="form-label">Organization</label>
-          <input class="form-input" type="text" placeholder="Organization name">
+          <input class="form-input" id="cl-org" type="text" placeholder="Organization name">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input class="form-input" type="email" placeholder="Work email">
+          <input class="form-input" id="cl-email" type="email" placeholder="Work email">
         </div>
         <div class="form-group">
           <label class="form-label">Role Type</label>
-          <select class="form-select">
+          <select class="form-select" id="cl-role">
             <option value="">Select worker role</option>
             <option>Case Manager</option>
             <option>Social Worker</option>
@@ -369,10 +370,14 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
       </div>
       <div class="form-group">
         <label class="form-label">What moments do your workers struggle with?</label>
-        <textarea class="form-textarea" placeholder="Describe the situations where your workers need better support..."></textarea>
+        <textarea class="form-textarea" id="cl-message" placeholder="Describe the situations where your workers need better support..."></textarea>
       </div>
-      <button class="form-submit" type="button">Book Discovery Call &mdash; $300</button>
+      <button class="form-submit" id="caseline-submit" type="button">
+        <span class="submit-label">Book Discovery Call &mdash; $300</span>
+        <span class="submit-loading" style="display:none">Sending&hellip;</span>
+      </button>
       <div class="form-note">We&rsquo;ll respond within one business day to schedule your discovery call.<br>The $300 fee is collected at scheduling and credits to your first invoice if you proceed.</div>
+      <div id="caseline-status" style="margin-top:16px;font-family:var(--mono);font-size:11px;text-align:center;min-height:20px;"></div>
     </div>
   </div>
 </section>
@@ -420,6 +425,85 @@ setInterval(function() {
   });
   cards[currentCard].classList.add('active-sc');
 }, 4000);
+
+// EmailJS — contact form
+(function() {
+  if (typeof emailjs === 'undefined') return;
+  emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
+
+  var btn = document.getElementById('caseline-submit');
+  var statusEl = document.getElementById('caseline-status');
+  if (!btn) return;
+
+  btn.addEventListener('click', function() {
+    var name = document.querySelector('.form-wrap .form-row:nth-child(1) .form-input:nth-child(1)');
+    var org  = document.querySelector('.form-wrap .form-row:nth-child(1) .form-input:nth-child(2)');
+    var email = document.querySelector('.form-wrap .form-row:nth-child(2) .form-input[type="email"]');
+    var role  = document.querySelector('.form-wrap .form-row:nth-child(2) .form-select');
+    var message = document.querySelector('.form-wrap .form-textarea');
+
+    // Add IDs for reliable access
+    var fields = {
+      name: document.getElementById('cl-name') || name,
+      org:  document.getElementById('cl-org')  || org,
+      email: document.getElementById('cl-email') || email,
+      role:  document.getElementById('cl-role')  || role,
+      message: document.getElementById('cl-message') || message
+    };
+
+    var nameVal    = fields.name    ? fields.name.value.trim()    : '';
+    var orgVal     = fields.org     ? fields.org.value.trim()     : '';
+    var emailVal   = fields.email   ? fields.email.value.trim()   : '';
+    var roleVal    = fields.role    ? fields.role.value.trim()    : '';
+    var messageVal = fields.message ? fields.message.value.trim() : '';
+
+    if (!nameVal || !orgVal || !emailVal || !messageVal) {
+      statusEl.style.color = 'var(--red)';
+      statusEl.textContent = 'Please fill in all required fields.';
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      statusEl.style.color = 'var(--red)';
+      statusEl.textContent = 'Please enter a valid email address.';
+      return;
+    }
+
+    var label = btn.querySelector('.submit-label');
+    var loading = btn.querySelector('.submit-loading');
+    btn.disabled = true;
+    if (label) label.style.display = 'none';
+    if (loading) loading.style.display = 'inline';
+    statusEl.textContent = '';
+
+    emailjs.send('service_u94nvbm', 'template_875pqb4', {
+      from_name:    nameVal,
+      organization: orgVal,
+      reply_to:     emailVal,
+      role_type:    roleVal || 'Not specified',
+      message:      messageVal,
+      source:       'Caseline discovery form — rudolphcx.com/caseline.html'
+    }).then(function() {
+      statusEl.style.color = 'var(--teal)';
+      statusEl.textContent = 'Request received. We will be in touch within one business day.';
+      btn.disabled = false;
+      if (label) label.style.display = 'inline';
+      if (loading) loading.style.display = 'none';
+      // Clear fields
+      if (fields.name) fields.name.value = '';
+      if (fields.org) fields.org.value = '';
+      if (fields.email) fields.email.value = '';
+      if (fields.role) fields.role.selectedIndex = 0;
+      if (fields.message) fields.message.value = '';
+    }).catch(function(err) {
+      statusEl.style.color = 'var(--red)';
+      statusEl.textContent = 'Something went wrong. Please email jamal@rudolphcx.com directly.';
+      btn.disabled = false;
+      if (label) label.style.display = 'inline';
+      if (loading) loading.style.display = 'none';
+      console.error('EmailJS error:', err);
+    });
+  });
+})();
 </script>
 </body>
 </html>
