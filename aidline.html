@@ -252,6 +252,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
     <li><a href="#how">How It Works</a></li>
     <li><a href="demos.html">Demo Center</a></li>
     <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#sectors">Our Guides</a></li>
     <li><a href="#contact">Book Discovery</a></li>
   </ul>
 </nav>
@@ -445,6 +446,210 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 </section>
 
 <!-- FOOTER -->
+
+<!-- BUILT FOR YOUR SECTOR -->
+<section class="sector-section" id="sectors">
+  <div class="sector-inner">
+    <div class="sector-eyebrow reveal">Built For Your Sector</div>
+    <h2 class="sector-title reveal">The moment doesn't care what industry you're in.</h2>
+    <p class="sector-sub reveal">Aidline is built for any worker who faces a live, high-stakes moment with a person in need. Every sector has that moment. Every sector deserves a guide built for it.</p>
+    <div class="sector-grid reveal">
+
+      <a href="/aidline.html" class="sector-card active-card">
+        <div class="sector-card-tag">Available Now</div>
+        <div class="sector-card-name">Aidline<span class="sector-sm">&#8480;</span></div>
+        <div class="sector-card-role">Contact Centers &amp; Customer Service</div>
+        <div class="sector-card-desc">For agents handling live calls, cases, and escalations across federal benefits, state services, and customer operations.</div>
+        <div class="sector-card-cta">Explore Aidline &rarr;</div>
+      </a>
+
+      <a href="/caseline.html" class="sector-card active-card">
+        <div class="sector-card-tag">Available Now</div>
+        <div class="sector-card-name">Caseline<span class="sector-sm">&#8480;</span></div>
+        <div class="sector-card-role">Social Work &amp; Case Management</div>
+        <div class="sector-card-desc">For social workers, case managers, and benefits navigators who face live crisis moments with clients in need of structured support.</div>
+        <div class="sector-card-cta">Explore Caseline &rarr;</div>
+      </a>
+
+      <div class="sector-card coming-card">
+        <div class="sector-card-tag coming">Coming Soon</div>
+        <div class="sector-card-name">Chartline<span class="sector-sm">&#8480;</span></div>
+        <div class="sector-card-role">Healthcare &amp; Patient Services</div>
+        <div class="sector-card-desc">For intake coordinators, patient-facing staff, and frontline healthcare workers navigating live clinical and service moments.</div>
+      </div>
+
+      <div class="sector-card coming-card">
+        <div class="sector-card-tag coming">Coming Soon</div>
+        <div class="sector-card-name">Lendline<span class="sector-sm">&#8480;</span></div>
+        <div class="sector-card-role">Financial Services &amp; Lending</div>
+        <div class="sector-card-desc">For loan officers, branch bankers, and credit counselors handling live hardship conversations, denials, and complex financial moments.</div>
+      </div>
+
+      <div class="sector-card coming-card">
+        <div class="sector-card-tag coming">Coming Soon</div>
+        <div class="sector-card-name">Workline<span class="sector-sm">&#8480;</span></div>
+        <div class="sector-card-role">Workforce Development</div>
+        <div class="sector-card-desc">For employment specialists and workforce navigators supporting job seekers through live intake, assessment, and placement moments.</div>
+      </div>
+
+      <div class="sector-card coming-card">
+        <div class="sector-card-tag coming">Coming Soon</div>
+        <div class="sector-card-name">Reentryline<span class="sector-sm">&#8480;</span></div>
+        <div class="sector-card-role">Reentry &amp; Justice Services</div>
+        <div class="sector-card-desc">For reentry navigators, probation staff, and justice-adjacent workers handling live moments with people returning from incarceration.</div>
+      </div>
+
+    </div>
+    <div class="sector-note reveal">Don&#39;t see your sector? Every guide starts with a $300 discovery call. <a href="#contact" class="sector-note-link">Let&#39;s talk about what you need.</a></div>
+  </div>
+</section>
+
+<style>
+.sector-section {
+  padding: 120px 60px;
+  background: var(--cream2);
+  border-top: 1px solid var(--cream3);
+}
+.sector-inner { max-width: 1200px; margin: 0 auto; }
+.sector-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sector-eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+}
+.sector-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.5vw, 48px);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+}
+.sector-sub {
+  font-size: 15px;
+  color: var(--ink3);
+  line-height: 1.75;
+  max-width: 680px;
+  margin-bottom: 64px;
+  font-weight: 300;
+}
+.sector-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-bottom: 40px;
+}
+.sector-card {
+  background: white;
+  border: 1px solid var(--cream3);
+  padding: 36px 32px;
+  position: relative;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  display: block;
+}
+.sector-card.active-card {
+  cursor: pointer;
+}
+.sector-card.active-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(15,14,12,0.08);
+}
+.sector-card.coming-card {
+  background: var(--cream);
+  opacity: 0.7;
+}
+.sector-card-tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid rgba(196,154,60,0.3);
+  background: rgba(196,154,60,0.06);
+  border-radius: 2px;
+}
+.sector-card-tag.coming {
+  color: var(--muted);
+  border-color: var(--cream3);
+  background: transparent;
+}
+.sector-card-name {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.sector-sm {
+  font-size: 14px;
+  vertical-align: super;
+}
+.sector-card-role {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 16px;
+}
+.sector-card-desc {
+  font-size: 13px;
+  color: var(--ink3);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+.sector-card-cta {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.sector-note {
+  font-size: 14px;
+  color: var(--dim);
+  text-align: center;
+  font-weight: 300;
+}
+.sector-note-link {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(196,154,60,0.3);
+}
+.sector-note-link:hover {
+  border-color: var(--gold);
+}
+@media (max-width: 900px) {
+  .sector-section { padding: 80px 28px; }
+  .sector-grid { grid-template-columns: 1fr; }
+}
+</style>
+
 <footer>
   <div class="footer-logo">Rudolph<span>CX</span></div>
   <a href="/" class="footer-back">&larr; Back to rudolphcx.com</a>
