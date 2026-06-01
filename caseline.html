@@ -478,6 +478,25 @@ setInterval(function() {
     if (loading) loading.style.display = 'inline';
     statusEl.textContent = '';
 
+    // HubSpot Forms API — creates contact record in CRM
+    var hutk = document.cookie.replace(/(?:(?:^|.*;\s*)hubspotutk\s*=\s*([^;]*).*$)|^.*$/, '$1');
+    fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: [
+          { name: 'firstname', value: nameVal },
+          { name: 'email',     value: emailVal },
+          { name: 'company',   value: orgVal }
+        ],
+        context: {
+          hutk:    hutk || undefined,
+          pageUri: 'rudolphcx.com/caseline.html',
+          pageName: 'Caseline — Social Work & Case Management Guide'
+        }
+      })
+    }).catch(function(err) { console.error('HubSpot submit error:', err); });
+
     emailjs.send('service_u94nvbm', 'template_875pqb4', {
       from_name:    nameVal,
       organization: orgVal,
