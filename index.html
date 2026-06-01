@@ -233,6 +233,43 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 .anim-reset{position:absolute;inset:0;background:var(--cream);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:5;}
 .anim-reset.show{opacity:1;}
 .anim-reset-txt{font-family:var(--mono);font-size:7.5px;letter-spacing:0.17em;text-transform:uppercase;color:var(--dim);}
+
+.nav-dropdown { position: relative; }
+.nav-dropdown > a { display: flex; align-items: center; gap: 4px; }
+.nav-dropdown > a::after { content: ''; display: inline-block; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform 0.2s; }
+.nav-dropdown:hover > a::after { transform: rotate(-135deg) translateY(-2px); }
+.dropdown-menu { display: none; position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); background: var(--cream); border: 1px solid var(--cream3); min-width: 220px; padding: 8px 0; z-index: 200; box-shadow: 0 8px 24px rgba(15,14,12,0.10); }
+.nav-dropdown:hover .dropdown-menu { display: block; }
+.dropdown-menu li { list-style: none; }
+.dropdown-menu a { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s, background 0.15s; white-space: nowrap; }
+.dropdown-menu a:hover { color: var(--red); background: var(--cream2); }
+.dropdown-live { font-family: var(--mono); font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(42,110,74,0.12); color: #2a6e4a; padding: 2px 6px; border-radius: 2px; }
+.dropdown-soon { font-family: var(--mono); font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 2px 6px; }
+.dropdown-divider { height: 1px; background: var(--cream3); margin: 6px 0; }
+
+.agents-section { padding: 100px 60px; background: white; border-top: 1px solid var(--cream3); }
+.agents-inner { max-width: 1100px; margin: 0 auto; }
+.agents-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.agents-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+.agents-title { font-family: var(--serif); font-size: clamp(32px,3.5vw,50px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
+.agents-title em { font-style: italic; color: var(--red); }
+.agents-sub { font-size: 15px; color: var(--ink3); line-height: 1.75; max-width: 560px; margin-bottom: 64px; font-weight: 300; }
+.agents-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.agent-card { padding: 40px 36px; border: 1px solid var(--cream3); position: relative; background: var(--cream); transition: background 0.2s; }
+.agent-card.resolved { background: white; border-color: rgba(42,110,74,0.25); }
+.agent-sector { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-bottom: 20px; }
+.agent-name { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.02em; }
+.agent-role { font-family: var(--mono); font-size: 9px; font-weight: 400; color: var(--dim); letter-spacing: 0.1em; margin-bottom: 24px; text-transform: uppercase; }
+.agent-scene { font-size: 14px; color: var(--ink3); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
+.agent-scene strong { color: var(--ink); font-weight: 600; }
+.agent-status { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+.agent-status.no-guide { color: var(--red); }
+.agent-status.resolved-status { color: #2a6e4a; }
+.agent-status::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.agent-status.no-guide::before { background: var(--red); }
+.agent-status.resolved-status::before { background: #2a6e4a; animation: alvp 1.4s ease-in-out infinite; }
+.agents-cta { margin-top: 48px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+@media (max-width: 900px) { .agents-grid { grid-template-columns: 1fr; } .agents-section { padding: 80px 28px; } }
 </style>
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
@@ -243,11 +280,19 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 <nav>
   <div class="nav-logo">Rudolph<span>CX</span></div>
   <ul class="nav-links">
-    <li><a href="#what">What We Build</a></li>
-    <li><a href="/aidline.html">Aidline&#8480;</a></li>
-    <li><a href="/aidline.html#sectors">Our Guides</a></li>
-    <li><a href="#demos">Demos</a></li>
-    <li><a href="demos.html">Demo Center</a></li>
+    <li class="nav-dropdown">
+      <a href="/aidline.html#sectors">Our Guides</a>
+      <ul class="dropdown-menu">
+        <li><a href="/aidline.html">Aidline&#8480; <span class="dropdown-live">Live</span></a></li>
+        <li><a href="/caseline.html">Caseline <span class="dropdown-live">Live</span></a></li>
+        <li class="dropdown-divider"></li>
+        <li><a href="#">Chartline <span class="dropdown-soon">Soon</span></a></li>
+        <li><a href="#">Lendline <span class="dropdown-soon">Soon</span></a></li>
+        <li><a href="#">Workline <span class="dropdown-soon">Soon</span></a></li>
+        <li><a href="#">Reentryline <span class="dropdown-soon">Soon</span></a></li>
+      </ul>
+    </li>
+    <li><a href="#demos">See It Live</a></li>
     <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -354,6 +399,45 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
     </div>
   </div>
 </section>
+<section class="agents-section">
+  <div class="agents-inner">
+    <div class="agents-eyebrow reveal">Built for moments like these</div>
+    <h2 class="agents-title reveal">Same moment.<br><em>Different room.</em></h2>
+    <p class="agents-sub reveal">Every sector has a version of this moment. Worker in front of someone who needs help. Situation is live. The answer isn't obvious. These are the moments we build for.</p>
+    <div class="agents-grid">
+
+      <div class="agent-card reveal">
+        <div class="agent-sector">Contact Center</div>
+        <div class="agent-name">Juniper</div>
+        <div class="agent-role">Benefits Rep &mdash; Federal Agency</div>
+        <div class="agent-scene">Caller needs to know if her coverage is active before a procedure tomorrow. Juniper pulls up the screen. <strong>Three systems open. None of them say the same thing.</strong> Training covered the policy. It didn't cover this.</div>
+        <div class="agent-status no-guide">No guide. Guessing.</div>
+      </div>
+
+      <div class="agent-card reveal reveal-delay-1">
+        <div class="agent-sector">Social Services</div>
+        <div class="agent-name">Leo</div>
+        <div class="agent-role">Case Manager &mdash; County Benefits Office</div>
+        <div class="agent-scene">Client in front of him. Eviction notice in her hand. She qualifies for emergency assistance — Leo is almost certain. <strong>But almost certain doesn't help her today.</strong> The eligibility matrix is in a binder somewhere.</div>
+        <div class="agent-status no-guide">No guide. Stalling.</div>
+      </div>
+
+      <div class="agent-card resolved reveal reveal-delay-2">
+        <div class="agent-sector">Financial Services</div>
+        <div class="agent-name">Mara</div>
+        <div class="agent-role">Loan Servicer &mdash; Community Bank</div>
+        <div class="agent-scene">Borrower is upset. Missed payment, possible default. Mara opens the guide. <strong>Situation 4 &mdash; Payment Hardship Intake.</strong> Five steps. Exact language. Right escalation path. She handles it in four minutes.</div>
+        <div class="agent-status resolved-status">Guide open. Moment handled.</div>
+      </div>
+
+    </div>
+    <div class="agents-cta reveal">
+      <a href="/aidline.html" class="btn-primary"><span>See How Aidline&#8480; Works</span></a>
+      <a href="#contact" class="btn-secondary">Talk to us about your sector <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+</section>
+
 <section class="demos-section" id="demos">
   <div class="section-inner">
     <div class="demos-eyebrow reveal">Live Demos</div>
