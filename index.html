@@ -26,6 +26,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60
 .nav-logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
 .nav-logo span { color: var(--red); }
 .nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links > li { position: relative; }
 .nav-links a { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
 .nav-links a:hover { color: var(--red); }
 .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 120px 60px 80px; position: relative; overflow: hidden; }
@@ -238,8 +239,8 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 .nav-dropdown > a { display: flex; align-items: center; gap: 4px; }
 .nav-dropdown > a::after { content: ''; display: inline-block; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform 0.2s; }
 .nav-dropdown:hover > a::after { transform: rotate(-135deg) translateY(-2px); }
-.dropdown-menu { display: none; position: absolute; top: calc(100% + 12px); left: 50%; transform: translateX(-50%); background: var(--cream); border: 1px solid var(--cream3); min-width: 220px; padding: 8px 0; z-index: 200; box-shadow: 0 8px 24px rgba(15,14,12,0.10); }
-.nav-dropdown:hover .dropdown-menu { display: block; }
+.dropdown-menu { display: none; position: absolute; top: calc(100% + 2px); left: 50%; transform: translateX(-50%); background: var(--cream); border: 1px solid var(--cream3); min-width: 220px; padding: 8px 0; z-index: 200; box-shadow: 0 8px 24px rgba(15,14,12,0.10); }
+.nav-dropdown:hover .dropdown-menu, .nav-dropdown.open .dropdown-menu { display: block; }
 .dropdown-menu li { list-style: none; }
 .dropdown-menu a { display: flex; align-items: center; justify-content: space-between; padding: 9px 18px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s, background 0.15s; white-space: nowrap; }
 .dropdown-menu a:hover { color: var(--red); background: var(--cream2); }
@@ -457,7 +458,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
         <div class="demo-title">Caseline</div>
         <div class="demo-role">Social Worker &mdash; Case Manager</div>
         <div class="demo-desc">Built for social workers and case managers navigating live client moments. Covers intake, benefit navigation, escalation, and resolution handling in high-stakes real-time situations.</div>
-        <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">00</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
+        <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">$300</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
         <a href="/caseline.html" class="demo-cta">Explore Caseline <span class="demo-cta-arrow">&rarr;</span></a>
       </div>
       <div class="demo-card chart reveal reveal-delay-2" style="cursor:default">
@@ -481,7 +482,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
         <div class="demo-title">Workline</div>
         <div class="demo-role">Employment Specialist &mdash; Workforce Services</div>
         <div class="demo-desc">Built for workforce development specialists navigating live employment and job placement moments. Covers intake, eligibility, referrals, and barrier resolution.</div>
-        <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">00</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
+        <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">$300</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
         <div style="margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;">Coming Soon</div>
       </div>
       <div class="demo-card reveal reveal-delay-2" style="cursor:default">
@@ -489,7 +490,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
         <div class="demo-title">Reentryline</div>
         <div class="demo-role">Reentry Navigator &mdash; Justice Services</div>
         <div class="demo-desc">Built for reentry navigators supporting individuals returning from incarceration. Covers benefit access, housing referrals, ID restoration, and crisis de-escalation in live moments.</div>
-        <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">00</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
+        <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">$300</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
         <div style="margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;">Coming Soon</div>
       </div>
     </div>
@@ -716,6 +717,18 @@ function runSequence(){
   },500);
 }
 setTimeout(runSequence,2500);
+
+// Dropdown click/touch support
+document.querySelectorAll('.nav-dropdown').forEach(function(item) {
+  item.addEventListener('click', function(e) {
+    var isOpen = this.classList.contains('open');
+    document.querySelectorAll('.nav-dropdown').forEach(function(d) { d.classList.remove('open'); });
+    if (!isOpen) { this.classList.add('open'); e.stopPropagation(); }
+  });
+});
+document.addEventListener('click', function() {
+  document.querySelectorAll('.nav-dropdown').forEach(function(d) { d.classList.remove('open'); });
+});
 </script>
 </body>
 </html>
