@@ -79,7 +79,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60
 .demos-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red2); }
 .demos-title { font-family: var(--serif); font-size: clamp(36px,4vw,56px); font-weight: 500; color: var(--cream); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
 .demos-sub { font-size: 15px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; max-width: 560px; margin-bottom: 72px; }
-.demos-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; }
+.demos-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
 .demo-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 36px 30px; position: relative; overflow: hidden; transition: all 0.3s ease; text-decoration: none; display: block; }
 .demo-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; transform: scaleX(0); transform-origin: left; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
 .demo-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); transform: translateY(-3px); }
@@ -357,8 +357,8 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 <section class="demos-section" id="demos">
   <div class="section-inner">
     <div class="demos-eyebrow reveal">Live Demos</div>
-    <h2 class="demos-title reveal">Four guides.<br>Four industries.</h2>
-    <p class="demos-sub reveal">Each demo is fully functional. Click any situation, work through the steps, see exactly what an agent would see on a live call.</p>
+    <h2 class="demos-title reveal">Six guides.<br>Every sector.</h2>
+    <p class="demos-sub reveal">Six guides. Every sector. Each demo is fully functional — click any situation, work through the steps, see exactly what a worker sees in a live high-stakes moment.</p>
     <div class="demos-grid">
       <div class="demo-card aidline-card reveal">
         <div class="demo-tag">Contact Center &middot; All Industries</div>
@@ -368,13 +368,13 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
         <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">$300</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
         <a href="/aidline.html" class="demo-cta">Explore Aidline&#8480; <span class="demo-cta-arrow">&rarr;</span></a>
       </div>
-      <div class="demo-card arc reveal reveal-delay-1" style="cursor:default;opacity:0.6;">
-        <div class="demo-tag">Nonprofit &middot; Government BPO</div>
-        <div class="demo-title">Memberline</div>
-        <div class="demo-role">Member Services Agent &mdash; Tier I Contact Center</div>
-        <div class="demo-desc">Built for nonprofit and government BPO operations. Covers member verification, benefit status, training support, certification lookup, and escalation handling.</div>
-        <div class="demo-stats"><div class="ds-item"><div class="ds-n">20</div><div class="ds-l">Situations</div></div><div class="ds-item"><div class="ds-n">2col</div><div class="ds-l">Step layout</div></div><div class="ds-item"><div class="ds-n">SF</div><div class="ds-l">Salesforce</div></div></div>
-        <div style="margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;">Coming Soon</div>
+      <div class="demo-card arc reveal reveal-delay-1">
+        <div class="demo-tag">Social Services &middot; Case Management</div>
+        <div class="demo-title">Caseline</div>
+        <div class="demo-role">Social Worker &mdash; Case Manager</div>
+        <div class="demo-desc">Built for social workers and case managers navigating live client moments. Covers intake, benefit navigation, escalation, and resolution handling in high-stakes real-time situations.</div>
+        <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">00</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
+        <a href="/caseline.html" class="demo-cta">Explore Caseline <span class="demo-cta-arrow">&rarr;</span></a>
       </div>
       <div class="demo-card chart reveal reveal-delay-2" style="cursor:default">
         <div class="demo-tag">Healthcare &middot; Legal Services</div>
@@ -390,6 +390,22 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
         <div class="demo-role">Customer Service Specialist &mdash; Mortgage Loan Servicing</div>
         <div class="demo-desc">FDCPA-compliant guide for mortgage loan servicing operations. Covers payment inquiries, loss mitigation intake, foreclosure status, escrow, and complaint handling.</div>
         <div class="demo-stats"><div class="ds-item"><div class="ds-n">10</div><div class="ds-l">Situations</div></div><div class="ds-item"><div class="ds-n">14</div><div class="ds-l">Step paths</div></div><div class="ds-item"><div class="ds-n">FDCPA</div><div class="ds-l">Compliant</div></div></div>
+        <div style="margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;">Coming Soon</div>
+      </div>
+      <div class="demo-card reveal reveal-delay-1" style="cursor:default">
+        <div class="demo-tag">Workforce Development</div>
+        <div class="demo-title">Workline</div>
+        <div class="demo-role">Employment Specialist &mdash; Workforce Services</div>
+        <div class="demo-desc">Built for workforce development specialists navigating live employment and job placement moments. Covers intake, eligibility, referrals, and barrier resolution.</div>
+        <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">00</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
+        <div style="margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;">Coming Soon</div>
+      </div>
+      <div class="demo-card reveal reveal-delay-2" style="cursor:default">
+        <div class="demo-tag">Reentry &middot; Justice-Adjacent</div>
+        <div class="demo-title">Reentryline</div>
+        <div class="demo-role">Reentry Navigator &mdash; Justice Services</div>
+        <div class="demo-desc">Built for reentry navigators supporting individuals returning from incarceration. Covers benefit access, housing referrals, ID restoration, and crisis de-escalation in live moments.</div>
+        <div class="demo-stats"><div class="ds-item"><div class="ds-n">5</div><div class="ds-l">Operations</div></div><div class="ds-item"><div class="ds-n">00</div><div class="ds-l">Discovery</div></div><div class="ds-item"><div class="ds-n">2wk</div><div class="ds-l">Delivery</div></div></div>
         <div style="margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;">Coming Soon</div>
       </div>
     </div>
