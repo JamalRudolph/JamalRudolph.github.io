@@ -243,6 +243,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
 <!-- End of HubSpot Embed Code -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div id="cursor"></div>
@@ -439,8 +440,49 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
   <div class="section-eyebrow reveal" style="justify-content:center">Get Started</div>
   <h2 class="contact-title reveal">Ready to see what this<br>looks like for <em>your role?</em></h2>
   <p class="contact-sub reveal">Book the $300 discovery call. We research your operation before we get on the phone. You leave with a scoping document and a written proposal.</p>
-  <a href="mailto:jamal@rudolphcx.com?subject=Discovery Call Request — Aidline" class="btn-gold reveal" style="display:inline-block">Book Discovery Call &mdash; $300</a>
-  <div class="contact-details reveal">
+  <div class="form-wrap reveal" style="max-width:640px;margin:0 auto;">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input class="form-input" id="al-name" type="text" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Organization</label>
+        <input class="form-input" id="al-org" type="text" placeholder="Organization name">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="al-email" type="email" placeholder="Work email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role Type</label>
+        <select class="form-select" id="al-role">
+          <option value="">Select worker role</option>
+          <option>Case Manager</option>
+          <option>Social Worker</option>
+          <option>Benefits Navigator</option>
+          <option>Intake Worker</option>
+          <option>Field Worker</option>
+          <option>Contact Center Agent</option>
+          <option>Financial Services</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">What moments do your workers struggle with?</label>
+      <textarea class="form-textarea" id="al-message" placeholder="Describe the situations where your workers need better support..."></textarea>
+    </div>
+    <button class="form-submit btn-gold" id="aidline-submit" type="button">
+      <span class="submit-label">Book Discovery Call &mdash; $300</span>
+      <span class="submit-loading" style="display:none">Sending&hellip;</span>
+    </button>
+    <div class="form-note" style="margin-top:12px;font-size:12px;opacity:0.7;">We&rsquo;ll respond within one business day to schedule your discovery call.<br>The $300 fee is collected at scheduling and credits to your first invoice if you proceed.</div>
+    <div id="aidline-status" style="margin-top:16px;font-family:var(--mono);font-size:11px;text-align:center;min-height:20px;"></div>
+  </div>
+  <div class="contact-details reveal" style="margin-top:32px;">
     <div class="contact-item">Jamal Rudolph &mdash; Founder, Rudolph CX</div>
     <div class="contact-item"><a href="mailto:jamal@rudolphcx.com">jamal@rudolphcx.com</a></div>
     <div class="contact-item"><a href="tel:9108020961">(910) 802-0961</a></div>
@@ -819,6 +861,95 @@ function runSequence(){
   },500);
 }
 setTimeout(runSequence,2500);
+</script>
+
+<script>
+(function() {
+  if (typeof emailjs === 'undefined') return;
+  emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
+
+  var btn = document.getElementById('aidline-submit');
+  var statusEl = document.getElementById('aidline-status');
+  if (!btn) return;
+
+  btn.addEventListener('click', function() {
+    var nameVal    = (document.getElementById('al-name')    || {}).value || '';
+    var orgVal     = (document.getElementById('al-org')     || {}).value || '';
+    var emailVal   = (document.getElementById('al-email')   || {}).value || '';
+    var roleVal    = (document.getElementById('al-role')    || {}).value || '';
+    var messageVal = (document.getElementById('al-message') || {}).value || '';
+
+    nameVal    = nameVal.trim();
+    orgVal     = orgVal.trim();
+    emailVal   = emailVal.trim();
+    messageVal = messageVal.trim();
+
+    if (!nameVal || !orgVal || !emailVal || !messageVal) {
+      statusEl.style.color = 'var(--red, #b83224)';
+      statusEl.textContent = 'Please fill in all required fields.';
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      statusEl.style.color = 'var(--red, #b83224)';
+      statusEl.textContent = 'Please enter a valid email address.';
+      return;
+    }
+
+    var label   = btn.querySelector('.submit-label');
+    var loading = btn.querySelector('.submit-loading');
+    btn.disabled = true;
+    if (label)   label.style.display   = 'none';
+    if (loading) loading.style.display = 'inline';
+    statusEl.textContent = '';
+
+    // HubSpot Forms API — creates contact record in CRM
+    var hutk = document.cookie.replace(/(?:(?:^|.*;\s*)hubspotutk\s*=\s*([^;]*).*$)|^.*$/, '$1');
+    fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: [
+          { name: 'firstname', value: nameVal },
+          { name: 'email',     value: emailVal },
+          { name: 'company',   value: orgVal }
+        ],
+        context: {
+          hutk:    hutk || undefined,
+          pageUri: 'rudolphcx.com/aidline.html',
+          pageName: 'Aidline — Done-For-You Agent Reference Guides'
+        }
+      })
+    }).catch(function(err) { console.error('HubSpot submit error:', err); });
+
+    // EmailJS — notification to jamal@rudolphcx.com
+    emailjs.send('service_u94nvbm', 'template_875pqb4', {
+      from_name:    nameVal,
+      organization: orgVal,
+      reply_to:     emailVal,
+      role_type:    roleVal || 'Not specified',
+      message:      messageVal,
+      source:       'Aidline discovery form — rudolphcx.com/aidline.html'
+    }).then(function() {
+      statusEl.style.color = 'var(--teal, #1D9E75)';
+      statusEl.textContent = 'Request received. We will be in touch within one business day.';
+      btn.disabled = false;
+      if (label)   label.style.display   = 'inline';
+      if (loading) loading.style.display = 'none';
+      document.getElementById('al-name').value    = '';
+      document.getElementById('al-org').value     = '';
+      document.getElementById('al-email').value   = '';
+      document.getElementById('al-role').selectedIndex = 0;
+      document.getElementById('al-message').value = '';
+    }).catch(function(err) {
+      statusEl.style.color = 'var(--red, #b83224)';
+      statusEl.textContent = 'Something went wrong. Please email jamal@rudolphcx.com directly.';
+      btn.disabled = false;
+      if (label)   label.style.display   = 'inline';
+      if (loading) loading.style.display = 'none';
+      console.error('EmailJS error:', err);
+    });
+  });
+})();
 </script>
 </body>
 </html>
