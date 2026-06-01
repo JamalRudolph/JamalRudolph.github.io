@@ -3,529 +3,1057 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caseline — Performance Support Guides for Social Workers &amp; Case Managers | Rudolph CX</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<title>Caseline — Case Manager Field Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Epilogue:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
-  --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
-  --red: #b83224; --red2: #d94030;
-  --gold: #c49a3c;
-  --teal: #2a6e5a;
-  --serif: 'Cormorant Garamond', Georgia, serif;
-  --mono: 'DM Mono', monospace;
-  --sans: 'DM Sans', system-ui, sans-serif;
-}
-html { scroll-behavior: smooth; }
-body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; cursor: none; }
-.cursor { width: 10px; height: 10px; background: var(--teal); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.6), 0 0 0 2.5px rgba(42,110,90,0.3); }
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--cream2); }
-::-webkit-scrollbar-thumb { background: var(--teal); }
+  :root {
+    --ink: #2c2416;
+    --paper: #f5f0e8;
+    --rust: #c05a2a;
+    --amber: #c8780a;
+    --sage: #5a7a50;
+    --slate: #5a6e8a;
+    --halt: #b83020;
+    --warn: #c8780a;
+    --pass: #5a7a50;
+    --rule: #ddd6c4;
+    --muted: #8a7e6e;
+    --card: #faf7f0;
+    --card-border: #e4dac8;
+    --header-bg: #fffdf8;
+    --header-border: #e8dfc8;
+    --tab-bg: #f0ebe0;
+    --tab-active: #c05a2a;
+    --tab-text: #8a7e6e;
+    --tab-hover: #2c2416;
+    --banner-bg: #fdf4ec;
+    --banner-border: #e8c8a8;
+    --banner-text: #8a3a10;
+    --trigger-bg: #fdf8f2;
+    --trigger-border: #c05a2a;
+  }
 
-/* NAV */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; mix-blend-mode: multiply; }
-.nav-logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; text-decoration: none; display: inline-block; }
-.nav-logo span { color: var(--teal); }
-.nav-links { display: flex; gap: 32px; list-style: none; }
-.nav-links a { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
-.nav-links a:hover { color: var(--teal); }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* HERO */
-.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 140px 60px 80px; position: relative; overflow: hidden; }
-.hero::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.7; }
-.hero-left { position: relative; z-index: 1; }
-.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
-.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--teal); }
-.hero-title { font-family: var(--serif); font-size: clamp(48px,5.5vw,78px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 32px; }
-.hero-title em { font-style: italic; color: var(--teal); }
-.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 480px; margin-bottom: 48px; font-weight: 300; }
-.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-.btn-teal { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; background: var(--teal); color: var(--cream); border: none; cursor: none; text-decoration: none; transition: all 0.2s; position: relative; overflow: hidden; display: inline-block; }
-.btn-teal::after { content: ''; position: absolute; inset: 0; background: var(--ink); transform: translateX(-101%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
-.btn-teal:hover::after { transform: translateX(0); }
-.btn-teal span { position: relative; z-index: 1; }
-.btn-sec { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.15s; }
-.btn-sec:hover { color: var(--teal); }
+  body {
+    font-family: 'Epilogue', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
 
-/* HERO RIGHT — Scenario Cards */
-.hero-right { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 16px; padding: 20px 20px 40px 40px; }
-.scenario-card { background: white; border: 1px solid var(--cream3); padding: 24px 28px; position: relative; opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
-.scenario-card.visible { opacity: 1; transform: none; }
-.scenario-card.active-sc { border-left: 3px solid var(--teal); }
-.sc-tag { font-family: var(--mono); font-size: 7.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
-.sc-situation { font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--ink); line-height: 1.4; margin-bottom: 10px; }
-.sc-outcome { font-size: 12px; color: var(--dim); line-height: 1.6; font-weight: 300; }
-.sc-guide-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--cream3); }
+  /* ── HEADER ── */
+  .guide-header {
+    background: var(--header-bg);
+    color: var(--ink);
+    padding: 2rem 2rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--header-border);
+    box-shadow: 0 2px 12px rgba(180,140,80,0.08);
+  }
 
-/* MARQUEE */
-.marquee-wrap { border-top: 1px solid var(--cream3); border-bottom: 1px solid var(--cream3); padding: 14px 0; overflow: hidden; background: var(--cream2); position: relative; z-index: 1; }
-.marquee-track { display: flex; animation: marquee 32s linear infinite; width: max-content; }
-.marquee-item { display: flex; align-items: center; gap: 28px; padding: 0 28px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
-.marquee-item::after { content: '\00b7'; color: var(--teal); }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .header-top {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
 
-/* SECTIONS */
-.section { padding: 120px 60px; position: relative; }
-.section-inner { max-width: 1200px; margin: 0 auto; }
-.section-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--teal); }
-.section-title { font-family: var(--serif); font-size: clamp(34px,3.8vw,52px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 32px; }
-.section-title em { font-style: italic; color: var(--teal); }
-.split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 64px; }
-.split-text { font-size: 15px; color: var(--ink3); line-height: 1.8; font-weight: 300; }
-.split-text p { margin-bottom: 20px; }
-.split-text strong { color: var(--ink); font-weight: 600; }
+  .guide-wordmark {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
 
-/* Pull quote */
-.pull-quote { border-left: 2px solid var(--teal); padding: 24px 32px; background: white; margin: 40px 0; }
-.pq-text { font-family: var(--serif); font-size: 21px; font-weight: 500; color: var(--ink); line-height: 1.45; font-style: italic; margin-bottom: 12px; }
-.pq-attr { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+  .guide-wordmark span {
+    color: var(--rust);
+  }
 
-/* Feature list */
-.feature-list { list-style: none; }
-.feature-item { display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid var(--cream3); }
-.feature-item:first-child { border-top: 1px solid var(--cream3); }
-.feature-num { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--teal); letter-spacing: 0.1em; flex-shrink: 0; margin-top: 2px; width: 28px; }
-.feature-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
-.feature-desc { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; }
+  .guide-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--header-border);
+    border-radius: 2px;
+  }
 
-/* SITUATIONS SECTION */
-.situations-section { padding: 120px 60px; background: var(--ink); position: relative; overflow: hidden; }
-.situations-section::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(42,110,90,0.15) 0%, transparent 70%); pointer-events: none; }
-.sit-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-.sit-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--teal); }
-.sit-title { font-family: var(--serif); font-size: clamp(32px,3.5vw,48px); font-weight: 500; color: var(--cream); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
-.sit-sub { font-size: 15px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; max-width: 560px; margin-bottom: 64px; }
-.sit-note { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.25); margin-bottom: 32px; }
-.sit-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
-.sit-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 32px 28px; position: relative; transition: all 0.3s ease; }
-.sit-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(42,110,90,0.4); }
-.sit-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--teal); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
-.sit-card:hover::before { transform: scaleX(1); }
-.sit-card-n { font-family: var(--mono); font-size: 9px; font-weight: 600; color: var(--teal); letter-spacing: 0.1em; margin-bottom: 16px; }
-.sit-card-title { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 8px; letter-spacing: -0.01em; line-height: 1.2; }
-.sit-card-desc { font-size: 12px; color: rgba(247,244,238,0.5); line-height: 1.65; font-weight: 300; }
+  .ethical-trigger-banner {
+    margin-top: 1rem;
+    background: var(--banner-bg);
+    color: var(--banner-text);
+    border: 1px solid var(--banner-border);
+    padding: 0.6rem 1rem;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-left: 3px solid var(--rust);
+  }
 
-/* PRICING */
-.pricing-section { padding: 120px 60px; background: var(--cream); border-top: 1px solid var(--cream3); }
-.pricing-block { max-width: 760px; margin: 0 auto; text-align: center; }
-.pb-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal); margin-bottom: 20px; }
-.pb-title { font-family: var(--serif); font-size: clamp(36px,4vw,54px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
-.pb-sub { font-size: 15px; color: var(--ink3); line-height: 1.75; font-weight: 300; max-width: 560px; margin: 0 auto 48px; }
-.pb-discovery { background: white; border: 1px solid var(--cream3); padding: 40px; margin-bottom: 32px; text-align: left; }
-.pb-discovery-tag { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal); margin-bottom: 16px; }
-.pb-discovery-price { font-family: var(--serif); font-size: 48px; font-weight: 600; color: var(--ink); line-height: 1; margin-bottom: 8px; }
-.pb-discovery-note { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; max-width: 480px; }
-.pb-tiers-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-bottom: 20px; }
-.pb-tiers-range { font-family: var(--serif); font-size: 36px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
-.pb-tiers-note { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; margin-bottom: 40px; }
-.pb-cta { display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 40px; background: var(--teal); color: var(--cream); text-decoration: none; transition: background 0.2s; }
-.pb-cta:hover { background: var(--ink); }
+  .ethical-trigger-banner::before {
+    content: "⚑";
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
 
-/* CONTACT */
-.contact-section { padding: 120px 60px; background: var(--cream2); border-top: 1px solid var(--cream3); text-align: center; }
-.contact-title { font-family: var(--serif); font-size: clamp(36px,4.5vw,64px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
-.contact-title em { font-style: italic; color: var(--teal); }
-.contact-sub { font-size: 16px; color: var(--dim); line-height: 1.7; max-width: 500px; margin: 0 auto 48px; font-weight: 300; }
-.form-wrap { max-width: 560px; margin: 0 auto; text-align: left; }
-.form-group { margin-bottom: 20px; }
-.form-label { font-family: var(--mono); font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); display: block; margin-bottom: 8px; }
-.form-input, .form-select, .form-textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--cream3); background: white; font-family: var(--sans); font-size: 14px; color: var(--ink); font-weight: 300; outline: none; transition: border-color 0.15s; appearance: none; }
-.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--teal); }
-.form-textarea { resize: vertical; min-height: 100px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.form-submit { width: 100%; padding: 16px; background: var(--teal); color: var(--cream); font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
-.form-submit:hover { background: var(--ink); }
-.form-note { font-family: var(--mono); font-size: 9px; color: var(--dim); text-align: center; margin-top: 16px; line-height: 1.6; }
+  /* ── NAV TABS ── */
+  .tab-bar {
+    background: var(--tab-bg);
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    border-bottom: 2px solid var(--header-border);
+  }
 
-/* FOOTER */
-footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex; align-items: center; justify-content: space-between; background: var(--cream); flex-wrap: wrap; gap: 12px; }
-.footer-logo { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--ink3); }
-.footer-logo span { color: var(--teal); }
-.footer-back { font-family: var(--mono); font-size: 9px; color: var(--dim); text-decoration: none; letter-spacing: 0.1em; transition: color 0.15s; }
-.footer-back:hover { color: var(--teal); }
-.footer-copy { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; }
+  .tab-bar::-webkit-scrollbar { display: none; }
 
-/* REVEAL */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1); }
-.reveal.visible { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
+  .tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tab-text);
+    padding: 0.65rem 1.1rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+    user-select: none;
+  }
 
-@media (max-width: 900px) {
-  nav { padding: 16px 28px; }
-  .nav-links { gap: 16px; }
-  .hero { grid-template-columns: 1fr; padding: 100px 28px 60px; }
-  .hero-right { display: none; }
-  .split-layout { grid-template-columns: 1fr; gap: 40px; }
-  .sit-grid { grid-template-columns: 1fr; }
-  .section, .situations-section, .pricing-section, .contact-section { padding: 80px 28px; }
-  footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: center; }
-  .form-row { grid-template-columns: 1fr; }
-}
+  .tab:hover { color: var(--tab-hover); }
+  .tab.active { color: var(--tab-active); border-bottom-color: var(--tab-active); font-weight: 500; }
+
+  /* ── LAYOUT ── */
+  .guide-body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* ── SECTION PANEL ── */
+  .section-panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .section-panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── ETHICAL TRIGGER GATE ── */
+  .trigger-gate {
+    background: #1a1208;
+    color: #f5f0e8;
+    border-radius: 6px;
+    padding: 0;
+    margin-bottom: 2rem;
+    border: 3px solid #f0b800;
+    box-shadow: 0 0 0 6px rgba(240,184,0,0.12), 0 4px 24px rgba(0,0,0,0.18);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .trigger-gate-stripe {
+    background: repeating-linear-gradient(
+      -45deg,
+      #f0b800,
+      #f0b800 12px,
+      #1a1208 12px,
+      #1a1208 24px
+    );
+    height: 14px;
+    width: 100%;
+  }
+
+  .trigger-gate-inner {
+    padding: 1.5rem 2rem 1.75rem;
+  }
+
+  .trigger-gate-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #f0b800;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+
+  .trigger-gate h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+    color: #fff8e0;
+  }
+
+  .trigger-checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .trigger-checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .trigger-checklist li::before {
+    content: "□";
+    font-family: 'DM Mono', monospace;
+    color: #f0b800;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+
+  .trigger-gate .halt-line {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(240,184,0,0.25);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: #f0b800;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── SITUATION CARDS ── */
+  .situation-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .situation-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: background 0.15s;
+  }
+
+  .card-header:hover { background: #f0ead8; }
+
+  .card-header.open {
+    border-bottom-color: var(--card-border);
+    background: #f0ead8;
+  }
+
+  .card-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    min-width: 2rem;
+    letter-spacing: 0.05em;
+  }
+
+  .card-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    flex: 1;
+  }
+
+  .card-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .tag-halt { background: #f5ddd8; color: var(--halt); border: 1px solid #e0b0a8; }
+  .tag-warn { background: #f5ecd8; color: var(--warn); border: 1px solid #e0c898; }
+  .tag-legal { background: #dce8dc; color: var(--sage); border: 1px solid #b0c8b0; }
+  .tag-federal { background: #dde0e8; color: var(--slate); border: 1px solid #b0b8c8; }
+
+  .card-chevron {
+    color: var(--muted);
+    font-size: 0.8rem;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .card-header.open .card-chevron { transform: rotate(180deg); }
+
+  .card-body {
+    display: none;
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .card-body.open { display: block; }
+
+  /* ── CARD BODY CONTENT ── */
+  .step-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .step-list li {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    align-items: start;
+  }
+
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    padding-top: 0.2rem;
+  }
+
+  .callout {
+    border-radius: 3px;
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-top: 0.75rem;
+  }
+
+  .callout-halt {
+    background: #fdf0ee;
+    border-left: 3px solid var(--halt);
+    color: #7a2018;
+  }
+
+  .callout-warn {
+    background: #fdf6ee;
+    border-left: 3px solid var(--amber);
+    color: #7a4810;
+  }
+
+  .callout-legal {
+    background: #f0f5f0;
+    border-left: 3px solid var(--sage);
+    color: #2a4228;
+  }
+
+  .callout-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    opacity: 0.7;
+  }
+
+  .source-line {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--card-border);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── REGULATORY NOTICE (vacated/updated) ── */
+  .reg-notice {
+    background: #fff8e8;
+    border: 1px solid #e8d898;
+    border-radius: 3px;
+    padding: 0.65rem 1rem;
+    font-size: 0.83rem;
+    line-height: 1.5;
+    margin-top: 0.75rem;
+    color: #5a4010;
+  }
+
+  .reg-notice strong {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--amber);
+  }
+
+  /* ── SECTION HEADINGS ── */
+  .section-heading {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+    color: var(--ink);
+  }
+
+  .section-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* ── REGULATORY QUICK REF ── */
+  .reg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.83rem;
+  }
+
+  .reg-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 2px solid var(--rule);
+    background: var(--tab-bg);
+  }
+
+  .reg-table td {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  .reg-table tr:hover td { background: #eee8da; }
+
+  .reg-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .status-active { background: #dce8dc; color: var(--sage); }
+  .status-vacated { background: #f5ddd8; color: var(--halt); }
+  .status-updated { background: #f5ecd8; color: var(--warn); }
+
+  /* ── FOOTER ── */
+  .guide-footer {
+    text-align: center;
+    padding: 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    border-top: 1px solid var(--rule);
+    margin-top: 3rem;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .guide-header { padding: 1.25rem; }
+    .guide-body { padding: 1.25rem; }
+    .tab-bar { padding: 0 1rem; }
+    .card-header { padding: 0.85rem 1rem; }
+    .card-body { padding: 1rem 1.25rem 1.25rem; }
+  }
 </style>
-<!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
-<!-- End of HubSpot Embed Code -->
 </head>
 <body>
-<div class="cursor" id="cursor"></div>
 
-<nav>
-  <a href="/" class="nav-logo">Rudolph<span>CX</span></a>
-  <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/aidline.html">Aidline&#8480;</a></li>
-    <li><a href="#situations">Situations</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#contact">Book Discovery</a></li>
-  </ul>
+<header class="guide-header">
+  <div class="header-top">
+    <div class="guide-wordmark">Case<span>line</span>&#8480;</div>
+    <div class="guide-subtitle">Case Manager Field Guide · v1.0</div>
+  </div>
+  <div class="ethical-trigger-banner">
+    ETHICAL TRIGGER CHECK FIRST — Before any situation plays out, ask: does this moment require a mandatory report? That question always comes first.
+  </div>
+</header>
+
+<nav class="tab-bar">
+  <div class="tab active" onclick="showTab('trigger')">Trigger Check</div>
+  <div class="tab" onclick="showTab('situations')">14 Situations</div>
+  <div class="tab" onclick="showTab('regs')">Regulatory Ref</div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow reveal">Social Work &amp; Case Management</div>
-    <h1 class="hero-title reveal reveal-delay-1">
-      Built for the<br>
-      moment the<br>
-      case is <em>live.</em>
-    </h1>
-    <p class="hero-sub reveal reveal-delay-2">
-      Caseline&#8480; is a custom-built reference guide for social workers, case managers, and benefits navigators who face live, high-stakes moments with clients in need — and need the right move right now.
-    </p>
-    <div class="hero-actions reveal reveal-delay-3">
-      <a href="#contact" class="btn-teal"><span>Book Discovery Call &mdash; $300</span></a>
-      <a href="#situations" class="btn-sec">See What It Covers
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
-  </div>
-  <div class="hero-right">
-    <div class="scenario-card active-sc" id="sc1">
-      <div class="sc-tag">Caseline&#8480; &mdash; Live Situation</div>
-      <div class="sc-situation">&ldquo;Client is escalating. They&rsquo;re threatening to leave before the intake is complete. I don&rsquo;t know the de-escalation protocol off the top of my head.&rdquo;</div>
-      <div class="sc-outcome">The guide surfaces the de-escalation pathway in two taps. The worker stays calm. The client stays in the room.</div>
-      <div class="sc-guide-label">&#10003; Handled &mdash; Caseline found the right move</div>
-    </div>
-    <div class="scenario-card" id="sc2">
-      <div class="sc-tag">Caseline&#8480; &mdash; Live Situation</div>
-      <div class="sc-situation">&ldquo;Client discloses something I wasn&rsquo;t expecting. I need to know my mandatory reporting obligations right now, not tomorrow.&rdquo;</div>
-      <div class="sc-outcome">The guide surfaces the reporting threshold, the language, and the next step. The worker acts correctly. The client is protected.</div>
-      <div class="sc-guide-label">&#10003; Handled &mdash; Caseline found the right move</div>
-    </div>
-    <div class="scenario-card" id="sc3">
-      <div class="sc-tag">Caseline&#8480; &mdash; Live Situation</div>
-      <div class="sc-situation">&ldquo;Client doesn&rsquo;t qualify for the benefit they came in for. I need to know what I can offer them instead without making a promise I can&rsquo;t keep.&rdquo;</div>
-      <div class="sc-outcome">The guide surfaces the alternative pathways and the exact language. The worker redirects with confidence. The client leaves with a next step.</div>
-      <div class="sc-guide-label">&#10003; Handled &mdash; Caseline found the right move</div>
-    </div>
-  </div>
-</section>
+<main class="guide-body">
 
-<!-- MARQUEE -->
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <div class="marquee-item">Crisis Intervention</div><div class="marquee-item">Mandatory Reporting</div><div class="marquee-item">Benefits Navigation</div><div class="marquee-item">Client De-escalation</div><div class="marquee-item">Intake Protocols</div><div class="marquee-item">Referral Pathways</div><div class="marquee-item">Safety Assessment</div><div class="marquee-item">Documentation Standards</div><div class="marquee-item">Trauma-Informed Response</div><div class="marquee-item">Live Case Support</div><div class="marquee-item">Crisis Intervention</div><div class="marquee-item">Mandatory Reporting</div><div class="marquee-item">Benefits Navigation</div><div class="marquee-item">Client De-escalation</div><div class="marquee-item">Intake Protocols</div><div class="marquee-item">Referral Pathways</div><div class="marquee-item">Safety Assessment</div><div class="marquee-item">Documentation Standards</div><div class="marquee-item">Trauma-Informed Response</div><div class="marquee-item">Live Case Support</div>
-  </div>
-</div>
-
-<!-- PROBLEM -->
-<section class="section" id="what">
-  <div class="section-inner">
-    <div class="section-eyebrow reveal">The Problem</div>
-    <h2 class="section-title reveal">Social workers are trained for the case.<br>Not for the <em>moment inside it.</em></h2>
-    <div class="split-layout">
-      <div class="split-text reveal">
-        <p>Organizations invest in training, supervision, and policy manuals. Workers complete them, pass their certifications, and go into the field.</p>
-        <p>Then the moments start. A client escalates faster than expected. A disclosure requires a mandatory report and the worker isn&rsquo;t certain of the threshold. A benefit denial needs to be delivered with a redirect the worker can&rsquo;t fully remember.</p>
-        <p><strong>This is not a training failure. Training prepared the worker for the concept. It didn&rsquo;t prepare them for this specific moment, with this specific person, right now.</strong></p>
-        <p>Caseline&#8480; is built for that gap. Not a manual. Not an app. A guide that lives inside the moment &mdash; structured, specific, and ready the day the case is live.</p>
+  <!-- ══ TAB 1: ETHICAL TRIGGER GATE ══ -->
+  <section class="section-panel active" id="tab-trigger">
+    <div class="trigger-gate">
+      <div class="trigger-gate-stripe"></div>
+      <div class="trigger-gate-inner">
+      <div class="trigger-gate-label">⚠ Mandatory Pre-Check · Every Interaction — Do Not Proceed Without Completing This</div>
+      <h2>Does this moment require a mandatory report?</h2>
+      <ul class="trigger-checklist">
+        <li>Did the client disclose abuse, neglect, or exploitation of a child, elder, or dependent adult?</li>
+        <li>Is there credible risk of imminent harm to self or others?</li>
+        <li>Did you observe indicators of human trafficking? (TVPA)</li>
+        <li>Did the client disclose information that triggers your jurisdiction's mandated reporter statute?</li>
+        <li>Does CAPTA apply to this population and this disclosure?</li>
+        <li>Is Elder Justice Act APS reporting triggered? (Final Rule, June 7, 2024)</li>
+      </ul>
+      <div class="halt-line">⚑ IF ANY BOX APPLIES → REPORT OBLIGATION IS NOT DISCRETIONARY. Proceed to your agency's mandatory reporting protocol before continuing the session. Documentation must reflect the disclosure and your action.</div>
       </div>
-      <div class="split-text reveal">
-        <div class="pull-quote">
-          <div class="pq-text">&ldquo;The moment doesn&rsquo;t wait for you to review your training materials or ask your supervisor for advice.&rdquo;</div>
-          <div class="pq-attr">Crisis Intervention in Social Work &mdash; Casebook.net, 2026</div>
+      <div class="trigger-gate-stripe"></div>
+    </div>
+
+    <h2 class="section-heading">How to use this guide</h2>
+    <div class="section-meta">Built from 4-dive primary source research · 14 confirmed situations · Rudolph CX LLC</div>
+
+    <div class="situation-grid">
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">01</span>
+          <span class="card-title">Before every client session</span>
+          <span class="card-tag tag-halt">Always First</span>
+          <span class="card-chevron">▼</span>
         </div>
-        <ul class="feature-list">
-          <li class="feature-item">
-            <div class="feature-num">01</div>
-            <div><div class="feature-title">Built from your policies and protocols</div><div class="feature-desc">Every situation in Caseline is built from your organization&rsquo;s actual source material &mdash; not generic best practices.</div></div>
-          </li>
-          <li class="feature-item">
-            <div class="feature-num">02</div>
-            <div><div class="feature-title">Role-specific to your workers</div><div class="feature-desc">Case managers, intake workers, and field staff face different moments. Caseline is built for the specific role you need.</div></div>
-          </li>
-          <li class="feature-item">
-            <div class="feature-num">03</div>
-            <div><div class="feature-title">Ready on the day the case is live</div><div class="feature-desc">Delivered as a single HTML file. No login. No app. No friction. Open it when the moment arrives.</div></div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SITUATIONS -->
-<section class="situations-section" id="situations">
-  <div class="section-inner">
-    <div class="sit-eyebrow">What Caseline Covers</div>
-    <h2 class="sit-title">The situations your workers face every day.</h2>
-    <p class="sit-sub">Each Caseline guide is custom-built for your organization&rsquo;s specific situations, protocols, and population. These are illustrative examples of what a Caseline guide can cover.</p>
-    <div class="sit-note">Illustrative situations &mdash; your Caseline is built from your source material</div>
-    <div class="sit-grid">
-      <div class="sit-card">
-        <div class="sit-card-n">01</div>
-        <div class="sit-card-title">Client Crisis &amp; De-escalation</div>
-        <div class="sit-card-desc">Step-by-step de-escalation pathway for clients in acute distress. What to say, what not to say, when to involve a supervisor, when to call 911.</div>
-      </div>
-      <div class="sit-card">
-        <div class="sit-card-n">02</div>
-        <div class="sit-card-title">Mandatory Reporting Threshold</div>
-        <div class="sit-card-desc">Reporting obligations surfaced in real time. Threshold criteria, required language, documentation steps, and who to notify first.</div>
-      </div>
-      <div class="sit-card">
-        <div class="sit-card-n">03</div>
-        <div class="sit-card-title">Benefit Denial &amp; Redirect</div>
-        <div class="sit-card-desc">What to say when a client doesn&rsquo;t qualify. Alternative pathways, referral language, and how to close the conversation with a next step.</div>
-      </div>
-      <div class="sit-card">
-        <div class="sit-card-n">04</div>
-        <div class="sit-card-title">Intake with Resistant Client</div>
-        <div class="sit-card-desc">Protocols for completing intake when a client is unwilling, guarded, or combative. What questions to prioritize, what to defer, how to proceed.</div>
-      </div>
-      <div class="sit-card">
-        <div class="sit-card-n">05</div>
-        <div class="sit-card-title">Unexpected Disclosure</div>
-        <div class="sit-card-desc">When a client discloses something outside the scope of the current case. How to respond, what to document, whether to open a new case.</div>
-      </div>
-      <div class="sit-card">
-        <div class="sit-card-n">06</div>
-        <div class="sit-card-title">Safety Assessment</div>
-        <div class="sit-card-desc">Live safety assessment framework for domestic situations, child welfare concerns, or imminent risk. Structured questions. Clear escalation thresholds.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="pricing-section" id="pricing">
-  <div class="section-inner">
-    <div class="pricing-block">
-      <div class="pb-eyebrow reveal">Pricing</div>
-      <h2 class="pb-title reveal">One process. One contract.<br>Built for your organization.</h2>
-      <p class="pb-sub reveal">Caseline follows the same proven build process as every Rudolph CX guide. It starts with a discovery call.</p>
-
-      <div class="pb-discovery reveal">
-        <div class="pb-discovery-tag">Discovery Call</div>
-        <div class="pb-discovery-price">$300</div>
-        <div class="pb-discovery-note">Non-refundable. Credits in full to your first invoice if you proceed. The discovery call is where we understand your organization, your workers, and the moments they face &mdash; so we can recommend the right build scope before you commit to anything.</div>
-      </div>
-
-      <div class="reveal">
-        <div class="pb-tiers-label">Build Tiers</div>
-        <div class="pb-tiers-range">$2,500 &mdash; $8,000+</div>
-        <div class="pb-tiers-note">Four tiers based on role complexity, number of situations, and scope. Your discovery call determines the right tier. 50% deposit before work begins. 50% on delivery.</div>
-        <a href="#contact" class="pb-cta">Book Discovery Call &mdash; $300</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="contact-section" id="contact">
-  <div class="section-inner">
-    <h2 class="contact-title reveal">Ready to build a guide for<br>your <em>workers?</em></h2>
-    <p class="contact-sub reveal">Tell us about your organization and the moments your workers face. We&rsquo;ll take it from there.</p>
-    <div class="form-wrap reveal">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Your Name</label>
-          <input class="form-input" id="cl-name" type="text" placeholder="Full name">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Organization</label>
-          <input class="form-input" id="cl-org" type="text" placeholder="Organization name">
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Run the Mandatory Reporting check above. Fully. Every time.</span></li>
+            <li><span class="step-num">2.</span><span>Confirm client identity and current supervision status (if applicable to population).</span></li>
+            <li><span class="step-num">3.</span><span>Review any open action items from prior session before adding new ones.</span></li>
+            <li><span class="step-num">4.</span><span>Note any disclosures that may have changed the client's legal overlay (new arrest, custody change, benefit termination).</span></li>
+          </ol>
+          <div class="callout callout-halt">
+            <div class="callout-label">Hard Stop</div>
+            You are not required to complete a session before filing a mandatory report. The report obligation fires on disclosure — not on session completion.
+          </div>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input class="form-input" id="cl-email" type="email" placeholder="Work email">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Role Type</label>
-          <select class="form-select" id="cl-role">
-            <option value="">Select worker role</option>
-            <option>Case Manager</option>
-            <option>Social Worker</option>
-            <option>Benefits Navigator</option>
-            <option>Intake Worker</option>
-            <option>Field Worker</option>
-            <option>Other</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">What moments do your workers struggle with?</label>
-        <textarea class="form-textarea" id="cl-message" placeholder="Describe the situations where your workers need better support..."></textarea>
-      </div>
-      <button class="form-submit" id="caseline-submit" type="button">
-        <span class="submit-label">Book Discovery Call &mdash; $300</span>
-        <span class="submit-loading" style="display:none">Sending&hellip;</span>
-      </button>
-      <div class="form-note">We&rsquo;ll respond within one business day to schedule your discovery call.<br>The $300 fee is collected at scheduling and credits to your first invoice if you proceed.</div>
-      <div id="caseline-status" style="margin-top:16px;font-family:var(--mono);font-size:11px;text-align:center;min-height:20px;"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<footer>
-  <div class="footer-logo">Rudolph<span>CX</span></div>
-  <a href="/" class="footer-back">&larr; Back to rudolphcx.com</a>
-  <div class="footer-copy">&#169; 2026 Rudolph CX LLC &middot; Caseline&#8480; &middot; Durham, NC</div>
+  <!-- ══ TAB 2: 14 SITUATIONS ══ -->
+  <section class="section-panel" id="tab-situations">
+    <h2 class="section-heading">14 Confirmed Situations</h2>
+    <div class="section-meta">Sourced from 4-dive primary research record · Session 99 · Rudolph CX LLC</div>
+
+    <div class="situation-grid">
+
+      <!-- S01 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-01</span>
+          <span class="card-title">Mandatory Reporting Trigger</span>
+          <span class="card-tag tag-halt">Hard Stop</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Stop the session immediately upon disclosure or observation that triggers your mandated reporter obligation.</span></li>
+            <li><span class="step-num">2.</span><span>Identify which statute applies: CAPTA (child), Elder Justice Act APS Final Rule June 7 2024 (elder/adult), TVPA (trafficking).</span></li>
+            <li><span class="step-num">3.</span><span>File report per your jurisdiction's protocol within the required timeframe. Do not defer to end of session.</span></li>
+            <li><span class="step-num">4.</span><span>Document the disclosure verbatim in the case record. Do not paraphrase client language.</span></li>
+            <li><span class="step-num">5.</span><span>Notify supervisor per agency policy. Mandatory reporting is not a supervisory decision — it is your individual obligation.</span></li>
+          </ol>
+          <div class="callout callout-halt">
+            <div class="callout-label">CAPTA / Elder Justice Act</div>
+            Mandatory reporting is not discretionary. Client consent is not required. Confidentiality does not override the report obligation.
+          </div>
+          <div class="source-line">Source: CAPTA 42 U.S.C. § 5101 · Elder Justice Act APS Final Rule (June 7, 2024) · TVPA (FBI documented indicators)</div>
+        </div>
+      </div>
+
+      <!-- S02 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-02</span>
+          <span class="card-title">HIPAA Disclosure Decision</span>
+          <span class="card-tag tag-federal">HIPAA</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Identify who is requesting the disclosure and under what authority.</span></li>
+            <li><span class="step-num">2.</span><span>Confirm whether a signed authorization exists. If yes — verify it is current, complete, and covers this specific disclosure.</span></li>
+            <li><span class="step-num">3.</span><span>Apply Minimum Necessary standard: disclose only what the purpose requires. (45 CFR § 164.514(d))</span></li>
+            <li><span class="step-num">4.</span><span>If subpoena: attorney subpoena alone is insufficient. Court order or client authorization required for PHI. (45 CFR § 164.512(e))</span></li>
+            <li><span class="step-num">5.</span><span>Document the disclosure: date, recipient, purpose, what was shared, authorization basis.</span></li>
+          </ol>
+          <div class="callout callout-warn">
+            <div class="callout-label">Information Blocking</div>
+            Withholding records a client has a right to access is a violation of the 21st Century Cures Act (45 CFR Part 171), enforceable since April 2021. Denying access requires a documented exception — not a supervisor preference.
+          </div>
+          <div class="callout callout-legal">
+            <div class="callout-label">Right of Access Deadline</div>
+            30-day hard deadline to provide records. One 30-day extension permitted with written notice. OCR enforcement active — $112,500 penalty (Concentra, Dec 2025).
+          </div>
+          <div class="source-line">Source: HIPAA 45 CFR Parts 160/164 · Right of Access 45 CFR § 164.524 · 21st Century Cures Act 45 CFR Part 171</div>
+        </div>
+      </div>
+
+      <!-- S03 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-03</span>
+          <span class="card-title">SNAP / TANF Eligibility Determination</span>
+          <span class="card-tag tag-federal">Federal Benefits</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Confirm household composition and income against current federal poverty level.</span></li>
+            <li><span class="step-num">2.</span><span>For SNAP: check for drug felony conviction. Ban is state-by-state — never assume. Verify your state's current policy.</span></li>
+            <li><span class="step-num">3.</span><span>For TANF: confirm work participation requirements and exemptions applicable to this client.</span></li>
+            <li><span class="step-num">4.</span><span>Document all verification documents collected and submitted.</span></li>
+            <li><span class="step-num">5.</span><span>Inform client of appeal rights and timeline if application is denied or benefits are reduced.</span></li>
+          </ol>
+          <div class="callout callout-warn">
+            <div class="callout-label">Drug Felony Ban — State Variation</div>
+            SNAP drug felony restriction is state-by-state under PRWORA 1996. Some states have fully lifted it. Never assume eligibility or ineligibility without checking your state's current policy.
+          </div>
+          <div class="source-line">Source: SNAP/TANF/Medicaid federal standards · PRWORA 1996</div>
+        </div>
+      </div>
+
+      <!-- S04 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-04</span>
+          <span class="card-title">Medicaid Enrollment / Referral</span>
+          <span class="card-tag tag-federal">Medicaid</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Confirm citizenship/immigration status — determines eligibility pathway.</span></li>
+            <li><span class="step-num">2.</span><span>For justice-involved individuals: as of January 1, 2026, Medicaid must be suspended — not terminated — upon incarceration. No new application required upon release. (Consolidated Appropriations Act 2024)</span></li>
+            <li><span class="step-num">3.</span><span>Connect client to enrollment assistance. Do not leave enrollment incomplete at session end.</span></li>
+            <li><span class="step-num">4.</span><span>Document referral and next steps in case record.</span></li>
+          </ol>
+          <div class="callout callout-legal">
+            <div class="callout-label">Reentry — Medicaid Suspension (Jan 1, 2026)</div>
+            Justice-involved clients released after Jan 1, 2026 do not need to reapply for Medicaid. Benefits were suspended, not terminated. Bring release papers — reinstatement is the process.
+          </div>
+          <div class="source-line">Source: SNAP/TANF/Medicaid · Consolidated Appropriations Act 2024</div>
+        </div>
+      </div>
+
+      <!-- S05 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-05</span>
+          <span class="card-title">ADA Accommodation Request</span>
+          <span class="card-tag tag-legal">ADA Title II</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Client does not need to use the word "disability" or cite the ADA to trigger the accommodation obligation.</span></li>
+            <li><span class="step-num">2.</span><span>Engage in the interactive process — ask what the client needs, not whether they qualify.</span></li>
+            <li><span class="step-num">3.</span><span>Document the request, the interactive process, and the accommodation provided or reason for denial.</span></li>
+            <li><span class="step-num">4.</span><span>Do not require medical documentation as a precondition for engaging the interactive process.</span></li>
+          </ol>
+          <div class="callout callout-warn">
+            <div class="callout-label">WCAG 2.1 AA — Deadline April 24, 2026</div>
+            ADA Title II now requires WCAG 2.1 AA compliance for digital services used in government-adjacent settings. Non-compliance: $55,000–$150,000 in fines.
+          </div>
+          <div class="source-line">Source: ADA Title II · 29 CFR Part 1630</div>
+        </div>
+      </div>
+
+      <!-- S06 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-06</span>
+          <span class="card-title">Mental Health Crisis — Suicidal Ideation</span>
+          <span class="card-tag tag-halt">Crisis Protocol</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Use the Columbia Suicide Severity Rating Scale (C-SSRS) — the SAMHSA-validated instrument for this population.</span></li>
+            <li><span class="step-num">2.</span><span>Ask directly: "Are you thinking about suicide?" Direct language does not increase risk.</span></li>
+            <li><span class="step-num">3.</span><span>Assess ideation, plan, means, intent, and timeline using C-SSRS framework.</span></li>
+            <li><span class="step-num">4.</span><span>If imminent risk: do not leave client alone. Contact crisis services. Document the assessment and your response.</span></li>
+            <li><span class="step-num">5.</span><span>Warm handoff — do not provide a number and end the session. Stay with the client through the transfer.</span></li>
+          </ol>
+          <div class="callout callout-halt">
+            <div class="callout-label">SAMHSA TIC — Trauma-Informed Lens</div>
+            Apply Trauma-Informed Care principles throughout crisis intervention. Power dynamics in the helping relationship affect disclosure. A client who feels controlled will not disclose accurately.
+          </div>
+          <div class="source-line">Source: C-SSRS Columbia/SAMHSA · SAMHSA TIC Six Principles (SMA14-4884)</div>
+        </div>
+      </div>
+
+      <!-- S07 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-07</span>
+          <span class="card-title">Substance Use Disclosure — 42 CFR Part 2</span>
+          <span class="card-tag tag-halt">SUD Confidentiality</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>SUD treatment records are subject to 42 CFR Part 2 — stricter than HIPAA. General HIPAA authorization is not sufficient.</span></li>
+            <li><span class="step-num">2.</span><span>Disclosure requires a Part 2-specific written consent that names the recipient, the information to be shared, and the purpose.</span></li>
+            <li><span class="step-num">3.</span><span>Confirm whether your program is a Part 2-covered entity before applying these rules.</span></li>
+            <li><span class="step-num">4.</span><span>Document the consent form received and the scope of disclosure authorized.</span></li>
+          </ol>
+          <div class="callout callout-halt">
+            <div class="callout-label">42 CFR Part 2 — Enforcement Active Feb 16, 2026</div>
+            Updated enforcement posture is now active. Do not apply pre-2026 Part 2 guidance. Confirm your agency's compliance posture reflects the current enforcement standard.
+          </div>
+          <div class="source-line">Source: 42 CFR Part 2 SUD records · Enforcement effective February 16, 2026</div>
+        </div>
+      </div>
+
+      <!-- S08 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-08</span>
+          <span class="card-title">Housing Instability Referral</span>
+          <span class="card-tag tag-legal">HUD Housing First</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Assess housing status: housed / at-risk / literally homeless / fleeing DV.</span></li>
+            <li><span class="step-num">2.</span><span>Housing First principle: housing access is not contingent on sobriety, compliance, or treatment participation. (HUD CoC NOFO FY2024-2025)</span></li>
+            <li><span class="step-num">3.</span><span>For formerly incarcerated clients: HUD One-Strike proposed rule was withdrawn in 2025. Many formerly incarcerated individuals CAN be eligible for subsidized housing — do not assume ineligibility.</span></li>
+            <li><span class="step-num">4.</span><span>For DV survivors: VAWA protections apply to housing. (24 CFR Part 5 Subpart L)</span></li>
+            <li><span class="step-num">5.</span><span>Document referral, availability, and client's response.</span></li>
+          </ol>
+          <div class="callout callout-legal">
+            <div class="callout-label">HUD One-Strike — Withdrawn 2025</div>
+            The proposed rule restricting housing access for formerly incarcerated individuals was withdrawn. Do not apply it. Many formerly incarcerated individuals are eligible for subsidized housing.
+          </div>
+          <div class="source-line">Source: HUD Housing First CoC NOFO FY2024-2025 · VAWA 24 CFR Part 5 Subpart L</div>
+        </div>
+      </div>
+
+      <!-- S09 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-09</span>
+          <span class="card-title">Elder Abuse / APS Reporting</span>
+          <span class="card-tag tag-halt">Mandatory Report</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Identify indicator type: physical abuse, financial exploitation, neglect, self-neglect, emotional abuse.</span></li>
+            <li><span class="step-num">2.</span><span>Elder Justice Act APS Final Rule (June 7, 2024) — current governing standard. Apply it, not prior guidance.</span></li>
+            <li><span class="step-num">3.</span><span>File APS report per your state's process. Do not delay pending confirmation — report on reasonable suspicion.</span></li>
+            <li><span class="step-num">4.</span><span>OAA Title III services may be applicable for follow-up support. (OAA Title III)</span></li>
+            <li><span class="step-num">5.</span><span>Document: observed indicators, client statement, your assessment, report filed, date and time.</span></li>
+          </ol>
+          <div class="callout callout-halt">
+            <div class="callout-label">Elder Justice Act — Final Rule June 7, 2024</div>
+            This is the governing APS standard. Report on reasonable suspicion — you are not an investigator. Investigation is APS's role, not yours.
+          </div>
+          <div class="source-line">Source: Elder Justice Act APS Final Rule (June 7, 2024) · OAA Title III</div>
+        </div>
+      </div>
+
+      <!-- S10 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-10</span>
+          <span class="card-title">Trauma-Informed De-escalation</span>
+          <span class="card-tag tag-warn">High Stakes</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Recognize the trigger: agitation, withdrawal, dissociation, or escalating affect may be trauma responses — not defiance.</span></li>
+            <li><span class="step-num">2.</span><span>Lower your voice. Increase space. Reduce environmental stimuli if possible.</span></li>
+            <li><span class="step-num">3.</span><span>Name what you observe without labeling: "I notice you seem frustrated" not "You're being difficult."</span></li>
+            <li><span class="step-num">4.</span><span>Offer the client control: "Would you like to take a break?" "Can we slow down?"</span></li>
+            <li><span class="step-num">5.</span><span>If the situation does not de-escalate: pause the session. Safety of client and worker is the priority.</span></li>
+          </ol>
+          <div class="callout callout-legal">
+            <div class="callout-label">SAMHSA TIC — Six Principles</div>
+            Trauma-informed practice is not a technique — it is a lens. Safety, trustworthiness, peer support, collaboration, empowerment, and cultural sensitivity apply throughout every interaction. (SMA14-4884)
+          </div>
+          <div class="source-line">Source: SAMHSA TIC Six Principles (SMA14-4884) · NASW Code of Ethics (2021)</div>
+        </div>
+      </div>
+
+      <!-- S11 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-11</span>
+          <span class="card-title">Child Welfare / Foster Care</span>
+          <span class="card-tag tag-halt">ICWA / Title IV-E</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>At first contact: determine whether the child is or may be an Indian child as defined by ICWA. Ask — do not assume.</span></li>
+            <li><span class="step-num">2.</span><span>If ICWA applies: tribal notification is required. Different placement preferences and standards apply. ICWA governs over state child welfare standards in applicable cases. (25 CFR Part 23)</span></li>
+            <li><span class="step-num">3.</span><span>For foster care placement: confirm Title IV-E eligibility and licensing compliance. (45 CFR § 1356.21)</span></li>
+            <li><span class="step-num">4.</span><span>Document all ICWA inquiry and findings. Absence of documentation = absence of inquiry in litigation.</span></li>
+          </ol>
+          <div class="callout callout-halt">
+            <div class="callout-label">ICWA — Federal Law Supersedes State</div>
+            ICWA is federal law. In applicable cases it supersedes state child welfare standards. Tribal notification is not optional. Non-compliance voids placement proceedings.
+          </div>
+          <div class="source-line">Source: ICWA 25 CFR Part 23 · Title IV-E 45 CFR § 1356.21 · CAPTA 42 U.S.C. § 5101</div>
+        </div>
+      </div>
+
+      <!-- S12 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-12</span>
+          <span class="card-title">Reentry — Justice-Involved Client</span>
+          <span class="card-tag tag-legal">Second Chance Act</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Confirm supervision status: probation, parole, or unsupervised release. This determines what the client can and cannot do.</span></li>
+            <li><span class="step-num">2.</span><span>SSI: if released within 12 months of suspension — bring release papers to SSA office, no new application required. Over 12 months — new application. (42 U.S.C. § 1382(e)(1))</span></li>
+            <li><span class="step-num">3.</span><span>Medicaid: suspended not terminated as of Jan 1, 2026. Reinstatement process, not reapplication. (Consolidated Appropriations Act 2024)</span></li>
+            <li><span class="step-num">4.</span><span>SNAP drug felony: check your state. Many states have lifted the ban.</span></li>
+            <li><span class="step-num">5.</span><span>Employment background check: Fair Chance Act prohibits asking about criminal history before conditional offer for federal contractors. (P.L. 116-92, effective Dec 2021)</span></li>
+          </ol>
+          <div class="callout callout-legal">
+            <div class="callout-label">Second Chance Act — 2024 Reauthorization</div>
+            Second Chance Act reauthorized — passed Senate December 2024. Federal reentry funding and programming support remains active.
+          </div>
+          <div class="source-line">Source: Second Chance Act P.L. 110-199 · Fair Chance Act P.L. 116-92 · SSI 42 U.S.C. § 1382(e)(1) · Consolidated Appropriations Act 2024</div>
+        </div>
+      </div>
+
+      <!-- S13 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-13</span>
+          <span class="card-title">Housing / Homelessness — HUD CoC</span>
+          <span class="card-tag tag-legal">Housing First</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Assess literal homelessness vs. at-risk: distinction affects which HUD CoC programs apply.</span></li>
+            <li><span class="step-num">2.</span><span>Housing First standard: sobriety, compliance, or treatment participation cannot be a precondition for housing access under CoC funding. (HUD CoC NOFO FY2024-2025)</span></li>
+            <li><span class="step-num">3.</span><span>For DV survivors: VAWA housing protections apply — emergency transfers, lease bifurcation, and prohibition on eviction based on DV-related criminal activity. (24 CFR Part 5 Subpart L)</span></li>
+            <li><span class="step-num">4.</span><span>SSI/SSDI SOAR model: if client appears to meet disability criteria, initiate SOAR-assisted application. (SAMHSA documented)</span></li>
+          </ol>
+          <div class="callout callout-legal">
+            <div class="callout-label">VAWA — Housing Protections</div>
+            VAWA protects DV, sexual assault, dating violence, and stalking survivors in federally-assisted housing. Survivors cannot be evicted solely because of DV-related criminal activity by their abuser.
+          </div>
+          <div class="source-line">Source: HUD Housing First CoC NOFO FY2024-2025 · VAWA 24 CFR Part 5 Subpart L · SSI/SSDI SOAR (SAMHSA)</div>
+        </div>
+      </div>
+
+      <!-- S14 -->
+      <div class="situation-card">
+        <div class="card-header" onclick="toggleCard(this)">
+          <span class="card-num">S-14</span>
+          <span class="card-title">Older Adult — OAA / APS Services</span>
+          <span class="card-tag tag-legal">OAA Title III</span>
+          <span class="card-chevron">▼</span>
+        </div>
+        <div class="card-body">
+          <ol class="step-list">
+            <li><span class="step-num">1.</span><span>Confirm age eligibility for OAA Title III programs: generally 60+ (60+ for most; 55+ for some programs).</span></li>
+            <li><span class="step-num">2.</span><span>Screen for: nutrition needs, caregiver stress, transportation, legal assistance, and health promotion eligibility under OAA.</span></li>
+            <li><span class="step-num">3.</span><span>If APS is already involved: coordinate, do not duplicate. Get a release and confirm the APS case worker's current assessment.</span></li>
+            <li><span class="step-num">4.</span><span>For mental health needs: MHPAEA Final Rule effective November 22, 2024 — mental health and SUD benefits must be covered at parity with medical/surgical benefits. (Sept 9, 2024 Final Rule)</span></li>
+            <li><span class="step-num">5.</span><span>Document: services offered, accepted, declined, and rationale in all cases.</span></li>
+          </ol>
+          <div class="callout callout-legal">
+            <div class="callout-label">MHPAEA — Parity Final Rule (Nov 22, 2024)</div>
+            Mental health and SUD benefits must be covered at parity with medical/surgical benefits. If a client is being denied mental health coverage their medical plan would cover for a comparable condition — this is a MHPAEA violation.
+          </div>
+          <div class="source-line">Source: OAA Title III · Elder Justice Act APS Final Rule (June 7, 2024) · MHPAEA Final Rule (effective Nov 22, 2024)</div>
+        </div>
+      </div>
+
+    </div><!-- /situation-grid -->
+  </section>
+
+  <!-- ══ TAB 3: REGULATORY REF ══ -->
+  <section class="section-panel" id="tab-regs">
+    <h2 class="section-heading">Regulatory Quick Reference</h2>
+    <div class="section-meta">All sources verified from primary research record · Session 99 · Flags incorporated per Ray + Nova review</div>
+
+    <div class="reg-notice">
+      <strong>⚑ Active Flags — Read Before Using This Guide</strong>
+      <strong style="color: var(--halt); margin-top:0.5rem;">VACATED:</strong> Section 1557 LGBTQ+ protections vacated November 2025. Do not cite as active protection. Standard HIPAA privacy rules apply. NPP updates still required by February 16, 2026.<br><br>
+      <strong style="color: var(--amber);">UPDATED ENFORCEMENT:</strong> 42 CFR Part 2 SUD records — updated enforcement posture active February 16, 2026. Do not apply pre-2026 guidance.<br><br>
+      <strong style="color: var(--amber);">UPDATED:</strong> MHPAEA Final Rule effective November 22, 2024. Mental health parity requirements strengthened.<br><br>
+      <strong style="color: var(--sage);">WITHDRAWN:</strong> HUD One-Strike proposed rule withdrawn 2025. Many formerly incarcerated individuals remain eligible for subsidized housing.
+    </div>
+
+    <br>
+
+    <table class="reg-table">
+      <thead>
+        <tr>
+          <th>Citation</th>
+          <th>What It Governs</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CAPTA</strong><br><small>42 U.S.C. § 5101</small></td>
+          <td>Child abuse mandatory reporting · Federal baseline</td>
+          <td><span class="reg-status status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>Elder Justice Act APS Final Rule</strong><br><small>June 7, 2024</small></td>
+          <td>Adult Protective Services reporting standard</td>
+          <td><span class="reg-status status-updated">Updated 2024</span></td>
+        </tr>
+        <tr>
+          <td><strong>HIPAA Privacy Rule</strong><br><small>45 CFR Parts 160/164</small></td>
+          <td>Protected health information · Disclosure rules · Right of Access</td>
+          <td><span class="reg-status status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>42 CFR Part 2</strong><br><small>SUD Records</small></td>
+          <td>Substance use disorder treatment record confidentiality</td>
+          <td><span class="reg-status status-updated">Enforcement Feb 16, 2026</span></td>
+        </tr>
+        <tr>
+          <td><strong>Section 1557 LGBTQ+</strong><br><small>ACA protections</small></td>
+          <td>Gender-affirming care / LGBTQ+ anti-discrimination in health programs</td>
+          <td><span class="reg-status status-vacated">Vacated Nov 2025</span></td>
+        </tr>
+        <tr>
+          <td><strong>MHPAEA Final Rule</strong><br><small>Sept 9, 2024</small></td>
+          <td>Mental health / SUD parity with medical/surgical benefits</td>
+          <td><span class="reg-status status-updated">Effective Nov 22, 2024</span></td>
+        </tr>
+        <tr>
+          <td><strong>ICWA</strong><br><small>25 CFR Part 23</small></td>
+          <td>Indian Child Welfare Act · Tribal notification · Placement preferences</td>
+          <td><span class="reg-status status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>Title IV-E</strong><br><small>45 CFR § 1356.21</small></td>
+          <td>Foster care eligibility · Placement and licensing standards</td>
+          <td><span class="reg-status status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>VAWA</strong><br><small>24 CFR Part 5 Subpart L</small></td>
+          <td>Housing protections for DV / sexual assault / stalking survivors</td>
+          <td><span class="reg-status status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>Fair Chance Act</strong><br><small>P.L. 116-92</small></td>
+          <td>Criminal history inquiry — after conditional offer only (federal contractors)</td>
+          <td><span class="reg-status status-active">Effective Dec 2021</span></td>
+        </tr>
+        <tr>
+          <td><strong>Second Chance Act</strong><br><small>P.L. 110-199</small></td>
+          <td>Reentry programming · Federal grants</td>
+          <td><span class="reg-status status-updated">Reauthorized Dec 2024</span></td>
+        </tr>
+        <tr>
+          <td><strong>Medicaid Suspension Rule</strong><br><small>Consolidated Appropriations Act 2024</small></td>
+          <td>Suspend not terminate Medicaid upon incarceration</td>
+          <td><span class="reg-status status-updated">Effective Jan 1, 2026</span></td>
+        </tr>
+        <tr>
+          <td><strong>SSI Reinstatement</strong><br><small>42 U.S.C. § 1382(e)(1)</small></td>
+          <td>12-month reinstatement window upon release without new application</td>
+          <td><span class="reg-status status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>OAA Title III</strong></td>
+          <td>Older Americans Act services — nutrition, transportation, legal, caregiver support</td>
+          <td><span class="reg-status status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>HUD One-Strike Rule</strong></td>
+          <td>Proposed restriction on housing access for formerly incarcerated individuals</td>
+          <td><span class="reg-status status-vacated">Withdrawn 2025</span></td>
+        </tr>
+        <tr>
+          <td><strong>21st Century Cures Act</strong><br><small>45 CFR Part 171</small></td>
+          <td>Information blocking prohibition · Patient access rights</td>
+          <td><span class="reg-status status-active">Enforceable Apr 2021</span></td>
+        </tr>
+        <tr>
+          <td><strong>TVPA</strong><br><small>FBI Documented Indicators</small></td>
+          <td>Human trafficking identification and mandatory reporting indicators</td>
+          <td><span class="reg-status status-active">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>NASW Code of Ethics</strong><br><small>2021</small></td>
+          <td>Professional ethics framework · Social work practice standards</td>
+          <td><span class="reg-status status-active">Current (2021)</span></td>
+        </tr>
+        <tr>
+          <td><strong>SAMHSA TIC</strong><br><small>SMA14-4884</small></td>
+          <td>Trauma-Informed Care · Six Principles</td>
+          <td><span class="reg-status status-active">Active</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer class="guide-footer">
+  Caseline&#8480; · Case Manager Field Guide · v1.0 · Built from 4-dive primary source research · Rudolph CX LLC<br>
+  This guide is a reference tool. It does not constitute legal advice. Regulatory citations reflect research as of Session 99 (June 2026). Verify currency before applying.
 </footer>
 
 <script>
-var cursor = document.getElementById('cursor');
-document.addEventListener('mousemove', function(e) {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-});
+  function showTab(id) {
+    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
 
-// Reveal on scroll
-var reveals = document.querySelectorAll('.reveal');
-var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) entry.target.classList.add('visible');
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-reveals.forEach(function(el) { observer.observe(el); });
-
-// Hero reveals
-setTimeout(function() {
-  document.querySelectorAll('.hero .reveal').forEach(function(el) {
-    el.classList.add('visible');
-  });
-}, 100);
-
-// Scenario card cycle
-var cards = document.querySelectorAll('.scenario-card');
-var currentCard = 0;
-cards.forEach(function(c, i) {
-  if (i === 0) c.classList.add('visible');
-});
-setInterval(function() {
-  cards[currentCard].classList.remove('active-sc');
-  currentCard = (currentCard + 1) % cards.length;
-  cards.forEach(function(c, i) {
-    c.classList.toggle('visible', i <= currentCard);
-  });
-  cards[currentCard].classList.add('active-sc');
-}, 4000);
-
-// EmailJS — contact form
-(function() {
-  if (typeof emailjs === 'undefined') return;
-  emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
-
-  var btn = document.getElementById('caseline-submit');
-  var statusEl = document.getElementById('caseline-status');
-  if (!btn) return;
-
-  btn.addEventListener('click', function() {
-    var name = document.querySelector('.form-wrap .form-row:nth-child(1) .form-input:nth-child(1)');
-    var org  = document.querySelector('.form-wrap .form-row:nth-child(1) .form-input:nth-child(2)');
-    var email = document.querySelector('.form-wrap .form-row:nth-child(2) .form-input[type="email"]');
-    var role  = document.querySelector('.form-wrap .form-row:nth-child(2) .form-select');
-    var message = document.querySelector('.form-wrap .form-textarea');
-
-    // Add IDs for reliable access
-    var fields = {
-      name: document.getElementById('cl-name') || name,
-      org:  document.getElementById('cl-org')  || org,
-      email: document.getElementById('cl-email') || email,
-      role:  document.getElementById('cl-role')  || role,
-      message: document.getElementById('cl-message') || message
-    };
-
-    var nameVal    = fields.name    ? fields.name.value.trim()    : '';
-    var orgVal     = fields.org     ? fields.org.value.trim()     : '';
-    var emailVal   = fields.email   ? fields.email.value.trim()   : '';
-    var roleVal    = fields.role    ? fields.role.value.trim()    : '';
-    var messageVal = fields.message ? fields.message.value.trim() : '';
-
-    if (!nameVal || !orgVal || !emailVal || !messageVal) {
-      statusEl.style.color = 'var(--red)';
-      statusEl.textContent = 'Please fill in all required fields.';
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-      statusEl.style.color = 'var(--red)';
-      statusEl.textContent = 'Please enter a valid email address.';
-      return;
-    }
-
-    var label = btn.querySelector('.submit-label');
-    var loading = btn.querySelector('.submit-loading');
-    btn.disabled = true;
-    if (label) label.style.display = 'none';
-    if (loading) loading.style.display = 'inline';
-    statusEl.textContent = '';
-
-    // HubSpot Forms API — creates contact record in CRM
-    var hutk = document.cookie.replace(/(?:(?:^|.*;\s*)hubspotutk\s*=\s*([^;]*).*$)|^.*$/, '$1');
-    fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fields: [
-          { name: 'firstname', value: nameVal },
-          { name: 'email',     value: emailVal },
-          { name: 'company',   value: orgVal }
-        ],
-        context: {
-          hutk:    hutk || undefined,
-          pageUri: 'rudolphcx.com/caseline.html',
-          pageName: 'Caseline — Social Work & Case Management Guide'
-        }
-      })
-    }).catch(function(err) { console.error('HubSpot submit error:', err); });
-
-    emailjs.send('service_u94nvbm', 'template_875pqb4', {
-      from_name:    nameVal,
-      organization: orgVal,
-      reply_to:     emailVal,
-      role_type:    roleVal || 'Not specified',
-      message:      messageVal,
-      source:       'Caseline discovery form — rudolphcx.com/caseline.html'
-    }).then(function() {
-      statusEl.style.color = 'var(--teal)';
-      statusEl.textContent = 'Request received. We will be in touch within one business day.';
-      btn.disabled = false;
-      if (label) label.style.display = 'inline';
-      if (loading) loading.style.display = 'none';
-      // Clear fields
-      if (fields.name) fields.name.value = '';
-      if (fields.org) fields.org.value = '';
-      if (fields.email) fields.email.value = '';
-      if (fields.role) fields.role.selectedIndex = 0;
-      if (fields.message) fields.message.value = '';
-    }).catch(function(err) {
-      statusEl.style.color = 'var(--red)';
-      statusEl.textContent = 'Something went wrong. Please email jamal@rudolphcx.com directly.';
-      btn.disabled = false;
-      if (label) label.style.display = 'inline';
-      if (loading) loading.style.display = 'none';
-      console.error('EmailJS error:', err);
+  function toggleCard(header) {
+    const body = header.nextElementSibling;
+    const isOpen = header.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.card-header.open').forEach(h => {
+      h.classList.remove('open');
+      h.nextElementSibling.classList.remove('open');
     });
-  });
-})();
+    // Open this one if it was closed
+    if (!isOpen) {
+      header.classList.add('open');
+      body.classList.add('open');
+    }
+  }
 </script>
 </body>
 </html>
