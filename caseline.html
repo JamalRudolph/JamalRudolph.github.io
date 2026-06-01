@@ -28,7 +28,7 @@ body { font-family: var(--sans); background: var(--cream); color: var(--ink); ov
 
 /* NAV */
 nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; mix-blend-mode: multiply; }
-.nav-logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+.nav-logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; text-decoration: none; display: inline-block; }
 .nav-logo span { color: var(--teal); }
 .nav-links { display: flex; gap: 32px; list-style: none; }
 .nav-links a { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
@@ -177,7 +177,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 <div class="cursor" id="cursor"></div>
 
 <nav>
-  <div class="nav-logo">Rudolph<span>CX</span></div>
+  <a href="/" class="nav-logo">Rudolph<span>CX</span></a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/aidline.html">Aidline&#8480;</a></li>
