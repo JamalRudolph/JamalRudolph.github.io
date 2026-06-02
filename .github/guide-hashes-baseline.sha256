@@ -1,0 +1,11 @@
+# guide-hashes-baseline.sha256
+# Rudolph CX - File Integrity Baseline
+# Generated: Session 103 - 2026-06-02
+# REGENERATE ONLY after an authorized update. Never after a suspected tamper.
+# FORMAT: <sha256hash>  <filename>
+
+4883d3d2694e918952a4e4555be14cbe2e7c2fa4a9455e887fe037fb444bbcbd  index.html
+e771b85ad28438bcecd42d1363aa38697eb6b5e3e685a1739a080bc1b4ab2b29  aidline.html
+c96a0bad1968b06574ad99c7dc7f92b601a98d567f021894c4125160ec064fd6  caseline.html
+d5347912db2fc048c7fae79c2a182451607adfd4f098058f44f82b0b0f5a1d20  chartline_guide.html
+365b62c3e49884e895e2b83c185587afcdf7d69f226b5e07f01b9f5b88774cdd  lendline.html
