@@ -253,6 +253,20 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 .anim-reset{position:absolute;inset:0;background:var(--cream);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:5;}
 .anim-reset.show{opacity:1;}
 .anim-reset-txt{font-family:var(--mono);font-size:7.5px;letter-spacing:0.17em;text-transform:uppercase;color:var(--dim);}
+
+/* ── WCAG 2.1 AA ── */
+.skip-link { position:absolute; top:-100%; left:0; background:var(--ink); color:var(--cream); padding:0.5rem 1rem; font-family:var(--mono); font-size:0.78rem; z-index:10000; text-decoration:none; border-radius:0 0 4px 0; letter-spacing:0.1em; }
+.skip-link:focus { top:0; outline:3px solid var(--gold); outline-offset:2px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid var(--red); outline-offset:2px; }
+.nav-links a:focus-visible { outline:3px solid var(--red); outline-offset:3px; }
+/* Nav dropdown */
+.nav-links > li { position: relative; }
+.nav-dropdown > a::after { content: ' ▾'; font-size: 8px; }
+.dropdown-menu { display: none; position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%); background: var(--cream); border: 1px solid #e2ddd3; min-width: 210px; padding: 8px 0; z-index: 200; box-shadow: 0 8px 24px rgba(15,14,12,0.10); }
+.nav-dropdown:hover .dropdown-menu, .nav-dropdown.open .dropdown-menu { display: block; }
+.dropdown-menu a { display: block; padding: 10px 20px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s, background 0.15s; white-space: nowrap; }
+.dropdown-menu a:hover { color: var(--red); background: #ede9e0; }
+.dropdown-menu .dm-tag { font-size: 7px; color: var(--muted); margin-left: 6px; letter-spacing: 0.1em; }
 </style>
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
@@ -260,24 +274,35 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div id="cursor"></div>
 
 <!-- NAV -->
-<nav>
+<nav aria-label="Main navigation">
   <a href="/" class="nav-logo">Rudolph<span>CX</span></a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="#how">How It Works</a></li>
+    <li class="nav-dropdown">
+      <a href="#" aria-haspopup="true" aria-expanded="false">Our Guides</a>
+      <div class="dropdown-menu">
+        <a href="/aidline.html">Aidline&#8480; <span class="dm-tag">Live</span></a>
+        <a href="/caseline.html">Caseline <span class="dm-tag">Live</span></a>
+        <a href="/lendline.html">Lendline <span class="dm-tag">Live</span></a>
+        <a href="/chartline.html">Chartline <span class="dm-tag">Soon</span></a>
+        <a href="/workline.html">Workline <span class="dm-tag">Soon</span></a>
+        <a href="/reentryline.html">Reentryline <span class="dm-tag">Soon</span></a>
+      </div>
+    </li>
     <li><a href="demos.html">Demo Center</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#sectors">Our Guides</a></li>
     <li><a href="#contact">Book Discovery</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <section class="aidline-hero" id="hero">
-  <div class="hero-left">
+  <div class="hero-left" id="main-content">
     <div class="hero-eyebrow reveal">Done-For-You</div>
     <h1 class="hero-title reveal reveal-delay-1">
       The guide that lives<br>
@@ -286,6 +311,11 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
     <p class="hero-sub reveal reveal-delay-2">
       Aidline&#8480; is a custom-built, situation-specific reference guide for any worker who faces a live, high-stakes moment with a person in need. Built from your source material. Delivered as a single HTML file. Ready on the day the moment is live.
     </p>
+    
+    <div class="offline-badge reveal" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:28px;padding:8px 14px;border:1px solid #e2ddd3;background:white;">
+      <span style="width:6px;height:6px;background:#2a6e4a;border-radius:50%;display:inline-block;flex-shrink:0;"></span>
+      Works offline &mdash; single HTML file, no internet required
+    </div>
     <div class="hero-actions reveal reveal-delay-3">
       <a href="#contact" class="btn-gold">Book Discovery Call &mdash; $300</a>
       <a href="demos.html" class="btn-outline">View Demo Center</a>
@@ -443,11 +473,24 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
           <div class="tier-desc">Custom scoping required. Multi-role, multi-site, or ongoing retainer arrangements. Includes dedicated revision cycles and version control.</div>
         </div>
       </div>
+      
+    <div class="pricing-block retainer reveal" style="border-left:4px solid #2a6e4a;">
+      <div class="pb-eyebrow" style="color:#2a6e4a;">Annual Update Retainer</div>
+      <div class="pb-price" style="margin-bottom:8px;">$750 <span style="font-size:18px;color:rgba(247,244,238,0.5);font-weight:400;letter-spacing:0;">/ guide / year</span></div>
+      <div class="pb-note">Keeps your guide current as policies, systems, or regulatory requirements change. Covers one annual review cycle with revisions. Scoped changes outside the annual cycle are billed as change orders.</div>
+    </div>
       <div class="payment-terms"><strong>Payment:</strong> 50% deposit before work begins &middot; 50% balance on delivery &middot; No payment before scoping is complete.</div>
       <div class="cert-note">Certification add-on available &mdash; contact us for details and pricing.</div>
     </div>
   </div>
 </section>
+
+
+    <div class="equity-block reveal" style="margin-top:4px;background:white;border-left:3px solid var(--gold);padding:28px 32px;">
+      <div style="font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Build Standard</div>
+      <p style="font-size:14px;color:var(--ink);font-weight:600;margin-bottom:8px;">Built for everyone in the room.</p>
+      <p style="font-size:13px;color:var(--ink3);line-height:1.7;font-weight:300;">Every Aidline guide is built to serve all workers &mdash; regardless of background, circumstance, or identity. Biased <em>towards</em> is the pattern we catch, not only biased against. This standard applies to every situation, every path, every word.</p>
+    </div>
 
 <!-- CONTACT -->
 <section class="contact-section" id="contact">
@@ -457,21 +500,21 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
   <div class="form-wrap reveal" style="max-width:640px;margin:0 auto;">
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">Your Name</label>
+        <label class="form-label" for="al-name">Your Name</label>
         <input class="form-input" id="al-name" type="text" placeholder="Full name">
       </div>
       <div class="form-group">
-        <label class="form-label">Organization</label>
+        <label class="form-label" for="al-org">Organization</label>
         <input class="form-input" id="al-org" type="text" placeholder="Organization name">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label class="form-label">Email</label>
+        <label class="form-label" for="al-email">Email</label>
         <input class="form-input" id="al-email" type="email" placeholder="Work email">
       </div>
       <div class="form-group">
-        <label class="form-label">Role Type</label>
+        <label class="form-label" for="al-role">Role Type</label>
         <select class="form-select" id="al-role">
           <option value="">Select worker role</option>
           <option>Case Manager</option>
@@ -486,7 +529,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
       </div>
     </div>
     <div class="form-group">
-      <label class="form-label">What moments do your workers struggle with?</label>
+      <label class="form-label" for="al-message">What moments do your workers struggle with?</label>
       <textarea class="form-textarea" id="al-message" placeholder="Describe the situations where your workers need better support..."></textarea>
     </div>
     <button class="form-submit btn-gold" id="aidline-submit" type="button">
@@ -964,6 +1007,43 @@ setTimeout(runSequence,2500);
     });
   });
 })();
+
+// ── WCAG 2.1 AA — Nav keyboard support ──
+(function() {
+  document.querySelectorAll('.nav-dropdown > a').forEach(function(trigger) {
+    trigger.addEventListener('keydown', function(e) {
+      var parent = trigger.closest('.nav-dropdown');
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        var isOpen = parent.classList.contains('open');
+        document.querySelectorAll('.nav-dropdown').forEach(function(d) {
+          d.classList.remove('open');
+          var t = d.querySelector(':scope > a');
+          if (t) t.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) { parent.classList.add('open'); trigger.setAttribute('aria-expanded', 'true'); }
+      }
+      if (e.key === 'Escape') { parent.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
+    });
+  });
+  document.querySelectorAll('.nav-dropdown').forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      var isOpen = this.classList.contains('open');
+      document.querySelectorAll('.nav-dropdown').forEach(function(d) { d.classList.remove('open'); });
+      if (!isOpen) { this.classList.add('open'); e.stopPropagation(); }
+      var t = this.querySelector(':scope > a');
+      if (t) t.setAttribute('aria-expanded', this.classList.contains('open') ? 'true' : 'false');
+    });
+  });
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.nav-dropdown').forEach(function(d) {
+      d.classList.remove('open');
+      var t = d.querySelector(':scope > a');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+
 </script>
 </body>
 </html>
