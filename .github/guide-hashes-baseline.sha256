@@ -1,11 +1,14 @@
 # guide-hashes-baseline.sha256
 # Rudolph CX - File Integrity Baseline
-# Generated: Session 103 - 2026-06-02
+# Generated: Session 105 - 2026-06-02
 # REGENERATE ONLY after an authorized update. Never after a suspected tamper.
 # FORMAT: <sha256hash>  <filename>
 
-4883d3d2694e918952a4e4555be14cbe2e7c2fa4a9455e887fe037fb444bbcbd  index.html
-e771b85ad28438bcecd42d1363aa38697eb6b5e3e685a1739a080bc1b4ab2b29  aidline.html
-c96a0bad1968b06574ad99c7dc7f92b601a98d567f021894c4125160ec064fd6  caseline.html
-d5347912db2fc048c7fae79c2a182451607adfd4f098058f44f82b0b0f5a1d20  chartline_guide.html
-365b62c3e49884e895e2b83c185587afcdf7d69f226b5e07f01b9f5b88774cdd  lendline.html
+7141601aabbaae1f3b31caba43218c408a7cfafa8a218393ad19bff8ab352f36  index.html
+f5136e86f4a63647f540479956600de66cba37ccfe6fdb1cb023907f1b3b69c3  aidline.html
+4819799d334da0a8a715aadb1cb64f1b28781a73c000291117de5ae5da6a2a41  caseline.html
+e36c1ce052e8451cc2178793ebb1e1bf7c6540793e52337f908c7959fc5d0769  lendline.html
+90e828a30df7d860665a5f3416ce932d8054905d851c3c66aeda7405fb86c247  chartline.html
+ff92e61f3ebb7352807c32881625a4495214c26c4af8ccce9e379cabb6fdef4e  workline.html
+ca29bffa9458b8a1b1052d9588d432a6c62b34f3673c16bbc880076bcd30d12e  reentryline.html
+dcee7a2f8b0f51a1ab864aff3616df202a186165284d7cdd5f465570185d8799  situation-library.html
