@@ -1,0 +1,85 @@
+name: Guide Tamper Alert — Push
+
+# Fires immediately on any push to main that touches a monitored file.
+# Sends email to jamal@rudolphcx.com via Namecheap SMTP.
+#
+# SETUP REQUIRED (one-time — already done):
+#   SMTP_USERNAME   →  jamal@rudolphcx.com
+#   SMTP_PASSWORD   →  Namecheap Private Email password
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'index.html'
+      - 'aidline.html'
+      - 'caseline.html'
+      - 'chartline_guide.html'
+      - 'lendline.html'
+
+jobs:
+  tamper-alert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Identify changed files
+        id: changed
+        run: |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^(index|aidline|caseline|chartline_guide|lendline)\.html$' | tr '\n' ', ' | sed 's/,$//')
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          echo "Changed files: $CHANGED"
+
+      - name: Compute SHA-256 of monitored files
+        id: hashes
+        run: |
+          HASH_REPORT=""
+          for f in index.html aidline.html caseline.html chartline_guide.html lendline.html; do
+            if [ -f "$f" ]; then
+              H=$(sha256sum "$f" | awk '{print $1}')
+              HASH_REPORT="$HASH_REPORT$f: $H\n"
+            fi
+          done
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          printf "$HASH_REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Send tamper alert email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: mail.privateemail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "⚠️ FILE CHANGED — ${{ steps.changed.outputs.files }}"
+          to: jamal@rudolphcx.com
+          from: "Rudolph CX Monitor <jamal@rudolphcx.com>"
+          body: |
+            RUDOLPH CX — FILE CHANGE ALERT
+
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Triggered by: ${{ github.actor }}
+            Commit: ${{ github.sha }}
+            Time: ${{ github.event.head_commit.timestamp }}
+
+            Changed files:
+            ${{ steps.changed.outputs.files }}
+
+            Commit message:
+            ${{ github.event.head_commit.message }}
+
+            Current SHA-256 hashes:
+            ${{ steps.hashes.outputs.report }}
+
+            View the commit:
+            ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
+
+            ---
+            If you authorized this change, no action needed.
+            If you did NOT authorize this change, investigate immediately.
