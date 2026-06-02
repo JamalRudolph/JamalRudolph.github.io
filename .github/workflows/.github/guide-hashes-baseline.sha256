@@ -1,0 +1,20 @@
+# guide-hashes-baseline.sha256
+# Rudolph CX — File Integrity Baseline
+# Generated: Session 103 — 2026-06-02
+#
+# HOW TO GENERATE THIS FILE:
+#   1. Open terminal in your local repo folder (or use GitHub Codespaces)
+#   2. Run:
+#        sha256sum index.html aidline.html caseline.html chartline_guide.html lendline.html
+#   3. Paste the output below, replacing the REPLACE_WITH_ACTUAL_HASH placeholders
+#   4. Commit with message: chore: initialize guide hash baseline [authorized]
+#
+# REGENERATE ONLY after an authorized update. Never after a suspected tamper.
+#
+# FORMAT: <sha256hash>  <filename>
+
+REPLACE_WITH_ACTUAL_HASH  index.html
+REPLACE_WITH_ACTUAL_HASH  aidline.html
+REPLACE_WITH_ACTUAL_HASH  caseline.html
+REPLACE_WITH_ACTUAL_HASH  chartline_guide.html
+REPLACE_WITH_ACTUAL_HASH  lendline.html
