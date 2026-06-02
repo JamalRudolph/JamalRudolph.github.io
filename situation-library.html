@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industry Situation Library — Rudolph CX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0f0e0c; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
+  --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --active: var(--cream);
+  /* vertical colors */
+  --hc: #1e5a70;    /* healthcare - deep teal */
+  --fs: #2a4e2a;    /* financial - deep green */
+  --gb: #4a3010;    /* gov benefits - deep amber */
+  --ut: #1a3a6a;    /* utilities - deep navy */
+  --ins: #5a2a50;   /* insurance - deep plum */
+  --ret: #5a1e1e;   /* retail - deep crimson */
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: #0d0c0a; color: var(--cream); min-height: 100vh; overflow-x: hidden; cursor: none; }
+.cursor { width: 8px; height: 8px; background: var(--cream); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.08s ease; mix-blend-mode: difference; }
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: #1a1810; }
+::-webkit-scrollbar-thumb { background: rgba(247,244,238,0.3); }
+
+/* HEADER */
+header { padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(247,244,238,0.08); background: rgba(13,12,10,0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+.logo { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; color: var(--cream); }
+.logo span { color: rgba(247,244,238,0.4); }
+.header-meta { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,244,238,0.3); }
+
+/* INTRO */
+.intro { padding: 80px 48px 56px; max-width: 900px; }
+.intro-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(247,244,238,0.35); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.intro-label::before { content: ''; display: block; width: 24px; height: 1px; background: rgba(247,244,238,0.35); }
+.intro-title { font-family: var(--serif); font-size: clamp(36px,4vw,58px); font-weight: 500; color: var(--cream); line-height: 1.08; letter-spacing: -0.03em; margin-bottom: 20px; }
+.intro-title em { font-style: italic; color: rgba(247,244,238,0.55); }
+.intro-sub { font-size: 14px; color: rgba(247,244,238,0.4); line-height: 1.75; font-weight: 300; max-width: 560px; }
+.intro-sub strong { color: rgba(247,244,238,0.65); font-weight: 500; }
+
+/* VERTICAL SELECTOR */
+.selector-wrap { padding: 0 48px 48px; }
+.selector-label { font-family: var(--mono); font-size: 8px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(247,244,238,0.25); margin-bottom: 16px; }
+.verticals { display: grid; grid-template-columns: repeat(6,1fr); gap: 2px; }
+.v-btn { background: rgba(247,244,238,0.04); border: 1px solid rgba(247,244,238,0.08); padding: 18px 12px 16px; cursor: pointer; transition: all 0.2s ease; text-align: center; position: relative; overflow: hidden; }
+.v-btn::before { content: ''; position: absolute; inset: 0; background: var(--v-color, rgba(247,244,238,0.06)); opacity: 0; transition: opacity 0.2s; }
+.v-btn:hover::before { opacity: 1; }
+.v-btn.active { border-color: rgba(247,244,238,0.25); background: rgba(247,244,238,0.07); }
+.v-btn.active::before { opacity: 1; }
+.v-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--v-color, rgba(247,244,238,0.5)); }
+.v-icon { font-size: 18px; display: block; margin-bottom: 8px; line-height: 1; }
+.v-label { font-family: var(--mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(247,244,238,0.5); display: block; transition: color 0.2s; }
+.v-btn:hover .v-label, .v-btn.active .v-label { color: rgba(247,244,238,0.9); }
+.v-btn[data-v="healthcare"] { --v-color: rgba(30,90,112,0.6); }
+.v-btn[data-v="financial"] { --v-color: rgba(42,78,42,0.6); }
+.v-btn[data-v="government"] { --v-color: rgba(74,48,16,0.6); }
+.v-btn[data-v="utilities"] { --v-color: rgba(26,58,106,0.6); }
+.v-btn[data-v="insurance"] { --v-color: rgba(90,42,80,0.6); }
+.v-btn[data-v="retail"] { --v-color: rgba(90,30,30,0.6); }
+
+/* CONTENT AREA */
+.content { padding: 0 48px 80px; }
+.vertical-panel { display: none; animation: fadeUp 0.3s ease; }
+.vertical-panel.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+.panel-header { padding: 36px 0 32px; border-bottom: 1px solid rgba(247,244,238,0.08); margin-bottom: 32px; display: flex; align-items: flex-end; gap: 24px; justify-content: space-between; }
+.panel-title { font-family: var(--serif); font-size: clamp(28px,3vw,42px); font-weight: 500; color: var(--cream); line-height: 1.1; letter-spacing: -0.025em; }
+.panel-role { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.3); }
+.panel-gate { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(247,244,238,0.5); padding: 8px 14px; border: 1px solid rgba(247,244,238,0.15); white-space: nowrap; flex-shrink: 0; }
+
+/* SITUATION CARDS */
+.situations { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; }
+.sit-card { background: rgba(247,244,238,0.03); border: 1px solid rgba(247,244,238,0.07); padding: 32px 28px; position: relative; overflow: hidden; transition: all 0.25s ease; cursor: default; }
+.sit-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--sit-color, rgba(247,244,238,0.15)); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; }
+.sit-card:hover { background: rgba(247,244,238,0.05); }
+.sit-card:hover::before { transform: scaleX(1); }
+.sit-n { font-family: var(--mono); font-size: 9px; font-weight: 600; color: var(--sit-color, rgba(247,244,238,0.3)); letter-spacing: 0.1em; margin-bottom: 14px; }
+.sit-title { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 10px; letter-spacing: -0.01em; line-height: 1.2; }
+.sit-desc { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; margin-bottom: 16px; }
+.sit-break { background: rgba(247,244,238,0.04); border-left: 2px solid var(--sit-color, rgba(247,244,238,0.2)); padding: 10px 14px; margin-bottom: 14px; }
+.sit-break-label { font-family: var(--mono); font-size: 7px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--sit-color, rgba(247,244,238,0.4)); margin-bottom: 5px; opacity: 0.8; }
+.sit-break-text { font-size: 12px; color: rgba(247,244,238,0.6); line-height: 1.6; font-weight: 300; }
+.sit-demo-prompt { font-family: var(--mono); font-size: 10px; color: rgba(247,244,238,0.25); font-style: italic; letter-spacing: 0.03em; border-top: 1px solid rgba(247,244,238,0.06); padding-top: 12px; }
+
+/* healthcare colors */
+.vertical-panel[data-v="healthcare"] .sit-card { --sit-color: rgba(80,180,210,0.7); }
+.vertical-panel[data-v="financial"] .sit-card { --sit-color: rgba(80,180,80,0.7); }
+.vertical-panel[data-v="government"] .sit-card { --sit-color: rgba(210,160,60,0.7); }
+.vertical-panel[data-v="utilities"] .sit-card { --sit-color: rgba(80,140,220,0.7); }
+.vertical-panel[data-v="insurance"] .sit-card { --sit-color: rgba(200,120,200,0.7); }
+.vertical-panel[data-v="retail"] .sit-card { --sit-color: rgba(220,90,90,0.7); }
+
+/* DEMO PROMPT FOOTER */
+.demo-footer { margin-top: 48px; padding: 32px 36px; border: 1px solid rgba(247,244,238,0.1); background: rgba(247,244,238,0.03); display: flex; align-items: flex-start; gap: 28px; }
+.df-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+.df-label { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,244,238,0.3); margin-bottom: 8px; }
+.df-line { font-family: var(--serif); font-size: 22px; font-style: italic; color: var(--cream); line-height: 1.4; font-weight: 400; margin-bottom: 8px; }
+.df-note { font-size: 12px; color: rgba(247,244,238,0.3); line-height: 1.65; font-weight: 300; }
+
+/* EMPTY STATE */
+.empty-state { padding: 80px 48px; text-align: center; }
+.empty-state p { font-family: var(--mono); font-size: 11px; color: rgba(247,244,238,0.2); letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* FOOTER */
+footer { padding: 24px 48px; border-top: 1px solid rgba(247,244,238,0.06); display: flex; align-items: center; justify-content: space-between; }
+.footer-l { font-family: var(--serif); font-size: 14px; color: rgba(247,244,238,0.25); }
+.footer-r { font-family: var(--mono); font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(247,244,238,0.15); }
+
+@media (max-width: 800px) {
+  header, .intro, .selector-wrap, .content { padding-left: 24px; padding-right: 24px; }
+  .verticals { grid-template-columns: repeat(3,1fr); }
+  .situations { grid-template-columns: 1fr; }
+  .panel-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  footer { flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+
+<header>
+  <div class="logo">Rudolph<span>CX</span></div>
+  <div class="header-meta">Industry Situation Library &mdash; Sales Tool</div>
+</header>
+
+<div class="intro">
+  <div class="intro-label">Pre-Call Research Asset</div>
+  <h1 class="intro-title">The moments that break down<br>on <em>every</em> team.</h1>
+  <p class="intro-sub">Select the prospect&rsquo;s industry below. Each situation is sourced from documented industry call patterns &mdash; <strong>not invented</strong>. Use these on the discovery call to show the prospect their world before they explain it to you.</p>
+</div>
+
+<div class="selector-wrap">
+  <div class="selector-label">Select vertical</div>
+  <div class="verticals">
+    <button class="v-btn" data-v="healthcare" onclick="selectVertical('healthcare')" aria-pressed="false">
+      <span class="v-icon">&#x2695;</span>
+      <span class="v-label">Healthcare</span>
+    </button>
+    <button class="v-btn" data-v="financial" onclick="selectVertical('financial')" aria-pressed="false">
+      <span class="v-icon">&#x1F3E6;</span>
+      <span class="v-label">Financial</span>
+    </button>
+    <button class="v-btn" data-v="government" onclick="selectVertical('government')" aria-pressed="false">
+      <span class="v-icon">&#x1F3DB;</span>
+      <span class="v-label">Gov Benefits</span>
+    </button>
+    <button class="v-btn" data-v="utilities" onclick="selectVertical('utilities')" aria-pressed="false">
+      <span class="v-icon">&#x26A1;</span>
+      <span class="v-label">Utilities</span>
+    </button>
+    <button class="v-btn" data-v="insurance" onclick="selectVertical('insurance')" aria-pressed="false">
+      <span class="v-icon">&#x1F4CB;</span>
+      <span class="v-label">Insurance</span>
+    </button>
+    <button class="v-btn" data-v="retail" onclick="selectVertical('retail')" aria-pressed="false">
+      <span class="v-icon">&#x1F6CD;</span>
+      <span class="v-label">Retail</span>
+    </button>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state" id="empty-state">
+    <p>Select a vertical above to load situations</p>
+  </div>
+
+  <!-- HEALTHCARE -->
+  <div class="vertical-panel" data-v="healthcare" id="panel-healthcare">
+    <div class="panel-header">
+      <div>
+        <div class="panel-role">Patient access &middot; Billing &middot; Member services</div>
+        <h2 class="panel-title">Healthcare Contact Center</h2>
+      </div>
+      <div class="panel-gate">Gate: No clinical advice &mdash; HIPAA</div>
+    </div>
+    <div class="situations">
+      <div class="sit-card">
+        <div class="sit-n">S-01 &middot; Healthcare</div>
+        <div class="sit-title">Insurance Eligibility Failure</div>
+        <div class="sit-desc">Patient calls to schedule or after an appointment. Agent runs eligibility &mdash; coverage shows inactive, wrong plan, or out-of-network. Patient insists they have insurance.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent can&rsquo;t confirm coverage without payer portal access; can&rsquo;t tell patient what IS covered; can&rsquo;t promise the service will be paid. Must navigate without creating liability.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-02 &middot; Healthcare</div>
+        <div class="sit-title">Billing Dispute &mdash; Post-Procedure</div>
+        <div class="sit-desc">Patient received a bill after a procedure and is disputing the amount, the line items, or claiming insurance should have covered it. Caller is often distressed &mdash; the bill followed bad news.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent sees the bill but can&rsquo;t modify it, promise a refund, or make a coverage determination. Must acknowledge the frustration without overpromising.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-03 &middot; Healthcare</div>
+        <div class="sit-title">Prior Authorization Hold</div>
+        <div class="sit-desc">Patient needs a procedure or medication. Physician ordered it. Insurance requires prior auth. Patient calls asking why they can&rsquo;t get their medication or their appointment yet.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot push the payer, cannot expedite the clinical review, and cannot tell the patient the outcome. Must explain the delay without giving clinical advice or false hope.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-04 &middot; Healthcare</div>
+        <div class="sit-title">Clinical Escalation &mdash; Symptom Triage</div>
+        <div class="sit-desc">Caller describes symptoms or asks whether their condition is serious enough to come in. Agent is not a clinician and cannot make that determination.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Hard stop. Agent cannot give any clinical guidance. Must transfer to clinical staff without making any medical judgment. A delayed transfer can cause real harm.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+    </div>
+    <div class="demo-footer">
+      <div class="df-icon">&#x1F4AC;</div>
+      <div>
+        <div class="df-label">Live Demo Prompt</div>
+        <div class="df-line">&ldquo;I spent some time looking at what your team handles. I want to show you something. Does this situation come up for your agents?&rdquo;</div>
+        <div class="df-note">Each situation above maps to a step-by-step guide path built from that organization&rsquo;s source material. The prospect&rsquo;s &ldquo;yes&rdquo; is the opening.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINANCIAL -->
+  <div class="vertical-panel" data-v="financial" id="panel-financial">
+    <div class="panel-header">
+      <div>
+        <div class="panel-role">Banking agents &middot; Credit union reps &middot; Loan servicing</div>
+        <h2 class="panel-title">Financial Services Contact Center</h2>
+      </div>
+      <div class="panel-gate">Gate: Identity verified before any account access</div>
+    </div>
+    <div class="situations">
+      <div class="sit-card">
+        <div class="sit-n">S-01 &middot; Financial Services</div>
+        <div class="sit-title">Suspected Account Takeover</div>
+        <div class="sit-desc">Customer calls saying they didn&rsquo;t make recent transactions. Or a caller is trying to reset credentials and something about the call feels scripted or off.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent must verify identity before accessing the account &mdash; but the fraud may have already compromised it. Cannot take any irreversible action (wire transfer, address change) until fully verified.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-02 &middot; Financial Services</div>
+        <div class="sit-title">Transaction Dispute &mdash; Unauthorized Charge</div>
+        <div class="sit-desc">Customer says a charge on their account is unauthorized. Wants it reversed immediately. May be escalating.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot promise a reversal timeline or guarantee the outcome of a dispute investigation. Must open the dispute correctly in the system without creating false expectations.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-03 &middot; Financial Services</div>
+        <div class="sit-title">Account Access Locked</div>
+        <div class="sit-desc">Customer can&rsquo;t log in, has been locked out, or can&rsquo;t pass knowledge-based authentication. Escalating on the phone. Wants the agent to &ldquo;just let them in.&rdquo;</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot bypass security protocols. Must follow the exact unlock process. If the caller is a fraudster, any shortcut is a completed security breach.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-04 &middot; Financial Services</div>
+        <div class="sit-title">Loan Payoff &mdash; Exact Balance Inquiry</div>
+        <div class="sit-desc">Customer needs the exact payoff amount for a mortgage or auto loan &mdash; often for a closing or refinance. Wants the precise number right now on the phone.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Verbal payoff quotes may not be legally binding. Figures change daily with interest accrual. Agent cannot give a final number the customer can rely on for a legal closing.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+    </div>
+    <div class="demo-footer">
+      <div class="df-icon">&#x1F4AC;</div>
+      <div>
+        <div class="df-label">Live Demo Prompt</div>
+        <div class="df-line">&ldquo;I spent some time looking at what your team handles. I want to show you something. Does this situation come up for your agents?&rdquo;</div>
+        <div class="df-note">Each situation above maps to a step-by-step guide path built from that organization&rsquo;s source material. The prospect&rsquo;s &ldquo;yes&rdquo; is the opening.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOVERNMENT BENEFITS -->
+  <div class="vertical-panel" data-v="government" id="panel-government">
+    <div class="panel-header">
+      <div>
+        <div class="panel-role">Benefits navigators &middot; Eligibility specialists &middot; State agency reps</div>
+        <h2 class="panel-title">Government Benefits Contact Center</h2>
+      </div>
+      <div class="panel-gate">Gate: Cannot determine eligibility or promise benefits</div>
+    </div>
+    <div class="situations">
+      <div class="sit-card">
+        <div class="sit-n">S-01 &middot; Government Benefits</div>
+        <div class="sit-title">Eligibility Question &mdash; Do I Qualify?</div>
+        <div class="sit-desc">Caller wants to know if they qualify for SNAP, Medicaid, or unemployment. They describe their situation and ask directly: &ldquo;Do I qualify?&rdquo;</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot make the eligibility determination &mdash; that&rsquo;s the system&rsquo;s job. Must intake the information and direct to the application process without answering the question directly.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-02 &middot; Government Benefits</div>
+        <div class="sit-title">Application Status &mdash; Where Is My Case?</div>
+        <div class="sit-desc">Caller submitted an application days or weeks ago and wants to know what&rsquo;s happening. They may have a deadline &mdash; food is running out, rent is due.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent may not have visibility into the processing queue or reviewer decisions. Cannot promise a timeline or expedite without proper authority. Stakes are high.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-03 &middot; Government Benefits</div>
+        <div class="sit-title">Document Gap &mdash; I Submitted That Already</div>
+        <div class="sit-desc">Caller says they submitted required documents. System shows documents missing or not received. Caller is frustrated and may be near a redetermination deadline.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot verify what the caller submitted on their end. Cannot manually mark documents as received. Must navigate without invalidating the caller&rsquo;s claim or dismissing their frustration.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-04 &middot; Government Benefits</div>
+        <div class="sit-title">Benefit Denial &mdash; Why Was I Cut Off?</div>
+        <div class="sit-desc">Caller received a denial letter or notice that their benefit is being reduced or terminated. They want to know why and what they can do about it.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent must explain the determination without overturning it, and must provide the correct appeals path without giving legal advice. Caller&rsquo;s income may depend on this call.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+    </div>
+    <div class="demo-footer">
+      <div class="df-icon">&#x1F4AC;</div>
+      <div>
+        <div class="df-label">Live Demo Prompt</div>
+        <div class="df-line">&ldquo;I spent some time looking at what your team handles. I want to show you something. Does this situation come up for your agents?&rdquo;</div>
+        <div class="df-note">Each situation above maps to a step-by-step guide path built from that organization&rsquo;s source material. The prospect&rsquo;s &ldquo;yes&rdquo; is the opening.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UTILITIES -->
+  <div class="vertical-panel" data-v="utilities" id="panel-utilities">
+    <div class="panel-header">
+      <div>
+        <div class="panel-role">Customer service agents &middot; Outage specialists &middot; Billing reps</div>
+        <h2 class="panel-title">Utilities Contact Center</h2>
+      </div>
+      <div class="panel-gate">Gate: Cannot promise restoration times or field dates</div>
+    </div>
+    <div class="situations">
+      <div class="sit-card">
+        <div class="sit-n">S-01 &middot; Utilities</div>
+        <div class="sit-title">Outage During High-Volume Event</div>
+        <div class="sit-desc">Major weather event or equipment failure. Agent is handling 10x normal call volume. Caller demands to know when power, water, or gas will be restored.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent has no direct line to field restoration crews. Restoration estimates come from the OMS &mdash; not the agent. Promising a time that doesn&rsquo;t hold makes the situation worse.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-02 &middot; Utilities</div>
+        <div class="sit-title">High Bill Dispute &mdash; Alleged Meter Error</div>
+        <div class="sit-desc">Customer received an unusually high bill and believes the meter is wrong, the rate changed without notice, or usage was misread. Wants answers now.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot confirm a meter error without a field investigation. Cannot reverse the bill on the spot. Must take the complaint and set expectations for the investigation process.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-03 &middot; Utilities</div>
+        <div class="sit-title">Payment Arrangement &mdash; Behind on Bill</div>
+        <div class="sit-desc">Customer is behind on their bill and asking for a payment plan to avoid shutoff. May be in crisis.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot set up unauthorized payment plans or promise shutoff protection without system authority. Mathematical errors in plans create liability. Inconsistency across agents creates compliance exposure.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-04 &middot; Utilities</div>
+        <div class="sit-title">Service Setup or Transfer &mdash; Moving</div>
+        <div class="sit-desc">Customer is moving. Needs to set up service at a new address or transfer from an existing one. May need a field technician visit. Has a move-in date.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent must coordinate new account setup and cannot commit to a service activation date without field availability. &ldquo;We&rsquo;ll be there Thursday&rdquo; without confirmation creates broken promises.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+    </div>
+    <div class="demo-footer">
+      <div class="df-icon">&#x1F4AC;</div>
+      <div>
+        <div class="df-label">Live Demo Prompt</div>
+        <div class="df-line">&ldquo;I spent some time looking at what your team handles. I want to show you something. Does this situation come up for your agents?&rdquo;</div>
+        <div class="df-note">Each situation above maps to a step-by-step guide path built from that organization&rsquo;s source material. The prospect&rsquo;s &ldquo;yes&rdquo; is the opening.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSURANCE -->
+  <div class="vertical-panel" data-v="insurance" id="panel-insurance">
+    <div class="panel-header">
+      <div>
+        <div class="panel-role">Claims intake agents &middot; Policy servicing reps &middot; Member services</div>
+        <h2 class="panel-title">Insurance Contact Center</h2>
+      </div>
+      <div class="panel-gate">Gate: Agent is recorder — not adjudicator</div>
+    </div>
+    <div class="situations">
+      <div class="sit-card">
+        <div class="sit-n">S-01 &middot; Insurance</div>
+        <div class="sit-title">First Notice of Loss (FNOL) Intake</div>
+        <div class="sit-desc">Policyholder just had an incident &mdash; car accident, house fire, storm damage. First call to report the claim. Caller may be distressed or in shock.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent must accurately document the incident without making any statement about coverage or liability. &ldquo;Sounds like that would be covered&rdquo; creates insurer liability. The agent is the recorder, not the adjudicator.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-02 &middot; Insurance</div>
+        <div class="sit-title">Claim Status &mdash; Why Is This Taking So Long?</div>
+        <div class="sit-desc">Policyholder filed a claim weeks ago. Calling to find out where it is. The adjuster hasn&rsquo;t been in touch. They need an answer today.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent may not have adjuster contact or visibility into the claim queue. Cannot force the adjuster to call. Cannot estimate when the claim will be resolved. High frustration potential.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-03 &middot; Insurance</div>
+        <div class="sit-title">Coverage Dispute &mdash; I Thought This Was Covered</div>
+        <div class="sit-desc">Policyholder expected their policy to cover a procedure, repair, or loss. They&rsquo;re calling because a claim was denied or a bill was sent directly to them.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent can explain what the policy says, but cannot override the denial or make a new coverage determination. Must explain without inflaming the situation further.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-04 &middot; Insurance</div>
+        <div class="sit-title">Lapse Risk &mdash; Missed Payment</div>
+        <div class="sit-desc">Policyholder missed a payment. Policy is at risk of lapsing &mdash; or may have already lapsed. Caller wants to know if they&rsquo;re still covered. May have an active incident.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot confirm coverage for an in-progress incident if the policy may have lapsed. Must follow reinstatement process without creating ambiguity about current coverage status.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+    </div>
+    <div class="demo-footer">
+      <div class="df-icon">&#x1F4AC;</div>
+      <div>
+        <div class="df-label">Live Demo Prompt</div>
+        <div class="df-line">&ldquo;I spent some time looking at what your team handles. I want to show you something. Does this situation come up for your agents?&rdquo;</div>
+        <div class="df-note">Each situation above maps to a step-by-step guide path built from that organization&rsquo;s source material. The prospect&rsquo;s &ldquo;yes&rdquo; is the opening.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RETAIL -->
+  <div class="vertical-panel" data-v="retail" id="panel-retail">
+    <div class="panel-header">
+      <div>
+        <div class="panel-role">Customer service agents &middot; Order support reps &middot; Returns specialists</div>
+        <h2 class="panel-title">Retail Contact Center</h2>
+      </div>
+      <div class="panel-gate">Gate: Cannot override policy or control carrier</div>
+    </div>
+    <div class="situations">
+      <div class="sit-card">
+        <div class="sit-n">S-01 &middot; Retail</div>
+        <div class="sit-title">Order Not Received &mdash; Carrier Shows Delivered</div>
+        <div class="sit-desc">Customer says they never received their package. Carrier tracking says &ldquo;delivered.&rdquo; Customer wants a refund or replacement right now.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot override what the carrier says. Cannot promise reshipment or refund without completing the claims process. &ldquo;Delivered&rdquo; status creates a dispute that takes time &mdash; but the customer wants it resolved now.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-02 &middot; Retail</div>
+        <div class="sit-title">Return Outside the Policy Window</div>
+        <div class="sit-desc">Customer wants to return an item but the return window has closed. They have a reason &mdash; gift, medical, travel. They want an exception.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent cannot make policy exceptions without authorization. Verbal exceptions create inconsistency across the team and can&rsquo;t be systematically honored. Must hold policy without destroying the relationship.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-03 &middot; Retail</div>
+        <div class="sit-title">Wrong Item / Damaged Product</div>
+        <div class="sit-desc">Customer received the wrong product or something that arrived damaged. Wants it fixed immediately. Doesn&rsquo;t want to wait for a process.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent must initiate the replacement or refund process correctly &mdash; including whether a photo is required, whether the original ships back, and what timeline is realistic. Cannot overpromise.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+      <div class="sit-card">
+        <div class="sit-n">S-04 &middot; Retail</div>
+        <div class="sit-title">Supervisor Demand &mdash; Escalation Request</div>
+        <div class="sit-desc">Customer is frustrated about any of the above and demands to speak with a supervisor right now. They don&rsquo;t want to hear from the agent anymore.</div>
+        <div class="sit-break"><div class="sit-break-label">Where it breaks</div><div class="sit-break-text">Agent must de-escalate or transfer &mdash; but cannot tell the customer a supervisor will &ldquo;definitely fix this&rdquo; or override the prior answer. Escalation must be managed without invalidating the original response.</div></div>
+        <div class="sit-demo-prompt">&ldquo;Does this situation come up for your agents?&rdquo;</div>
+      </div>
+    </div>
+    <div class="demo-footer">
+      <div class="df-icon">&#x1F4AC;</div>
+      <div>
+        <div class="df-label">Live Demo Prompt</div>
+        <div class="df-line">&ldquo;I spent some time looking at what your team handles. I want to show you something. Does this situation come up for your agents?&rdquo;</div>
+        <div class="df-note">Each situation above maps to a step-by-step guide path built from that organization&rsquo;s source material. The prospect&rsquo;s &ldquo;yes&rdquo; is the opening.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<footer>
+  <div class="footer-l">Rudolph CX LLC &mdash; Sales Asset</div>
+  <div class="footer-r">Situations sourced from primary industry research &middot; Not for external distribution</div>
+</footer>
+
+<script>
+var cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', function(e) {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+
+function selectVertical(v) {
+  // hide empty state
+  document.getElementById('empty-state').style.display = 'none';
+  // deactivate all buttons
+  document.querySelectorAll('.v-btn').forEach(function(b) {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
+  // activate clicked button
+  var btn = document.querySelector('.v-btn[data-v="' + v + '"]');
+  if (btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); }
+  // hide all panels
+  document.querySelectorAll('.vertical-panel').forEach(function(p) {
+    p.classList.remove('active');
+  });
+  // show selected panel
+  var panel = document.getElementById('panel-' + v);
+  if (panel) {
+    panel.classList.add('active');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// keyboard nav for vertical buttons
+document.querySelectorAll('.v-btn').forEach(function(btn) {
+  btn.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      btn.click();
+    }
+  });
+});
+</script>
+</body>
+</html>
