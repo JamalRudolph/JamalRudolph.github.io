@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reentryline — Performance Support Guides for Reentry Navigation | Rudolph CX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
+--cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
+--violet: #5a3a8a; --violet2: #7048a8; --violet-light: #f0ecf8; --violet-deep: #42286a;
+--amber: #c8780a; --red: #b83020; --gold: #c49a3c;
+--serif: 'Cormorant Garamond', Georgia, serif;
+--mono: 'DM Mono', monospace;
+--sans: 'DM Sans', system-ui, sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; cursor: none; }
+.cursor { width: 10px; height: 10px; background: var(--violet); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.6), 0 0 0 2.5px rgba(90,58,138,0.3); }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--cream2); }
+::-webkit-scrollbar-thumb { background: var(--violet); }
+/* WCAG 2.1 AA */
+.skip-link { position:absolute; top:-100%; left:0; background:var(--ink); color:var(--cream); padding:0.5rem 1rem; font-family:var(--mono); font-size:0.78rem; z-index:10000; text-decoration:none; border-radius:0 0 4px 0; letter-spacing:0.1em; }
+.skip-link:focus { top:0; outline:3px solid var(--gold); outline-offset:2px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid var(--violet); outline-offset:2px; }
+.nav-links a:focus-visible { outline:3px solid var(--violet); outline-offset:3px; }
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; mix-blend-mode: multiply; }
+.nav-logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; text-decoration: none; display: inline-block; }
+.nav-logo span { color: var(--violet); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links > li { position: relative; }
+.nav-links a { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+.nav-links a:hover { color: var(--violet); }
+.nav-dropdown > a::after { content: ' ▾'; font-size: 8px; }
+.dropdown-menu { display: none; position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%); background: var(--cream); border: 1px solid var(--cream3); min-width: 210px; padding: 8px 0; z-index: 200; box-shadow: 0 8px 24px rgba(15,14,12,0.10); }
+.nav-dropdown:hover .dropdown-menu, .nav-dropdown.open .dropdown-menu { display: block; }
+.dropdown-menu a { display: block; padding: 10px 20px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s, background 0.15s; white-space: nowrap; }
+.dropdown-menu a:hover { color: var(--violet); background: var(--cream2); }
+.dropdown-menu .dm-tag { font-size: 7px; color: var(--muted); margin-left: 6px; letter-spacing: 0.1em; }
+/* HERO */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 140px 60px 80px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.7; }
+.hero-left { position: relative; z-index: 1; }
+.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--violet); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--violet); }
+.hero-title { font-family: var(--serif); font-size: clamp(48px,5.5vw,78px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 32px; }
+.hero-title em { font-style: italic; color: var(--violet); }
+.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 480px; margin-bottom: 32px; font-weight: 300; }
+.offline-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); margin-bottom: 28px; padding: 8px 14px; border: 1px solid var(--cream3); background: white; }
+.offline-dot { width: 6px; height: 6px; background: #2a6e4a; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-accent { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; background: var(--violet); color: var(--cream); border: none; cursor: pointer; text-decoration: none; transition: all 0.2s; position: relative; overflow: hidden; display: inline-block; }
+.btn-accent::after { content: ''; position: absolute; inset: 0; background: var(--ink); transform: translateX(-101%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
+.btn-accent:hover::after { transform: translateX(0); }
+.btn-accent span { position: relative; z-index: 1; }
+.btn-sec { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.15s; }
+.btn-sec:hover { color: var(--violet); }
+/* HERO RIGHT */
+.hero-right { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 16px; padding: 20px 20px 40px 40px; }
+.scenario-card { background: white; border: 1px solid var(--cream3); padding: 24px 28px; position: relative; opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.scenario-card.visible { opacity: 1; transform: none; }
+.scenario-card.active-sc { border-left: 3px solid var(--violet); }
+.sc-tag { font-family: var(--mono); font-size: 7.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--violet); margin-bottom: 10px; }
+.sc-situation { font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--ink); line-height: 1.4; margin-bottom: 10px; }
+.sc-outcome { font-size: 12px; color: var(--dim); line-height: 1.6; font-weight: 300; }
+.sc-guide-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--cream3); }
+/* MARQUEE */
+.marquee-wrap { border-top: 1px solid var(--cream3); border-bottom: 1px solid var(--cream3); padding: 14px 0; overflow: hidden; background: var(--cream2); position: relative; z-index: 1; }
+.marquee-track { display: flex; animation: marquee 40s linear infinite; width: max-content; }
+.marquee-item { display: flex; align-items: center; gap: 28px; padding: 0 28px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
+.marquee-item::after { content: '\00b7'; color: var(--violet); }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* SECTIONS */
+.section { padding: 120px 60px; position: relative; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--violet); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--violet); }
+.section-title { font-family: var(--serif); font-size: clamp(34px,3.8vw,52px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 32px; }
+.section-title em { font-style: italic; color: var(--violet); }
+.split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 64px; }
+.split-text { font-size: 15px; color: var(--ink3); line-height: 1.8; font-weight: 300; }
+.split-text p { margin-bottom: 20px; }
+.split-text strong { color: var(--ink); font-weight: 600; }
+/* Compliance block */
+.compliance-block { background: var(--violet-light); border-left: 2px solid var(--violet); padding: 24px 28px; margin: 32px 0; }
+.cb-label { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--violet); margin-bottom: 12px; }
+.cb-list { list-style: none; }
+.cb-list li { font-size: 12px; color: var(--ink3); line-height: 1.7; font-weight: 300; padding: 4px 0; border-bottom: 1px solid var(--cream3); }
+.cb-list li:last-child { border-bottom: none; }
+.cb-list li::before { content: '§ '; color: var(--violet); font-family: var(--mono); font-size: 10px; }
+/* Active changes callout */
+.active-changes { background: #fffae8; border: 1px solid #e8d888; border-left: 3px solid var(--amber); padding: 20px 24px; margin: 32px 0; border-radius: 2px; }
+.ac-label { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); margin-bottom: 10px; }
+.ac-text { font-size: 13px; color: var(--ink3); line-height: 1.7; font-weight: 300; }
+/* Pull quote */
+.pull-quote { border-left: 2px solid var(--violet); padding: 24px 32px; background: white; margin: 40px 0; }
+.pq-text { font-family: var(--serif); font-size: 21px; font-weight: 500; color: var(--ink); line-height: 1.45; font-style: italic; margin-bottom: 12px; }
+.pq-attr { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+/* Feature list */
+.feature-list { list-style: none; }
+.feature-item { display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid var(--cream3); }
+.feature-item:first-child { border-top: 1px solid var(--cream3); }
+.feature-num { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--violet); letter-spacing: 0.1em; flex-shrink: 0; margin-top: 2px; width: 28px; }
+.feature-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.feature-desc { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; }
+/* SITUATIONS */
+.situations-section { padding: 120px 60px; background: var(--ink); position: relative; overflow: hidden; }
+.situations-section::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(90,58,138,0.2) 0%, transparent 70%); pointer-events: none; }
+.sit-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--violet2); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.sit-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--violet2); }
+.sit-title { font-family: var(--serif); font-size: clamp(32px,3.5vw,48px); font-weight: 500; color: var(--cream); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
+.sit-sub { font-size: 15px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; max-width: 560px; margin-bottom: 16px; }
+.sit-note { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.25); margin-bottom: 48px; }
+.sit-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; }
+.sit-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 28px 24px; position: relative; transition: all 0.3s ease; }
+.sit-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(90,58,138,0.5); }
+.sit-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--violet); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+.sit-card:hover::before { transform: scaleX(1); }
+.sit-card-n { font-family: var(--mono); font-size: 9px; font-weight: 600; color: var(--violet2); letter-spacing: 0.1em; margin-bottom: 12px; }
+.sit-card-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--cream); margin-bottom: 6px; letter-spacing: -0.01em; line-height: 1.2; }
+.sit-card-desc { font-size: 11px; color: rgba(247,244,238,0.5); line-height: 1.65; font-weight: 300; }
+.sit-card-reg { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; color: rgba(112,72,168,0.9); margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); text-transform: uppercase; }
+.sit-card-flag { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; color: rgba(200,120,10,0.9); margin-top: 4px; text-transform: uppercase; }
+/* PRICING */
+.pricing-section { padding: 120px 60px; background: var(--cream); border-top: 1px solid var(--cream3); }
+.pricing-block { max-width: 760px; margin: 0 auto; text-align: center; }
+.pb-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--violet); margin-bottom: 20px; }
+.pb-title { font-family: var(--serif); font-size: clamp(36px,4vw,54px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
+.pb-sub { font-size: 15px; color: var(--ink3); line-height: 1.75; font-weight: 300; max-width: 560px; margin: 0 auto 48px; }
+.pb-discovery { background: white; border: 1px solid var(--cream3); padding: 40px; margin-bottom: 32px; text-align: left; }
+.pb-discovery-tag { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--violet); margin-bottom: 16px; }
+.pb-discovery-price { font-family: var(--serif); font-size: 48px; font-weight: 600; color: var(--ink); line-height: 1; margin-bottom: 8px; }
+.pb-discovery-note { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; max-width: 480px; }
+.pb-tiers-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-bottom: 20px; }
+.pb-tiers-range { font-family: var(--serif); font-size: 36px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+.pb-tiers-note { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; margin-bottom: 24px; }
+.retainer-block { margin-top: 24px; padding: 28px 32px; border-left: 3px solid var(--violet); background: white; text-align: left; }
+.retainer-label { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--violet); margin-bottom: 10px; }
+.retainer-price { font-family: var(--serif); font-size: 32px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.retainer-note { font-size: 13px; color: var(--dim); line-height: 1.7; font-weight: 300; }
+.pb-cta { display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 40px; background: var(--violet); color: var(--cream); text-decoration: none; transition: background 0.2s; }
+.pb-cta:hover { background: var(--ink); }
+/* EQUITY */
+.equity-block { background: var(--cream2); border-top: 1px solid var(--cream3); padding: 60px; }
+/* CONTACT */
+.contact-section { padding: 120px 60px; background: var(--cream2); border-top: 1px solid var(--cream3); text-align: center; }
+.contact-title { font-family: var(--serif); font-size: clamp(36px,4.5vw,64px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
+.contact-title em { font-style: italic; color: var(--violet); }
+.contact-sub { font-size: 16px; color: var(--dim); line-height: 1.7; max-width: 500px; margin: 0 auto 48px; font-weight: 300; }
+.form-wrap { max-width: 560px; margin: 0 auto; text-align: left; }
+.form-group { margin-bottom: 20px; }
+.form-label { font-family: var(--mono); font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); display: block; margin-bottom: 8px; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--cream3); background: white; font-family: var(--sans); font-size: 14px; color: var(--ink); font-weight: 300; outline: none; transition: border-color 0.15s; appearance: none; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--violet); }
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-submit { width: 100%; padding: 16px; background: var(--violet); color: var(--cream); font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+.form-submit:hover { background: var(--ink); }
+.form-note { font-family: var(--mono); font-size: 9px; color: var(--dim); text-align: center; margin-top: 16px; line-height: 1.6; }
+/* FOOTER */
+footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex; align-items: center; justify-content: space-between; background: var(--cream); flex-wrap: wrap; gap: 12px; }
+.footer-logo { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--ink3); }
+.footer-logo span { color: var(--violet); }
+.footer-back { font-family: var(--mono); font-size: 9px; color: var(--dim); text-decoration: none; letter-spacing: 0.1em; transition: color 0.15s; }
+.footer-back:hover { color: var(--violet); }
+.footer-copy { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; }
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1); }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+@media (max-width: 900px) {
+nav { padding: 16px 28px; }
+.nav-links { gap: 16px; }
+.hero { grid-template-columns: 1fr; padding: 100px 28px 60px; }
+.hero-right { display: none; }
+.split-layout { grid-template-columns: 1fr; gap: 40px; }
+.sit-grid { grid-template-columns: 1fr; }
+.section, .situations-section, .pricing-section, .contact-section { padding: 80px 28px; }
+.equity-block { padding: 40px 28px; }
+footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: center; }
+.form-row { grid-template-columns: 1fr; }
+}
+</style>
+<script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="cursor" id="cursor"></div>
+
+<nav aria-label="Main navigation">
+<a href="/" class="nav-logo">Rudolph<span>CX</span></a>
+<ul class="nav-links">
+<li><a href="/">Home</a></li>
+<li class="nav-dropdown">
+  <a href="#" aria-haspopup="true" aria-expanded="false">Our Guides</a>
+  <div class="dropdown-menu">
+    <a href="/aidline.html">Aidline&#8480; <span class="dm-tag">Live</span></a>
+    <a href="/caseline.html">Caseline <span class="dm-tag">Live</span></a>
+    <a href="/lendline.html">Lendline <span class="dm-tag">Live</span></a>
+    <a href="/chartline.html">Chartline <span class="dm-tag">Live</span></a>
+    <a href="/workline.html">Workline <span class="dm-tag">Live</span></a>
+    <a href="/reentryline.html">Reentryline <span class="dm-tag">Live</span></a>
+  </div>
+</li>
+<li><a href="#situations">Situations</a></li>
+<li><a href="#pricing">Pricing</a></li>
+<li><a href="#contact">Book Discovery</a></li>
+</ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+<div class="hero-left" id="main-content">
+<div class="hero-eyebrow reveal">Reentry &middot; Criminal Justice &middot; Community Navigation</div>
+<h1 class="hero-title reveal reveal-delay-1">
+Built for the<br>
+moment the<br>
+client is <em>back.</em>
+</h1>
+<p class="hero-sub reveal reveal-delay-2">
+Reentryline is a custom-built reference guide for reentry specialists, parole officers, and community-based navigators who face live, high-stakes moments with people returning from incarceration &mdash; SSI reinstatement windows, Medicaid reactivation, housing eligibility, supervision violations &mdash; and need the right move right now.
+</p>
+<div class="offline-badge reveal reveal-delay-2">
+  <span class="offline-dot"></span>
+  Works offline &mdash; single HTML file, no internet required
+</div>
+<div class="hero-actions reveal reveal-delay-3">
+<a href="#contact" class="btn-accent"><span>Book Discovery Call &mdash; $300</span></a>
+<a href="#situations" class="btn-sec">See What It Covers
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</a>
+</div>
+</div>
+<div class="hero-right">
+<div class="scenario-card active-sc" id="sc1">
+<div class="sc-tag">Reentryline &mdash; Live Situation</div>
+<div class="sc-situation">&ldquo;Client was released two weeks ago. They had SSI before incarceration. Now they&rsquo;re asking if they have to start over with a whole new application.&rdquo;</div>
+<div class="sc-outcome">The guide surfaces the 12-month SSI reinstatement window, the bring-release-papers-to-SSA path, and the no-new-application rule. The specialist acts immediately &mdash; before the window closes.</div>
+<div class="sc-guide-label">&#10003; Handled &mdash; Reentryline found the right move</div>
+</div>
+<div class="scenario-card" id="sc2">
+<div class="sc-tag">Reentryline &mdash; Live Situation</div>
+<div class="sc-situation">&ldquo;Client needs housing. I told them they can&rsquo;t get subsidized housing because of their record. Now they&rsquo;re asking me to show them where that rule is.&rdquo;</div>
+<div class="sc-outcome">The guide surfaces that the HUD One-Strike rule was withdrawn in 2025. Many formerly incarcerated individuals are eligible. The navigator corrects the error before it costs the client housing.</div>
+<div class="sc-guide-label">&#10003; Handled &mdash; Reentryline found the right move</div>
+</div>
+<div class="scenario-card" id="sc3">
+<div class="sc-tag">Reentryline &mdash; Live Situation</div>
+<div class="sc-situation">&ldquo;Client disclosed something that might be a supervision violation. They&rsquo;re asking me what to do. Do I tell them to report or not?&rdquo;</div>
+<div class="sc-outcome">The guide surfaces the hard stop: advising on whether to report a supervision violation is legal advice. The specialist refers to legal counsel immediately. The client&rsquo;s trust is honored. No legal exposure created.</div>
+<div class="sc-guide-label">&#10003; Handled &mdash; Reentryline found the right move</div>
+</div>
+</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" role="marquee" aria-hidden="true">
+<div class="marquee-track">
+<div class="marquee-item">SSI Reinstatement</div><div class="marquee-item">Medicaid Reactivation</div><div class="marquee-item">SNAP Drug Felony</div><div class="marquee-item">Housing Eligibility</div><div class="marquee-item">Fair Chance Act</div><div class="marquee-item">ID &amp; Documents</div><div class="marquee-item">Mental Health / SUD</div><div class="marquee-item">Child Support Arrears</div><div class="marquee-item">Supervision Violation</div><div class="marquee-item">Crisis Response</div><div class="marquee-item">Second Chance Act</div><div class="marquee-item">Supervision Gate First</div><div class="marquee-item">SSI Reinstatement</div><div class="marquee-item">Medicaid Reactivation</div><div class="marquee-item">SNAP Drug Felony</div><div class="marquee-item">Housing Eligibility</div><div class="marquee-item">Fair Chance Act</div><div class="marquee-item">ID &amp; Documents</div><div class="marquee-item">Mental Health / SUD</div><div class="marquee-item">Child Support Arrears</div><div class="marquee-item">Supervision Violation</div><div class="marquee-item">Crisis Response</div><div class="marquee-item">Second Chance Act</div><div class="marquee-item">Supervision Gate First</div>
+</div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section" id="what">
+<div class="section-inner">
+<div class="section-eyebrow reveal">The Problem</div>
+<h2 class="section-title reveal">Reentry navigators are trained for the process.<br>Not for the <em>moment inside it.</em></h2>
+<div class="split-layout">
+<div class="split-text reveal">
+<p>Reentry organizations invest in training, certification programs, and policy documentation. Navigators complete them, understand the benefit landscape, and go to the floor.</p>
+<p>Then the live moments start. A client released three weeks ago asks if they need a new SSI application &mdash; and the 12-month window is closing. A navigator tells a client they can&rsquo;t get housing because of their record &mdash; not knowing the HUD One-Strike rule was withdrawn. A client discloses a potential supervision violation and asks what to do.</p>
+<p><strong>This is not a training failure. Training prepared the navigator for the regulation. It didn&rsquo;t prepare them for this specific client, this specific deadline, right now.</strong></p>
+<p>Reentryline is built for that gap. Not a policy binder. Not another system login. A guide that lives inside the moment &mdash; regulation-grounded, deadline-aware, and ready the day the navigator goes live.</p>
+</div>
+<div class="split-text reveal">
+<div class="pull-quote">
+<div class="pq-text">&ldquo;The period immediately after release is the highest-risk window. Missed benefit deadlines in the first 30 days post-release are associated with significantly elevated recidivism and mortality risk.&rdquo;</div>
+<div class="pq-attr">Reentryline Guide &mdash; Primary Source Research, Session 99 &middot; Rudolph CX LLC</div>
+</div>
+<ul class="feature-list">
+<li class="feature-item">
+<div class="feature-num">01</div>
+<div><div class="feature-title">Built from your organization&rsquo;s policies and population</div><div class="feature-desc">Every situation in Reentryline is built from your organization&rsquo;s actual source material, supervision context, and service protocols &mdash; not generic scripts.</div></div>
+</li>
+<li class="feature-item">
+<div class="feature-num">02</div>
+<div><div class="feature-title">Current law embedded from the start</div><div class="feature-desc">Medicaid Jan 1 2026 reinstatement rule, HUD One-Strike withdrawal, Second Chance Act reauthorization, 42 CFR Part 2 enforcement &mdash; built in, not bolted on.</div></div>
+</li>
+<li class="feature-item">
+<div class="feature-num">03</div>
+<div><div class="feature-title">Ready on the day the navigator goes live</div><div class="feature-desc">Delivered as a single HTML file. No login. No app. No friction. Open it when the client is in the room.</div></div>
+</li>
+</ul>
+<div class="compliance-block">
+<div class="cb-label">Regulatory Foundation</div>
+<ul class="cb-list">
+<li>Second Chance Act &mdash; P.L. 110-199, reauthorized December 2024</li>
+<li>Fair Chance Act &mdash; P.L. 116-92 (effective December 2021)</li>
+<li>Medicaid Suspension Rule &mdash; Consolidated Appropriations Act 2024 (eff. Jan 1, 2026)</li>
+<li>SSI Reinstatement &mdash; 42 U.S.C. &sect; 1382(e)(1) &middot; 12-month window</li>
+<li>SNAP / PRWORA 1996 &mdash; drug felony rules vary by state</li>
+<li>MHPAEA Final Rule &mdash; effective November 22, 2024</li>
+<li>42 CFR Part 2 &mdash; SUD records (enforcement February 16, 2026)</li>
+<li>VAWA Housing &mdash; 24 CFR Part 5 Subpart L</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SITUATIONS -->
+<section class="situations-section" id="situations">
+<div class="section-inner">
+<div class="sit-eyebrow">What Reentryline Covers</div>
+<h2 class="sit-title">The moments that define reentry navigation.</h2>
+<p class="sit-sub">Supervision status is confirmed first, every session. Then the situation that matches. Each path is sourced from primary federal law &mdash; Second Chance Act, SSI, Medicaid, SNAP, MHPAEA, Fair Chance Act &mdash; and verified against current enforcement dates.</p>
+<div class="sit-note">10 situations &middot; Supervision gate first, every time &middot; Your Reentryline is built from your source material</div>
+<div class="sit-grid">
+<div class="sit-card">
+<div class="sit-card-n">S-01</div>
+<div class="sit-card-title">SSI Reinstatement</div>
+<div class="sit-card-desc">12-month reinstatement window from suspension date. Bring release papers to SSA — no new application if within window. Over 12 months: new application required. Act immediately if client is within window.</div>
+<div class="sit-card-reg">42 U.S.C. § 1382(e)(1) · SSA POMS SI 02301</div>
+<div class="sit-card-flag">&#9650; 12-month window — hard deadline from suspension date</div>
+</div>
+<div class="sit-card">
+<div class="sit-card-n">S-02</div>
+<div class="sit-card-title">Medicaid Reinstatement (Jan 1, 2026)</div>
+<div class="sit-card-desc">For incarceration after Jan 1, 2026: Medicaid was suspended, not terminated. Reinstatement process — no new application. Bring release papers to state Medicaid agency. Pre-Jan 2026: verify state rules.</div>
+<div class="sit-card-reg">Consolidated Appropriations Act 2024 · Eff. Jan 1, 2026</div>
+<div class="sit-card-flag">&#9650; 2026 change — reinstatement, not reapplication</div>
+</div>
+<div class="sit-card">
+<div class="sit-card-n">S-03</div>
+<div class="sit-card-title">SNAP Eligibility — Drug Felony</div>
+<div class="sit-card-desc">Drug felony SNAP ban is state-by-state under PRWORA 1996. Many states have fully lifted the ban. Never assume ineligibility without checking current state policy. Fugitive felon rule applies. Verify every time.</div>
+<div class="sit-card-reg">SNAP / PRWORA 1996 · USDA SNAP policy database</div>
+<div class="sit-card-flag">&#9650; State-by-state — verify before advising</div>
+</div>
+<div class="sit-card">
+<div class="sit-card-n">S-04</div>
+<div class="sit-card-title">Housing — Subsidized Eligibility</div>
+<div class="sit-card-desc">HUD One-Strike proposed rule was withdrawn in 2025. Many formerly incarcerated individuals can be eligible for subsidized housing. PHAs retain some discretion. Hard bars remain for certain sex offenses and meth manufacture. Navigate case by case.</div>
+<div class="sit-card-reg">HUD One-Strike — withdrawn 2025 · VAWA 24 CFR Part 5 Subpart L</div>
+</div>
+<div class="sit-card">
+<div class="sit-card-n">S-05</div>
+<div class="sit-card-title">Employment — Fair Chance Act</div>
+<div class="sit-card-desc">Federal contractors: criminal history question comes after conditional offer — not on application, not in interview. Second Chance Act reauthorized December 2024: federal reentry employment programming remains active. Verify jurisdiction for broader state bans.</div>
+<div class="sit-card-reg">Fair Chance Act P.L. 116-92 · Second Chance Act P.L. 110-199 (Dec 2024)</div>
+</div>
+<div class="sit-card">
+<div class="sit-card-n">S-06</div>
+<div class="sit-card-title">ID and Documents</div>
+<div class="sit-card-desc">Without a state-issued ID, almost nothing else in reentry can happen. ID is the anchor document — prioritize it above all else. Many states provide free state ID at release. SSA card and birth certificate paths confirmed before any other referral.</div>
+<div class="sit-card-reg">SSA · State vital records · Second Chance Act reentry programs</div>
+</div>
+<div class="sit-card">
+<div class="sit-card-n">S-07</div>
+<div class="sit-card-title">Mental Health and SUD Access</div>
+<div class="sit-card-desc">Medicaid is the primary payer for behavioral health for reentry populations. MHPAEA Final Rule (eff. Nov 22, 2024): mental health and SUD benefits at parity. 42 CFR Part 2 governs SUD records — standard HIPAA authorization is insufficient. Enforcement active Feb 16, 2026.</div>
+<div class="sit-card-reg">MHPAEA Final Rule (eff. Nov 22, 2024) · 42 CFR Part 2</div>
+<div class="sit-card-flag">&#9650; 42 CFR Part 2 enforcement Feb 16, 2026</div>
+</div>
+<div class="sit-card">
+<div class="sit-card-n">S-08</div>
+<div class="sit-card-title">Child Support — Arrears</div>
+<div class="sit-card-desc">In many states, child support accrues during incarceration. File for modification immediately upon release — courts will not retroactively reduce arrears before the filing date. Every day without a filing is a day of accruing debt. Do not give legal advice.</div>
+<div class="sit-card-reg">State family court rules vary · OCSE federal standards</div>
+<div class="sit-card-flag">&#9650; File for modification immediately — retroactive only to filing date</div>
+</div>
+<div class="sit-card">
+<div class="sit-card-n">S-09</div>
+<div class="sit-card-title">Supervision Violation Disclosure</div>
+<div class="sit-card-desc">Do not advise the client on whether to report or not report to their supervision officer. That is a legal decision. Refer immediately to legal counsel. Document that disclosure occurred, referral was made, and no legal advice was given.</div>
+<div class="sit-card-reg">Supervision conditions vary by jurisdiction · Rudolph CX Methodology</div>
+<div class="sit-card-flag">&#9650; Do not advise — refer to legal counsel</div>
+</div>
+<div class="sit-card">
+<div class="sit-card-n">S-10</div>
+<div class="sit-card-title">Client in Crisis — Housing or Financial Emergency</div>
+<div class="sit-card-desc">Stabilize first. A client in housing or financial crisis cannot effectively engage in reentry planning. Housing First applies — sobriety and compliance cannot be conditions of CoC-funded emergency shelter. Do not leave without a concrete next action.</div>
+<div class="sit-card-reg">HUD Housing First · WIOA Rapid Response · Second Chance Act</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+<div class="section-inner">
+<div class="pricing-block">
+<div class="pb-eyebrow reveal">Pricing</div>
+<h2 class="pb-title reveal">One process. One contract.<br>Built for your organization.</h2>
+<p class="pb-sub reveal">Reentryline follows the same proven build process as every Rudolph CX guide. It starts with a discovery call.</p>
+<div class="pb-discovery reveal">
+<div class="pb-discovery-tag">Discovery Call</div>
+<div class="pb-discovery-price">$300</div>
+<div class="pb-discovery-note">Non-refundable. Credits in full to your first invoice if you proceed. The discovery call is where we understand your organization&rsquo;s service population, supervision context, and the live moments your navigators face &mdash; so we can recommend the right build scope before you commit to anything.</div>
+</div>
+<div class="reveal">
+<div class="pb-tiers-label">Build Tiers</div>
+<div class="pb-tiers-range">$2,500 &mdash; $8,000+</div>
+<div class="pb-tiers-note">Four tiers based on role complexity, number of situations, and scope. Your discovery call determines the right tier. 50% deposit before work begins. 50% on delivery.</div>
+<a href="#contact" class="pb-cta">Book Discovery Call &mdash; $300</a>
+</div>
+<div class="retainer-block reveal">
+<div class="retainer-label">Annual Update Retainer</div>
+<div class="retainer-price">$750 <span style="font-size:15px;color:var(--dim);font-weight:400;">/ guide / year</span></div>
+<p class="retainer-note">Reentry benefit rules change through federal legislation, state policy, and regulatory enforcement. The annual retainer keeps your guide current. Covers one review cycle with revisions. Scoped changes outside the annual cycle are billed as change orders.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- EQUITY -->
+<div class="equity-block">
+<div class="section-inner">
+<div style="font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--violet);margin-bottom:12px;">Build Standard</div>
+<h3 style="font-family:var(--serif);font-size:28px;font-weight:500;color:var(--ink);margin-bottom:12px;">Built for everyone in the room.</h3>
+<p style="font-size:14px;color:var(--ink3);line-height:1.75;font-weight:300;max-width:640px;">Every Reentryline guide is built to serve all workers and all clients &mdash; regardless of background, circumstance, or identity. Biased <em>towards</em> is the pattern we catch, not only biased against. Single fathers, men in family court, reentry populations, people with non-apparent circumstances &mdash; this standard applies to every situation, every path, every word.</p>
+</div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+<div class="section-inner">
+<h2 class="contact-title reveal">Ready to build a guide for<br>your <em>navigators?</em></h2>
+<p class="contact-sub reveal">Tell us about your organization, your service population, and the moments your navigators face. We&rsquo;ll take it from there.</p>
+<div class="form-wrap reveal">
+<div class="form-row">
+<div class="form-group">
+<label class="form-label" for="rl-name">Your Name</label>
+<input class="form-input" id="rl-name" type="text" placeholder="Full name">
+</div>
+<div class="form-group">
+<label class="form-label" for="rl-org">Organization</label>
+<input class="form-input" id="rl-org" type="text" placeholder="Organization name">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label class="form-label" for="rl-email">Email</label>
+<input class="form-input" id="rl-email" type="email" placeholder="Work email">
+</div>
+<div class="form-group">
+<label class="form-label" for="rl-role">Role Type</label>
+<select class="form-select" id="rl-role">
+<option value="">Select role</option>
+<option>Reentry Specialist</option>
+<option>Parole / Probation Officer</option>
+<option>Community Navigator</option>
+<option>Case Manager</option>
+<option>Reentry Program Director</option>
+<option>Benefits Navigator</option>
+<option>Other</option>
+</select>
+</div>
+</div>
+<div class="form-group">
+<label class="form-label" for="rl-message">What moments do your navigators struggle with?</label>
+<textarea class="form-textarea" id="rl-message" placeholder="Describe the situations where your navigators need better support..."></textarea>
+</div>
+<button class="form-submit" id="reentryline-submit" type="button" aria-label="Book Discovery Call for $300">
+<span class="submit-label">Book Discovery Call &mdash; $300</span>
+<span class="submit-loading" style="display:none">Sending&hellip;</span>
+</button>
+<div class="form-note">We&rsquo;ll respond within one business day to schedule your discovery call.<br>The $300 fee is collected at scheduling and credits to your first invoice if you proceed.</div>
+<div id="reentryline-status" style="margin-top:16px;font-family:var(--mono);font-size:11px;text-align:center;min-height:20px;"></div>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="footer-logo">Rudolph<span>CX</span></div>
+<a href="/" class="footer-back">&larr; Back to rudolphcx.com</a>
+<div class="footer-copy">&#169; 2026 Rudolph CX LLC &middot; Reentryline &middot; Durham, NC</div>
+</footer>
+
+<script>
+var cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', function(e) {
+cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+});
+var reveals = document.querySelectorAll('.reveal');
+var observer = new IntersectionObserver(function(entries) {
+entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(function(el) { observer.observe(el); });
+setTimeout(function() {
+document.querySelectorAll('.hero .reveal').forEach(function(el) { el.classList.add('visible'); });
+}, 100);
+var cards = document.querySelectorAll('.scenario-card');
+var currentCard = 0;
+cards.forEach(function(c, i) { if (i === 0) c.classList.add('visible'); });
+setInterval(function() {
+cards[currentCard].classList.remove('active-sc');
+currentCard = (currentCard + 1) % cards.length;
+cards.forEach(function(c, i) { c.classList.toggle('visible', i <= currentCard); });
+cards[currentCard].classList.add('active-sc');
+}, 4000);
+document.querySelectorAll('.nav-dropdown').forEach(function(item) {
+item.addEventListener('click', function(e) {
+var isOpen = this.classList.contains('open');
+document.querySelectorAll('.nav-dropdown').forEach(function(d) { d.classList.remove('open'); });
+if (!isOpen) { this.classList.add('open'); e.stopPropagation(); }
+});
+});
+document.addEventListener('click', function() {
+document.querySelectorAll('.nav-dropdown').forEach(function(d) { d.classList.remove('open'); });
+});
+// WCAG 2.1 AA keyboard nav
+(function() {
+document.querySelectorAll('.nav-dropdown > a').forEach(function(trigger) {
+trigger.addEventListener('keydown', function(e) {
+var parent = trigger.closest('.nav-dropdown');
+if (e.key === 'Enter' || e.key === ' ') {
+e.preventDefault();
+var isOpen = parent.classList.contains('open');
+document.querySelectorAll('.nav-dropdown').forEach(function(d) {
+d.classList.remove('open');
+var t = d.querySelector(':scope > a'); if (t) t.setAttribute('aria-expanded', 'false');
+});
+if (!isOpen) { parent.classList.add('open'); trigger.setAttribute('aria-expanded', 'true'); }
+}
+if (e.key === 'Escape') { parent.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
+});
+});
+document.querySelectorAll('.nav-dropdown').forEach(function(item) {
+item.addEventListener('click', function() {
+var t = this.querySelector(':scope > a');
+if (t) t.setAttribute('aria-expanded', this.classList.contains('open') ? 'true' : 'false');
+});
+});
+})();
+// EmailJS
+(function() {
+if (typeof emailjs === 'undefined') return;
+emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
+var btn = document.getElementById('reentryline-submit');
+var statusEl = document.getElementById('reentryline-status');
+if (!btn) return;
+btn.addEventListener('click', function() {
+var nameVal = (document.getElementById('rl-name')||{}).value||'';
+var orgVal = (document.getElementById('rl-org')||{}).value||'';
+var emailVal = (document.getElementById('rl-email')||{}).value||'';
+var roleVal = (document.getElementById('rl-role')||{}).value||'';
+var messageVal = (document.getElementById('rl-message')||{}).value||'';
+nameVal=nameVal.trim();orgVal=orgVal.trim();emailVal=emailVal.trim();messageVal=messageVal.trim();
+if (!nameVal||!orgVal||!emailVal||!messageVal) { statusEl.style.color='var(--red)'; statusEl.textContent='Please fill in all required fields.'; return; }
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) { statusEl.style.color='var(--red)'; statusEl.textContent='Please enter a valid email address.'; return; }
+var label=btn.querySelector('.submit-label'); var loading=btn.querySelector('.submit-loading');
+btn.disabled=true; if(label)label.style.display='none'; if(loading)loading.style.display='inline'; statusEl.textContent='';
+var hutk=document.cookie.replace(/(?:(?:^|.*;\s*)hubspotutk\s*=\s*([^;]*).*$)|^.*$/,'$1');
+fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a',{
+method:'POST',headers:{'Content-Type':'application/json'},
+body:JSON.stringify({fields:[{name:'firstname',value:nameVal},{name:'email',value:emailVal},{name:'company',value:orgVal}],context:{hutk:hutk||undefined,pageUri:'rudolphcx.com/reentryline.html',pageName:'Reentryline \u2014 Reentry Navigation Guide'}})
+}).catch(function(err){console.error('HubSpot error:',err);});
+emailjs.send('service_u94nvbm','template_875pqb4',{
+from_name:nameVal,organization:orgVal,reply_to:emailVal,
+role_type:roleVal||'Not specified',message:messageVal,
+source:'Reentryline discovery form \u2014 rudolphcx.com/reentryline.html'
+}).then(function(){
+statusEl.style.color='var(--violet)';
+statusEl.textContent='Request received. We will be in touch within one business day.';
+btn.disabled=false; if(label)label.style.display='inline'; if(loading)loading.style.display='none';
+document.getElementById('rl-name').value=''; document.getElementById('rl-org').value='';
+document.getElementById('rl-email').value=''; document.getElementById('rl-role').selectedIndex=0;
+document.getElementById('rl-message').value='';
+}).catch(function(err){
+statusEl.style.color='var(--red)';
+statusEl.textContent='Something went wrong. Please email jamal@rudolphcx.com directly.';
+btn.disabled=false; if(label)label.style.display='inline'; if(loading)loading.style.display='none';
+});
+});
+})();
+</script>
+</body>
+</html>
