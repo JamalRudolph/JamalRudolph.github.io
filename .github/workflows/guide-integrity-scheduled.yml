@@ -1,0 +1,111 @@
+name: Guide Integrity Check — Scheduled
+
+# Runs nightly at 2 AM ET (7 AM UTC).
+# Compares current file hashes against baseline manifest.
+# Sends alert only on mismatch.
+#
+# SETUP REQUIRED (one-time — already done):
+#   SMTP_USERNAME   →  jamal@rudolphcx.com
+#   SMTP_PASSWORD   →  Namecheap Private Email password
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # 2 AM ET daily
+  workflow_dispatch:       # manual trigger available from Actions tab
+
+jobs:
+  integrity-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify baseline manifest exists
+        run: |
+          if [ ! -f ".github/guide-hashes-baseline.sha256" ]; then
+            echo "ERROR: Baseline manifest not found at .github/guide-hashes-baseline.sha256"
+            exit 1
+          fi
+          echo "Baseline manifest found."
+          cat .github/guide-hashes-baseline.sha256
+
+      - name: Compare current hashes to baseline
+        id: integrity
+        run: |
+          BASELINE=".github/guide-hashes-baseline.sha256"
+          MISMATCH=""
+          CURRENT_REPORT=""
+          PASS=true
+
+          while IFS= read -r line; do
+            [[ -z "$line" || "$line" == \#* ]] && continue
+            EXPECTED_HASH=$(echo "$line" | awk '{print $1}')
+            FILENAME=$(echo "$line" | awk '{print $2}')
+
+            if [ ! -f "$FILENAME" ]; then
+              MISMATCH="$MISMATCH\nFILE MISSING: $FILENAME"
+              PASS=false
+              continue
+            fi
+
+            ACTUAL_HASH=$(sha256sum "$FILENAME" | awk '{print $1}')
+            CURRENT_REPORT="$CURRENT_REPORT$FILENAME: $ACTUAL_HASH\n"
+
+            if [ "$ACTUAL_HASH" != "$EXPECTED_HASH" ]; then
+              MISMATCH="$MISMATCH\nMISMATCH: $FILENAME\n  Expected: $EXPECTED_HASH\n  Actual:   $ACTUAL_HASH"
+              PASS=false
+            fi
+          done < "$BASELINE"
+
+          echo "pass=$PASS" >> $GITHUB_OUTPUT
+          echo "mismatch<<EOF" >> $GITHUB_OUTPUT
+          printf "$MISMATCH" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "current_report<<EOF" >> $GITHUB_OUTPUT
+          printf "$CURRENT_REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          if [ "$PASS" = "true" ]; then
+            echo "✅ All files match baseline. No tampering detected."
+          else
+            echo "❌ INTEGRITY FAILURE DETECTED"
+            printf "$MISMATCH\n"
+            exit 1
+          fi
+
+      - name: Send integrity failure alert
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: mail.privateemail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "🚨 INTEGRITY FAILURE — Rudolph CX site files may have been tampered with"
+          to: jamal@rudolphcx.com
+          from: "Rudolph CX Monitor <jamal@rudolphcx.com>"
+          body: |
+            RUDOLPH CX — INTEGRITY FAILURE ALERT
+
+            Repository: ${{ github.repository }}
+            Check time: ${{ github.run_started_at }}
+            Run ID: ${{ github.run_id }}
+
+            MISMATCHES DETECTED:
+            ${{ steps.integrity.outputs.mismatch }}
+
+            CURRENT HASHES (at time of check):
+            ${{ steps.integrity.outputs.current_report }}
+
+            NEXT STEPS:
+            1. Review commit history for unauthorized changes.
+            2. Compare against your Drive backup copies.
+            3. If tampered, restore from Drive and regenerate baseline.
+
+            View Actions run:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            ---
+            This alert fired because one or more files do not match
+            their recorded SHA-256 hash in .github/guide-hashes-baseline.sha256
