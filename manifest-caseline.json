@@ -1,0 +1,24 @@
+{
+  "name": "Caseline\u2120 \u2014 Case Manager Field Guide",
+  "short_name": "Caseline",
+  "description": "Rudolph CX LLC \u2014 Caseline Performance Support Guide. Built for the moment the situation is live.",
+  "start_url": "/caseline.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f0e8",
+  "theme_color": "#2a7a72",
+  "icons": [
+    {
+      "src": "/caseline-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/caseline-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
