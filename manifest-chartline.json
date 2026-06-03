@@ -1,0 +1,24 @@
+{
+  "name": "Chartline\u2120 \u2014 Health Records Field Guide",
+  "short_name": "Chartline",
+  "description": "Rudolph CX LLC \u2014 Chartline Performance Support Guide. Built for the moment the situation is live.",
+  "start_url": "/chartline.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f0e8",
+  "theme_color": "#2d6ab0",
+  "icons": [
+    {
+      "src": "/chartline-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/chartline-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
