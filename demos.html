@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Center — Rudolph CX</title>
+<meta name="description" content="See all six Rudolph CX performance support guides and scope your own — one situation, fully built, before you book.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
+  --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
+  --red: #b83020; --gold: #c49a3c; --teal: #2a7a72; --teal-light: #e8f4f2;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); line-height: 1.6; }
+
+.skip-link { position:absolute; top:-100%; left:0; background:var(--ink); color:#fff; padding:0.5rem 1rem; font-family:var(--mono); font-size:0.75rem; z-index:9999; text-decoration:none; }
+.skip-link:focus { top:0; }
+
+/* ── NAV ── */
+nav { position: sticky; top: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+.nav-logo span { color: var(--red); }
+.nav-links { list-style: none; display: flex; align-items: center; gap: 2rem; }
+.nav-links > li > a { font-family: var(--sans); font-size: 0.85rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+.nav-links > li > a:hover { color: var(--ink); }
+.nav-dropdown { position: relative; }
+.nav-dropdown > a::after { content: ' ↓'; font-size: 0.7rem; opacity: 0.5; }
+.dropdown-menu { display: none; position: absolute; top: calc(100% + 2px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.nav-dropdown:hover .dropdown-menu, .nav-dropdown.open .dropdown-menu { display: flex; flex-direction: column; gap: 2px; }
+.dropdown-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; font-family: var(--sans); color: var(--ink3); text-decoration: none; }
+.dropdown-menu a:hover { background: var(--cream2); color: var(--ink); }
+.dm-tag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); }
+.nav-cta { background: var(--ink) !important; color: var(--cream) !important; padding: 0.4rem 1rem !important; border-radius: 3px; font-size: 0.8rem !important; }
+.nav-cta:hover { background: var(--red) !important; color: #fff !important; }
+.nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.25rem; flex-direction: column; gap: 5px; }
+.nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 2px; transition: all 0.2s; }
+.nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+/* ── HERO ── */
+.demo-hero { padding: 80px 80px 60px; border-bottom: 1px solid var(--cream3); }
+.demo-hero-eyebrow { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+.demo-hero-title { font-family: var(--serif); font-size: clamp(2.4rem, 4vw, 3.6rem); font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem; }
+.demo-hero-sub { font-size: 1rem; color: var(--ink3); max-width: 580px; line-height: 1.7; }
+
+/* ── GUIDE CARDS ── */
+.guides-section { padding: 60px 80px; border-bottom: 1px solid var(--cream3); }
+.guides-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin-bottom: 2rem; }
+.guides-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.guide-card { background: var(--cream2); border: 1px solid var(--cream3); border-radius: 4px; padding: 1.75rem; display: flex; flex-direction: column; gap: 0.75rem; text-decoration: none; color: var(--ink); transition: border-color 0.15s, box-shadow 0.15s; }
+.guide-card:hover { border-color: var(--ink3); box-shadow: 0 4px 16px rgba(15,14,12,0.08); }
+.guide-card-sector { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+.guide-card-name { font-family: var(--serif); font-size: 1.4rem; font-weight: 500; color: var(--ink); }
+.guide-card-role { font-size: 0.82rem; color: var(--ink3); line-height: 1.5; }
+.guide-card-stats { display: flex; gap: 1.5rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--cream3); }
+.guide-stat-n { font-family: var(--serif); font-size: 1.3rem; font-weight: 500; color: var(--ink); display: block; }
+.guide-stat-l { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); }
+.guide-card-cta { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; color: var(--ink); margin-top: 0.5rem; }
+
+/* ── WIZARD SECTION ── */
+.wizard-section { padding: 80px 80px; background: var(--ink); }
+.wizard-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+.wizard-title { font-family: var(--serif); font-size: clamp(2rem, 3vw, 2.8rem); font-weight: 500; color: var(--cream); line-height: 1.15; margin-bottom: 0.75rem; }
+.wizard-sub { font-size: 0.95rem; color: var(--muted); line-height: 1.7; max-width: 560px; margin-bottom: 3rem; }
+
+/* ── WIZARD STEPS ── */
+.wizard-container { max-width: 640px; }
+.wizard-step { display: none; }
+.wizard-step.active { display: block; }
+
+/* Step indicators */
+.step-indicator { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.2s; }
+.step-dot.done { background: var(--teal); }
+.step-dot.active { background: var(--cream); }
+
+/* Form elements */
+.wiz-field { margin-bottom: 1.25rem; }
+.wiz-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 0.4rem; }
+.wiz-input, .wiz-select { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 3px; padding: 0.75rem 1rem; font-family: var(--sans); font-size: 0.9rem; color: var(--cream); outline: none; transition: border-color 0.15s; }
+.wiz-input::placeholder { color: rgba(255,255,255,0.3); }
+.wiz-select option { background: var(--ink2); color: var(--cream); }
+.wiz-input:focus, .wiz-select:focus { border-color: rgba(255,255,255,0.4); }
+.wiz-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--cream); color: var(--ink); border: none; padding: 0.85rem 2rem; border-radius: 3px; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background 0.15s; margin-top: 0.5rem; }
+.wiz-btn:hover { background: var(--teal-light); }
+.wiz-btn-outline { background: transparent; color: var(--cream); border: 1px solid rgba(255,255,255,0.2); }
+.wiz-btn-outline:hover { background: rgba(255,255,255,0.06); }
+
+/* Sample card */
+.sample-card { background: #f7f4ee; border-radius: 4px; padding: 1.75rem; margin-bottom: 1.5rem; }
+.sample-card-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin-bottom: 1rem; }
+.sample-card-title { font-family: var(--serif); font-size: 1.15rem; font-weight: 500; color: var(--ink); margin-bottom: 1rem; }
+.sample-card-tag { display: inline-block; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 2px; margin-bottom: 1rem; }
+.tag-halt { background: #fdf0ee; color: #b83020; border: 1px solid #e8c0b8; }
+.tag-warn { background: #fdf4e0; color: #c8780a; border: 1px solid #e0c888; }
+.tag-legal { background: #eaf2ea; color: #3a6640; border: 1px solid #b0c8b0; }
+.tag-teal { background: #e8f4f2; color: #2a7a72; border: 1px solid #a8d4d0; }
+.sample-steps { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+.sample-steps li { display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.5rem; font-size: 0.88rem; line-height: 1.55; color: var(--ink2); }
+.step-n { font-family: var(--mono); font-size: 0.65rem; color: var(--dim); padding-top: 0.15rem; }
+.sample-callout { border-radius: 3px; padding: 0.65rem 1rem; font-size: 0.82rem; line-height: 1.5; margin-top: 0.75rem; }
+.callout-halt { background: #fdf0ee; border-left: 3px solid #b83020; color: #7a2018; }
+.callout-warn { background: #fdf6ee; border-left: 3px solid #c8780a; color: #7a4810; }
+.callout-legal { background: #f0f5f0; border-left: 3px solid #3a6640; color: #2a4228; }
+.callout-teal { background: #e8f4f2; border-left: 3px solid #2a7a72; color: #1a5a54; }
+.callout-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.2rem; opacity: 0.7; }
+.sample-source { font-family: var(--mono); font-size: 0.62rem; color: var(--dim); padding-top: 0.75rem; margin-top: 0.75rem; border-top: 1px solid var(--cream3); }
+.sample-disclaimer { font-family: var(--mono); font-size: 0.6rem; color: rgba(255,255,255,0.35); letter-spacing: 0.03em; margin-top: 0.75rem; line-height: 1.6; }
+
+/* Gate */
+.gate-block { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 2rem; margin-bottom: 1.5rem; }
+.gate-headline { font-family: var(--serif); font-size: 1.6rem; font-weight: 500; color: var(--cream); margin-bottom: 0.75rem; }
+.gate-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+.gate-includes { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+.gate-includes li { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.03em; display: flex; gap: 0.5rem; align-items: flex-start; }
+.gate-includes li::before { content: "◹"; color: var(--teal); flex-shrink: 0; }
+.gate-price { font-family: var(--serif); font-size: 2.2rem; color: var(--cream); margin-bottom: 0.25rem; }
+.gate-price-note { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-bottom: 1.5rem; }
+.gate-success { display: none; font-family: var(--mono); font-size: 0.72rem; color: #5a9a6a; margin-top: 0.75rem; }
+
+/* Footer */
+footer { background: var(--ink2); padding: 2.5rem 80px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
+.footer-logo { font-family: var(--serif); font-size: 1.1rem; color: var(--cream); }
+.footer-logo span { color: var(--red); }
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.08em; color: var(--muted); text-decoration: none; text-transform: uppercase; }
+.footer-links a:hover { color: var(--cream); }
+.footer-legal { font-family: var(--mono); font-size: 0.6rem; color: var(--dim); }
+
+/* Mobile */
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; flex-direction: column; align-items: flex-start; gap: 0; position: absolute; top: 64px; left: 0; right: 0; background: var(--cream); border-bottom: 1px solid var(--cream3); padding: 1rem 24px; z-index: 99; }
+  .nav-links.open { display: flex; }
+  .nav-links > li { width: 100%; padding: 0.5rem 0; border-bottom: 1px solid var(--cream3); }
+  .nav-hamburger { display: flex; }
+  .dropdown-menu { position: static; box-shadow: none; border: none; padding: 0.25rem 0 0.25rem 1rem; }
+  .nav-dropdown:hover .dropdown-menu, .nav-dropdown.open .dropdown-menu { display: flex; }
+  .demo-hero { padding: 48px 24px 40px; }
+  .guides-section { padding: 40px 24px; }
+  .guides-grid { grid-template-columns: 1fr; }
+  .wizard-section { padding: 60px 24px; }
+  footer { padding: 2rem 24px; flex-direction: column; align-items: flex-start; }
+}
+
+/* Mobile sticky CTA */
+.mobile-sticky-cta { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--ink); padding: 1rem 24px; z-index: 90; border-top: 1px solid rgba(255,255,255,0.1); }
+.mobile-sticky-cta a { display: block; background: var(--cream); color: var(--ink); text-align: center; padding: 0.75rem; border-radius: 3px; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; text-decoration: none; }
+@media (max-width: 900px) { .mobile-sticky-cta { display: block; } body { padding-bottom: 72px; } }
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+<a href="/" class="nav-logo">Rudolph<span>CX</span></a>
+<ul class="nav-links" id="nav-links">
+  <li><a href="/">Home</a></li>
+  <li class="nav-dropdown">
+    <a href="#" aria-haspopup="true" aria-expanded="false">Our Guides</a>
+    <div class="dropdown-menu">
+      <a href="/aidline.html">Aidline&#8480; <span class="dm-tag">Live</span></a>
+      <a href="/caseline.html">Caseline&#8480; <span class="dm-tag">Live</span></a>
+      <a href="/lendline.html">Lendline&#8480; <span class="dm-tag">Live</span></a>
+      <a href="/chartline.html">Chartline&#8480; <span class="dm-tag">Live</span></a>
+      <a href="/workline.html">Workline&#8480; <span class="dm-tag">Live</span></a>
+      <a href="/reentryline.html">Reentryline&#8480; <span class="dm-tag">Live</span></a>
+    </div>
+  </li>
+  <li><a href="/demos.html">Demo Center</a></li>
+  <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep&#8480;</a></li>
+  <li><a href="#wizard" class="nav-cta">Scope My Guide</a></li>
+</ul>
+<button class="nav-hamburger" id="hamburger" aria-label="Open navigation" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="demo-hero" id="main-content">
+  <div class="demo-hero-eyebrow">Demo Center</div>
+  <h1 class="demo-hero-title">Six guides.<br>Every sector.<br>One moment.</h1>
+  <p class="demo-hero-sub">Explore every Rudolph CX guide — then scope your own. Enter your situation and see exactly one card, fully built. When you're ready, book the $300 discovery call.</p>
+</section>
+
+<!-- ── SIX GUIDE CARDS ── -->
+<section class="guides-section">
+  <div class="guides-label">Available Now — All Six Guides Live</div>
+  <div class="guides-grid">
+
+    <a href="/aidline.html" class="guide-card">
+      <div class="guide-card-sector">Federal Benefits &middot; All Industries</div>
+      <div class="guide-card-name">Aidline&#8480;</div>
+      <div class="guide-card-role">For any frontline worker facing a live high-stakes moment — when the situation is live, training is nowhere in the room.</div>
+      <div class="guide-card-stats">
+        <div><span class="guide-stat-n">10</span><span class="guide-stat-l">Situations</span></div>
+        <div><span class="guide-stat-n">$300</span><span class="guide-stat-l">Discovery</span></div>
+        <div><span class="guide-stat-n">2wk</span><span class="guide-stat-l">Delivery</span></div>
+      </div>
+      <div class="guide-card-cta">Explore Aidline&#8480; &rarr;</div>
+    </a>
+
+    <a href="/caseline.html" class="guide-card">
+      <div class="guide-card-sector">Social Services &middot; Case Management</div>
+      <div class="guide-card-name">Caseline&#8480;</div>
+      <div class="guide-card-role">For social workers, case managers, and benefits navigators navigating live client moments with regulatory and ethical stakes.</div>
+      <div class="guide-card-stats">
+        <div><span class="guide-stat-n">14</span><span class="guide-stat-l">Situations</span></div>
+        <div><span class="guide-stat-n">$300</span><span class="guide-stat-l">Discovery</span></div>
+        <div><span class="guide-stat-n">2wk</span><span class="guide-stat-l">Delivery</span></div>
+      </div>
+      <div class="guide-card-cta">Explore Caseline&#8480; &rarr;</div>
+    </a>
+
+    <a href="/chartline.html" class="guide-card">
+      <div class="guide-card-sector">Healthcare &middot; Medical Records</div>
+      <div class="guide-card-name">Chartline&#8480;</div>
+      <div class="guide-card-role">For intake coordinators and patient-facing staff handling live records requests, HIPAA decisions, and authorization chains.</div>
+      <div class="guide-card-stats">
+        <div><span class="guide-stat-n">8</span><span class="guide-stat-l">Situations</span></div>
+        <div><span class="guide-stat-n">$300</span><span class="guide-stat-l">Discovery</span></div>
+        <div><span class="guide-stat-n">2wk</span><span class="guide-stat-l">Delivery</span></div>
+      </div>
+      <div class="guide-card-cta">Explore Chartline&#8480; &rarr;</div>
+    </a>
+
+    <a href="/lendline.html" class="guide-card">
+      <div class="guide-card-sector">Financial Services &middot; Mortgage</div>
+      <div class="guide-card-name">Lendline&#8480;</div>
+      <div class="guide-card-role">For loan officers and mortgage servicers navigating live hardship conversations, FDCPA deadlines, and loss mitigation intake.</div>
+      <div class="guide-card-stats">
+        <div><span class="guide-stat-n">10</span><span class="guide-stat-l">Situations</span></div>
+        <div><span class="guide-stat-n">$300</span><span class="guide-stat-l">Discovery</span></div>
+        <div><span class="guide-stat-n">2wk</span><span class="guide-stat-l">Delivery</span></div>
+      </div>
+      <div class="guide-card-cta">Explore Lendline&#8480; &rarr;</div>
+    </a>
+
+    <a href="/workline.html" class="guide-card">
+      <div class="guide-card-sector">Workforce Development</div>
+      <div class="guide-card-name">Workline&#8480;</div>
+      <div class="guide-card-role">For employment specialists and workforce navigators handling live intake, WIOA eligibility, and barrier resolution moments.</div>
+      <div class="guide-card-stats">
+        <div><span class="guide-stat-n">10</span><span class="guide-stat-l">Situations</span></div>
+        <div><span class="guide-stat-n">$300</span><span class="guide-stat-l">Discovery</span></div>
+        <div><span class="guide-stat-n">2wk</span><span class="guide-stat-l">Delivery</span></div>
+      </div>
+      <div class="guide-card-cta">Explore Workline&#8480; &rarr;</div>
+    </a>
+
+    <a href="/reentryline.html" class="guide-card">
+      <div class="guide-card-sector">Reentry &middot; Justice Services</div>
+      <div class="guide-card-name">Reentryline&#8480;</div>
+      <div class="guide-card-role">For reentry navigators and justice-adjacent workers handling live benefit access, housing referrals, and crisis moments.</div>
+      <div class="guide-card-stats">
+        <div><span class="guide-stat-n">10</span><span class="guide-stat-l">Situations</span></div>
+        <div><span class="guide-stat-n">$300</span><span class="guide-stat-l">Discovery</span></div>
+        <div><span class="guide-stat-n">2wk</span><span class="guide-stat-l">Delivery</span></div>
+      </div>
+      <div class="guide-card-cta">Explore Reentryline&#8480; &rarr;</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ── SCOPING WIZARD ── -->
+<section class="wizard-section" id="wizard">
+  <div class="wizard-label">Scope My Guide</div>
+  <h2 class="wizard-title">See how your guide would work.</h2>
+  <p class="wizard-sub">Tell us about your team and your situation. We'll show you one fully built situation card — exactly what your workers would see in a live moment. Then we'll scope the rest.</p>
+
+  <div class="wizard-container">
+
+    <!-- Step indicators -->
+    <div class="step-indicator" id="step-indicator">
+      <div class="step-dot active" id="dot-1"></div>
+      <div class="step-dot" id="dot-2"></div>
+      <div class="step-dot" id="dot-3"></div>
+      <div class="step-dot" id="dot-4"></div>
+    </div>
+
+    <!-- STEP 1: Intake -->
+    <div class="wizard-step active" id="step-1">
+      <div class="wiz-field">
+        <label class="wiz-label" for="w-sector">Your sector</label>
+        <select class="wiz-select" id="w-sector">
+          <option value="">Select your sector&hellip;</option>
+          <option value="social">Social Services / Case Management</option>
+          <option value="healthcare">Healthcare / Patient Services</option>
+          <option value="financial">Financial Services / Lending</option>
+          <option value="workforce">Workforce Development</option>
+          <option value="reentry">Reentry / Justice Services</option>
+          <option value="federal">Federal Benefits / Government</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="wiz-field" id="other-field" style="display:none;">
+        <label class="wiz-label" for="w-other-sector">Tell us your sector</label>
+        <input class="wiz-input" id="w-other-sector" type="text" placeholder="e.g. Veterans services, immigration...">
+      </div>
+      <div class="wiz-field">
+        <label class="wiz-label" for="w-role">Your role</label>
+        <input class="wiz-input" id="w-role" type="text" placeholder="e.g. Case Manager, Loan Officer, Workforce Specialist...">
+      </div>
+      <div class="wiz-field">
+        <label class="wiz-label" for="w-team">Team size</label>
+        <select class="wiz-select" id="w-team">
+          <option value="">Select&hellip;</option>
+          <option value="solo">Just me</option>
+          <option value="small">2–10</option>
+          <option value="mid">11–50</option>
+          <option value="large">50+</option>
+        </select>
+      </div>
+      <button class="wiz-btn" onclick="goStep2()">Next: Your Situation &rarr;</button>
+    </div>
+
+    <!-- STEP 2: Situation input -->
+    <div class="wizard-step" id="step-2">
+      <div class="wiz-field">
+        <label class="wiz-label" for="w-situation">Your #1 live situation</label>
+        <input class="wiz-input" id="w-situation" type="text" placeholder="e.g. Client asks about a denied benefit claim...">
+        <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);margin-top:0.4rem;">Describe the live moment your team struggles with most. Use your own words.</div>
+      </div>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+        <button class="wiz-btn wiz-btn-outline" onclick="goStep(1)">← Back</button>
+        <button class="wiz-btn" onclick="goStep3()">See My Situation &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Sample card + gate -->
+    <div class="wizard-step" id="step-3">
+      <div id="sample-card-output"></div>
+      <div class="sample-disclaimer">This sample is illustrative — pre-built from primary source research for your sector. Your delivered guide is built from your organization's actual source material, policies, and workflows.</div>
+
+      <div class="gate-block" style="margin-top:2rem;">
+        <div class="gate-headline">Your situation has been scoped.</div>
+        <div class="gate-sub" id="gate-sub-text">Based on what you've shared, your guide would include situations like this one — built from primary source research, regulatory citations, and your team's actual live moments.</div>
+        <ul class="gate-includes">
+          <li id="gate-sit-count">Full guide with situations mapped to your sector</li>
+          <li>Regulatory reference section — primary sources only</li>
+          <li>Hard stops and ethical triggers built in</li>
+          <li>Deployment guide — browser, QR code, and mobile install</li>
+          <li>Delivered as a single file. No platform. No subscription.</li>
+        </ul>
+        <div class="gate-price">$300</div>
+        <div class="gate-price-note">Discovery call · Non-refundable · Credits in full to first invoice on sign</div>
+        <div class="wiz-field">
+          <label class="wiz-label" for="w-email">Drop your work email and we'll hold your scope</label>
+          <input class="wiz-input" id="w-email" type="email" placeholder="you@organization.org">
+        </div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <button class="wiz-btn wiz-btn-outline" onclick="goStep(2)">← Back</button>
+          <button class="wiz-btn" onclick="submitAndBook()">Book My $300 Discovery Call &rarr;</button>
+        </div>
+        <div class="gate-success" id="gate-success">✓ Scope submitted. Redirecting to booking form&hellip;</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Rudolph<span>CX</span> LLC</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/about.html">About</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  </div>
+  <div class="footer-legal">Rudolph CX LLC &middot; Durham, NC &middot; Demo Center</div>
+</footer>
+
+<div class="mobile-sticky-cta">
+  <a href="#wizard">Scope My Guide — See It Built &rarr;</a>
+</div>
+
+<script>
+// ── HAMBURGER ──
+var hamburger = document.getElementById('hamburger');
+var navLinks = document.getElementById('nav-links');
+hamburger.addEventListener('click', function() {
+  var open = navLinks.classList.toggle('open');
+  hamburger.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', open);
+});
+document.querySelectorAll('.nav-dropdown').forEach(function(d) {
+  d.addEventListener('click', function(e) {
+    if(window.innerWidth <= 900) {
+      e.preventDefault();
+      d.classList.toggle('open');
+    }
+  });
+});
+document.addEventListener('click', function(e) {
+  if(!e.target.closest('nav')) {
+    navLinks.classList.remove('open');
+    hamburger.classList.remove('open');
+  }
+});
+
+// ── SECTOR → OTHER FIELD ──
+document.getElementById('w-sector').addEventListener('change', function() {
+  document.getElementById('other-field').style.display = this.value === 'other' ? 'block' : 'none';
+});
+
+// ── PRE-BUILT SAMPLE CARDS PER SECTOR ──
+var sampleCards = {
+  social: {
+    title: 'Mandatory Reporting Trigger',
+    tag: { text: 'Hard Stop', cls: 'tag-halt' },
+    steps: [
+      'Stop the session immediately upon disclosure or observation that triggers your mandated reporter obligation.',
+      'Identify which statute applies: CAPTA (child), Elder Justice Act APS Final Rule June 7 2024 (elder/adult), TVPA (trafficking).',
+      'File report per your jurisdiction\'s protocol within the required timeframe. Do not defer to end of session.',
+      'Document the disclosure verbatim in the case record. Do not paraphrase client language.',
+      'Notify supervisor per agency policy. Mandatory reporting is your individual obligation — not a supervisory decision.'
+    ],
+    callout: { cls: 'callout-halt', label: 'CAPTA / Elder Justice Act', text: 'Mandatory reporting is not discretionary. Client consent is not required. Confidentiality does not override the report obligation.' },
+    source: 'CAPTA 42 U.S.C. § 5101 · Elder Justice Act APS Final Rule (June 7, 2024) · TVPA (FBI documented indicators)',
+    situationCount: 14, guide: 'Caseline&#8480;'
+  },
+  healthcare: {
+    title: 'HIPAA Disclosure Decision',
+    tag: { text: 'HIPAA', cls: 'tag-teal' },
+    steps: [
+      'Identify who is requesting the disclosure and under what authority.',
+      'Confirm whether a signed authorization exists. If yes — verify it is current, complete, and covers this specific disclosure.',
+      'Apply Minimum Necessary standard: disclose only what the purpose requires. (45 CFR § 164.514(d))',
+      'If subpoena: attorney subpoena alone is insufficient. Court order or client authorization required for PHI. (45 CFR § 164.512(e))',
+      'Document the disclosure: date, recipient, purpose, what was shared, authorization basis.'
+    ],
+    callout: { cls: 'callout-warn', label: 'Right of Access Deadline', text: '30-day hard deadline to provide records. One 30-day extension permitted with written notice. OCR enforcement active — $112,500 penalty (Concentra, Dec 2025).' },
+    source: 'HIPAA 45 CFR Parts 160/164 · Right of Access 45 CFR § 164.524 · 21st Century Cures Act 45 CFR Part 171',
+    situationCount: 8, guide: 'Chartline&#8480;'
+  },
+  financial: {
+    title: 'Forbearance Intake',
+    tag: { text: 'Reg X / FDCPA', cls: 'tag-warn' },
+    steps: [
+      'Confirm borrower identity and loan number before any account discussion. FDCPA applies from first contact.',
+      'Ask open-ended: "Can you tell me what\'s changed with your financial situation?" Do not lead the answer.',
+      'Determine hardship type: income loss, medical, natural disaster, divorce. Hardship type determines document package.',
+      'Inform the borrower: forbearance is available. Do not promise approval. Do not suggest they stop paying.',
+      'Document: date, time, hardship type stated, options presented, borrower response, next steps communicated.'
+    ],
+    callout: { cls: 'callout-halt', label: 'Hard Stop — No Approval Promise', text: 'Do not tell a borrower they are approved for forbearance before underwriting completes. Premature approval representations are CFPB exam findings. Document what was offered, not what was approved.' },
+    source: 'FDCPA 15 U.S.C. §§ 1692–1692p · RESPA Regulation X 12 CFR Part 1024 · CFPB Mortgage Servicing Exam Procedures 2023',
+    situationCount: 10, guide: 'Lendline&#8480;'
+  },
+  workforce: {
+    title: 'Client Received Layoff Notice',
+    tag: { text: 'WARN Act / WIOA', cls: 'tag-legal' },
+    steps: [
+      'Confirm whether the layoff qualifies under WARN Act (100+ employees, 60-day notice required). If yes — client may have legal claim for notice violation.',
+      'Assess immediate financial situation: last paycheck received, UI eligibility, COBRA timeline.',
+      'Open WIOA Title I eligibility intake. Layoff is a qualifying event — client does not need to be unemployed yet.',
+      'Rapid Response: if mass layoff event, confirm whether Rapid Response services have been activated by the employer.',
+      'Document: layoff date confirmed, WARN applicability noted, services opened, next appointment scheduled.'
+    ],
+    callout: { cls: 'callout-warn', label: 'WARN Act — 60-Day Notice', text: 'If the employer failed to provide 60-day WARN notice, the client may be entitled to back pay and benefits for the violation period. Flag for legal referral — this is not a workforce center determination to make.' },
+    source: 'WARN Act 29 U.S.C. § 2101 · WIOA Title I 29 U.S.C. § 3101 · Wagner-Peyser Act 29 U.S.C. § 49',
+    situationCount: 10, guide: 'Workline&#8480;'
+  },
+  reentry: {
+    title: 'SSI Reinstatement',
+    tag: { text: 'SSI / Second Chance Act', cls: 'tag-legal' },
+    steps: [
+      'Confirm release date. The 12-month SSI reinstatement window opens on the date of release from incarceration.',
+      'If within 12 months of suspension: bring release papers to SSA office. No new application required — reinstatement is the process.',
+      'If more than 12 months since suspension: new application required. Begin SOAR-assisted application if client meets disability criteria.',
+      'Confirm Medicaid: as of January 1, 2026, Medicaid was suspended not terminated. Reinstatement process — not reapplication.',
+      'Document: release date confirmed, reinstatement window status, SSA office routing, Medicaid status confirmed.'
+    ],
+    callout: { cls: 'callout-teal', label: 'Medicaid Suspension Rule — Jan 1, 2026', text: 'Justice-involved clients released after January 1, 2026 do not need to reapply for Medicaid. Benefits were suspended, not terminated. Bring release papers — reinstatement is the process.' },
+    source: 'SSI 42 U.S.C. § 1382(e)(1) · Consolidated Appropriations Act 2024 · Second Chance Act P.L. 110-199',
+    situationCount: 10, guide: 'Reentryline&#8480;'
+  },
+  federal: {
+    title: 'Claim Denied — Appeal Rights',
+    tag: { text: 'Appeal Deadline', cls: 'tag-halt' },
+    steps: [
+      'Confirm the denial date. The appeal process is two steps — do not skip directly to OPM.',
+      'Step 1: Written reconsideration request to the carrier. The carrier has 30 days to respond after receiving additional information from the member.',
+      'Step 2: If carrier upholds denial — request OPM review within 90 calendar days of the carrier\'s final decision (or 120 days if the carrier did not respond within 30 days).',
+      'Document: denial date, denial reason, appeal submitted date, tracking number.',
+      'Inform the member: OPM\'s decision is final and binding on the carrier.'
+    ],
+    callout: { cls: 'callout-halt', label: 'Two-Step Appeal Process — 5 CFR § 890.105', text: 'Step 1: Written reconsideration to the carrier (30 days). Step 2: OPM review within 90 days of carrier final decision. Do not tell the member they have 60 days from denial to appeal to OPM — that conflates both steps and is incorrect.' },
+    source: 'FEHB 5 U.S.C. Chapter 89 / 5 CFR § 890.105 · OPM FEHB Handbook',
+    situationCount: 10, guide: 'Aidline&#8480;'
+  }
+};
+
+var wizardData = {};
+
+function updateDots(step) {
+  for(var i = 1; i <= 4; i++) {
+    var dot = document.getElementById('dot-'+i);
+    dot.className = 'step-dot' + (i < step ? ' done' : i === step ? ' active' : '');
+  }
+}
+
+function goStep(n) {
+  document.querySelectorAll('.wizard-step').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('step-'+n).classList.add('active');
+  updateDots(n);
+  document.getElementById('wizard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function goStep2() {
+  var sector = document.getElementById('w-sector').value;
+  var role = document.getElementById('w-role').value.trim();
+  var team = document.getElementById('w-team').value;
+  var otherSector = document.getElementById('w-other-sector').value.trim();
+
+  if(!sector) { alert('Please select your sector.'); return; }
+  if(!role) { alert('Please enter your role.'); return; }
+  if(!team) { alert('Please select your team size.'); return; }
+  if(sector === 'other' && !otherSector) { alert('Please describe your sector.'); return; }
+
+  wizardData.sector = sector;
+  wizardData.role = role;
+  wizardData.team = team;
+  wizardData.otherSector = otherSector;
+
+  goStep(2);
+}
+
+function goStep3() {
+  var situation = document.getElementById('w-situation').value.trim();
+  if(!situation) { alert('Please describe your #1 live situation.'); return; }
+  wizardData.situation = situation;
+
+  // Build sample card
+  var card;
+  if(wizardData.sector === 'other') {
+    // Other sector — gate fires immediately, no sample card
+    document.getElementById('sample-card-output').innerHTML = '';
+    document.getElementById('gate-sub-text').innerHTML =
+      'You\'re in <strong style="color:var(--cream);">' + (wizardData.otherSector || 'your sector') + '</strong> — ' +
+      'a sector we haven\'t pre-built a sample for yet. That\'s exactly what the discovery call is for. ' +
+      'We\'ll scope your guide live and build it from the ground up for your team.';
+    document.getElementById('gate-sit-count').textContent = 'Custom situation set built for your sector';
+  } else {
+    card = sampleCards[wizardData.sector];
+    if(!card) card = sampleCards.federal;
+
+    // Populate gate sub
+    document.getElementById('gate-sub-text').innerHTML =
+      'Based on what you\'ve shared, your <strong style="color:var(--cream);">' + card.guide +
+      '</strong> would include situations like this one — built from primary source research, regulatory citations, and your team\'s actual live moments.';
+    document.getElementById('gate-sit-count').textContent =
+      'Full guide with ' + card.situationCount + ' confirmed situations';
+
+    // Render sample card
+    var stepsHtml = card.steps.map(function(s, i) {
+      return '<li><span class="step-n">' + (i+1) + '.</span><span>' + s + '</span></li>';
+    }).join('');
+
+    document.getElementById('sample-card-output').innerHTML =
+      '<div class="sample-card">' +
+        '<div class="sample-card-label">Sample Situation Card &mdash; ' + card.guide + '</div>' +
+        '<div class="sample-card-tag ' + card.tag.cls + '">' + card.tag.text + '</div>' +
+        '<div class="sample-card-title">' + (wizardData.situation.length > 60 ? wizardData.situation.substring(0,57)+'...' : wizardData.situation) + '</div>' +
+        '<ol class="sample-steps">' + stepsHtml + '</ol>' +
+        '<div class="sample-callout ' + card.callout.cls + '">' +
+          '<div class="callout-label">' + card.callout.label + '</div>' +
+          card.callout.text +
+        '</div>' +
+        '<div class="sample-source">Source: ' + card.source + '</div>' +
+      '</div>';
+  }
+
+  goStep(3);
+}
+
+function submitAndBook() {
+  var email = document.getElementById('w-email').value.trim();
+  if(!email || !email.includes('@')) { alert('Please enter your work email.'); return; }
+  wizardData.email = email;
+
+  // Submit to HubSpot
+  var hutk = document.cookie.replace(/(?:(?:^|.*;\\s*)hubspotutk\\s*=\\s*([^;]*).*$)|^.*$/, '$1');
+  var sectorLabel = document.getElementById('w-sector').options[document.getElementById('w-sector').selectedIndex].text;
+
+  fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      fields: [
+        { name: 'email',     value: email },
+        { name: 'company',   value: wizardData.role || '' },
+        { name: 'message',   value: 'Wizard — Sector: ' + sectorLabel + (wizardData.otherSector ? ' ('+wizardData.otherSector+')' : '') + ' | Role: ' + wizardData.role + ' | Team: ' + wizardData.team + ' | Situation: ' + wizardData.situation }
+      ],
+      context: {
+        hutk: hutk || undefined,
+        pageUri: 'rudolphcx.com/demos.html',
+        pageName: 'Demo Center — Scoping Wizard'
+      }
+    })
+  }).catch(function() {}); // Silent fail — don't block redirect
+
+  document.getElementById('gate-success').style.display = 'block';
+
+  // Redirect to contact section on caseline landing page (has full form)
+  setTimeout(function() {
+    window.location.href = '/caseline.html#contact';
+  }, 1800);
+}
+
+// Nav keyboard
+document.querySelectorAll('.nav-dropdown').forEach(function(d) {
+  d.addEventListener('keydown', function(e) {
+    if(e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      d.classList.toggle('open');
+    }
+  });
+});
+</script>
+</body>
+</html>
