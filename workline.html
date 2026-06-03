@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Workline — Performance Support Guides for Workforce Development | Rudolph CX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="manifest" href="/manifest-workline.json">
+<meta name="theme-color" content="#5a2a7a">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
@@ -581,6 +583,13 @@ btn.disabled=false; if(label)label.style.display='inline'; if(loading)loading.st
 });
 });
 })();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw-workline.js');
+  });
+}
 </script>
 </body>
 </html>
