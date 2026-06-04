@@ -53,8 +53,9 @@ nav {
   padding: 18px 48px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1200px; }
 .nav-logo {
   font-family: var(--serif);
   font-size: 22px;
@@ -424,6 +425,7 @@ footer {
 
 <!-- NAV -->
 <nav aria-label="Main navigation">
+<div class="nav-inner">
 <a href="/" class="nav-logo">Rudolph<span>CX</span></a>
 <ul class="nav-links">
 <li><a href="/">Home</a></li>
@@ -443,6 +445,7 @@ footer {
 <li><a href="/aidline.html#pricing">Pricing</a></li>
 <li><a href="/#contact">Contact</a></li>
 </ul>
+</div>
 </nav>
 
 <!-- HERO -->
