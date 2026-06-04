@@ -22,7 +22,8 @@ body { font-family: var(--sans); background: var(--cream); color: var(--ink); ov
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--cream2); }
 ::-webkit-scrollbar-thumb { background: var(--red); }
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: center; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1200px; }
 .nav-logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
 .nav-logo span { color: var(--red); }
 .nav-links { display: flex; gap: 32px; list-style: none; }
@@ -282,6 +283,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 <body>
 <div class="cursor" id="cursor"></div>
 <nav>
+<div class="nav-inner">
   <div class="nav-logo">Rudolph<span>CX</span></div>
   <ul class="nav-links">
     <li class="nav-dropdown">
@@ -302,6 +304,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+</div>
 </nav>
 <section class="hero" id="hero">
   <div class="hero-left">
