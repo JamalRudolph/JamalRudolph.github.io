@@ -969,17 +969,21 @@ setTimeout(runSequence,2500);
     if (loading) loading.style.display = 'inline';
     statusEl.textContent = '';
 
-    // Airtable CRM — direct webhook, no CORS restriction
-    fetch('https://hooks.airtable.com/workflows/v1/genericWebhook/appxI9uREaJowKnnj/wflj7gy3K4jbgpNiX/wtrX4r6dB5GAmj01o', {
+    // Route through Apps Script — bypasses browser CORS to reach Airtable
+    fetch('https://script.google.com/macros/s/AKfycbxbjH4789HDt-9w5zlPsKSiw8G0kPSco3hdm36V1hQcOcly6LgFP-nnXtStywHR2qIlHw/exec', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
+        token:   'RCX-WEBHOOK-2026-SECURE',
+        method:  'crm_intake',
         name:    nameVal,
+        org:     orgVal,
         email:   emailVal,
-        notes:   'Org: ' + orgVal + '\nRole: ' + (roleVal || '') + '\nMessage: ' + messageVal,
+        role:    roleVal || '',
+        message: messageVal,
         source:  'Aidline discovery form'
       })
-    }).catch(function(err) { console.error('Airtable webhook error:', err); });
+    }).catch(function(err) { console.error('Webhook error:', err); });
 
     // HubSpot Forms API — creates contact record in CRM
     var hutk = document.cookie.replace(/(?:(?:^|.*;\s*)hubspotutk\s*=\s*([^;]*).*$)|^.*$/, '$1');
