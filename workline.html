@@ -10,6 +10,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; display: flex; align-items: center; justify-content: center; padding: 0; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 960px; padding: 0 32px; }
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+.nav-logo span { color: var(--accent, var(--rust, var(--red, #b83020))); }
+.nav-links { list-style: none; display: flex; align-items: center; gap: 1.75rem; margin: 0; padding: 0; }
+.nav-links a { font-family: var(--sans); font-size: 0.85rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-dropdown { position: relative; }
+.nav-dropdown > a::after { content: ' ↓'; font-size: 0.7rem; opacity: 0.5; }
+.nav-dropdown:hover .dropdown-menu,
+.nav-dropdown:focus-within .dropdown-menu { display: flex; flex-direction: column; gap: 2px; }
+.dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream, #f5f4f0); border: 1px solid var(--cream3, #e0ddd6); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
+.dropdown-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); }
+.dropdown-menu a:hover { background: var(--cream2, #eceae4); color: var(--ink); }
+.dm-tag { font-size: 0.65rem; background: var(--accent, var(--rust, var(--red, #b83020))); color: #fff; padding: 1px 5px; border-radius: 2px; }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
 --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
@@ -30,22 +46,10 @@ body { font-family: var(--sans); background: var(--cream); color: var(--ink); ov
 .skip-link { position:absolute; top:-100%; left:0; background:var(--ink); color:var(--cream); padding:0.5rem 1rem; font-family:var(--mono); font-size:0.78rem; z-index:10000; text-decoration:none; border-radius:0 0 4px 0; letter-spacing:0.1em; }
 .skip-link:focus { top:0; outline:3px solid var(--gold); outline-offset:2px; }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid var(--forest); outline-offset:2px; }
-.nav-links a:focus-visible { outline:3px solid var(--forest); outline-offset:3px; }
+
 /* NAV */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: center; mix-blend-mode: multiply; }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 960px; }
-.nav-logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; text-decoration: none; display: inline-block; }
-.nav-logo span { color: var(--forest); }
-.nav-links { display: flex; gap: 32px; list-style: none; }
-.nav-links > li { position: relative; }
-.nav-links a { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
-.nav-links a:hover { color: var(--forest); }
-.nav-dropdown > a::after { content: ' ▾'; font-size: 8px; }
-.dropdown-menu { display: none; position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%); background: var(--cream); border: 1px solid var(--cream3); min-width: 210px; padding: 8px 0; z-index: 200; box-shadow: 0 8px 24px rgba(15,14,12,0.10); }
-.nav-dropdown:hover .dropdown-menu, .nav-dropdown.open .dropdown-menu { display: block; }
-.dropdown-menu a { display: block; padding: 10px 20px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color 0.15s, background 0.15s; white-space: nowrap; }
-.dropdown-menu a:hover { color: var(--forest); background: var(--cream2); }
-.dropdown-menu .dm-tag { font-size: 7px; color: var(--muted); margin-left: 6px; letter-spacing: 0.1em; }
+
+.dropdown-menu 
 /* HERO */
 .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 140px 60px 80px; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.7; }
@@ -181,8 +185,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 .reveal-delay-2 { transition-delay: 0.2s; }
 .reveal-delay-3 { transition-delay: 0.3s; }
 @media (max-width: 900px) {
-nav { padding: 16px 28px; }
-.nav-links { gap: 16px; }
+
 .hero { grid-template-columns: 1fr; padding: 100px 28px 60px; }
 .hero-right { display: none; }
 .split-layout { grid-template-columns: 1fr; gap: 40px; }
@@ -202,8 +205,8 @@ footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: cente
 <nav aria-label="Main navigation">
 <div class="nav-inner">
 <a href="/" class="nav-logo">Rudolph<span>CX</span></a>
-<ul class="nav-links">
 <li><a href="/">Home</a></li>
+<ul class="nav-links">
 <li class="nav-dropdown">
   <a href="#" aria-haspopup="true" aria-expanded="false">Our Guides</a>
   <div class="dropdown-menu">
