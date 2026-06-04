@@ -975,10 +975,8 @@ setTimeout(runSequence,2500);
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name:    nameVal,
-        org:     orgVal,
         email:   emailVal,
-        role:    roleVal || '',
-        message: messageVal,
+        notes:   'Org: ' + orgVal + '\nRole: ' + (roleVal || '') + '\nMessage: ' + messageVal,
         source:  'Aidline discovery form'
       })
     }).catch(function(err) { console.error('Airtable webhook error:', err); });
