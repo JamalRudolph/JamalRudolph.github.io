@@ -997,6 +997,24 @@ setTimeout(runSequence,2500);
       message:      messageVal,
       source:       'Aidline discovery form — rudolphcx.com/aidline.html'
     }).then(function() {
+
+    // Airtable CRM via Apps Script webhook
+    var WEBHOOK_SECRET = 'RCX-WEBHOOK-2026-SECURE';
+    fetch('https://script.google.com/macros/s/AKfycbxMvU8T2H4QJNEJm4KpFUPPmTr3YoaBR5sj8f7-LyQ5hFXiNFk2EtWFk1hNXDHfNLA/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token:   'RCX-WEBHOOK-2026-SECURE',
+        method:  'crm_intake',
+        name:    nameVal,
+        org:     orgVal,
+        email:   emailVal,
+        role:    roleVal || '',
+        message: messageVal,
+        source:  'Aidline discovery form'
+      })
+    }).catch(function(err) { console.error('Webhook error:', err); });
+
       statusEl.style.color = 'var(--teal, #1D9E75)';
       statusEl.textContent = 'Request received. We will be in touch within one business day.';
       btn.disabled = false;
