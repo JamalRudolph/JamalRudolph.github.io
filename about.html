@@ -8,21 +8,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; display: flex; align-items: center; justify-content: center; padding: 0; }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 960px; padding: 0 32px; }
-.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; display: flex; align-items: center; padding: 0 40px; }
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
 .nav-logo span { color: var(--accent, var(--rust, var(--red, #b83020))); }
-.nav-links { list-style: none; display: flex; align-items: center; gap: 1.75rem; margin: 0; padding: 0; }
+.nav-links { list-style: none; display: flex; align-items: center; gap: 1.75rem; margin: 0 auto; padding: 0; }
 .nav-links a { font-family: var(--sans); font-size: 0.85rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
 .nav-links a:hover { color: var(--ink); }
 .nav-dropdown { position: relative; }
 .nav-dropdown > a::after { content: ' ↓'; font-size: 0.7rem; opacity: 0.5; }
 .nav-dropdown:hover .dropdown-menu,
 .nav-dropdown:focus-within .dropdown-menu { display: flex; flex-direction: column; gap: 2px; }
-.dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream, #f5f4f0); border: 1px solid var(--cream3, #e0ddd6); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
+.dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
 .dropdown-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); }
-.dropdown-menu a:hover { background: var(--cream2, #eceae4); color: var(--ink); }
+.dropdown-menu a:hover { background: var(--cream2); color: var(--ink); }
 .dm-tag { font-size: 0.65rem; background: var(--accent, var(--rust, var(--red, #b83020))); color: #fff; padding: 1px 5px; border-radius: 2px; }
+
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -388,10 +388,9 @@ footer {
 
 <!-- NAV -->
 <nav aria-label="Main navigation">
-<div class="nav-inner">
 <a href="/" class="nav-logo">Rudolph<span>CX</span></a>
-<li><a href="/">Home</a></li>
 <ul class="nav-links">
+<li><a href="/">Home</a></li>
 <li class="nav-dropdown">
   <a href="#" aria-haspopup="true" aria-expanded="false">Our Guides</a>
   <div class="dropdown-menu">
@@ -406,10 +405,9 @@ footer {
 <li><a href="/demos.html">Demo Center</a></li>
 <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
 <li><a href="/about.html">About</a></li>
-<li><a href="/#pricing">Pricing</a></li>
+<li><a href="/aidline.html#pricing">Pricing</a></li>
 <li><a href="/#contact">Book Discovery</a></li>
 </ul>
-</div>
 </nav>
 
 <!-- HERO -->
