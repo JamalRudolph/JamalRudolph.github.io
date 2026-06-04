@@ -39,6 +39,42 @@ body { font-family: var(--sans); background: var(--cream); color: var(--ink); li
 .skip-link { position:absolute; top:-100%; left:0; background:var(--ink); color:#fff; padding:0.5rem 1rem; font-family:var(--mono); font-size:0.75rem; z-index:9999; text-decoration:none; }
 .skip-link:focus { top:0; }
 
+
+/* ── PRICING SECTION ── */
+.pricing-section { padding: 80px 80px; background: var(--cream); border-top: 1px solid var(--cream3); }
+.pricing-inner { max-width: 1000px; margin: 0 auto; }
+.pricing-eyebrow { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+.pricing-title { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 500; line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+.pricing-sub { font-size: 0.95rem; color: var(--ink3); max-width: 540px; line-height: 1.7; margin-bottom: 3rem; }
+
+.pricing-discovery { background: var(--ink); color: var(--cream); border-radius: 4px; padding: 2rem 2.5rem; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 2.5rem; flex-wrap: wrap; }
+.pd-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); flex-shrink: 0; }
+.pd-price { font-family: var(--serif); font-size: 2.4rem; font-weight: 500; color: var(--cream); flex-shrink: 0; letter-spacing: -0.02em; }
+.pd-note { font-size: 0.8rem; color: rgba(247,244,238,0.5); line-height: 1.6; flex: 1; min-width: 200px; }
+.pd-cta { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--cream); border: 1px solid rgba(247,244,238,0.25); padding: 0.6rem 1.2rem; border-radius: 2px; text-decoration: none; white-space: nowrap; transition: border-color 0.15s; flex-shrink: 0; }
+.pd-cta:hover { border-color: rgba(247,244,238,0.6); }
+
+.pt-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); margin-bottom: 1rem; }
+.pt-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--cream3); border: 1px solid var(--cream3); border-radius: 4px; overflow: hidden; }
+.pt-card { background: var(--cream); padding: 1.75rem 1.5rem; position: relative; display: flex; flex-direction: column; gap: 0.3rem; }
+.pt-card.featured { background: white; }
+.pt-badge { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.25rem; }
+.pt-tier { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+.pt-sits { font-size: 0.78rem; color: var(--ink3); margin-top: 0.2rem; }
+.pt-price { font-family: var(--serif); font-size: 1.6rem; font-weight: 500; color: var(--ink); letter-spacing: -0.02em; margin-top: 0.75rem; }
+.pt-note { font-size: 0.72rem; color: var(--dim); line-height: 1.5; margin-top: 0.25rem; }
+
+.pricing-footnote { font-family: var(--mono); font-size: 0.62rem; color: var(--dim); line-height: 1.7; margin-top: 2rem; max-width: 760px; letter-spacing: 0.01em; }
+
+@media(max-width: 900px) {
+  .pricing-section { padding: 60px 24px; }
+  .pt-grid { grid-template-columns: repeat(2, 1fr); }
+  .pricing-discovery { gap: 1.25rem; }
+}
+@media(max-width: 600px) {
+  .pt-grid { grid-template-columns: 1fr; }
+}
+
 /* ── NAV ── */
 
 .nav-links > li > a { font-family: var(--sans); font-size: 0.85rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
@@ -184,7 +220,7 @@ footer { background: var(--ink2); padding: 2.5rem 80px; display: flex; align-ite
 <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
 <li><a href="/about.html">About</a></li>
 <li><a href="#pricing">Pricing</a></li>
-<li><a href="#contact">Book Discovery</a></li>
+<li><a href="#wizard">Book Discovery</a></li>
 </ul>
 </nav>
 
@@ -369,6 +405,55 @@ footer { background: var(--ink2); padding: 2.5rem 80px; display: flex; align-ite
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- ── PRICING ── -->
+<section class="pricing-section" id="pricing">
+  <div class="pricing-inner">
+    <div class="pricing-eyebrow">Investment</div>
+    <h2 class="pricing-title">What it costs.<br>What it credits.</h2>
+    <p class="pricing-sub">Start with a $300 discovery call — scoped to your operation. The fee credits in full to your first invoice when you sign.</p>
+
+    <div class="pricing-discovery">
+      <div class="pd-label">Discovery Call</div>
+      <div class="pd-price">$300</div>
+      <div class="pd-note">Non-refundable · Credits to first invoice · Scoping document + written proposal included</div>
+      <a href="#wizard" class="pd-cta">Scope My Guide &rarr;</a>
+    </div>
+
+    <div class="pricing-tiers">
+      <div class="pt-label">Done-For-You Build Tiers</div>
+      <div class="pt-grid">
+        <div class="pt-card">
+          <div class="pt-tier">Starter</div>
+          <div class="pt-sits">3 situations</div>
+          <div class="pt-price">$2,500</div>
+          <div class="pt-note">Base engagement</div>
+        </div>
+        <div class="pt-card featured">
+          <div class="pt-badge">Most Common</div>
+          <div class="pt-tier">Standard</div>
+          <div class="pt-sits">5 situations</div>
+          <div class="pt-price">$3,750</div>
+          <div class="pt-note">Full library · Quick reference index</div>
+        </div>
+        <div class="pt-card">
+          <div class="pt-tier">Professional</div>
+          <div class="pt-sits">8 situations</div>
+          <div class="pt-price">$5,500</div>
+          <div class="pt-note">Full library + glossary + cross-reference</div>
+        </div>
+        <div class="pt-card">
+          <div class="pt-tier">Enterprise</div>
+          <div class="pt-sits">12+ situations</div>
+          <div class="pt-price">From $8,000</div>
+          <div class="pt-note">Custom scope · Quoted at discovery</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pricing-footnote">50% deposit before work begins · 50% on delivery · Discovery fee credits to deposit · Every tier includes case setup, step sequence, agent script, case note template, escalation path, and branded HTML file</div>
   </div>
 </section>
 
