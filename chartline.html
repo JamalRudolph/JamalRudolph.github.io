@@ -34,7 +34,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .nav-links a:focus-visible { outline:3px solid var(--navy); outline-offset:3px; }
 .pb-cta:focus-visible, .form-submit:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
 /* NAV */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; mix-blend-mode: multiply; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: center; mix-blend-mode: multiply; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1200px; }
 .nav-logo { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; text-decoration: none; display: inline-block; }
 .nav-logo span { color: var(--navy); }
 .nav-links { display: flex; gap: 32px; list-style: none; }
@@ -200,6 +201,7 @@ footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: cente
 <div class="cursor" id="cursor"></div>
 
 <nav aria-label="Main navigation">
+<div class="nav-inner">
 <a href="/" class="nav-logo">Rudolph<span>CX</span></a>
 <ul class="nav-links">
 <li><a href="/">Home</a></li>
@@ -220,6 +222,7 @@ footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: cente
 <li><a href="#pricing">Pricing</a></li>
 <li><a href="#contact">Book Discovery</a></li>
 </ul>
+</div>
 </nav>
 
 <!-- HERO -->
