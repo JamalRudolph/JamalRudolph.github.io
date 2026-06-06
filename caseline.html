@@ -218,6 +218,8 @@ footer { background: var(--ink2); padding: 3rem 80px; display: flex; align-items
     window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
     plausible.init()
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -457,22 +459,22 @@ footer { background: var(--ink2); padding: 3rem 80px; display: flex; align-items
       Discovery fee: $300 flat · Credits in full to first invoice
     </div>
   </div>
-  <form class="contact-form" name="caseline-contact" method="POST" data-netlify="true" onsubmit="handleSubmit(event)">
+  <form class="contact-form" name="caseline-contact" id="caseline-form">
     <div class="form-group">
       <label for="name">Full Name</label>
-      <input type="text" id="name" name="name" required placeholder="Your name">
+      <input type="text" id="cl-name" name="name" required placeholder="Your name">
     </div>
     <div class="form-group">
       <label for="org">Organization</label>
-      <input type="text" id="org" name="org" required placeholder="Agency or organization name">
+      <input type="text" id="cl-org" name="org" required placeholder="Agency or organization name">
     </div>
     <div class="form-group">
       <label for="email">Work Email</label>
-      <input type="email" id="email" name="email" required placeholder="you@organization.org">
+      <input type="email" id="cl-email" name="email" required placeholder="you@organization.org">
     </div>
     <div class="form-group">
       <label for="population">Population Served</label>
-      <select id="population" name="population" required>
+      <select id="cl-population" name="population" required>
         <option value="">Select&hellip;</option>
         <option>Social services / case management</option>
         <option>Child welfare</option>
@@ -488,10 +490,10 @@ footer { background: var(--ink2); padding: 3rem 80px; display: flex; align-items
     </div>
     <div class="form-group">
       <label for="message">What situation does your team struggle with most?</label>
-      <textarea id="message" name="message" placeholder="Describe the live moment where your team most needs support..."></textarea>
+      <textarea id="cl-message" name="message" placeholder="Describe the live moment where your team most needs support..."></textarea>
     </div>
-    <button type="submit" class="form-submit">Submit &rarr; Book the $300 Discovery Call</button>
-    <div id="form-success" style="display:none; font-family:var(--mono); font-size:0.72rem; color:#3a6640; margin-top:0.5rem;">Submitted. We'll be in touch within 24 hours.</div>
+    <button type="button" id="caseline-submit" class="form-submit"><span class="submit-label">Submit &rarr; Book the $300 Discovery Call</span><span class="submit-loading" style="display:none">Sending&hellip;</span></button>
+    <div id="caseline-status" style="font-family:var(--mono); font-size:0.72rem; margin-top:0.5rem;"></div>
   </form>
 </div>
 </section>
@@ -513,32 +515,111 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 
-// Form handling
-function handleSubmit(e) {
-  e.preventDefault();
-  const form = e.target;
-  fetch('/', { method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: new URLSearchParams(new FormData(form)).toString()
-  }).then(() => {
-    form.reset();
-    document.getElementById('form-success').style.display = 'block';
-  }).catch(() => {
-    document.getElementById('form-success').textContent = 'Submission error. Please email us directly.';
-    document.getElementById('form-success').style.display = 'block';
-  });
-}
+<script>
+(function() {
+  if (typeof emailjs === 'undefined') return;
+  emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
 
-// Nav dropdown keyboard
-document.querySelectorAll('.nav-dropdown').forEach(d => {
-  d.addEventListener('keydown', e => {
-    if(e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      const menu = d.querySelector('.dropdown-menu');
-      menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+  var btn      = document.getElementById('caseline-submit');
+  var statusEl = document.getElementById('caseline-status');
+  if (!btn) return;
+
+  btn.addEventListener('click', function() {
+    var nameVal  = (document.getElementById('cl-name')       || {}).value || '';
+    var orgVal   = (document.getElementById('cl-org')        || {}).value || '';
+    var emailVal = (document.getElementById('cl-email')      || {}).value || '';
+    var popVal   = (document.getElementById('cl-population') || {}).value || '';
+    var msgVal   = (document.getElementById('cl-message')    || {}).value || '';
+
+    nameVal  = nameVal.trim();
+    orgVal   = orgVal.trim();
+    emailVal = emailVal.trim();
+    msgVal   = msgVal.trim();
+
+    if (!nameVal || !orgVal || !emailVal) {
+      statusEl.style.color = 'var(--red, #b83224)';
+      statusEl.textContent = 'Please fill in all required fields.';
+      return;
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      statusEl.style.color = 'var(--red, #b83224)';
+      statusEl.textContent = 'Please enter a valid email address.';
+      return;
+    }
+
+    var label   = btn.querySelector('.submit-label');
+    var loading = btn.querySelector('.submit-loading');
+    btn.disabled = true;
+    if (label)   label.style.display   = 'none';
+    if (loading) loading.style.display = 'inline';
+    statusEl.textContent = '';
+
+    // Webhook — Apps Script CRM intake
+    fetch('https://script.google.com/macros/s/AKfycbxbjH4789HDt-9w5zlPsKSiw8G0kPSco3hdm36V1hQcOcly6LgFP-nnXtStywHR2qIlHw/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        token:   'RCX-WEBHOOK-2026-SECURE',
+        method:  'crm_intake',
+        name:    nameVal,
+        org:     orgVal,
+        email:   emailVal,
+        role:    popVal || '',
+        message: msgVal,
+        source:  'Caseline discovery form'
+      })
+    }).catch(function(err) { console.error('Webhook error:', err); });
+
+    // HubSpot Forms API
+    var hutk = document.cookie.replace(/(?:(?:^|.*;\s*)hubspotutk\s*=\s*([^;]*).*$)|^.*$/, '$1');
+    fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        fields: [
+          { name: 'firstname', value: nameVal },
+          { name: 'email',     value: emailVal },
+          { name: 'company',   value: orgVal }
+        ],
+        context: {
+          hutk:     hutk || undefined,
+          pageUri:  'rudolphcx.com/caseline.html',
+          pageName: 'Caseline — Done-For-You Case Manager Field Guides'
+        }
+      })
+    }).catch(function(err) { console.error('HubSpot error:', err); });
+
+    // EmailJS — notification to jamal@rudolphcx.com
+    emailjs.send('service_u94nvbm', 'template_875pqb4', {
+      from_name:    nameVal,
+      organization: orgVal,
+      reply_to:     emailVal,
+      role_type:    popVal || 'Not specified',
+      message:      msgVal,
+      source:       'Caseline discovery form — rudolphcx.com/caseline.html'
+    }).then(function() {
+      statusEl.style.color = 'var(--teal, #2a6e5a)';
+      statusEl.textContent = 'Request received. We will be in touch within one business day.';
+      btn.disabled = false;
+      if (label)   label.style.display   = 'inline';
+      if (loading) loading.style.display = 'none';
+      document.getElementById('cl-name').value       = '';
+      document.getElementById('cl-org').value        = '';
+      document.getElementById('cl-email').value      = '';
+      document.getElementById('cl-population').value = '';
+      document.getElementById('cl-message').value    = '';
+    }).catch(function(err) {
+      statusEl.style.color = 'var(--red, #b83224)';
+      statusEl.textContent = 'Something went wrong. Please email jamal@rudolphcx.com directly.';
+      btn.disabled = false;
+      if (label)   label.style.display   = 'inline';
+      if (loading) loading.style.display = 'none';
+      console.error('EmailJS error:', err);
+    });
   });
-});
+})();
 </script>
 
 <script>
