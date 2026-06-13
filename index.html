@@ -859,6 +859,19 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
   <h2 class="contact-title reveal">Ready to see what this<br>looks like for <em>your role?</em></h2>
   <p class="contact-sub reveal">Book a $300 discovery call. We research your operation before we get on the phone. You leave with a scoping document and a written proposal.</p>
   <a href="/aidline.html#contact" class="btn-primary reveal" style="display:inline-block"><span>Book Discovery Call &mdash; $300</span></a>
+  <div class="contact-divider reveal" style="display:flex;align-items:center;gap:1rem;margin:2rem 0 1.5rem;max-width:480px;">
+    <div style="flex:1;height:1px;background:var(--cream3, #e2ddd3);"></div>
+    <span style="font-family:var(--mono, monospace);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim, #8a8278);">or send a note</span>
+    <div style="flex:1;height:1px;background:var(--cream3, #e2ddd3);"></div>
+  </div>
+  <form class="homepage-contact-form reveal" id="homepageContactForm" onsubmit="handleHomepageSubmit(event)" style="display:flex;flex-direction:column;gap:0.65rem;max-width:480px;margin-bottom:2rem;">
+    <input type="text" name="name" placeholder="Your name" required style="padding:0.7rem 0.9rem;border:1px solid var(--cream3, #e2ddd3);border-radius:3px;font-family:var(--sans, sans-serif);font-size:0.88rem;background:#fff;color:var(--ink, #0f0e0c);">
+    <input type="email" name="email" placeholder="Work email" required style="padding:0.7rem 0.9rem;border:1px solid var(--cream3, #e2ddd3);border-radius:3px;font-family:var(--sans, sans-serif);font-size:0.88rem;background:#fff;color:var(--ink, #0f0e0c);">
+    <input type="text" name="org" placeholder="Organization" style="padding:0.7rem 0.9rem;border:1px solid var(--cream3, #e2ddd3);border-radius:3px;font-family:var(--sans, sans-serif);font-size:0.88rem;background:#fff;color:var(--ink, #0f0e0c);">
+    <textarea name="message" placeholder="What do you need a guide for?" rows="3" style="padding:0.7rem 0.9rem;border:1px solid var(--cream3, #e2ddd3);border-radius:3px;font-family:var(--sans, sans-serif);font-size:0.88rem;background:#fff;color:var(--ink, #0f0e0c);resize:vertical;"></textarea>
+    <button type="submit" id="homepageSubmitBtn" style="align-self:flex-start;padding:0.7rem 1.6rem;background:var(--ink, #0f0e0c);color:var(--cream, #f7f4ee);font-family:var(--mono, monospace);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;border:none;border-radius:3px;cursor:pointer;transition:opacity 0.15s;">Send &rarr;</button>
+    <div id="homepageFormStatus" style="font-family:var(--mono, monospace);font-size:0.7rem;color:var(--dim, #8a8278);"></div>
+  </form>
   <div class="contact-details reveal">
     <div class="contact-item">Jamal Rudolph &mdash; Founder, Rudolph CX</div>
     <div class="contact-item"><a href="mailto:jamal@rudolphcx.com">jamal@rudolphcx.com</a></div>
@@ -1045,6 +1058,36 @@ document.querySelectorAll('.nav-dropdown').forEach(function(item) {
 document.addEventListener('click', function() {
   document.querySelectorAll('.nav-dropdown').forEach(function(d) { d.classList.remove('open'); });
 });
+</script>
+
+<script>
+async function handleHomepageSubmit(e) {
+  e.preventDefault();
+  var btn = document.getElementById('homepageSubmitBtn');
+  var status = document.getElementById('homepageFormStatus');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  var data = Object.fromEntries(new FormData(e.target));
+  try {
+    await fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ fields: [
+        {name:'firstname',value:data.name||''},{name:'email',value:data.email||''},
+        {name:'company',value:data.org||''},{name:'message',value:data.message||''}
+      ], context:{pageUri:window.location.href,pageName:'Rudolph CX Homepage'}})
+    });
+  } catch(err) {}
+  try {
+    if (typeof emailjs !== 'undefined') {
+      await emailjs.send('service_u94nvbm','template_875pqb4',{
+        from_name:data.name,from_email:data.email,organization:data.org||'Not provided',
+        message:data.message||'',guide:'Homepage inquiry'
+      });
+    }
+  } catch(err) {}
+  btn.textContent = 'Sent — I’ll be in touch.';
+  status.textContent = '';
+  e.target.reset();
+}
 </script>
 </body>
 </html>
