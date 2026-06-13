@@ -258,6 +258,12 @@ footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: cente
   @media (max-width: 480px) {
     #pwa-install-banner { bottom: 16px; right: 16px; left: 16px; max-width: none; }
   }
+
+.disclaimer-section { background: var(--cream2, #ede9e0); border-top: 1px solid var(--cream3, #e2ddd3); padding: 1.5rem 0; }
+.disclaimer-inner { max-width: 900px; margin: 0 auto; padding: 0 60px; }
+.disclaimer-text { font-family: var(--mono, monospace); font-size: 0.65rem; color: var(--dim, #8a8278); line-height: 1.7; letter-spacing: 0.02em; }
+@media (max-width: 900px) { .disclaimer-inner { padding: 0 24px; } }
+
 </style>
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
   <link rel="canonical" href="https://rudolphcx.com/chartline.html">
@@ -546,6 +552,12 @@ Chartline is a custom-built reference guide for medical records coordinators who
 </div>
 </section>
 
+
+<div class="disclaimer-section">
+  <div class="disclaimer-inner">
+    <p class="disclaimer-text">This guide is an operational reference tool for frontline workers. It does not constitute legal, medical, regulatory, or professional advice. Regulatory citations reflect research as of the guide&rsquo;s last build date &mdash; verify currency before applying. Always consult qualified counsel for legal questions. Rudolph CX LLC &middot; Durham, NC &middot; rudolphcx.com</p>
+  </div>
+</div>
 <footer>
 <div class="footer-logo">Rudolph<span>CX</span></div>
 <a href="/" class="footer-back">&larr; Back to rudolphcx.com</a>
