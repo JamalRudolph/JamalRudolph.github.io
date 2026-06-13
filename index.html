@@ -297,6 +297,75 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
   .stat-source { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.05em; color: var(--ink3); opacity: 0.7; }
   @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 540px) { .stats-grid { grid-template-columns: 1fr; } .stat-figure { font-size: 2.8rem; } }
+
+/* ── Industry Strip ─────────────────────────────────────────── */
+.industry-strip-section { background: var(--ink, #0f0e0c); padding: 3.5rem 0; }
+.industry-strip-inner { max-width: 1100px; margin: 0 auto; padding: 0 60px; }
+.industry-strip-eyebrow { font-family: var(--mono, monospace); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,244,238,0.4); margin-bottom: 1.75rem; text-align: center; }
+.industry-strip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.istrip-chip { display: flex; flex-direction: column; gap: 0.2rem; padding: 1rem 1.1rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; text-decoration: none; transition: background 0.18s, border-color 0.18s; }
+.istrip-chip:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.2); }
+.istrip-icon { font-size: 0.55rem; color: var(--red, #b83020); margin-bottom: 0.1rem; }
+.istrip-name { font-family: var(--sans, sans-serif); font-size: 0.82rem; font-weight: 500; color: rgba(247,244,238,0.92); line-height: 1.2; }
+.istrip-guide { font-family: var(--mono, monospace); font-size: 0.62rem; color: rgba(247,244,238,0.35); letter-spacing: 0.06em; margin-top: 0.2rem; }
+
+/* ── Differentiation Block ──────────────────────────────────── */
+.diff-section { background: var(--cream, #f7f4ee); padding: 6rem 0; border-top: 1px solid var(--cream3, #e2ddd3); }
+.diff-inner { max-width: 1000px; margin: 0 auto; padding: 0 60px; }
+.diff-eyebrow { font-family: var(--mono, monospace); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red, #b83020); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 10px; }
+.diff-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red, #b83020); }
+.diff-title { font-family: var(--serif, Georgia, serif); font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight: 400; color: var(--ink, #0f0e0c); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 3rem; }
+.diff-title em { font-style: italic; color: var(--red, #b83020); }
+.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+.diff-col { border-radius: 4px; padding: 2rem; }
+.diff-col-them { background: rgba(184,48,32,0.04); border: 1px solid rgba(184,48,32,0.12); }
+.diff-col-us { background: rgba(20,60,30,0.04); border: 1px solid rgba(20,60,30,0.12); }
+.diff-col-label { font-family: var(--mono, monospace); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim, #8a8278); margin-bottom: 1.25rem; }
+.diff-item { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 1rem; font-size: 0.88rem; line-height: 1.6; color: var(--ink2, #2a2620); }
+.diff-item:last-child { margin-bottom: 0; }
+.diff-item-x { color: var(--red, #b83020); font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; font-weight: 600; }
+.diff-item-check { color: #2a6636; font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; font-weight: 700; }
+.diff-note { font-family: var(--serif, Georgia, serif); font-size: 1.1rem; font-style: italic; color: var(--ink3, #4a453e); text-align: center; padding-top: 1.5rem; border-top: 1px solid var(--cream3, #e2ddd3); line-height: 1.6; }
+
+/* ── FAQ Section ────────────────────────────────────────────── */
+.faq-section { background: #fff; padding: 6rem 0; border-top: 1px solid var(--cream3, #e2ddd3); }
+.faq-inner { max-width: 840px; margin: 0 auto; padding: 0 60px; }
+.faq-eyebrow { font-family: var(--mono, monospace); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim, #8a8278); margin-bottom: 0.75rem; }
+.faq-title { font-family: var(--serif, Georgia, serif); font-size: 2rem; font-weight: 400; color: var(--ink, #0f0e0c); margin-bottom: 3rem; letter-spacing: -0.02em; }
+.faq-grid { display: flex; flex-direction: column; gap: 0; }
+.faq-item { padding: 1.5rem 0; border-bottom: 1px solid var(--cream3, #e2ddd3); }
+.faq-item:first-child { border-top: 1px solid var(--cream3, #e2ddd3); }
+.faq-q { font-family: var(--serif, Georgia, serif); font-size: 1.05rem; font-weight: 500; color: var(--ink, #0f0e0c); margin-bottom: 0.6rem; line-height: 1.4; }
+.faq-a { font-size: 0.9rem; color: var(--ink3, #4a453e); line-height: 1.7; }
+
+/* ── Social Proof / Path A ──────────────────────────────────── */
+.proof-section { background: var(--ink, #0f0e0c); padding: 6rem 0; }
+.proof-inner { max-width: 1100px; margin: 0 auto; padding: 0 60px; }
+.proof-eyebrow { font-family: var(--mono, monospace); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,244,238,0.4); margin-bottom: 1rem; }
+.proof-title { font-family: var(--serif, Georgia, serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 400; color: #f7f4ee; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 3rem; }
+.proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem; }
+.proof-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 1.75rem; }
+.proof-card-icon { font-size: 0.7rem; color: var(--red, #b83020); margin-bottom: 0.5rem; }
+.proof-card-num { font-family: var(--serif, Georgia, serif); font-size: 2.4rem; font-weight: 400; color: #f7f4ee; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.3rem; }
+.proof-card-label { font-family: var(--mono, monospace); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(247,244,238,0.45); margin-bottom: 0.9rem; }
+.proof-card-text { font-size: 0.86rem; color: rgba(247,244,238,0.72); line-height: 1.65; margin-bottom: 0.9rem; }
+.proof-card-basis { font-family: var(--mono, monospace); font-size: 0.6rem; color: rgba(247,244,238,0.25); letter-spacing: 0.06em; }
+.proof-cta-row { display: flex; align-items: center; gap: 2rem; }
+.proof-cta { font-family: var(--mono, monospace); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: #f7f4ee; text-decoration: none; border-bottom: 1px solid rgba(247,244,238,0.4); padding-bottom: 2px; transition: opacity 0.18s; }
+.proof-cta:hover { opacity: 0.65; }
+.proof-cta-secondary { font-family: var(--mono, monospace); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(247,244,238,0.45); text-decoration: none; transition: color 0.18s; }
+.proof-cta-secondary:hover { color: rgba(247,244,238,0.75); }
+
+/* ── Responsive adjustments ─────────────────────────────────── */
+@media (max-width: 900px) {
+  .industry-strip-grid { grid-template-columns: repeat(2, 1fr); }
+  .industry-strip-inner { padding: 0 24px; }
+  .diff-grid { grid-template-columns: 1fr; }
+  .diff-inner, .faq-inner, .proof-inner { padding: 0 24px; }
+  .proof-grid { grid-template-columns: 1fr; }
+  .proof-cta-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
+}
+
 </style>
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
@@ -456,9 +525,64 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
         <div class="stat-body">more likely to stay &mdash; workers who have the right training to perform on the job.</div>
         <div class="stat-source">Lighthouse Research, 2024</div>
       </div>
-    </div>
+    
+      <div class="stat-block">
+        <div class="stat-figure">$22.5B</div>
+        <div class="stat-text">global frontline worker training market in 2024 &mdash; projected to reach $66&ndash;100B by 2030. Rudolph CX addresses the segment existing platforms miss: the live performance moment where training has already ended.</div>
+        <div class="stat-source">Grand View Research / Mordor Intelligence, 2024&ndash;2025</div>
+      </div>
+</div>
   </div>
 </section>
+
+<section class="diff-section">
+  <div class="diff-inner">
+    <div class="diff-eyebrow">Why This Is Different</div>
+    <h2 class="diff-title">Not a knowledge base.<br>Not an LMS.<br>A <em>decision engine</em> for the live moment.</h2>
+    <div class="diff-grid">
+      <div class="diff-col diff-col-them">
+        <div class="diff-col-label">Existing tools</div>
+        <div class="diff-item">
+          <div class="diff-item-x">&#215;</div>
+          <div class="diff-item-text">Organized by topic category &mdash; the worker has to know what they&rsquo;re looking for before they can find it</div>
+        </div>
+        <div class="diff-item">
+          <div class="diff-item-x">&#215;</div>
+          <div class="diff-item-text">Built for onboarding and compliance &mdash; designed to be read once, not used in a live call</div>
+        </div>
+        <div class="diff-item">
+          <div class="diff-item-x">&#215;</div>
+          <div class="diff-item-text">Requires the worker to search, scan, and interpret &mdash; while the caller waits</div>
+        </div>
+        <div class="diff-item">
+          <div class="diff-item-x">&#215;</div>
+          <div class="diff-item-text">General enough to apply to everyone &mdash; specific enough to help no one in a live moment</div>
+        </div>
+      </div>
+      <div class="diff-col diff-col-us">
+        <div class="diff-col-label">Rudolph CX guides</div>
+        <div class="diff-item">
+          <div class="diff-item-check">&#10003;</div>
+          <div class="diff-item-text">Organized by situation &mdash; type what the caller just said and the complete response path surfaces immediately</div>
+        </div>
+        <div class="diff-item">
+          <div class="diff-item-check">&#10003;</div>
+          <div class="diff-item-text">Built for the live moment &mdash; the 90 seconds between &ldquo;how do I&rdquo; and the worker&rsquo;s response</div>
+        </div>
+        <div class="diff-item">
+          <div class="diff-item-check">&#10003;</div>
+          <div class="diff-item-text">Worker steps and caller script in a single panel &mdash; no searching, no scanning, no guessing</div>
+        </div>
+        <div class="diff-item">
+          <div class="diff-item-check">&#10003;</div>
+          <div class="diff-item-text">Built from your source material for your specific situations &mdash; not adapted from a generic template</div>
+        </div>
+      </div>
+    </div>
+    <div class="diff-note">Training teaches the policy. The guide handles the moment. Both are necessary. Only one exists when the caller is live.</div>
+  </div>
+</section>
+
 <section class="agents-section">
   <div class="agents-inner">
     <div class="agents-eyebrow reveal">Built for moments like these</div>
@@ -558,6 +682,41 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
     </div>
   </div>
 </section>
+
+<section class="proof-section">
+  <div class="proof-inner">
+    <div class="proof-eyebrow">What a Guide Does in the Room</div>
+    <h2 class="proof-title">The moment changes when the guide is open.</h2>
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="proof-card-icon">&#9650;</div>
+        <div class="proof-card-num">&lt; 4 min</div>
+        <div class="proof-card-label">Average time to resolution</div>
+        <div class="proof-card-text">When a worker opens the correct situation in a Rudolph CX guide, they navigate from initial caller statement to complete resolution &mdash; including escalation triggers and caller script &mdash; in under four minutes. No searching. No callbacks. No guessing.</div>
+        <div class="proof-card-basis">Design outcome &middot; Aidline&#8480; architecture</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-card-icon">&#9650;</div>
+        <div class="proof-card-num">Day 1</div>
+        <div class="proof-card-label">Onboarding ramp</div>
+        <div class="proof-card-text">New workers using a performance support guide on their first live call handle situations confidently from the start &mdash; instead of waiting weeks for experience to fill the gaps that training left open. The guide is the bridge between knowing and doing.</div>
+        <div class="proof-card-basis">Design outcome &middot; Caseline&#8480; architecture</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-card-icon">&#9650;</div>
+        <div class="proof-card-num">One file</div>
+        <div class="proof-card-label">Zero IT involvement</div>
+        <div class="proof-card-text">Each guide is delivered as a single HTML file. Installable on any device. Works offline after first load. No login, no app store, no IT ticket, no deployment window. It is in the worker&rsquo;s hands the same day it is delivered.</div>
+        <div class="proof-card-basis">Design outcome &middot; All guides</div>
+      </div>
+    </div>
+    <div class="proof-cta-row">
+      <a href="#demos" class="proof-cta">See the guides live &rarr;</a>
+      <a href="#contact" class="proof-cta-secondary">Talk to us about your sector &rarr;</a>
+    </div>
+  </div>
+</section>
+
 <section class="how-section" id="how">
   <div class="section-inner">
     <div class="section-eyebrow reveal">The Process</div>
@@ -569,6 +728,55 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
     </div>
   </div>
 </section>
+
+<section class="industry-strip-section">
+  <div class="industry-strip-inner">
+    <div class="industry-strip-eyebrow">Eight Industries &middot; One Build Process &middot; Delivered in Two Weeks</div>
+    <div class="industry-strip-grid">
+      <a href="/aidline.html" class="istrip-chip">
+        <span class="istrip-icon">&#9654;</span>
+        <span class="istrip-name">Benefits Navigation</span>
+        <span class="istrip-guide">Aidline&#8480;</span>
+      </a>
+      <a href="/caseline.html" class="istrip-chip">
+        <span class="istrip-icon">&#9654;</span>
+        <span class="istrip-name">Social Services</span>
+        <span class="istrip-guide">Caseline&#8480;</span>
+      </a>
+      <a href="/chartline.html" class="istrip-chip">
+        <span class="istrip-icon">&#9654;</span>
+        <span class="istrip-name">Clinical Documentation</span>
+        <span class="istrip-guide">Chartline&#8480;</span>
+      </a>
+      <a href="/lendline.html" class="istrip-chip">
+        <span class="istrip-icon">&#9654;</span>
+        <span class="istrip-name">Financial Services</span>
+        <span class="istrip-guide">Lendline&#8480;</span>
+      </a>
+      <a href="/workline.html" class="istrip-chip">
+        <span class="istrip-icon">&#9654;</span>
+        <span class="istrip-name">Workforce Development</span>
+        <span class="istrip-guide">Workline&#8480;</span>
+      </a>
+      <a href="/reentryline.html" class="istrip-chip">
+        <span class="istrip-icon">&#9654;</span>
+        <span class="istrip-name">Reentry &amp; Justice</span>
+        <span class="istrip-guide">Reentryline&#8480;</span>
+      </a>
+      <a href="/supervisorline.html" class="istrip-chip">
+        <span class="istrip-icon">&#9654;</span>
+        <span class="istrip-name">Frontline Supervision</span>
+        <span class="istrip-guide">Supervisorline&#8480;</span>
+      </a>
+      <a href="/peopleline.html" class="istrip-chip">
+        <span class="istrip-icon">&#9654;</span>
+        <span class="istrip-name">HR &amp; People Operations</span>
+        <span class="istrip-guide">Peopleline&#8480;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="firststep-section" id="firststep">
   <div class="section-inner">
     <div class="section-eyebrow reveal">A Companion Project</div>
@@ -590,6 +798,32 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
     </div>
   </div>
 </section>
+
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-eyebrow">Common Questions</div>
+    <h2 class="faq-title">Before you book</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-q">We already have a knowledge base and an LMS. Why do we need this?</div>
+        <div class="faq-a">Training and performance support solve different problems in different moments. An LMS teaches the policy during onboarding. A performance support guide handles the live call when training is nowhere in the room. They are not competitors &mdash; the guide is what fills the gap after training ends and the moment arrives.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How long does the build take and what do we need to provide?</div>
+        <div class="faq-a">Two weeks from a completed intake. We need your SOPs, call recordings or transcripts, and one 60-minute discovery call. We write everything. You review and approve. No IT involvement required on your end.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What does the guide actually look like? Can I see one?</div>
+        <div class="faq-a">Every live demo above is a real guide. Click into any situation, work the steps, read the caller script &mdash; that is exactly what your workers see. Each guide is delivered as a single HTML file that runs on any device, works offline after the first load, and requires no login, app store, or IT deployment.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What if we need changes after delivery?</div>
+        <div class="faq-a">The initial build includes one round of revisions. The guide is delivered as a standard HTML file &mdash; you own it. Ongoing updates, expanded situation libraries, and version 2 builds are scoped separately based on scope and frequency.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="pricing-section" id="pricing">
   <div class="section-inner">
     <div class="section-eyebrow reveal">Investment</div>
