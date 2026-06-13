@@ -285,7 +285,19 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 @media (max-width: 900px) { .agents-grid { grid-template-columns: 1fr; } .agents-section { padding: 80px 28px; } }
 
   .footer-disclaimer { font-family: var(--mono, monospace); font-size: 9px; color: var(--muted, #b5afa6); letter-spacing: 0.04em; line-height: 1.6; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08); max-width: 860px; }
-  </style>
+  
+  /* Statistics section */
+  .stats-section { background: var(--cream2, #f0ebe0); padding: 5rem 0; }
+  .stats-section .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+  .stats-section .section-eyebrow { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 3rem; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+  .stat-block { display: flex; flex-direction: column; gap: 0.5rem; }
+  .stat-figure { font-family: var(--serif); font-size: 3.5rem; font-weight: 400; color: var(--ink); line-height: 1; letter-spacing: -0.02em; }
+  .stat-body { font-size: 0.9rem; line-height: 1.55; color: var(--ink2, var(--ink)); flex: 1; }
+  .stat-source { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.05em; color: var(--ink3); opacity: 0.7; }
+  @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .stats-grid { grid-template-columns: 1fr; } .stat-figure { font-size: 2.8rem; } }
+</style>
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
 <!-- End of HubSpot Embed Code -->
@@ -413,6 +425,34 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
           <li class="feature-item"><div class="feature-num">03</div><div><div class="feature-title">Case setup before anything else</div><div class="feature-desc">Record type, case type, sub-type, and do-not warnings appear before step one. Agents create the right case before touching anything in the system.</div></div></li>
           <li class="feature-item"><div class="feature-num">04</div><div><div class="feature-title">Built from inside the role</div><div class="feature-desc">Every guide is built from official job aids, verified source documents, and live call experience &mdash; not assumptions made from the outside.</div></div></li>
         </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">By the Numbers</div>
+    <div class="stats-grid">
+      <div class="stat-block reveal">
+        <div class="stat-figure">80%</div>
+        <div class="stat-body">of the global workforce is frontline. Under 5% of training tech investment reaches them.</div>
+        <div class="stat-source">SNS Insider, 2025</div>
+      </div>
+      <div class="stat-block reveal reveal-delay-1">
+        <div class="stat-figure">24%</div>
+        <div class="stat-body">of frontline workers strongly agree they have the right training to succeed at work.</div>
+        <div class="stat-source">Lighthouse Research, 2024</div>
+      </div>
+      <div class="stat-block reveal reveal-delay-2">
+        <div class="stat-figure">43%</div>
+        <div class="stat-body">of frontline workers are gone within 90 days.</div>
+        <div class="stat-source">Fountain Frontline Report, 2025</div>
+      </div>
+      <div class="stat-block reveal reveal-delay-3">
+        <div class="stat-figure">3&times;</div>
+        <div class="stat-body">more likely to stay &mdash; workers who have the right training to perform on the job.</div>
+        <div class="stat-source">Lighthouse Research, 2024</div>
       </div>
     </div>
   </div>
