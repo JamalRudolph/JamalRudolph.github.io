@@ -1,14 +1,17 @@
 # guide-hashes-baseline.sha256
 # Rudolph CX - File Integrity Baseline
-# Generated: Session 132 - 2026-06-12
+# Generated: Session 141 - 2026-06-15
 # REGENERATE ONLY after an authorized update. Never after a suspected tamper.
+# Previous baseline: Session 132 - 2026-06-12
+# Reason for regeneration: Sessions 136+137 authorized updates (Supervisorline, Peopleline nav, disclaimer blocks, homepage expansion, contact form) not reflected in prior baseline.
 # FORMAT: <sha256hash>  <filename>
 
-7ce47621cd1d2399a2f0052f6b443ec93e58ebafec5bb449413ead34d6915019  index.html
-5a54c89e7a396e239043acc477e3a0cd73e3b9544ac9434d9906fcff92ff8841  aidline.html
-764be17b41314a7c6a288d6a49e773de4cca5b7353460ff28aa31d9d4826cc9e  caseline.html
-4b24867a6e4879969b7e05493590a2ab00a8f4bf99019e7fe593e501e04ff81d  lendline.html
-9f3ccfa0acd0f0ea88bd30ed1dc9bd983652131a772b3a914527ae55863074e1  chartline.html
-a7d07f4517ee0ac174b2dfb5d6677c15e60c92dc7d4b89796c44d6cc2f39fc58  workline.html
-7549df2e4702c25e583ce7ccd9a127dc67f4de32f3c2a7db2663c94f49b920fe  reentryline.html
+e5487d0adc09d3dcfe495e03589cfeab317cd05af426f5972c730b2e74e83c3a  index.html
+2127bf2390a0609f090ce6f0e449f820d9e81efdb69bc723a4e0cf5ce601c02a  aidline.html
+e3f27199a22295871926bb10a95fd3725694c20a77cbd6262cfb44d08e8a5703  caseline.html
+2610f7f7cde7a50d14ecc9d7c4f7c2f52c0c39cab47fb7935f29e28ea72f77be  lendline.html
+2288d0f54a66e10710d5dcdb0148041884034991e73d597b9a5bfc8f40eee775  chartline.html
+eb612b3eb5b186f1805a2523701d6dc04f9d1b8929d7fca08bb864c264972311  workline.html
+133b3a5f5aa8899615e332002b55259d54954cb8568fe424a0ff2c9e35bfc3da  reentryline.html
 4b72a520609c2e6d2e87be59ca421a1909a8b589092c6ef6370acc5cd72b862b  situation-library.html
+
