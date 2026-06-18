@@ -366,6 +366,145 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
   .proof-cta-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
 }
 
+
+/* ── BEFORE YOU REACH OUT — DISCOVERY SECTION ── */
+.discovery-section {
+  padding: 100px 60px;
+  background: var(--cream2);
+  border-top: 1px solid var(--cream3);
+}
+.discovery-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.discovery-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 20px;
+}
+.discovery-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+.discovery-body {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink3);
+  font-weight: 300;
+  margin-bottom: 20px;
+  max-width: 760px;
+}
+.discovery-body strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.discovery-divider {
+  height: 1px;
+  background: var(--cream3);
+  margin: 40px 0;
+}
+.discovery-why {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 12px;
+}
+.discovery-why-body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink3);
+  font-weight: 300;
+  max-width: 700px;
+  margin-bottom: 40px;
+}
+.discovery-distinction {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-bottom: 48px;
+}
+.discovery-col {
+  background: var(--cream);
+  padding: 32px 36px;
+  border: 1px solid var(--cream3);
+}
+.discovery-col.highlighted {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.discovery-col-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 16px;
+}
+.discovery-col.highlighted .discovery-col-label {
+  color: var(--red2);
+}
+.discovery-col-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+.discovery-col.highlighted .discovery-col-title {
+  color: var(--cream);
+}
+.discovery-col-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.discovery-col-list li {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--ink3);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--cream3);
+  line-height: 1.5;
+}
+.discovery-col.highlighted .discovery-col-list li {
+  color: rgba(247,244,238,0.65);
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+.discovery-col-list li:last-child { border-bottom: none; }
+.discovery-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.discovery-cta-note {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+}
+@media (max-width: 768px) {
+  .discovery-section { padding: 80px 28px; }
+  .discovery-distinction { grid-template-columns: 1fr; }
+}
+
 </style>
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
