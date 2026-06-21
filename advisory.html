@@ -62,6 +62,8 @@ nav {
 /* REVEAL */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1); }
 .reveal.visible { opacity: 1; transform: none; }
+/* Hero elements visible immediately — no above-fold fade delay */
+.adv-hero .reveal { opacity: 1; transform: none; transition: none; }
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
 .reveal-delay-3 { transition-delay: 0.3s; }
@@ -676,11 +678,14 @@ footer {
 </footer>
 
 <script>
-// Reveal on scroll
+// Hero elements: visible immediately, no animation delay
+document.querySelectorAll('.adv-hero .reveal').forEach(el => el.classList.add('visible'));
+
+// All other elements: reveal on scroll
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
 }, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal:not(.adv-hero .reveal)').forEach(el => observer.observe(el));
 
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
