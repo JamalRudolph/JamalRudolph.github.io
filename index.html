@@ -505,6 +505,45 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
   .discovery-distinction { grid-template-columns: 1fr; }
 }
 
+
+/* ── PRICING — FPF TIER SYSTEM ── */
+.pricing-philosophy { max-width: 760px; margin: 0 auto 56px; text-align: center; }
+.pricing-philosophy p { font-family: var(--serif); font-size: clamp(18px,2vw,24px); font-weight: 400; font-style: italic; color: var(--ink2); line-height: 1.5; letter-spacing: -0.01em; }
+.pricing-philosophy p + p { margin-top: 16px; font-size: 14px; font-style: normal; font-family: var(--sans); color: var(--ink3); font-weight: 300; line-height: 1.7; }
+.pricing-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 32px; }
+.price-card { background: white; padding: 48px 40px; position: relative; border: 1px solid var(--cream3); transition: all 0.25s ease; }
+.price-card.featured { background: var(--ink); border-color: var(--ink); }
+.price-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(15,14,12,0.1); }
+.price-tier { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; }
+.price-card.featured .price-tier { color: var(--red2); }
+.price-fit { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; }
+.price-card.featured .price-fit { color: var(--red2); }
+.price-rangeline { font-family: var(--serif); font-size: 32px; font-weight: 600; color: var(--ink); line-height: 1.1; margin-bottom: 6px; letter-spacing: -0.02em; }
+.price-card.featured .price-rangeline { color: var(--cream); }
+.price-rangelabel { font-family: var(--mono); font-size: 10px; color: var(--dim); margin-bottom: 28px; letter-spacing: 0.06em; }
+.price-card.featured .price-rangelabel { color: rgba(247,244,238,0.4); }
+.price-divider { height: 1px; background: var(--cream3); margin-bottom: 24px; }
+.price-card.featured .price-divider { background: rgba(255,255,255,0.1); }
+.descriptors-label { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; }
+.price-card.featured .descriptors-label { color: rgba(247,244,238,0.45); }
+.descriptor-list { list-style: none; margin-bottom: 24px; }
+.descriptor-list li { font-size: 13px; color: var(--ink3); line-height: 1.6; font-weight: 300; margin-bottom: 10px; padding-left: 14px; position: relative; }
+.descriptor-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 1px; background: var(--red); }
+.price-card.featured .descriptor-list li { color: rgba(247,244,238,0.7); }
+.price-card.featured .descriptor-list li::before { background: var(--red2); }
+.price-redistribute { font-family: var(--sans); font-size: 12px; color: var(--ink3); line-height: 1.6; font-style: italic; font-weight: 300; padding-top: 16px; border-top: 1px solid var(--cream3); margin-top: 8px; }
+.price-card.featured .price-redistribute { color: rgba(247,244,238,0.55); border-color: rgba(255,255,255,0.1); }
+.featured-badge { position: absolute; top: 20px; right: 20px; font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; background: var(--red); color: white; padding: 4px 10px; }
+.probono-door { margin-top: 2px; background: linear-gradient(180deg,rgba(196,154,60,0.08) 0%,rgba(196,154,60,0.12) 100%); border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); border-left: 1px solid rgba(196,154,60,0.3); border-right: 1px solid rgba(196,154,60,0.3); padding: 64px 56px; display: grid; grid-template-columns: 220px 1fr; gap: 48px; align-items: center; }
+.probono-label { font-family: var(--serif); font-size: 28px; font-weight: 600; font-style: italic; letter-spacing: -0.01em; color: var(--ink); line-height: 1.1; }
+.probono-label::before { content: ''; display: block; width: 40px; height: 2px; background: var(--gold); margin-bottom: 14px; }
+.probono-text { font-size: 16px; color: var(--ink2); line-height: 1.65; font-weight: 300; }
+.probono-lede { display: block; font-family: var(--serif); font-size: 20px; font-style: italic; font-weight: 500; color: var(--red); line-height: 1.4; margin-bottom: 12px; }
+.probono-text strong { color: var(--ink); font-weight: 500; }
+.honor-note { margin-top: 56px; padding: 36px 48px; text-align: center; font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--ink2); line-height: 1.55; font-weight: 400; max-width: 720px; margin-left: auto; margin-right: auto; letter-spacing: -0.005em; }
+.honor-note::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); margin: 0 auto 24px; }
+@media (max-width: 900px) { .pricing-grid-3 { grid-template-columns: 1fr; } .probono-door { grid-template-columns: 1fr; gap: 24px; padding: 44px 28px; } }
+
 </style>
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
@@ -531,6 +570,7 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
   </div>
 </li>
 <li><a href="/demos.html">Demo Center</a></li>
+<li><a href="/advisory.html">Advisory Services</a></li>
 <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
 <li><a href="/about.html">About</a></li>
 <li><a href="#pricing">Pricing</a></li>
@@ -1047,13 +1087,81 @@ footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex;
 <section class="pricing-section" id="pricing">
   <div class="section-inner">
     <div class="section-eyebrow reveal">Investment</div>
-    <h2 class="section-title reveal">Straightforward.<br>No hidden complexity.</h2>
-    <div class="reveal" style="margin-top:48px;background:var(--ink);padding:40px;border-left:3px solid var(--red);">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red2);margin-bottom:14px;">Aidline&#8480; &mdash; Done-For-You Build</div>
-      <div style="font-family:var(--serif);font-size:clamp(22px,3vw,32px);font-weight:500;color:var(--cream);line-height:1.2;margin-bottom:16px;">Engagements start at <strong style="color:#fff;">$2,500.</strong></div>
-      <div style="font-size:14px;color:rgba(247,244,238,0.55);line-height:1.7;font-weight:300;margin-bottom:28px;">Discovery call: <strong style="color:rgba(247,244,238,0.85);">$300 flat</strong> &mdash; credits in full toward your build if you sign. Non-refundable if you don&rsquo;t.</div>
-      <a href="/aidline.html#pricing" class="btn-primary"><span>See Full Pricing on Aidline&#8480; &rarr;</span></a>
+    <h2 class="section-title reveal">Pricing that names<br>who it&rsquo;s for.</h2>
+
+    <div class="pricing-philosophy reveal">
+      <p>The work is the same at every tier. The deliverable is the same at every tier. The price reflects what an organization can sustainably pay &mdash; not the value of the guide.</p>
+      <p>Select the tier where the most descriptors apply to your organization. We operate on the honor system. Larger operations paying their full tier is what makes the lower tiers possible.</p>
     </div>
+
+    <div class="pricing-grid-3">
+
+      <div class="price-card reveal">
+        <div class="price-tier">Enterprise</div>
+        <div class="price-fit">For scaled operations</div>
+        <div class="price-rangeline">$10,000+</div>
+        <div class="price-rangelabel">per engagement &middot; or retainer</div>
+        <div class="price-divider"></div>
+        <div class="descriptors-label">If most of these describe you</div>
+        <ul class="descriptor-list">
+          <li>Contact center with 200+ agents, or multi-site operations</li>
+          <li>Fortune 1000, large BPO, or federal prime contractor</li>
+          <li>Annual operating budget over $50M</li>
+          <li>Multiple roles or business lines need coverage</li>
+          <li>Ongoing process updates expected as a recurring need</li>
+        </ul>
+        <div class="price-redistribute">Every enterprise engagement is how this practice stays accessible to the organizations and individuals who need it most.</div>
+      </div>
+
+      <div class="price-card featured reveal reveal-delay-1">
+        <div class="featured-badge">Most Common</div>
+        <div class="price-tier">Standard</div>
+        <div class="price-fit">For established operations</div>
+        <div class="price-rangeline">$4,000&ndash;$7,500</div>
+        <div class="price-rangelabel">per engagement</div>
+        <div class="price-divider"></div>
+        <div class="descriptors-label">If most of these describe you</div>
+        <ul class="descriptor-list">
+          <li>Contact center with 25&ndash;200 agents</li>
+          <li>Established healthcare, financial services, or legal services operation</li>
+          <li>Regional BPO or mid-market services firm</li>
+          <li>State or county government agency with budgeted training line</li>
+          <li>One full role or department needs coverage</li>
+        </ul>
+        <div class="price-redistribute">Most engagements land here.</div>
+      </div>
+
+      <div class="price-card reveal reveal-delay-2">
+        <div class="price-tier">Solidarity</div>
+        <div class="price-fit">For mission-aligned operations</div>
+        <div class="price-rangeline">$1,500&ndash;$3,500</div>
+        <div class="price-rangelabel">per engagement</div>
+        <div class="price-divider"></div>
+        <div class="descriptors-label">If most of these describe you</div>
+        <ul class="descriptor-list">
+          <li>Workforce development board, NCWorks affiliate, or reentry program</li>
+          <li>Community-based nonprofit or mission-driven organization</li>
+          <li>Smaller government program or municipal department</li>
+          <li>Annual operating budget under $5M</li>
+          <li>Pilot project, single role, focused situation set</li>
+        </ul>
+        <div class="price-redistribute">This tier exists because the work matters most where the budget is tightest.</div>
+      </div>
+
+    </div>
+
+    <div class="probono-door reveal">
+      <div class="probono-label">Pro Bono<br>Door</div>
+      <div class="probono-text">
+        <span class="probono-lede">If your operating budget is below the Solidarity tier and your work directly supports workers, returning citizens, or job seekers &mdash; reach out anyway.</span>
+        <strong>A small number of pro bono engagements are reserved each year for organizations doing this kind of work.</strong> No application form. No tax-status questionnaire. A real conversation, on a real call.
+      </div>
+    </div>
+
+    <p class="honor-note reveal">
+      Tiers are self-selected. There is no income verification. The honor system is part of how this stays simple &mdash; and how it stays accessible to the organizations that need it most.
+    </p>
+
   </div>
 </section>
 <section class="contact-section" id="contact">
