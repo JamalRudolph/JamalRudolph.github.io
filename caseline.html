@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -219,32 +221,7 @@ footer { background: var(--ink2); padding: 3rem 80px; display: flex; align-items
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<nav aria-label="Main navigation">
-<a href="/" class="nav-logo">Rudolph<span>CX</span></a>
-<ul class="nav-links">
-<li><a href="/">Home</a></li>
-<li class="nav-dropdown">
-  <a href="#" aria-haspopup="true" aria-expanded="false">Our Guides</a>
-  <div class="dropdown-menu">
-    <a href="/aidline.html">Aidline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/caseline.html">Caseline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/lendline.html">Lendline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/chartline.html">Chartline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/workline.html">Workline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/reentryline.html">Reentryline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/supervisorline.html">Supervisorline&#8480; <span class="dm-tag">New</span></a>
-    <a href="/peopleline.html">Peopleline&#8480; <span class="dm-tag">New</span></a>
-  </div>
-</li>
-<li><a href="/demos.html">Demo Center</a></li>
-<li><a href="/advisory.html">Advisory Services</a></li>
-<li><a href="/groundwork.html">Groundwork</a></li>
-<li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
-<li><a href="/about.html">About</a></li>
-<li><a href="#pricing">Pricing</a></li>
-<li><a href="https://book.squareup.com/appointments/mduphd9nbedqey/location/LB8E62TY4W9N1/services" target="_blank" rel="noopener">Book Discovery</a></li>
-</ul>
-</nav>
+{% include nav.html %}
 <!-- ── PWA INSTALL BANNER ── -->
 <div id="pwa-install-banner" role="complementary" aria-label="Install guide for offline use">
   <button id="pwa-dismiss-btn" aria-label="Dismiss">&times;</button>
