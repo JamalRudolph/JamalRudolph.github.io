@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -397,30 +399,7 @@ footer {
 <body>
 
 <!-- NAV -->
-<nav aria-label="Main navigation">
-<a href="/" class="nav-logo">Rudolph<span>CX</span></a>
-<ul class="nav-links">
-<li><a href="/">Home</a></li>
-<li class="nav-dropdown">
-  <a href="#" aria-haspopup="true" aria-expanded="false">Our Guides</a>
-  <div class="dropdown-menu">
-    <a href="/aidline.html">Aidline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/caseline.html">Caseline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/lendline.html">Lendline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/chartline.html">Chartline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/workline.html">Workline&#8480; <span class="dm-tag">Live</span></a>
-    <a href="/reentryline.html">Reentryline&#8480; <span class="dm-tag">Live</span></a>
-  </div>
-</li>
-<li><a href="/demos.html">Demo Center</a></li>
-<li><a href="/advisory.html">Advisory Services</a></li>
-<li><a href="/groundwork.html">Groundwork</a></li>
-<li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
-<li><a href="/about.html">About</a></li>
-<li><a href="/pricing.html">Pricing</a></li>
-<li><a href="https://book.squareup.com/appointments/mduphd9nbedqey/location/LB8E62TY4W9N1/services">Book Discovery</a></li>
-</ul>
-</nav>
+{% include nav.html current="about" %}
 
 <!-- HERO -->
 <section class="hero">
