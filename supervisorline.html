@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -159,7 +161,7 @@ footer { background: var(--ink); color: rgba(247,244,238,0.5); padding: 2rem 60p
 .footer-logo { font-family: var(--serif); font-size: 1.1rem; color: #f7f4ee; }
 .footer-logo span { color: rgba(247,244,238,0.4); }
 .footer-copy { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em; }
-.footer-links { display: flex; gap: 1.5rem; }
+.footer-links { display: flex; gap: 1.5rem; }h
 .footer-links a { font-family: var(--mono); font-size: 0.62rem; color: rgba(247,244,238,0.4); text-decoration: none; letter-spacing: 0.06em; }
 .footer-links a:hover { color: rgba(247,244,238,0.8); }
 
@@ -181,32 +183,13 @@ footer { background: var(--ink); color: rgba(247,244,238,0.5); padding: 2rem 60p
   nav { padding: 0 24px; }
   .nav-links { display: none; }
 }
-</style>
+h
   <script data-goatcounter="https://rudolphcx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<nav>
-  <a href="/" class="nav-logo">Rudolph<span>CX</span></a>
-  <ul class="nav-links">
-    <li class="nav-dropdown"><a href="#">Guides ↓</a>
-      <div class="dropdown-menu">
-        <a href="/aidline.html">Aidline℠</a>
-        <a href="/caseline.html">Caseline℠</a>
-        <a href="/chartline.html">Chartline℠</a>
-        <a href="/lendline.html">Lendline℠</a>
-        <a href="/workline.html">Workline℠</a>
-        <a href="/reentryline.html">Reentryline℠</a>
-        <a href="/supervisorline.html" style="font-weight:600;">Supervisorline℠ <span class="dm-tag">New</span></a>
-              <a href="/peopleline.html" style="font-weight:600;">Peopleline&#8480; <span class="dm-tag">New</span></a>
-      </div>
-    </li>
-    <li><a href="#situations">How It Works</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+{% include nav.html current="supervisorline" %}
 
 <!-- HERO -->
 <section class="hero" id="hero">
