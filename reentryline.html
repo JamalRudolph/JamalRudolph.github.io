@@ -264,6 +264,14 @@ footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: cente
 .disclaimer-text { font-family: var(--mono, monospace); font-size: 0.65rem; color: var(--dim, #8a8278); line-height: 1.7; letter-spacing: 0.02em; }
 @media (max-width: 900px) { .disclaimer-inner { padding: 0 24px; } }
 
+.nav-dd{position:relative}
+.nav-dd>a::after{content:' ↓';font-size:.7rem;opacity:.5}
+.nav-dd:hover .dd-menu,.nav-dd:focus-within .dd-menu{display:flex;flex-direction:column;gap:2px}
+.dd-menu{display:none;position:absolute;top:100%;left:0;background:var(--cream);border:1px solid var(--cream3);border-radius:4px;padding:calc(.5rem + 8px) .5rem .5rem .5rem;min-width:230px;box-shadow:0 4px 20px rgba(0,0,0,.08);z-index:200}
+.dd-menu a{display:flex;align-items:center;justify-content:space-between;padding:.4rem .6rem;border-radius:3px;font-size:.82rem;color:var(--ink3);text-decoration:none}
+.dd-menu a:hover{background:var(--cream2);color:var(--ink)}
+.dm-tag{font-size:.6rem;background:var(--red);color:#fff;padding:1px 5px;border-radius:2px;font-family:var(--mono);letter-spacing:.05em}
+.dd-div{height:1px;background:var(--cream3);margin:4px 0}
 </style>
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
   <link rel="canonical" href="https://rudolphcx.com/reentryline.html">
