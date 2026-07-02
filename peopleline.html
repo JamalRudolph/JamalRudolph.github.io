@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -153,31 +155,22 @@ footer { background: var(--ink); color: rgba(247,244,238,0.5); padding: 2rem 60p
   nav { padding: 0 24px; }
   .nav-links { display: none; }
 }
+
+/* SHARED NAV SUPPORT (added for nav rebuild) */
+.nav-dd{position:relative}
+.nav-dd>a::after{content:' ↓';font-size:.7rem;opacity:.5}
+.nav-dd:hover .dd-menu,.nav-dd:focus-within .dd-menu{display:flex;flex-direction:column;gap:2px}
+.dd-menu{display:none;position:absolute;top:100%;left:0;background:var(--cream);border:1px solid var(--cream3);border-radius:4px;padding:calc(.5rem + 8px) .5rem .5rem .5rem;min-width:230px;box-shadow:0 4px 20px rgba(0,0,0,.08);z-index:200}
+.dd-menu a{display:flex;align-items:center;justify-content:space-between;padding:.4rem .6rem;border-radius:3px;font-size:.82rem;color:var(--ink3);text-decoration:none}
+.dd-menu a:hover{background:var(--cream2);color:var(--ink)}
+.dm-tag{font-size:.6rem;background:var(--red);color:#fff;padding:1px 5px;border-radius:2px;font-family:var(--mono);letter-spacing:.05em}
+.dd-div{height:1px;background:var(--cream3);margin:4px 0}
 </style>
   <script data-goatcounter="https://rudolphcx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
-<nav>
-  <a href="/" class="nav-logo">Rudolph<span>CX</span></a>
-  <ul class="nav-links">
-    <li class="nav-dropdown"><a href="#">Guides</a>
-      <div class="dropdown-menu">
-        <a href="/aidline.html">Aidline&#8480;</a>
-        <a href="/caseline.html">Caseline&#8480;</a>
-        <a href="/chartline.html">Chartline&#8480;</a>
-        <a href="/lendline.html">Lendline&#8480;</a>
-        <a href="/workline.html">Workline&#8480;</a>
-        <a href="/reentryline.html">Reentryline&#8480;</a>
-        <a href="/supervisorline.html">Supervisorline&#8480;</a>
-        <a href="/peopleline.html" style="font-weight:600;">Peopleline&#8480; <span class="dm-tag">New</span></a>
-      </div>
-    </li>
-    <li><a href="#situations">How It Works</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+{% include nav.html current="peopleline" %}
 <section class="hero" id="hero">
   <div class="hero-left">
     <div class="hero-eyebrow reveal">Peopleline&#8480; &middot; Performance Support &middot; HR &amp; People Operations</div>
