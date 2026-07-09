@@ -1,17 +1,21 @@
 # guide-hashes-baseline.sha256
 # Rudolph CX - File Integrity Baseline
-# Generated: Session 141 - 2026-06-15
+# Generated: Session 177 - 2026-07-09
 # REGENERATE ONLY after an authorized update. Never after a suspected tamper.
-# Previous baseline: Session 132 - 2026-06-12
-# Reason for regeneration: Sessions 136+137 authorized updates (Supervisorline, Peopleline nav, disclaimer blocks, homepage expansion, contact form) not reflected in prior baseline.
+# Previous baseline: Session 141 - 2026-06-15
+# Reason for regeneration: Baseline was stale since June 15; legitimate updates since then
+# (Lendline, Caseline content updates; Session 176/177 Supervisorline/Peopleline pricing,
+# methodology.html nav + Foundation Utterance) triggered false-positive integrity alert
+# on 2026-07-08 05:17 ET. Verified via direct hash computation that current file state
+# is stable (matches the "Actual" hashes reported in that alert) and authorship on all
+# recent commits is JamalRudolph -- confirmed false positive, not tampering.
 # FORMAT: <sha256hash>  <filename>
 
-e5487d0adc09d3dcfe495e03589cfeab317cd05af426f5972c730b2e74e83c3a  index.html
-2127bf2390a0609f090ce6f0e449f820d9e81efdb69bc723a4e0cf5ce601c02a  aidline.html
-e3f27199a22295871926bb10a95fd3725694c20a77cbd6262cfb44d08e8a5703  caseline.html
-2610f7f7cde7a50d14ecc9d7c4f7c2f52c0c39cab47fb7935f29e28ea72f77be  lendline.html
-2288d0f54a66e10710d5dcdb0148041884034991e73d597b9a5bfc8f40eee775  chartline.html
-eb612b3eb5b186f1805a2523701d6dc04f9d1b8929d7fca08bb864c264972311  workline.html
-133b3a5f5aa8899615e332002b55259d54954cb8568fe424a0ff2c9e35bfc3da  reentryline.html
-4b72a520609c2e6d2e87be59ca421a1909a8b589092c6ef6370acc5cd72b862b  situation-library.html
-
+80c8bef52537aee5e55d1816e36d88bd51db4130ba01acd3a66f55aba0a5b109  index.html
+7f9547b029fe6e3c27f470d17a056ede02ce3913655d830d7797b4805ddb5207  aidline.html
+810fba53014efc05fe522b4423ae52d93929854180859b1827d90c303cdc8fc9  caseline.html
+21087afb4a09fd0ef99e3396412488a8cd3ada35f3340d01fddd37845dbe11c6  lendline.html
+76ecfa44f33855b68285ef4ba0ba47abba387b9f8c5d9058e0907659416317ae  chartline.html
+7291930bd87bae913b3dee70b821a5b26ac28ce97be15cd874f43698b49562f4  workline.html
+88e3f55cc716e09fca2cd6aece96ed85272d5fff59b8db001e3478c06d5483dd  reentryline.html
+3f8514204eec9801e1a25717895222e9460d28a9b7727842147cbf3ddb33056b  situation-library.html
