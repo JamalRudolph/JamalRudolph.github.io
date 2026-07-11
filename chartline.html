@@ -647,6 +647,22 @@ btn.disabled = true;
 if (label) label.style.display = 'none';
 if (loading) loading.style.display = 'inline';
 statusEl.textContent = '';
+// Webhook — Apps Script CRM intake
+fetch('https://script.google.com/macros/s/AKfycbxbjH4789HDt-9w5zlPsKSiw8G0kPSco3hdm36V1hQcOcly6LgFP-nnXtStywHR2qIlHw/exec', {
+  method: 'POST',
+  headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+  body: JSON.stringify({
+    token:   'RCX-WEBHOOK-2026-SECURE',
+    method:  'crm_intake',
+    name:    nameVal,
+    org:     orgVal,
+    email:   emailVal,
+    role:    roleVal || '',
+    message: messageVal,
+    source:  'Chartline discovery form'
+  })
+}).catch(function(err) { console.error('Webhook error:', err); });
+
 var hutk = document.cookie.replace(/(?:(?:^|.*;\s*)hubspotutk\s*=\s*([^;]*).*$)|^.*$/, '$1');
 fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
 method: 'POST', headers: { 'Content-Type': 'application/json' },
