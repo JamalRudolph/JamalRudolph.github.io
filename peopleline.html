@@ -831,14 +831,29 @@ async function handleSubmit(e) {
   btn.textContent = 'Sending...'; btn.disabled = true;
   const data = Object.fromEntries(new FormData(e.target));
   try {
+    await fetch('https://script.google.com/macros/s/AKfycbxbjH4789HDt-9w5zlPsKSiw8G0kPSco3hdm36V1hQcOcly6LgFP-nnXtStywHR2qIlHw/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        token:   'RCX-WEBHOOK-2026-SECURE',
+        method:  'crm_intake',
+        name:    data.name || '',
+        org:     data.org || '',
+        email:   data.email || '',
+        message: `Industry: ${data.industry || 'Not specified'}\n\n${data.message || ''}`,
+        source:  'Peopleline discovery form'
+      })
+    });
+  } catch(err) {}
+  try {
     await fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
       method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ fields: [{name:'firstname',value:data.name},{name:'email',value:data.email},{name:'company',value:data.org},{name:'message',value:`Industry: ${data.industry||'Not specified'}\n\n${data.message||''}`}], context:{pageUri:window.location.href,pageName:'Peopleline\u2120'}})
     });
   } catch(err) {}
   try {
-    emailjs.init('user_default');
-    await emailjs.send('default_service','template_875pqb4',{from_name:data.name,from_email:data.email,organization:data.org,industry:data.industry||'Not specified',message:data.message||'',guide:'Peopleline\u2120'});
+    emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
+    await emailjs.send('service_u94nvbm','template_875pqb4',{from_name:data.name,from_email:data.email,organization:data.org,industry:data.industry||'Not specified',message:data.message||'',guide:'Peopleline\u2120'});
   } catch(err) {}
   btn.textContent = "Sent \u2014 we'll be in touch.";
   e.target.reset();
