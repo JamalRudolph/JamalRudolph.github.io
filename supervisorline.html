@@ -1048,6 +1048,23 @@ async function handleSubmit(e) {
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData);
 
+  // Webhook — Apps Script CRM intake
+  try {
+    await fetch('https://script.google.com/macros/s/AKfycbxbjH4789HDt-9w5zlPsKSiw8G0kPSco3hdm36V1hQcOcly6LgFP-nnXtStywHR2qIlHw/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        token:   'RCX-WEBHOOK-2026-SECURE',
+        method:  'crm_intake',
+        name:    data.name || '',
+        org:     data.org || '',
+        email:   data.email || '',
+        message: `Industry: ${data.industry || 'Not specified'}\n\n${data.message || ''}`,
+        source:  'Supervisorline discovery form'
+      })
+    });
+  } catch(err) { console.log('Webhook:', err); }
+
   // HubSpot
   try {
     await fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
@@ -1067,8 +1084,8 @@ async function handleSubmit(e) {
 
   // EmailJS
   try {
-    emailjs.init('user_default');
-    await emailjs.send('default_service', 'template_875pqb4', {
+    emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
+    await emailjs.send('service_u94nvbm', 'template_875pqb4', {
       from_name: data.name, from_email: data.email,
       organization: data.org, industry: data.industry || 'Not specified',
       message: data.message || '', guide: 'Supervisorline℠'
