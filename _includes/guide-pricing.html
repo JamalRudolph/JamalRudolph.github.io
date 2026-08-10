@@ -1,0 +1,52 @@
+{% comment %}
+  Usage from any guide page or pricing.html:
+  {% include guide-pricing.html family="aidline" guide_name="Workline" possessive="your organization" %}
+
+  family: aidline | chartline | supervisorline_peopleline
+  guide_name: the guide's display name, e.g. "Workline"
+  possessive: fills "Built for ___" and the discovery-call note, e.g. "your organization" / "your servicer"
+{% endcomment %}
+{% assign fam = site.data.pricing.families[include.family] %}
+<section class="pricing-section" id="pricing">
+<div class="section-inner">
+<div class="pricing-block">
+<div class="pb-eyebrow reveal">Pricing</div>
+<h2 class="pb-title reveal">One process. One contract.<br>Built for {{ include.possessive }}.</h2>
+<p class="pb-sub reveal">{{ include.guide_name }} follows the same proven build process as every Rudolph CX guide. It starts with a discovery call.</p>
+
+<div class="pb-discovery reveal">
+<div class="pb-discovery-tag">Discovery Call</div>
+<div class="pb-discovery-price">${{ site.data.pricing.discovery_call }}</div>
+<div class="pb-discovery-note">60 minutes. Non-refundable. Credits in full to your first invoice if you proceed. {{ include.discovery_note }}</div>
+</div>
+
+<div class="pb-discovery reveal">
+<div class="pb-discovery-tag">System-Language Fitting Fee</div>
+<div class="pb-discovery-price">${{ site.data.pricing.fitting_fee }}</div>
+<div class="pb-discovery-note">One-time, applied to every build. Adapts the guide's language to your actual internal systems and terminology at build time.</div>
+</div>
+
+<div class="reveal" style="margin-top:8px">
+<div class="pb-tiers-label" style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold,#c49a3c);margin-bottom:14px">{{ fam.label }}</div>
+{% for tier in fam.tiers %}
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div>
+    <div style="font-family:var(--serif);font-size:20px;color:var(--ink,#0f0e0c)">{{ tier.name }}</div>
+    <div style="font-size:12px;color:var(--dim,#4a453e)">{{ tier.detail }}</div>
+  </div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">${{ tier.price }}</div>
+</div>
+{% endfor %}
+<div class="pb-tiers-note" style="margin-top:12px">{{ site.data.pricing.payment_terms }}.</div>
+</div>
+
+<div class="retainer-block reveal">
+<div class="retainer-label">Annual Update Retainer</div>
+<div class="retainer-price">{{ fam.retainer_pct }}% <span style="font-size:15px;color:var(--dim);font-weight:400;">of build price</span></div>
+<p class="retainer-note">Keeps your guide current as regulations, policies, or platform workflows change. Covers one annual review cycle with revisions. Scoped changes outside the annual cycle are billed as change orders.</p>
+</div>
+
+<a href="https://book.squareup.com/appointments/mduphd9nbedqey/location/LB8E62TY4W9N1/services" target="_blank" rel="noopener" class="pb-cta">Book Discovery Call &mdash; ${{ site.data.pricing.discovery_call }}</a>
+</div>
+</div>
+</section>
