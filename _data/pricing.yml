@@ -1,0 +1,55 @@
+discovery_call: 500
+fitting_fee: 500
+payment_terms: "50% deposit before work begins, 50% on delivery"
+
+families:
+  aidline:
+    label: "Aidline-Family — Aidline, Caseline, Lendline, Workline, Reentryline"
+    retainer_pct: 15
+    tiers:
+      - name: "Foundation"
+        price: "6,500"
+        detail: "3 situations, single role"
+      - name: "Standard"
+        price: "9,500"
+        detail: "5 situations, full role coverage"
+      - name: "Comprehensive"
+        price: "14,000"
+        detail: "8 situations, multiple roles or expanded set"
+      - name: "Enterprise"
+        price: "20,000+"
+        detail: "12+ situations, custom multi-role/multi-site scoping"
+
+  chartline:
+    label: "Chartline — priced separately, direct PHI/HIPAA exposure"
+    retainer_pct: 20
+    tiers:
+      - name: "Foundation"
+        price: "7,500"
+        detail: "3 situations"
+      - name: "Standard"
+        price: "12,500"
+        detail: "5 situations"
+      - name: "Comprehensive"
+        price: "20,000"
+        detail: "8 situations"
+      - name: "Enterprise"
+        price: "32,000+"
+        detail: "12+ situations"
+
+  supervisorline_peopleline:
+    label: "Supervisorline & Peopleline — HR/People Operations"
+    retainer_pct: 20
+    tiers:
+      - name: "Foundation"
+        price: "5,000"
+        detail: "Single category build"
+      - name: "Full Build"
+        price: "12,000"
+        detail: "Standalone / cold sale"
+      - name: "Full Build"
+        price: "9,600–10,200"
+        detail: "Existing Rudolph CX client (cross-sell)"
+      - name: "Enterprise"
+        price: "20,000+"
+        detail: "Multi-entity, custom routing, ongoing legal review"
