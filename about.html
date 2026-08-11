@@ -1,576 +1,544 @@
----
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="About — Rudolph CX LLC">
-  <meta property="og:description" content="The company behind Aidline, Caseline, and a family of performance support guides built for frontline workers.">
-  <meta property="og:image" content="https://rudolphcx.com/og-default.png">
-  <meta property="og:url" content="https://rudolphcx.com/about.html">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="About — Rudolph CX LLC">
-  <meta name="twitter:description" content="The company behind Aidline, Caseline, and a family of performance support guides built for frontline workers.">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About — Rudolph CX</title>
 <meta name="description" content="Rudolph CX builds plain-language guidance for the moments that decide outcomes. About the founder, the methodology, and the AI-coordinated production team behind every deliverable.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; display: flex; align-items: center; padding: 0 40px; }
-.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
-.nav-logo span { color: var(--accent, var(--rust, var(--red, #b83020))); }
-.nav-links { list-style: none; display: flex; align-items: center; gap: 1.75rem; margin: 0 auto; padding: 0; }
-.nav-links a { font-family: var(--sans); font-size: 0.85rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
-.nav-links a:hover { color: var(--ink); }
-.nav-dropdown { position: relative; }
-.nav-dropdown > a::after { content: ' ↓'; font-size: 0.7rem; opacity: 0.5; }
-.nav-dropdown:hover .dropdown-menu,
-.nav-dropdown:focus-within .dropdown-menu { display: flex; flex-direction: column; gap: 2px; }
-.dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
-.dropdown-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); }
-.dropdown-menu a:hover { background: var(--cream2); color: var(--ink); }
-.dm-tag { font-size: 0.65rem; background: var(--accent, var(--rust, var(--red, #b83020))); color: #fff; padding: 1px 5px; border-radius: 2px; }
 
+/* ============================================================
+   DESIGN TOKENS — locked, RCX-FOUND-004 / RCX-PROD-001.
+   Single source of truth. Every page inherits these unchanged.
+   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --ink:    #0f0e0c;
-  --ink2:   #1a1816;
-  --ink3:   #2c2a26;
-  --cream:  #f7f4ee;
-  --cream2: #f1ece2;
-  --cream3: #e8e1d1;
-  --red:    #c8362a;
-  --red2:   #e04438;
-  --red-dim:#9b2419;
-  --gold:   #c49a3c;
-  --muted:  #8a8478;
-  --dim:    #5c574e;
-  --line:   rgba(15,14,12,0.08);
-  --serif:  'Lora', Georgia, serif;
-  --sans:   'Plus Jakarta Sans', system-ui, sans-serif;
-  --mono:   'JetBrains Mono', Menlo, monospace;
+  --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
+  --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
+  --red: #b83224; --red2: #d94030; --gold: #c49a3c;
+  --green: #2a6e4a;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', system-ui, sans-serif;
 }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body {
-  font-family: var(--sans);
-  background: var(--cream);
-  color: var(--ink);
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-a { color: inherit; text-decoration: none; }
-::-webkit-scrollbar { width: 6px; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; }
+::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--cream2); }
-::-webkit-scrollbar-thumb { background: var(--ink3); border-radius: 3px; }
-
-/* NAV — matches index */
-
-.nav-logo .cx {
-  color: var(--red);
-  font-style: italic;
-  font-weight: 700;
-  margin-left: 2px;
+::-webkit-scrollbar-thumb { background: var(--red); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
-.nav-links a:hover, .nav-links a.active { color: var(--red); }
-/* ── Our Guides dropdown ── */
-
-.dropdown-menu li { list-style: none; }
-
-.dropdown-divider { height: 1px; background: #e2ddd3; margin: 6px 0; }
-
-/* HERO */
-.hero {
-  padding: 120px 48px 80px;
-  background: var(--cream);
-  border-bottom: 1px solid var(--line);
-}
-.hero-inner {
-  max-width: 880px;
-  margin: 0 auto;
-}
-.hero-eyebrow {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.hero-eyebrow::before {
-  content: '';
-  width: 32px;
-  height: 1px;
-  background: var(--red);
-}
-.hero-h {
-  font-family: var(--serif);
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 500;
-  color: var(--ink);
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-  margin-bottom: 28px;
-}
-.hero-h em { font-style: italic; color: var(--red); }
-.hero-sub {
-  font-family: var(--sans);
-  font-size: clamp(16px, 1.8vw, 19px);
-  color: var(--dim);
-  line-height: 1.75;
-  max-width: 720px;
-  font-weight: 400;
-}
-.hero-sub strong { color: var(--ink); font-weight: 600; }
-
-/* SECTION */
-section.content {
-  padding: 90px 48px;
-  border-bottom: 1px solid var(--line);
-}
-section.content.dark {
-  background: var(--ink);
-  color: var(--cream);
-}
-section.content.cream2 { background: var(--cream2); }
-.content-inner {
-  max-width: 880px;
-  margin: 0 auto;
-}
-.section-eyebrow {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 22px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.section-eyebrow::before {
-  content: '';
-  width: 28px;
-  height: 1px;
-  background: var(--red);
-}
-section.content.dark .section-eyebrow { color: var(--red2); }
-section.content.dark .section-eyebrow::before { background: var(--red2); }
-
-.section-h {
-  font-family: var(--serif);
-  font-size: clamp(28px, 3.8vw, 40px);
-  font-weight: 500;
-  color: var(--ink);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  margin-bottom: 28px;
-}
-section.content.dark .section-h { color: var(--cream); }
-.section-h em { font-style: italic; color: var(--red); }
-section.content.dark .section-h em { color: var(--red2); }
-
-.body-p {
-  font-size: 16px;
-  color: var(--dim);
-  line-height: 1.8;
-  margin-bottom: 20px;
-  font-weight: 400;
-}
-section.content.dark .body-p { color: rgba(247,244,238,0.72); }
-.body-p strong { color: var(--ink); font-weight: 600; }
-section.content.dark .body-p strong { color: var(--cream); }
-
-.body-p.first-person {
-  font-family: var(--serif);
-  font-size: 17px;
-  font-style: italic;
-  color: var(--ink2);
-  line-height: 1.75;
-  padding-left: 24px;
-  border-left: 3px solid var(--red);
-}
-.body-p.first-person strong {
-  font-style: normal;
-  font-weight: 700;
-}
-
-/* TEAM ROSTER */
-.roster {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-  margin-top: 32px;
-  margin-bottom: 12px;
-}
-.roster-item {
-  background: rgba(247,244,238,0.04);
-  border: 1px solid rgba(247,244,238,0.08);
-  border-left: 3px solid var(--red2);
-  border-radius: 3px;
-  padding: 20px 22px;
-}
-.roster-name {
-  font-family: var(--serif);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--cream);
-  margin-bottom: 4px;
-  letter-spacing: -0.005em;
-}
-.roster-role {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--red2);
-  margin-bottom: 10px;
-}
-.roster-desc {
-  font-size: 13px;
-  color: rgba(247,244,238,0.68);
-  line-height: 1.65;
-  font-weight: 400;
-}
-
-/* WON'T DO LIST */
-.wontlist {
-  list-style: none;
-  margin-top: 20px;
-}
-.wontlist li {
-  font-size: 16px;
-  color: var(--ink2);
-  padding: 14px 0 14px 36px;
-  border-top: 1px solid var(--line);
-  position: relative;
-  font-weight: 400;
-  line-height: 1.65;
-}
-.wontlist li:last-child { border-bottom: 1px solid var(--line); }
-.wontlist li::before {
-  content: '✕';
-  position: absolute;
-  left: 0;
-  top: 14px;
-  color: var(--red);
-  font-weight: 700;
-  font-size: 14px;
-}
-.wontlist li strong {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-/* CTA */
-.cta-end {
-  padding: 100px 48px;
-  background: var(--red);
-  color: var(--cream);
-  text-align: center;
-}
-.cta-end-h {
-  font-family: var(--serif);
-  font-size: clamp(28px, 3.5vw, 38px);
-  font-weight: 500;
-  line-height: 1.2;
-  margin-bottom: 22px;
-  max-width: 760px;
-  margin-left: auto;
-  margin-right: auto;
-  letter-spacing: -0.015em;
-}
-.cta-end-h em { font-style: italic; }
-.cta-end-sub {
-  font-size: 16px;
-  color: rgba(247,244,238,0.85);
-  line-height: 1.7;
-  margin-bottom: 36px;
-  max-width: 620px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.cta-end-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--cream);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 16px 36px;
-  border-radius: 2px;
-  transition: all 0.2s;
-}
-.cta-end-btn:hover {
-  background: var(--ink);
-  color: var(--cream);
-}
-
-/* FOOTER */
-footer {
-  background: var(--ink);
-  color: rgba(247,244,238,0.55);
-  padding: 56px 48px 36px;
-  font-size: 13px;
-}
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr;
-  gap: 48px;
-  margin-bottom: 40px;
-}
-.footer-brand .nav-logo .cx { color: var(--red2); }
-.footer-tagline {
-  margin-top: 14px;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 14px;
-  color: rgba(247,244,238,0.5);
-  line-height: 1.6;
-  max-width: 320px;
-}
-.footer-col h4 {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(247,244,238,0.4);
-  margin-bottom: 16px;
-}
-.footer-col a {
-  display: block;
-  font-size: 13px;
-  color: rgba(247,244,238,0.65);
-  margin-bottom: 10px;
-  transition: color 0.15s;
-}
-.footer-col a:hover { color: var(--red2); }
-.footer-bottom {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-top: 28px;
-  border-top: 1px solid rgba(247,244,238,0.08);
-  font-size: 11px;
-  color: rgba(247,244,238,0.35);
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-.footer-legal {
-  font-family: var(--mono);
-  letter-spacing: 0.04em;
-}
-
-/* MOBILE */
+/* ============================================================
+   NAV — CSS written to match _includes/nav.html's REAL, current
+   markup exactly (nav-inner / nav-dd / dd-menu / nav-logo-accent).
+   This is the DRIFT-209-D-adjacent fix: the nav has been shipping
+   unstyled because no page's CSS matched what nav.html emits.
+   ============================================================ */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; }
+.nav-inner { max-width: 1400px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; gap: 2rem; }
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
+.nav-logo-accent { color: var(--red); }
+.nav-links { list-style: none; display: flex; align-items: center; gap: 1.6rem; margin: 0; padding: 0; flex-wrap: nowrap; }
+.nav-links a { font-family: var(--sans); font-size: 0.82rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; white-space: nowrap; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--red); }
+.nav-dd { position: relative; }
+.nav-dd > a::after { content: ' ↓'; font-size: 0.65rem; opacity: 0.5; }
+.nav-dd:hover .dd-menu,
+.nav-dd:focus-within .dd-menu { display: flex; }
+.dd-menu { display: none; flex-direction: column; gap: 2px; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
+.dd-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); gap: 10px; }
+.dd-menu a:hover { background: var(--cream2); color: var(--ink); }
+.dm-tag { font-size: 0.62rem; font-family: var(--mono); background: var(--red); color: #fff; padding: 1px 6px; border-radius: 2px; letter-spacing: 0.04em; }
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; flex-shrink: 0; }
+.nav-toggle .bar { display: block; width: 22px; height: 2px; background: var(--ink); margin: 5px 0; transition: transform 0.2s, opacity 0.2s; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+/* Mobile nav — real slide-down panel + tap-to-open Our Guides submenu (touch has no hover) */
 @media (max-width: 900px) {
-  
-  
-  
-  .hero, section.content, .cta-end { padding: 64px 24px; }
-  .roster { grid-template-columns: 1fr; gap: 12px; }
-  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
-  .footer-bottom { flex-direction: column; align-items: flex-start; }
-  .hero-h { font-size: 32px; }
-  .section-h { font-size: 26px; }
+  .nav-toggle { display: block; }
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--cream); border-bottom: 1px solid var(--cream3); flex-direction: column; align-items: stretch; gap: 0; max-height: calc(100vh - 64px); overflow-y: auto; box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+  .nav-links.mobile-open { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links > li > a { display: block; padding: 16px 24px; border-bottom: 1px solid var(--cream3); font-size: 0.95rem; }
+  .nav-dd > a::after { float: right; }
+  .dd-menu { display: none; position: static; box-shadow: none; border: none; border-top: 1px solid var(--cream3); border-radius: 0; background: var(--cream2); padding: 0; min-width: 0; }
+  .nav-dd.mobile-dd-open .dd-menu { display: flex; }
+  .dd-menu a { padding: 14px 36px; border-bottom: 1px solid var(--cream3); border-radius: 0; }
 }
 
-  .footer-disclaimer { font-family: var(--mono, monospace); font-size: 9px; color: var(--muted, #b5afa6); letter-spacing: 0.04em; line-height: 1.6; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.08); max-width: 860px; width: 100%; }
-  .nav-dd{position:relative}
-.nav-dd>a::after{content:' ↓';font-size:.7rem;opacity:.5}
-.nav-dd:hover .dd-menu,.nav-dd:focus-within .dd-menu{display:flex;flex-direction:column;gap:2px}
-.dd-menu{display:none;position:absolute;top:100%;left:0;background:var(--cream);border:1px solid var(--cream3);border-radius:4px;padding:calc(.5rem + 8px) .5rem .5rem .5rem;min-width:230px;box-shadow:0 4px 20px rgba(0,0,0,.08);z-index:200}
-.dd-menu a{display:flex;align-items:center;justify-content:space-between;padding:.4rem .6rem;border-radius:3px;font-size:.82rem;color:var(--ink3);text-decoration:none}
-.dd-menu a:hover{background:var(--cream2);color:var(--ink)}
-.dm-tag{font-size:.6rem;background:var(--red);color:#fff;padding:1px 5px;border-radius:2px;font-family:var(--mono);letter-spacing:.05em}
-.dd-div{height:1px;background:var(--cream3);margin:4px 0}
+/* ============================================================
+   SHARED SECTION SCAFFOLDING
+   ============================================================ */
+.section { padding: 120px 60px; position: relative; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+.section-title { font-family: var(--serif); font-size: clamp(36px,4vw,56px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 32px; }
+.section-title em { font-style: italic; color: var(--red); }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* ============================================================
+   HERO — thesis section. Per-guide content is [TEMPLATE]; the
+   shell/structure is canonical.
+   ============================================================ */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 120px 60px 80px; position: relative; overflow: hidden; }
+.hero-left { position: relative; z-index: 1; }
+.hero-right { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 20px 40px; min-height: 320px; }
+.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--red); }
+.hero-title { font-family: var(--serif); font-size: clamp(44px,5.5vw,76px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 28px; }
+.hero-title em { font-style: italic; color: var(--red); }
+.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 480px; margin-bottom: 40px; font-weight: 300; }
+.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-primary, .btn-gold, .btn-outline { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; border: none; text-decoration: none; display: inline-block; transition: all 0.2s; cursor: pointer; }
+.btn-primary { background: var(--ink); color: var(--cream); position: relative; overflow: hidden; }
+.btn-primary::after { content: ''; position: absolute; inset: 0; background: var(--red); transform: translateX(-101%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
+.btn-primary:hover::after { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-gold { background: var(--gold); color: var(--ink); }
+.btn-gold:hover { background: #d4a84a; }
+.btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 13px 28px; }
+.btn-outline:hover { background: var(--ink); color: var(--cream); }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; } }
+
+/* ============================================================
+   HOW IT WORKS — 3-step (Discovery → Build → Live). Structural
+   pattern adopted from prototype reference, our facts only.
+   ============================================================ */
+.how-section { padding: 120px 60px; background: white; }
+.steps-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 72px; border: 1px solid var(--cream3); }
+.step { padding: 40px 32px; border-right: 1px solid var(--cream3); transition: background 0.2s; }
+.step:last-child { border-right: none; }
+.step:hover { background: var(--cream); }
+.step-num { font-family: var(--serif); font-size: 56px; font-weight: 600; color: var(--cream3); line-height: 1; margin-bottom: 16px; letter-spacing: -0.04em; transition: color 0.2s; }
+.step:hover .step-num { color: var(--red); opacity: 0.3; }
+.step-title { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.step-subtitle { font-size: 12px; color: var(--red); font-weight: 500; margin-bottom: 14px; }
+.step-desc { font-size: 13px; color: var(--dim); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
+.step-badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); display: flex; align-items: center; gap: 6px; }
+.step-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+@media (max-width: 900px) { .steps-3 { grid-template-columns: 1fr; } .step { border-right: none; border-bottom: 1px solid var(--cream3); } }
+
+/* ============================================================
+   BENEFITS — stat-card grid. Metrics are [TEMPLATE] until each
+   guide's real, sourced numbers exist — do not ship placeholder
+   metrics as if verified.
+   ============================================================ */
+.benefits-section { padding: 120px 60px; background: var(--cream2); }
+.benefits-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--cream3); margin-top: 64px; border: 1px solid var(--cream3); }
+.benefit-card { background: var(--cream2); padding: 36px 32px; }
+.benefit-metric { font-family: var(--serif); font-size: 34px; font-weight: 600; color: var(--red); line-height: 1; margin-bottom: 4px; }
+.benefit-metric-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 18px; }
+.benefit-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.benefit-desc { font-size: 13px; color: var(--ink3); line-height: 1.7; font-weight: 300; }
+@media (max-width: 900px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   PRODUCT SHOWCASE — placeholder shell. [TEMPLATE]: must be
+   rebuilt per-guide to be factually accurate to real call/case
+   handling, per Session 209 direction — not filled here.
+   ============================================================ */
+.showcase-section { padding: 120px 60px; background: var(--ink); }
+.showcase-section .section-title { color: var(--cream); }
+.showcase-section .section-eyebrow { color: var(--gold); }
+.showcase-section .section-eyebrow::before { background: var(--gold); }
+.showcase-frame { margin-top: 56px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); min-height: 320px; display: flex; align-items: center; justify-content: center; color: rgba(247,244,238,0.35); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; padding: 40px; }
+
+/* ============================================================
+   FAQ — accordion. Structural pattern adopted from prototype;
+   copy must be real per-guide fact, not the prototype's fabricated
+   numbers ($300 discovery, 284 situations, pro-bono claims, etc.
+   all rejected — see Session 209).
+   ============================================================ */
+.faq-section { padding: 120px 60px; background: white; }
+.faq-list { margin-top: 56px; max-width: 840px; }
+.faq-item { border-bottom: 1px solid var(--cream3); }
+.faq-q { width: 100%; text-align: left; background: none; border: none; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; cursor: pointer; font-family: var(--serif); font-size: 19px; font-weight: 500; color: var(--ink); }
+.faq-q:hover { color: var(--red); }
+.faq-icon { font-family: var(--mono); font-size: 16px; color: var(--red); flex-shrink: 0; width: 20px; text-align: center; }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-item.open .faq-a { max-height: 600px; }
+.faq-a-inner { padding: 0 0 24px; font-size: 14px; color: var(--ink3); line-height: 1.8; font-weight: 300; max-width: 700px; }
+
+/* ============================================================
+   MOMENT QUOTE — canonical founder quote, verbatim, IDENTITY.md v13.
+   ============================================================ */
+.moment-section { padding: 100px 60px; background: var(--cream2); border-top: 1px solid var(--cream3); border-bottom: 1px solid var(--cream3); }
+.moment-inner { max-width: 820px; margin: 0 auto; }
+.moment-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+.moment-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+.moment-quote { font-family: var(--serif); font-size: clamp(20px,2.6vw,30px); font-weight: 500; color: var(--ink); line-height: 1.5; font-style: italic; margin-bottom: 20px; }
+.moment-attr { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+
+/* ============================================================
+   PRICING — CSS written to match _includes/guide-pricing.html's
+   REAL, current markup exactly (verified against the live include
+   this session). This is the direct DRIFT-209-D fix.
+   ============================================================ */
+.pricing-section { padding: 120px 60px; background: var(--cream); }
+.pricing-block { background: var(--ink); padding: 56px; position: relative; border-left: 4px solid var(--red); }
+.pb-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+.pb-title { font-family: var(--serif); font-size: clamp(28px,3.4vw,42px); font-weight: 500; color: var(--cream); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; }
+.pb-sub { font-size: 14px; color: rgba(247,244,238,0.6); line-height: 1.7; font-weight: 300; max-width: 560px; margin-bottom: 40px; }
+.pb-discovery { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 28px 32px; margin-bottom: 20px; }
+.pb-discovery-tag { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.pb-discovery-price { font-family: var(--serif); font-size: 36px; font-weight: 600; color: var(--cream); line-height: 1; margin-bottom: 10px; letter-spacing: -0.02em; }
+.pb-discovery-note { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; }
+.pb-tiers-note { font-size: 13px; color: rgba(247,244,238,0.45); line-height: 1.7; font-weight: 300; margin-top: 4px; }
+.pb-cta { display: inline-block; margin-top: 32px; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 36px; background: var(--red); color: var(--cream); text-decoration: none; transition: background 0.2s; }
+.pb-cta:hover { background: var(--red2); }
+.retainer-block { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); }
+.retainer-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.retainer-price { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--cream); letter-spacing: -0.02em; margin-bottom: 10px; }
+.retainer-note { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; max-width: 600px; }
+/* the include's own inline styles (price-row, pb-tiers-label) already carry
+   fallback var() values and render correctly without dedicated classes here —
+   verified by reading the include's actual style attributes this session. */
+
+/* ============================================================
+   FOOTER — legal block. Rudolph CX brand persists here per
+   LOCKS.md §33 (reference/marketing surface, not the delivered
+   console).
+   ============================================================ */
+.site-footer { padding: 64px 60px 40px; background: var(--ink); color: rgba(247,244,238,0.5); }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
+.footer-brand { font-family: var(--serif); font-size: 1.2rem; color: var(--cream); margin-bottom: 8px; }
+.footer-legal { font-family: var(--mono); font-size: 10px; line-height: 1.9; color: rgba(247,244,238,0.35); }
+.footer-tagline { font-size: 12px; font-style: italic; color: rgba(247,244,238,0.4); margin-top: 10px; }
+
+/* ============================================================
+   PWA INSTALL BANNER — generalized from Aidline's existing pattern.
+   Structurally sound (read this session); NOT confirmed working
+   end-to-end by an actual install test.
+   ============================================================ */
+#pwa-install-banner { display: none; position: fixed; bottom: 24px; right: 24px; z-index: 500; max-width: 340px; background: var(--ink); border: 1px solid rgba(255,255,255,0.12); padding: 18px 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+#pwa-install-banner.visible { display: flex; align-items: center; gap: 14px; }
+#pwa-install-banner .pwa-text { font-size: 11px; color: #e8e3db; line-height: 1.5; letter-spacing: 0.02em; }
+#pwa-install-banner .pwa-text strong { display: block; font-size: 12px; color: #fff; margin-bottom: 2px; }
+#pwa-install-btn { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 18px; background: var(--red); color: #fff; border: none; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
+#pwa-install-btn:hover { opacity: 0.85; }
+@media (max-width: 500px) { #pwa-install-banner { bottom: 16px; right: 16px; left: 16px; max-width: none; } }
+
 </style>
-  <link rel="canonical" href="https://rudolphcx.com/about.html">
-  <script data-goatcounter="https://rudolphcx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
-<!-- NAV -->
-{% include nav.html current="about" %}
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow">About</div>
-    <h1 class="hero-h">A small firm built around <em>one methodology</em> and the discipline to hold it.</h1>
-    <p class="hero-sub"><strong>Rudolph CX LLC is a North Carolina limited liability company building plain-language guidance for the moments that decide outcomes.</strong> Enterprise customer service operations on one side. Community-facing tools on the other. Same methodology. Same person on both sides of the conversation.</p>
-  </div>
-</section>
-
-<!-- WHO WE SERVE -->
-<section class="content" id="serve">
-  <div class="content-inner">
-    <div class="section-eyebrow">Who We Serve</div>
-    <h2>Everyone standing at a moment.</h2>
-    <p>Frontline workers, organizations, small businesses, and everyday people navigating something hard — anyone standing at a moment where the right move is not obvious. Guides for the worker mid-call. Advisory for the organization weighing a hard decision. Groundwork for the small business owner scoping a build. FirstStep for anyone navigating a moment on their own.</p>
-  </div>
-</section>
-
-<!-- THE FOUNDER -->
-<section class="content">
-  <div class="content-inner">
-    <div class="section-eyebrow">The Founder</div>
-    <h2 class="section-h">Jamal Rudolph. <em>Durham, NC.</em></h2>
-    <p class="body-p">Rudolph CX was founded in 2026 by Jamal Rudolph after years of contract work in large nonprofit Tier I call center operations. The company's first product was a personal job aid the founder built for himself, on his own time and equipment, to do his own job better. It turned out the same architecture worked for other people. The company exists because that observation kept being true.</p>
-
-    <p class="body-p first-person">I built the first version of what's now the Rudolph CX methodology while I was working a Tier I call center contract. I kept watching agents around me get stuck in the same moments, over and over — moments where they knew the customer needed help but couldn't find the path through the systems fast enough to deliver it. <strong>The problem wasn't the people. It was that nobody had built the tool that lives inside the moment.</strong> So I built one. Then I noticed the same pattern in other places — caseworkers, mortgage servicers, medical records teams, and especially the everyday person walking into the system from the other side. Same architecture every time. So Rudolph CX exists to build that tool, for both sides of the call line.</p>
-  <p>Jamal is also the author of <em>Eternal Hearts: A Guide to Gospel-Centered Relationships</em>, available on <a href="https://www.amazon.com/dp/B0H597L5YZ" target="_blank" rel="noopener">Amazon</a>.</p>
-  </div>
-</section>
-
-<!-- THE TEAM ARCHITECTURE -->
-<section class="content dark">
-  <div class="content-inner">
-    <div class="section-eyebrow">The Team Architecture</div>
-    <h2 class="section-h">An AI-coordinated production methodology, <em>with humans on the seam.</em></h2>
-    <p class="body-p"><strong>Rudolph CX uses an AI-coordinated production methodology</strong> — what we internally call a ten-voice production architecture. Each voice has a scoped discipline. The founder coordinates, authors, and is accountable for every deliverable. No deliverable ships without passing through the voices relevant to it.</p>
-
-    <p class="body-p">This is not the same as "a consultant who uses AI." This is a documented production system with named roles, written protocols, locked review gates, and a continuity substrate that makes the work auditable. The architecture exists because the founder believes solo consulting work fails most often not from lack of skill, but from lack of structural review discipline. Most one-person firms cannot afford dedicated multi-role review. Rudolph CX can — because the team is AI-coordinated.</p>
-
-    <div class="roster">
-      <div class="roster-item">
-        <div class="roster-name">Atlas</div>
-        <div class="roster-role">Systems &amp; Architecture</div>
-        <div class="roster-desc">Architecture of every deliverable. Contract logistics. Financial tech stack.</div>
-      </div>
-      <div class="roster-item">
-        <div class="roster-name">Sage</div>
-        <div class="roster-role">Methodology &amp; Governance</div>
-        <div class="roster-desc">Methodology integrity. Corporate legal frameworks. Financial strategy.</div>
-      </div>
-      <div class="roster-item">
-        <div class="roster-name">Bree</div>
-        <div class="roster-role">Voice &amp; Brand</div>
-        <div class="roster-desc">Growth marketing. Social strategy. Brand voice authorship.</div>
-      </div>
-      <div class="roster-item">
-        <div class="roster-name">Wit</div>
-        <div class="roster-role">Market Intelligence</div>
-        <div class="roster-desc">Competitive positioning. Demographics research. Sector fluency.</div>
-      </div>
-      <div class="roster-item">
-        <div class="roster-name">Ray</div>
-        <div class="roster-role">Adversarial Review</div>
-        <div class="roster-desc">Devil's advocate. Sales objection handling. Expense auditing.</div>
-      </div>
-      <div class="roster-item">
-        <div class="roster-name">Cee</div>
-        <div class="roster-role">Compilation &amp; Operations</div>
-        <div class="roster-desc">Lead scribe. Operations. Sales asset production. Bookkeeping execution.</div>
-      </div>
-      <div class="roster-item">
-        <div class="roster-name">Echo</div>
-        <div class="roster-role">Quality Checkpoint</div>
-        <div class="roster-desc">Pre-delivery verification across every deliverable. Confirms source, scope, and authorization before anything ships.</div>
-      </div>
-      <div class="roster-item">
-        <div class="roster-name">Nova</div>
-        <div class="roster-role">Legal &amp; Compliance</div>
-        <div class="roster-desc">Contract language, advisory terms, regulatory guardrails on every engagement.</div>
-      </div>
-      <div class="roster-item">
-        <div class="roster-name">Rex</div>
-        <div class="roster-role">Pricing &amp; Engagement</div>
-        <div class="roster-desc">Rate structure, client terms, revenue strategy.</div>
-      </div>
-      <div class="roster-item">
-        <div class="roster-name">Kai</div>
-        <div class="roster-role">Technical Build</div>
-        <div class="roster-desc">Code, integrations, interactive tools, guide builds.</div>
-      </div>
-    </div>
-
-    <p class="body-p" style="margin-top: 32px;">All ten voices review the work relevant to their discipline before anything ships. Founder authors and is accountable. Client data is not fed to public LLMs. Methodology and structural review are the AI's job. Human judgment, authorship, and accountability are the founder's.</p>
-  </div>
-</section>
-
-<!-- WHAT WE WON'T DO -->
-<section class="content cream2">
-  <div class="content-inner">
-    <div class="section-eyebrow">What We Won't Do</div>
-    <h2 class="section-h">A short list. <em>Kept short on purpose.</em></h2>
-    <p class="body-p">The discipline that protects a client is the discipline a firm names publicly. Here is what Rudolph CX will not do, regardless of fee:</p>
-
-    <ul class="wontlist">
-      <li><strong>No outcome guarantees.</strong> The methodology produces working tools. The tools work when teams use them. We don't promise revenue lifts, NPS shifts, or AHT reductions we can't substantiate.</li>
-      <li><strong>No training videos. No LMS modules. No "consulting decks."</strong> We build working tools your agents actually use on live calls. Not learning content.</li>
-      <li><strong>No inflated case studies.</strong> Demonstration content names what was built and what wasn't. We don't claim methodology success on engagements that didn't run.</li>
-      <li><strong>No testimonials we can't verify.</strong> If a quote is on our site, it came from someone we can name and who agreed to be named.</li>
-      <li><strong>No client data fed to public AI models.</strong> Production work uses scoped tooling with client-specific data isolation. Any AI use in client work is disclosed in scope of work.</li>
-      <li><strong>No engagement we don't have the capacity to deliver.</strong> When the calendar is full, we say so and recommend later or refer out.</li>
+<!-- NAV — inlined here (test render only), now matching nav-updated.html's Phase 1 revision (mobile toggle button added inside .nav-inner) -->
+<nav>
+  <div class="nav-inner">
+    <a href="guides.html" class="nav-logo">Rudolph<span class="nav-logo-accent">CX</span></a>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav-links" aria-label="Open menu">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+    <ul class="nav-links" id="primary-nav-links">
+      <li><a href="guides.html">Our Guides</a></li>
+      <li><a href="demos.html">Demo Center</a></li>
+      <li><a href="advisory.html">Advisory Services</a></li>
+      <li><a href="groundwork.html">Groundwork</a></li>
+      <li><a href="methodology.html">Methodology</a></li>
+      <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="book.html">Book Discovery</a></li>
     </ul>
   </div>
+</nav>
+
+
+<style>
+.about-hero { padding: 160px 60px 60px; max-width: 820px; }
+.about-section { padding: 60px 60px; max-width: 900px; }
+.about-section.wide { max-width: 1100px; }
+.voice-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--cream3); border: 1px solid var(--cream3); margin-top: 40px; }
+.voice-card { background: white; padding: 24px 18px; }
+.voice-name { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--red); margin-bottom: 4px; }
+.voice-role { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dim); margin-bottom: 10px; }
+.voice-desc { font-size: 11px; color: var(--ink3); line-height: 1.6; font-weight: 300; }
+.wont-list { margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
+.wont-item { padding: 20px 0; border-bottom: 1px solid var(--cream3); }
+.wont-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.wont-desc { font-size: 13px; color: var(--ink3); line-height: 1.7; font-weight: 300; }
+.reg-block { background: var(--ink); padding: 32px; margin-top: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.reg-item-label { font-family: var(--mono); font-size: 9px; color: rgba(247,244,238,0.4); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.reg-item-value { font-family: var(--mono); font-size: 13px; color: var(--cream); }
+@media (max-width: 900px) { .voice-grid { grid-template-columns: repeat(2, 1fr); } .reg-block { grid-template-columns: repeat(2, 1fr); } }
+</style>
+
+<section class="about-hero">
+  <div class="section-eyebrow reveal">About</div>
+  <h1 class="section-title reveal">A small firm built around one methodology and the discipline to hold it.</h1>
+  <p style="font-size:16px;color:var(--ink3);line-height:1.75;font-weight:300;" class="reveal">Rudolph CX LLC is a North Carolina limited liability company building plain-language guidance for the moments that decide outcomes. Enterprise customer service operations on one side. Community-facing tools on the other. Same methodology. Same person on both sides of the conversation.</p>
+  <div class="reg-block reveal">
+    <div><div class="reg-item-label">EIN</div><div class="reg-item-value">42-2269436</div></div>
+    <div><div class="reg-item-label">CAGE Code</div><div class="reg-item-value">21D84</div></div>
+    <div><div class="reg-item-label">UEI</div><div class="reg-item-value">FN7DXBSUVHN7</div></div>
+    <div><div class="reg-item-label">SAM.gov</div><div class="reg-item-value">Active</div></div>
+  </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-end">
-  <h2 class="cta-end-h">If the discipline matches what you're <em>looking for</em> — let's talk.</h2>
-  <p class="cta-end-sub">A real conversation, on a real call. Tell us what your team faces. We'll tell you what we'd build.</p>
-  <a href="mailto:jamal@rudolphcx.com" class="cta-end-btn">Contact →</a>
+<section class="about-section">
+  <div class="section-eyebrow reveal">Who We Serve</div>
+  <h2 class="section-title reveal" style="font-size:32px;">Everyone standing at a moment.</h2>
+  <p style="font-size:15px;color:var(--ink3);line-height:1.8;font-weight:300;" class="reveal">Frontline workers, organizations, small businesses, and everyday people navigating something hard &mdash; anyone standing at a moment where the right move is not obvious. Guides for the worker mid-call. Advisory for the organization weighing a hard decision. Groundwork for the small business owner scoping a build. FirstStep for anyone navigating a moment on their own.</p>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <a href="/" class="nav-logo">Rudolph<span class="cx">CX</span></a>
-      <p class="footer-tagline">Built for the people inside the system. And the people walking into it.</p>
+<section class="about-section">
+  <div class="section-eyebrow reveal">The Founder</div>
+  <h2 class="section-title reveal" style="font-size:32px;">Jamal Rudolph. Durham, NC.</h2>
+  <p style="font-size:15px;color:var(--ink3);line-height:1.85;font-weight:300;margin-bottom:18px;" class="reveal">Rudolph CX was founded in 2026 by Jamal Rudolph after years of contract work in large nonprofit Tier I call center operations. The company's first product was a personal job aid the founder built for himself, on his own time and equipment, to do his own job better. It turned out the same architecture worked for other people. The company exists because that observation kept being true.</p>
+  <p style="font-size:15px;color:var(--ink3);line-height:1.85;font-weight:300;margin-bottom:18px;" class="reveal">I built the first version of what's now the Rudolph CX methodology while I was working a Tier I call center contract. I kept watching agents around me get stuck in the same moments, over and over &mdash; moments where they knew the customer needed help but couldn't find the path through the systems fast enough to deliver it. The problem wasn't the people. It was that nobody had built the tool that lives inside the moment.</p>
+  <p style="font-size:15px;color:var(--ink3);line-height:1.85;font-weight:300;" class="reveal">So I built one. Then I noticed the same pattern in other places &mdash; caseworkers, mortgage servicers, medical records teams, and especially the everyday person walking into the system from the other side. Same architecture every time. So Rudolph CX exists to build that tool, for both sides of the call line.</p>
+</section>
+
+<section class="about-section wide">
+  <div class="section-eyebrow reveal">The Team Architecture</div>
+  <h2 class="section-title reveal" style="font-size:32px;">An AI-coordinated production methodology, with humans on the seam.</h2>
+  <p style="font-size:15px;color:var(--ink3);line-height:1.8;font-weight:300;max-width:760px;" class="reveal">Rudolph CX uses an AI-coordinated production methodology &mdash; what we internally call a ten-voice production architecture. Each voice has a scoped discipline. The founder coordinates, authors, and is accountable for every deliverable. No deliverable ships without passing through the voices relevant to it.</p>
+  <div class="voice-grid reveal">
+    <div class="voice-card">
+  <div class="voice-name">Atlas</div>
+  <div class="voice-role">Systems & Architecture</div>
+  <p class="voice-desc">Architecture of every deliverable. Contract logistics. Financial tech stack.</p>
+</div>
+<div class="voice-card">
+  <div class="voice-name">Sage</div>
+  <div class="voice-role">Methodology & Governance</div>
+  <p class="voice-desc">Methodology integrity. Corporate legal frameworks. Financial strategy.</p>
+</div>
+<div class="voice-card">
+  <div class="voice-name">Bree</div>
+  <div class="voice-role">Voice & Brand</div>
+  <p class="voice-desc">Growth marketing. Social strategy. Brand voice authorship.</p>
+</div>
+<div class="voice-card">
+  <div class="voice-name">Wit</div>
+  <div class="voice-role">Market Intelligence</div>
+  <p class="voice-desc">Competitive positioning. Demographics research. Sector fluency.</p>
+</div>
+<div class="voice-card">
+  <div class="voice-name">Ray</div>
+  <div class="voice-role">Adversarial Review</div>
+  <p class="voice-desc">Devil's advocate. Sales objection handling. Expense auditing.</p>
+</div>
+<div class="voice-card">
+  <div class="voice-name">Cee</div>
+  <div class="voice-role">Compilation & Operations</div>
+  <p class="voice-desc">Lead scribe. Operations. Sales asset production. Bookkeeping execution.</p>
+</div>
+<div class="voice-card">
+  <div class="voice-name">Echo</div>
+  <div class="voice-role">Quality Checkpoint</div>
+  <p class="voice-desc">Pre-delivery verification across every deliverable. Confirms source, scope, and authorization before anything ships.</p>
+</div>
+<div class="voice-card">
+  <div class="voice-name">Nova</div>
+  <div class="voice-role">Legal & Compliance</div>
+  <p class="voice-desc">Contract language, advisory terms, regulatory guardrails on every engagement.</p>
+</div>
+<div class="voice-card">
+  <div class="voice-name">Rex</div>
+  <div class="voice-role">Pricing & Engagement</div>
+  <p class="voice-desc">Rate structure, client terms, revenue strategy.</p>
+</div>
+<div class="voice-card">
+  <div class="voice-name">Kai</div>
+  <div class="voice-role">Technical Build</div>
+  <p class="voice-desc">Code, integrations, interactive tools, guide builds.</p>
+</div>
+  </div>
+  <p style="font-size:13px;color:var(--dim);line-height:1.8;font-weight:300;margin-top:24px;max-width:760px;" class="reveal">All ten voices review the work relevant to their discipline before anything ships. Founder authors and is accountable. Client data is not fed to public LLMs. Methodology and structural review are the AI's job. Human judgment, authorship, and accountability are the founder's.</p>
+</section>
+
+<section class="about-section">
+  <div class="section-eyebrow reveal">What We Won't Do</div>
+  <h2 class="section-title reveal" style="font-size:32px;">A short list. Kept short on purpose.</h2>
+  <p style="font-size:14px;color:var(--ink3);line-height:1.8;font-weight:300;" class="reveal">The discipline that protects a client is the discipline a firm names publicly. Here is what Rudolph CX will not do, regardless of fee:</p>
+  <div class="wont-list reveal">
+    <div class="wont-item">
+  <div class="wont-title">No outcome guarantees.</div>
+  <p class="wont-desc">The methodology produces working tools. The tools work when teams use them. We don't promise revenue lifts, NPS shifts, or AHT reductions we can't substantiate.</p>
+</div>
+<div class="wont-item">
+  <div class="wont-title">No training videos. No LMS modules. No "consulting decks."</div>
+  <p class="wont-desc">We build working tools your agents actually use on live calls. Not learning content.</p>
+</div>
+<div class="wont-item">
+  <div class="wont-title">No inflated case studies.</div>
+  <p class="wont-desc">Demonstration content names what was built and what wasn't. We don't claim methodology success on engagements that didn't run.</p>
+</div>
+<div class="wont-item">
+  <div class="wont-title">No testimonials we can't verify.</div>
+  <p class="wont-desc">If a quote is on our site, it came from someone we can name and who agreed to be named.</p>
+</div>
+<div class="wont-item">
+  <div class="wont-title">No client data fed to public AI models.</div>
+  <p class="wont-desc">Production work uses scoped tooling with client-specific data isolation. Any AI use in client work is disclosed in scope of work.</p>
+</div>
+<div class="wont-item">
+  <div class="wont-title">No engagement we don't have the capacity to deliver.</div>
+  <p class="wont-desc">When the calendar is full, we say so and recommend later or refer out.</p>
+</div>
+  </div>
+</section>
+
+<section class="section" style="text-align:center;padding-bottom:120px;">
+  <div class="section-inner">
+    <h2 class="section-title reveal" style="font-size:32px;">If the discipline matches what you're looking for &mdash; let's talk.</h2>
+    <p style="font-size:14px;color:var(--ink3);margin-bottom:28px;" class="reveal">A real conversation, on a real call. Tell us what your team faces. We'll tell you what we'd build.</p>
+    <a href="book.html" class="btn-primary reveal"><span>Contact &rarr;</span></a>
+  </div>
+</section>
+
+
+
+<style>
+.site-footer-v2 { padding: 80px 60px 32px; background: var(--ink); color: rgba(247,244,238,0.5); }
+.footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-brand-name { font-family: var(--serif); font-size: 1.3rem; color: var(--cream); margin-bottom: 4px; }
+.footer-brand-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red2); margin-bottom: 18px; }
+.footer-brand-desc { font-size: 13px; line-height: 1.7; color: rgba(247,244,238,0.4); margin-bottom: 22px; max-width: 260px; }
+.footer-brand-addr { font-size: 11px; line-height: 1.8; color: rgba(247,244,238,0.3); }
+.footer-col-label { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.3); margin-bottom: 18px; }
+.footer-link-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-link-list a { color: rgba(247,244,238,0.55); text-decoration: none; font-size: 13px; }
+.footer-link-list a:hover { color: var(--cream); }
+.footer-guide-tag { font-size: 10px; color: rgba(247,244,238,0.28); margin-top: 1px; }
+.footer-reg-row { display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; }
+.footer-reg-label { color: rgba(247,244,238,0.3); }
+.footer-reg-value { font-family: var(--mono); color: rgba(247,244,238,0.6); }
+.footer-cta-box { margin-top: 20px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+.footer-cta-title { color: var(--cream); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.footer-cta-sub { font-size: 11px; color: rgba(247,244,238,0.4); margin-bottom: 10px; }
+.footer-cta-link { color: var(--gold); font-size: 12px; font-weight: 600; text-decoration: none; }
+.footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 11px; color: rgba(247,244,238,0.25); }
+.footer-tagline-v2 { font-style: italic; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+</style>
+
+<footer class="site-footer-v2">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Rudolph<span style="color:var(--red)">CX</span></div>
+      <div class="footer-brand-sub">Performance Support</div>
+      <p class="footer-brand-desc">Custom performance support consoles for frontline workers who face live, high-stakes moments with people in need &mdash; and need the right move right now.</p>
+      <div class="footer-brand-addr">
+        Rudolph CX LLC<br>
+        Durham, NC &middot; Remote Nationwide<br>
+        Jamal Rudolph, Founder
+      </div>
     </div>
-    <div class="footer-col">
-      <h4>Site</h4>
-      <a href="#serve">Who We Serve</a>
-      <a href="/#build">What We Build</a>
-      <a href="/methodology.html">Methodology</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/about.html">About</a>
-      <a href="mailto:jamal@rudolphcx.com">Contact</a>
+    <div>
+      <div class="footer-col-label">Performance Guides</div>
+      <ul class="footer-link-list">
+        <li><a href="aidline.html">Aidline&#8480;<div class="footer-guide-tag">Healthcare &middot; Benefits</div></a></li>
+<li><a href="caseline.html">Caseline&#8480;<div class="footer-guide-tag">Social Services</div></a></li>
+<li><a href="lendline.html">Lendline&#8480;<div class="footer-guide-tag">Financial Services</div></a></li>
+<li><a href="chartline.html">Chartline&#8480;<div class="footer-guide-tag">Healthcare &middot; Clinical</div></a></li>
+<li><a href="workline.html">Workline&#8480;<div class="footer-guide-tag">Workforce Development</div></a></li>
+<li><a href="reentryline.html">Reentryline&#8480;<div class="footer-guide-tag">Reentry &amp; Justice</div></a></li>
+<li><a href="supervisorline.html">Supervisorline&#8480;<div class="footer-guide-tag">HR &middot; Supervision</div></a></li>
+<li><a href="peopleline.html">Peopleline&#8480;<div class="footer-guide-tag">HR &middot; People Ops</div></a></li>
+      </ul>
     </div>
-    <div class="footer-col">
-      <h4>Surfaces</h4>
-      <a href="/aidline.html">Aidline</a>
-      <a href="/chartline.html" target="_blank" rel="noopener">Chartline</a>
-      <a href="/lendline.html" target="_blank" rel="noopener">Lendline</a>
-      <a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a>
-      <a href="https://getfirststep.org/partners.html" target="_blank" rel="noopener">FirstStep Partners</a>
+    <div>
+      <div class="footer-col-label">Company</div>
+      <ul class="footer-link-list">
+        <li><a href="about.html">About</a></li>
+<li><a href="methodology.html">Methodology</a></li>
+<li><a href="advisory.html">Advisory Services</a></li>
+<li><a href="groundwork.html">Groundwork</a></li>
+<li><a href="demos.html">Demo Center</a></li>
+<li><a href="pricing.html">Pricing</a></li>
+<li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
+      </ul>
     </div>
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <a href="mailto:jamal@rudolphcx.com">jamal@rudolphcx.com</a>
-      <a href="tel:+19108020961">(910) 802-0961</a>
-      <a>Durham, NC</a>
+    <div>
+      <div class="footer-col-label">Federal Registrations</div>
+      <div class="footer-reg-row"><span class="footer-reg-label">EIN</span><span class="footer-reg-value">42-2269436</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">CAGE Code</span><span class="footer-reg-value">21D84</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">UEI</span><span class="footer-reg-value">FN7DXBSUVHN7</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">SAM.gov</span><span class="footer-reg-value">Active</span></div>
+      <div class="footer-cta-box">
+        <div class="footer-cta-title">Ready to build?</div>
+        <div class="footer-cta-sub">Start with the $500 discovery call. Credited in full.</div>
+        <a href="book.html" class="footer-cta-link">Book Discovery &rarr;</a>
+      </div>
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-legal">© 2026 Rudolph CX LLC · A North Carolina Limited Liability Company in active standing.</div>
-    <div>Built in Durham, NC.</div>
+    <div>&copy; 2026 Rudolph CX LLC. All rights reserved. Durham, NC.</div>
+    <div class="footer-tagline-v2">Every moment has a right move.&#8480;</div>
   </div>
-    <div class="footer-col">
-      <h4>Legal</h4>
-      <a href="/terms.html">Terms of Service</a>
-      <a href="/privacy.html">Privacy Policy</a>
-    </div>
 </footer>
+
+<script>
+/* ── Mobile nav ── */
+(function() {
+  var toggle = document.getElementById('nav-toggle');
+  var links = document.getElementById('primary-nav-links') || document.querySelector('.nav-links');
+  if (!toggle || !links) return;
+
+  function closeMenu() {
+    links.classList.remove('mobile-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.nav-dd.mobile-dd-open').forEach(function(dd) { dd.classList.remove('mobile-dd-open'); });
+  }
+
+  toggle.addEventListener('click', function() {
+    var open = links.classList.toggle('mobile-open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  /* On mobile, tapping "Our Guides" opens the submenu instead of relying on hover (touch has no hover) */
+  document.querySelectorAll('.nav-dd > a').forEach(function(ddLink) {
+    ddLink.addEventListener('click', function(e) {
+      if (window.innerWidth > 900) return; /* desktop keeps real hover behavior */
+      e.preventDefault();
+      ddLink.closest('.nav-dd').classList.toggle('mobile-dd-open');
+    });
+  });
+
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
+  document.addEventListener('click', function(e) {
+    if (window.innerWidth > 900) return;
+    if (!e.target.closest('nav')) closeMenu();
+  });
+  window.addEventListener('resize', function() { if (window.innerWidth > 900) closeMenu(); });
+})();
+
+/* ── FAQ accordion ── */
+document.querySelectorAll('.faq-q').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(i) { i.classList.remove('open'); i.querySelector('.faq-icon').textContent = '+'; });
+    if (!wasOpen) { item.classList.add('open'); btn.querySelector('.faq-icon').textContent = '−'; }
+  });
+});
+
+/* ── Scroll reveal ── */
+if ('IntersectionObserver' in window) {
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+} else {
+  document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('is-visible'); });
+}
+
+</script>
 
 </body>
 </html>
