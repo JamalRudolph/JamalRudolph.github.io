@@ -298,26 +298,85 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
   </div>
 </section>
 
-<footer class="site-footer">
-  <div class="footer-inner">
+
+<style>
+.site-footer-v2 { padding: 80px 60px 32px; background: var(--ink); color: rgba(247,244,238,0.5); }
+.footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-brand-name { font-family: var(--serif); font-size: 1.3rem; color: var(--cream); margin-bottom: 4px; }
+.footer-brand-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red2); margin-bottom: 18px; }
+.footer-brand-desc { font-size: 13px; line-height: 1.7; color: rgba(247,244,238,0.4); margin-bottom: 22px; max-width: 260px; }
+.footer-brand-addr { font-size: 11px; line-height: 1.8; color: rgba(247,244,238,0.3); }
+.footer-col-label { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.3); margin-bottom: 18px; }
+.footer-link-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-link-list a { color: rgba(247,244,238,0.55); text-decoration: none; font-size: 13px; }
+.footer-link-list a:hover { color: var(--cream); }
+.footer-guide-tag { font-size: 10px; color: rgba(247,244,238,0.28); margin-top: 1px; }
+.footer-reg-row { display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; }
+.footer-reg-label { color: rgba(247,244,238,0.3); }
+.footer-reg-value { font-family: var(--mono); color: rgba(247,244,238,0.6); }
+.footer-cta-box { margin-top: 20px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+.footer-cta-title { color: var(--cream); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.footer-cta-sub { font-size: 11px; color: rgba(247,244,238,0.4); margin-bottom: 10px; }
+.footer-cta-link { color: var(--gold); font-size: 12px; font-weight: 600; text-decoration: none; }
+.footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 11px; color: rgba(247,244,238,0.25); }
+.footer-tagline-v2 { font-style: italic; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+</style>
+
+<footer class="site-footer-v2">
+  <div class="footer-grid">
     <div>
-      <div class="footer-brand">Rudolph<span style="color:var(--red)">CX</span></div>
-      <div class="footer-legal">
-        Rudolph CX LLC · Durham, NC 27703<br>
-        EIN 42-2269436 · CAGE 21D84 · UEI FN7DXBSUVHN7
+      <div class="footer-brand-name">Rudolph<span style="color:var(--red)">CX</span></div>
+      <div class="footer-brand-sub">Performance Support</div>
+      <p class="footer-brand-desc">Custom performance support consoles for frontline workers who face live, high-stakes moments with people in need &mdash; and need the right move right now.</p>
+      <div class="footer-brand-addr">
+        Rudolph CX LLC<br>
+        Durham, NC &middot; Remote Nationwide<br>
+        Jamal Rudolph, Founder
       </div>
-      <div class="footer-tagline">Every moment has a right move.&#8480;</div>
     </div>
-    <div class="footer-legal"><a href="aidline.html">Aidline&#8480;</a>
-        <a href="caseline.html">Caseline&#8480;</a>
-        <a href="chartline.html">Chartline&#8480;</a>
-        <a href="lendline.html">Lendline&#8480;</a>
-        <a href="workline.html">Workline&#8480;</a>
-        <a href="reentryline.html">Reentryline&#8480;</a>
-        <a href="supervisorline.html">Supervisorline&#8480;</a>
-        <a href="peopleline.html">Peopleline&#8480;</a>
-        <a href="pricing.html">Pricing</a>
-        <a href="about.html">About</a></div>
+    <div>
+      <div class="footer-col-label">Performance Guides</div>
+      <ul class="footer-link-list">
+        <li><a href="aidline.html">Aidline&#8480;<div class="footer-guide-tag">Healthcare &middot; Benefits</div></a></li>
+<li><a href="caseline.html">Caseline&#8480;<div class="footer-guide-tag">Social Services</div></a></li>
+<li><a href="lendline.html">Lendline&#8480;<div class="footer-guide-tag">Financial Services</div></a></li>
+<li><a href="chartline.html">Chartline&#8480;<div class="footer-guide-tag">Healthcare &middot; Clinical</div></a></li>
+<li><a href="workline.html">Workline&#8480;<div class="footer-guide-tag">Workforce Development</div></a></li>
+<li><a href="reentryline.html">Reentryline&#8480;<div class="footer-guide-tag">Reentry &amp; Justice</div></a></li>
+<li><a href="supervisorline.html">Supervisorline&#8480;<div class="footer-guide-tag">HR &middot; Supervision</div></a></li>
+<li><a href="peopleline.html">Peopleline&#8480;<div class="footer-guide-tag">HR &middot; People Ops</div></a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-label">Company</div>
+      <ul class="footer-link-list">
+        <li><a href="about.html">About</a></li>
+<li><a href="methodology.html">Methodology</a></li>
+<li><a href="advisory.html">Advisory Services</a></li>
+<li><a href="groundwork.html">Groundwork</a></li>
+<li><a href="demos.html">Demo Center</a></li>
+<li><a href="pricing.html">Pricing</a></li>
+<li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-label">Federal Registrations</div>
+      <div class="footer-reg-row"><span class="footer-reg-label">EIN</span><span class="footer-reg-value">42-2269436</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">CAGE Code</span><span class="footer-reg-value">21D84</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">UEI</span><span class="footer-reg-value">FN7DXBSUVHN7</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">SAM.gov</span><span class="footer-reg-value">Active</span></div>
+      <div class="footer-cta-box">
+        <div class="footer-cta-title">Ready to build?</div>
+        <div class="footer-cta-sub">Start with the $500 discovery call. Credited in full.</div>
+        <a href="book.html" class="footer-cta-link">Book Discovery &rarr;</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>&copy; 2026 Rudolph CX LLC. All rights reserved. Durham, NC.</div>
+    <div class="footer-tagline-v2">Every moment has a right move.&#8480;</div>
   </div>
 </footer>
 
