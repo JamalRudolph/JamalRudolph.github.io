@@ -1,0 +1,24 @@
+{
+  "name": "Supervisorline\u2120 \u2014 Performance Support Guide",
+  "short_name": "Supervisorline",
+  "description": "Rudolph CX LLC \u2014 Supervisorline Performance Support Guide. Built for the moment the situation is live.",
+  "start_url": "/supervisorline.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7f4ee",
+  "theme_color": "#1e3a5f",
+  "icons": [
+    {
+      "src": "/supervisorline-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/supervisorline-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
