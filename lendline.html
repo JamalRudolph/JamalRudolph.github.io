@@ -128,15 +128,14 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
    HERO — thesis section. Per-guide content is [TEMPLATE]; the
    shell/structure is canonical.
    ============================================================ */
-.hero { min-height: 100vh; display: grid; grid-template-columns: 0.85fr 1.15fr; align-items: center; gap: 20px; padding: 120px 60px 80px; position: relative; overflow: hidden; }
-.hero-left { position: relative; z-index: 1; }
-.hero-right { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 20px 40px; min-height: 320px; }
-.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.hero { min-height: 92vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 140px 60px 80px; position: relative; overflow: hidden; background-image: linear-gradient(var(--cream3) 1px, transparent 1px), linear-gradient(90deg, var(--cream3) 1px, transparent 1px); background-size: 48px 48px; background-position: center; }
+.hero-inner { position: relative; z-index: 1; max-width: 780px; display: flex; flex-direction: column; align-items: center; }
+.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; justify-content: center; }
 .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--red); }
 .hero-title { font-family: var(--serif); font-size: clamp(44px,5.5vw,76px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 28px; }
 .hero-title em { font-style: italic; color: var(--red); }
-.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 480px; margin-bottom: 40px; font-weight: 300; }
-.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 560px; margin: 0 auto 40px; font-weight: 300; }
+.hero-actions { display: flex; gap: 16px; align-items: center; justify-content: center; flex-wrap: wrap; }
 .btn-primary, .btn-gold, .btn-outline { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; border: none; text-decoration: none; display: inline-block; transition: all 0.2s; cursor: pointer; }
 .btn-primary { background: var(--ink); color: var(--cream); position: relative; overflow: hidden; }
 .btn-primary::after { content: ''; position: absolute; inset: 0; background: var(--red); transform: translateX(-101%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
@@ -296,7 +295,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
      HERO — [TEMPLATE] content, canonical shell
      ═══════════════════════════════════════════════════ -->
 <section class="hero">
-  <div class="hero-left">
+  <div class="hero-inner">
     <div class="hero-eyebrow">Financial Services · Mortgage Loan Servicing</div>
     <h1 class="hero-title">Built for the moment the loan is live.</h1>
     <p class="hero-sub">Lendline is a custom-built reference guide for mortgage loan servicing agents who face live, high-stakes borrower moments — payment disputes, forbearance requests, payoff quotes, loss mitigation — and need the right move right now.</p>
@@ -305,7 +304,6 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
       <a href="demos.html" class="btn-outline">See a Live Demo</a>
     </div>
   </div>
-  <div class="hero-right" style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);text-align:center;">[Product art / sector pills — real visual asset not yet built, honestly left blank]</div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════
