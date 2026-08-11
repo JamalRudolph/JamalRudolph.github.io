@@ -1,1085 +1,639 @@
----
----
+<!--
+  RUDOLPH CX LLC — CANONICAL PAGE TEMPLATE
+  Built: Session 210, Phase 1 (resolves DRIFT-209-D + the nav/CSS mismatch found this session)
+
+  WHAT THIS FILE IS: the single source-of-truth markup + CSS + JS pattern that
+  every guide page (Phase 2) and new page (Phase 3, homepage Phase 4) gets
+  rebuilt from. It is NOT itself deployed as a live page. [TEMPLATE] markers
+  show where per-guide content goes — do not treat that copy as final.
+
+  WHAT THIS FIXES:
+  1. DRIFT-209-D — the pricing include (_includes/guide-pricing.html) renders
+     classes (.pricing-block, .pb-discovery, .retainer-block, .pb-cta, .reveal,
+     etc.) that only existed, incompletely, on aidline.html. Every class the
+     real include emits is now styled here, once, matching the include's
+     actual live markup exactly (verified against the live file this session).
+  2. Nav/CSS mismatch (found this session, not previously logged) — the shared
+     _includes/nav.html emits .nav-inner, .nav-dd, .dd-menu, .nav-logo-accent.
+     No page's embedded CSS styled those classes (pages styled .nav-dropdown,
+     .dropdown-menu instead) — the nav has been rendering unstyled on every
+     live page. Fixed here by writing CSS for nav.html's real, current output.
+
+  DESIGN TOKENS: locked per RCX-FOUND-004 / RCX-PROD-001. Not invented here —
+  copied from those values (Cormorant Garamond; #b83224 red; #c49a3c gold;
+  cream/ink palette). Nothing about the palette is a new choice.
+
+  PWA PATTERN: extracted and generalized from Aidline's existing service-
+  worker/manifest/install-banner code (verified this session by reading the
+  source — the pattern is structurally coherent; it has NOT been confirmed
+  working end-to-end in a real browser install by anyone this session or
+  per any HISTORY.md record found). Templatized with {{GUIDE_SLUG}} /
+  {{GUIDE_NAME}} / #1e3a5f placeholders so Phase 2 can generate the
+  remaining six guides' manifest+service-worker pairs from one pattern
+  instead of hand-building each.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="description" content="Supervisorline&#8480; by Rudolph CX — performance support for frontline supervisors navigating live workplace moments.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Supervisorline℠ — Rudolph CX">
-<meta property="og:description" content="Performance support for frontline supervisors navigating discipline, leave, harassment, and wage moments.">
-<meta property="og:image" content="https://rudolphcx.com/og-default.png">
-<meta property="og:url" content="https://rudolphcx.com/supervisorline.html">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Supervisorline℠ — Rudolph CX">
-<meta name="twitter:description" content="Performance support for frontline supervisors navigating discipline, leave, harassment, and wage moments.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Supervisorline — Performance Support for Frontline Supervisors | Rudolph CX</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Supervisorline&#8480; — Performance Support Guides | Rudolph CX</title>
+<meta name="description" content="Supervisorline&#8480; by Rudolph CX — Supervisors face live, high-stakes moments with no time to search a policy manual. Supervisorline℠ surfaces the complete response — routing ">
 <link rel="manifest" href="/manifest-supervisorline.json">
 <meta name="theme-color" content="#1e3a5f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; display: flex; align-items: center; padding: 0 40px; }
-.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
-.nav-logo span { color: var(--navy); }
-.nav-links { list-style: none; display: flex; align-items: center; gap: 1.75rem; margin: 0 auto; padding: 0; }
-.nav-links a { font-family: var(--sans); font-size: 0.85rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
-.nav-links a:hover { color: var(--ink); }
-.nav-dropdown { position: relative; }
-.nav-dropdown > a::after { content: ' ↓'; font-size: 0.7rem; opacity: 0.5; }
-.nav-dropdown:hover .dropdown-menu,
-.nav-dropdown:focus-within .dropdown-menu { display: flex; flex-direction: column; gap: 2px; }
-.dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
-.dropdown-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); }
-.dropdown-menu a:hover { background: var(--cream2); color: var(--ink); }
 
+/* ============================================================
+   DESIGN TOKENS — locked, RCX-FOUND-004 / RCX-PROD-001.
+   Single source of truth. Every page inherits these unchanged.
+   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
---ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
---cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
---navy: #1e3a5f; --navy2: #2a4e7a; --navy-light: #edf2f8; --navy-border: #b8cce0;
---amber: #c8780a; --red: #b83020; --gold: #c49a3c;
---serif: 'Cormorant Garamond', Georgia, serif;
---mono: 'DM Mono', monospace;
---sans: 'DM Sans', system-ui, sans-serif;
+  --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
+  --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
+  --red: #b83224; --red2: #d94030; --gold: #c49a3c;
+  --green: #2a6e4a;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', system-ui, sans-serif;
 }
 html { scroll-behavior: smooth; }
 body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; }
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--cream2); }
-::-webkit-scrollbar-thumb { background: var(--navy); }
-.skip-link { position:absolute; top:-100%; left:0; background:var(--ink); color:var(--cream); padding:0.5rem 1rem; font-family:var(--mono); font-size:0.78rem; z-index:10000; text-decoration:none; border-radius:0 0 4px 0; letter-spacing:0.1em; }
-.skip-link:focus { top:0; outline:3px solid var(--gold); outline-offset:2px; }
-a:focus-visible, button:focus-visible { outline:3px solid var(--navy); outline-offset:2px; }
-
-/* HERO */
-.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 140px 60px 80px; position: relative; overflow: hidden; background: var(--cream); }
-.hero-left { position: relative; z-index: 1; }
-.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--navy); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
-.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--navy); }
-.hero-title { font-family: var(--serif); font-size: clamp(48px,5.5vw,78px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 32px; }
-.hero-title em { font-style: italic; color: var(--navy); }
-.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.7; max-width: 420px; margin-bottom: 40px; }
-.hero-cta { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--navy); text-decoration: none; border-bottom: 1px solid var(--navy); padding-bottom: 2px; transition: opacity 0.2s; }
-.hero-cta:hover { opacity: 0.7; }
-.hero-right { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 16px; padding-left: 60px; }
-.hero-stat { background: var(--navy-light); border: 1px solid var(--navy-border); border-left: 3px solid var(--navy); border-radius: 4px; padding: 16px 20px; }
-.hero-stat-num { font-family: var(--serif); font-size: 2.2rem; font-weight: 500; color: var(--navy); letter-spacing: -0.02em; line-height: 1; margin-bottom: 6px; }
-.hero-stat-text { font-size: 13px; color: var(--ink3); line-height: 1.5; }
-.hero-stat-source { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.05em; margin-top: 6px; }
-
-/* ROUTING GATE */
-.routing-gate { background: var(--navy); color: #f7f4ee; padding: 3rem 0; }
-.routing-inner { max-width: 1100px; margin: 0 auto; padding: 0 60px; }
-.routing-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,244,238,0.55); margin-bottom: 1.5rem; }
-.routing-title { font-family: var(--serif); font-size: 1.8rem; font-weight: 400; margin-bottom: 2rem; line-height: 1.2; }
-.routing-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-.routing-tier { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 1.25rem 1.5rem; }
-.tier-badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; display: inline-block; margin-bottom: 0.75rem; }
-.tier-1-badge { background: rgba(255,255,255,0.15); color: rgba(247,244,238,0.9); }
-.tier-2-badge { background: var(--amber); color: #fff; }
-.tier-3-badge { background: var(--red); color: #fff; }
-.routing-tier h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 500; margin-bottom: 0.5rem; }
-.routing-tier p { font-size: 0.85rem; line-height: 1.6; color: rgba(247,244,238,0.75); }
-.routing-hard-rule { margin-top: 1.5rem; padding: 1rem 1.5rem; background: rgba(184,48,32,0.2); border: 1px solid rgba(184,48,32,0.4); border-left: 3px solid var(--red); border-radius: 4px; font-size: 0.85rem; color: rgba(247,244,238,0.9); line-height: 1.6; }
-
-/* SITUATION SECTION */
-.sit-section { max-width: 900px; margin: 0 auto; padding: 5rem 60px; }
-.sit-section-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--navy); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; }
-.sit-section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--navy); }
-.sit-section-title { font-family: var(--serif); font-size: 2rem; font-weight: 400; margin-bottom: 0.5rem; }
-.sit-section-meta { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: 0.05em; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--cream3); }
-.sit-grid { display: flex; flex-direction: column; gap: 1rem; }
-
-/* SITUATION CARDS */
-.sit-card { background: #fff; border: 1px solid var(--cream3); border-radius: 4px; overflow: hidden; }
-.sit-card-header { display: grid; grid-template-columns: 2.5rem 1fr auto auto; align-items: center; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; user-select: none; transition: background 0.15s; }
-.sit-card-header:hover { background: var(--cream2); }
-.sit-card-header.open { background: var(--navy-light); border-bottom: 1px solid var(--navy-border); }
-.sit-card-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; }
-.sit-card-title { font-family: var(--serif); font-size: 1rem; font-weight: 500; color: var(--ink); }
-.sit-card-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.sit-tag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; white-space: nowrap; }
-.sit-tag-t1 { background: var(--navy-light); color: var(--navy); border: 1px solid var(--navy-border); }
-.sit-tag-t2 { background: #fdf4e0; color: var(--amber); border: 1px solid #e0c888; }
-.sit-tag-t3 { background: #fdf0ee; color: var(--red); border: 1px solid #e0b0a8; }
-.sit-tag-halt { background: #fdf0ee; color: var(--red); border: 1px solid #e0b0a8; }
-.sit-card-chevron { color: var(--muted); font-size: 0.8rem; transition: transform 0.2s; flex-shrink: 0; }
-.sit-card-header.open .sit-card-chevron { transform: rotate(180deg); }
-.sit-card-body { display: none; padding: 1.25rem 1.5rem 1.5rem; }
-.sit-card-body.open { display: block; }
-
-/* BODY ELEMENTS */
-.sit-stat { background: var(--navy-light); border: 1px solid var(--navy-border); border-left: 3px solid var(--navy); border-radius: 3px; padding: 0.9rem 1.1rem; margin-bottom: 1.25rem; }
-.sit-stat-figure { font-family: var(--serif); font-size: 1.6rem; font-weight: 500; color: var(--navy); }
-.sit-stat-text { font-size: 0.85rem; color: var(--ink2); line-height: 1.5; margin-left: 0.5rem; }
-.sit-stat-source { display: block; font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 0.4rem; letter-spacing: 0.04em; }
-.sit-steps { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.1rem; }
-.sit-steps li { display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.5rem; font-size: 0.88rem; line-height: 1.6; align-items: start; }
-.sit-step-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); padding-top: 0.2rem; }
-.sit-callout { border-radius: 3px; padding: 0.7rem 1rem; font-size: 0.83rem; line-height: 1.55; margin-top: 0.8rem; }
-.sit-callout-halt { background: #fdf0ee; border-left: 3px solid var(--red); color: #7a2018; }
-.sit-callout-warn { background: #fdf6ee; border-left: 3px solid var(--amber); color: #7a4810; }
-.sit-callout-navy { background: var(--navy-light); border-left: 3px solid var(--navy); color: #1e3a5f; }
-.sit-callout-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.25rem; opacity: 0.7; }
-.sit-card-reg { font-family: var(--mono); font-size: 0.63rem; color: var(--muted); margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--cream3); letter-spacing: 0.03em; }
-.routing-badge { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; display: inline-block; margin-bottom: 0.75rem; }
-.routing-badge-t1 { background: var(--navy-light); color: var(--navy); border: 1px solid var(--navy-border); }
-.routing-badge-t2 { background: #fdf4e0; color: var(--amber); border: 1px solid #e0c888; }
-
-/* DISCLAIMER */
-.disclaimer-section { background: var(--cream2); border-top: 1px solid var(--cream3); padding: 2rem 0; }
-.disclaimer-inner { max-width: 900px; margin: 0 auto; padding: 0 60px; }
-.disclaimer-text { font-family: var(--mono); font-size: 0.65rem; color: var(--dim); line-height: 1.7; letter-spacing: 0.02em; }
-
-/* PRICING */
-.pricing-section { padding: 5rem 0; }
-.section-inner { max-width: 1100px; margin: 0 auto; padding: 0 60px; }
-.pricing-block { max-width: 600px; }
-.pb-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--navy); margin-bottom: 1rem; }
-.pb-title { font-family: var(--serif); font-size: 2.2rem; font-weight: 400; line-height: 1.2; margin-bottom: 1rem; }
-.pb-sub { font-size: 0.95rem; color: var(--ink3); line-height: 1.7; margin-bottom: 2rem; }
-.pb-cta { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; background: var(--navy); color: #fff; padding: 14px 28px; border-radius: 3px; text-decoration: none; transition: opacity 0.2s; }
-.pb-cta:hover { opacity: 0.85; }
-
-/* CONTACT */
-.contact-section { background: var(--navy); color: #f7f4ee; padding: 5rem 0; }
-.contact-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,244,238,0.55); margin-bottom: 1rem; }
-.contact-title { font-family: var(--serif); font-size: 2.2rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.2; }
-.contact-sub { font-size: 0.95rem; color: rgba(247,244,238,0.75); line-height: 1.7; margin-bottom: 2rem; max-width: 480px; }
-.contact-form { display: flex; flex-direction: column; gap: 0.75rem; max-width: 460px; }
-.contact-form input, .contact-form textarea, .contact-form select { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; padding: 0.75rem 1rem; color: #f7f4ee; font-family: var(--sans); font-size: 0.9rem; width: 100%; }
-.contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(247,244,238,0.4); }
-.contact-form textarea { min-height: 100px; resize: vertical; }
-.contact-form button { background: #f7f4ee; color: var(--navy); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 14px 28px; border: none; border-radius: 3px; cursor: pointer; transition: opacity 0.2s; align-self: flex-start; }
-.contact-form button:hover { opacity: 0.85; }
-
-/* FOOTER */
-footer { background: var(--ink); color: rgba(247,244,238,0.5); padding: 2rem 60px; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: var(--serif); font-size: 1.1rem; color: #f7f4ee; }
-.footer-logo span { color: rgba(247,244,238,0.4); }
-.footer-copy { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em; }
-.footer-links { display: flex; gap: 1.5rem; }
-.footer-links a { font-family: var(--mono); font-size: 0.62rem; color: rgba(247,244,238,0.4); text-decoration: none; letter-spacing: 0.06em; }
-.footer-links a:hover { color: rgba(247,244,238,0.8); }
-
-/* REVEAL */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
-.reveal.visible { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-
-@media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; }
-  .hero-right { padding-left: 0; margin-top: 2rem; }
-  .routing-tiers { grid-template-columns: 1fr; }
-  .sit-section { padding: 3rem 24px; }
-  .routing-inner { padding: 0 24px; }
-  .section-inner { padding: 0 24px; }
-  footer { flex-direction: column; gap: 1rem; padding: 2rem 24px; text-align: center; }
-  nav { padding: 0 24px; }
-  .nav-links { display: none; }
+::-webkit-scrollbar-thumb { background: var(--red); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
-/* SHARED NAV SUPPORT (added for nav rebuild) */.nav-dd{position:relative}.nav-dd>a::after{content:' ↓';font-size:.7rem;opacity:.5}.nav-dd:hover .dd-menu,.nav-dd:focus-within .dd-menu{display:flex;flex-direction:column;gap:2px}.dd-menu{display:none;position:absolute;top:100%;left:0;background:var(--cream);border:1px solid var(--cream3);border-radius:4px;padding:calc(.5rem + 8px) .5rem .5rem .5rem;min-width:230px;box-shadow:0 4px 20px rgba(0,0,0,.08);z-index:200}.dd-menu a{display:flex;align-items:center;justify-content:space-between;padding:.4rem .6rem;border-radius:3px;font-size:.82rem;color:var(--ink3);text-decoration:none}.dd-menu a:hover{background:var(--cream2);color:var(--ink)}.dm-tag{font-size:.6rem;background:var(--red);color:#fff;padding:1px 5px;border-radius:2px;font-family:var(--mono);letter-spacing:.05em}.dd-div{height:1px;background:var(--cream3);margin:4px 0}</style>
-  <script data-goatcounter="https://rudolphcx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+/* ============================================================
+   NAV — CSS written to match _includes/nav.html's REAL, current
+   markup exactly (nav-inner / nav-dd / dd-menu / nav-logo-accent).
+   This is the DRIFT-209-D-adjacent fix: the nav has been shipping
+   unstyled because no page's CSS matched what nav.html emits.
+   ============================================================ */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; }
+.nav-inner { max-width: 1400px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; gap: 2rem; }
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
+.nav-logo-accent { color: var(--red); }
+.nav-links { list-style: none; display: flex; align-items: center; gap: 1.6rem; margin: 0; padding: 0; flex-wrap: nowrap; }
+.nav-links a { font-family: var(--sans); font-size: 0.82rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; white-space: nowrap; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--red); }
+.nav-dd { position: relative; }
+.nav-dd > a::after { content: ' ↓'; font-size: 0.65rem; opacity: 0.5; }
+.nav-dd:hover .dd-menu,
+.nav-dd:focus-within .dd-menu { display: flex; }
+.dd-menu { display: none; flex-direction: column; gap: 2px; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
+.dd-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); gap: 10px; }
+.dd-menu a:hover { background: var(--cream2); color: var(--ink); }
+.dm-tag { font-size: 0.62rem; font-family: var(--mono); background: var(--red); color: #fff; padding: 1px 6px; border-radius: 2px; letter-spacing: 0.04em; }
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; flex-shrink: 0; }
+.nav-toggle .bar { display: block; width: 22px; height: 2px; background: var(--ink); margin: 5px 0; transition: transform 0.2s, opacity 0.2s; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+/* Mobile nav — real slide-down panel + tap-to-open Our Guides submenu (touch has no hover) */
+@media (max-width: 900px) {
+  .nav-toggle { display: block; }
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--cream); border-bottom: 1px solid var(--cream3); flex-direction: column; align-items: stretch; gap: 0; max-height: calc(100vh - 64px); overflow-y: auto; box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+  .nav-links.mobile-open { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links > li > a { display: block; padding: 16px 24px; border-bottom: 1px solid var(--cream3); font-size: 0.95rem; }
+  .nav-dd > a::after { float: right; }
+  .dd-menu { display: none; position: static; box-shadow: none; border: none; border-top: 1px solid var(--cream3); border-radius: 0; background: var(--cream2); padding: 0; min-width: 0; }
+  .nav-dd.mobile-dd-open .dd-menu { display: flex; }
+  .dd-menu a { padding: 14px 36px; border-bottom: 1px solid var(--cream3); border-radius: 0; }
+}
+
+/* ============================================================
+   SHARED SECTION SCAFFOLDING
+   ============================================================ */
+.section { padding: 120px 60px; position: relative; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+.section-title { font-family: var(--serif); font-size: clamp(36px,4vw,56px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 32px; }
+.section-title em { font-style: italic; color: var(--red); }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* ============================================================
+   HERO — thesis section. Per-guide content is [TEMPLATE]; the
+   shell/structure is canonical.
+   ============================================================ */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 120px 60px 80px; position: relative; overflow: hidden; }
+.hero-left { position: relative; z-index: 1; }
+.hero-right { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 20px 40px; min-height: 320px; }
+.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--red); }
+.hero-title { font-family: var(--serif); font-size: clamp(44px,5.5vw,76px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 28px; }
+.hero-title em { font-style: italic; color: var(--red); }
+.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 480px; margin-bottom: 40px; font-weight: 300; }
+.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-primary, .btn-gold, .btn-outline { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; border: none; text-decoration: none; display: inline-block; transition: all 0.2s; cursor: pointer; }
+.btn-primary { background: var(--ink); color: var(--cream); position: relative; overflow: hidden; }
+.btn-primary::after { content: ''; position: absolute; inset: 0; background: var(--red); transform: translateX(-101%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
+.btn-primary:hover::after { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-gold { background: var(--gold); color: var(--ink); }
+.btn-gold:hover { background: #d4a84a; }
+.btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 13px 28px; }
+.btn-outline:hover { background: var(--ink); color: var(--cream); }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; } }
+
+/* ============================================================
+   HOW IT WORKS — 3-step (Discovery → Build → Live). Structural
+   pattern adopted from prototype reference, our facts only.
+   ============================================================ */
+.how-section { padding: 120px 60px; background: white; }
+.steps-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 72px; border: 1px solid var(--cream3); }
+.step { padding: 40px 32px; border-right: 1px solid var(--cream3); transition: background 0.2s; }
+.step:last-child { border-right: none; }
+.step:hover { background: var(--cream); }
+.step-num { font-family: var(--serif); font-size: 56px; font-weight: 600; color: var(--cream3); line-height: 1; margin-bottom: 16px; letter-spacing: -0.04em; transition: color 0.2s; }
+.step:hover .step-num { color: var(--red); opacity: 0.3; }
+.step-title { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.step-subtitle { font-size: 12px; color: var(--red); font-weight: 500; margin-bottom: 14px; }
+.step-desc { font-size: 13px; color: var(--dim); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
+.step-badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); display: flex; align-items: center; gap: 6px; }
+.step-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+@media (max-width: 900px) { .steps-3 { grid-template-columns: 1fr; } .step { border-right: none; border-bottom: 1px solid var(--cream3); } }
+
+/* ============================================================
+   BENEFITS — stat-card grid. Metrics are [TEMPLATE] until each
+   guide's real, sourced numbers exist — do not ship placeholder
+   metrics as if verified.
+   ============================================================ */
+.benefits-section { padding: 120px 60px; background: var(--cream2); }
+.benefits-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--cream3); margin-top: 64px; border: 1px solid var(--cream3); }
+.benefit-card { background: var(--cream2); padding: 36px 32px; }
+.benefit-metric { font-family: var(--serif); font-size: 34px; font-weight: 600; color: var(--red); line-height: 1; margin-bottom: 4px; }
+.benefit-metric-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 18px; }
+.benefit-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.benefit-desc { font-size: 13px; color: var(--ink3); line-height: 1.7; font-weight: 300; }
+@media (max-width: 900px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   PRODUCT SHOWCASE — placeholder shell. [TEMPLATE]: must be
+   rebuilt per-guide to be factually accurate to real call/case
+   handling, per Session 209 direction — not filled here.
+   ============================================================ */
+.showcase-section { padding: 120px 60px; background: var(--ink); }
+.showcase-section .section-title { color: var(--cream); }
+.showcase-section .section-eyebrow { color: var(--gold); }
+.showcase-section .section-eyebrow::before { background: var(--gold); }
+.showcase-frame { margin-top: 56px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); min-height: 320px; display: flex; align-items: center; justify-content: center; color: rgba(247,244,238,0.35); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; padding: 40px; }
+
+/* ============================================================
+   FAQ — accordion. Structural pattern adopted from prototype;
+   copy must be real per-guide fact, not the prototype's fabricated
+   numbers ($300 discovery, 284 situations, pro-bono claims, etc.
+   all rejected — see Session 209).
+   ============================================================ */
+.faq-section { padding: 120px 60px; background: white; }
+.faq-list { margin-top: 56px; max-width: 840px; }
+.faq-item { border-bottom: 1px solid var(--cream3); }
+.faq-q { width: 100%; text-align: left; background: none; border: none; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; cursor: pointer; font-family: var(--serif); font-size: 19px; font-weight: 500; color: var(--ink); }
+.faq-q:hover { color: var(--red); }
+.faq-icon { font-family: var(--mono); font-size: 16px; color: var(--red); flex-shrink: 0; width: 20px; text-align: center; }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-item.open .faq-a { max-height: 600px; }
+.faq-a-inner { padding: 0 0 24px; font-size: 14px; color: var(--ink3); line-height: 1.8; font-weight: 300; max-width: 700px; }
+
+/* ============================================================
+   MOMENT QUOTE — canonical founder quote, verbatim, IDENTITY.md v13.
+   ============================================================ */
+.moment-section { padding: 100px 60px; background: var(--cream2); border-top: 1px solid var(--cream3); border-bottom: 1px solid var(--cream3); }
+.moment-inner { max-width: 820px; margin: 0 auto; }
+.moment-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+.moment-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+.moment-quote { font-family: var(--serif); font-size: clamp(20px,2.6vw,30px); font-weight: 500; color: var(--ink); line-height: 1.5; font-style: italic; margin-bottom: 20px; }
+.moment-attr { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+
+/* ============================================================
+   PRICING — CSS written to match _includes/guide-pricing.html's
+   REAL, current markup exactly (verified against the live include
+   this session). This is the direct DRIFT-209-D fix.
+   ============================================================ */
+.pricing-section { padding: 120px 60px; background: var(--cream); }
+.pricing-block { background: var(--ink); padding: 56px; position: relative; border-left: 4px solid var(--red); }
+.pb-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+.pb-title { font-family: var(--serif); font-size: clamp(28px,3.4vw,42px); font-weight: 500; color: var(--cream); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; }
+.pb-sub { font-size: 14px; color: rgba(247,244,238,0.6); line-height: 1.7; font-weight: 300; max-width: 560px; margin-bottom: 40px; }
+.pb-discovery { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 28px 32px; margin-bottom: 20px; }
+.pb-discovery-tag { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.pb-discovery-price { font-family: var(--serif); font-size: 36px; font-weight: 600; color: var(--cream); line-height: 1; margin-bottom: 10px; letter-spacing: -0.02em; }
+.pb-discovery-note { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; }
+.pb-tiers-note { font-size: 13px; color: rgba(247,244,238,0.45); line-height: 1.7; font-weight: 300; margin-top: 4px; }
+.pb-cta { display: inline-block; margin-top: 32px; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 36px; background: var(--red); color: var(--cream); text-decoration: none; transition: background 0.2s; }
+.pb-cta:hover { background: var(--red2); }
+.retainer-block { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); }
+.retainer-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.retainer-price { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--cream); letter-spacing: -0.02em; margin-bottom: 10px; }
+.retainer-note { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; max-width: 600px; }
+/* the include's own inline styles (price-row, pb-tiers-label) already carry
+   fallback var() values and render correctly without dedicated classes here —
+   verified by reading the include's actual style attributes this session. */
+
+/* ============================================================
+   FOOTER — legal block. Rudolph CX brand persists here per
+   LOCKS.md §33 (reference/marketing surface, not the delivered
+   console).
+   ============================================================ */
+.site-footer { padding: 64px 60px 40px; background: var(--ink); color: rgba(247,244,238,0.5); }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
+.footer-brand { font-family: var(--serif); font-size: 1.2rem; color: var(--cream); margin-bottom: 8px; }
+.footer-legal { font-family: var(--mono); font-size: 10px; line-height: 1.9; color: rgba(247,244,238,0.35); }
+.footer-tagline { font-size: 12px; font-style: italic; color: rgba(247,244,238,0.4); margin-top: 10px; }
+
+/* ============================================================
+   PWA INSTALL BANNER — generalized from Aidline's existing pattern.
+   Structurally sound (read this session); NOT confirmed working
+   end-to-end by an actual install test.
+   ============================================================ */
+#pwa-install-banner { display: none; position: fixed; bottom: 24px; right: 24px; z-index: 500; max-width: 340px; background: var(--ink); border: 1px solid rgba(255,255,255,0.12); padding: 18px 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+#pwa-install-banner.visible { display: flex; align-items: center; gap: 14px; }
+#pwa-install-banner .pwa-text { font-size: 11px; color: #e8e3db; line-height: 1.5; letter-spacing: 0.02em; }
+#pwa-install-banner .pwa-text strong { display: block; font-size: 12px; color: #fff; margin-bottom: 2px; }
+#pwa-install-btn { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 18px; background: var(--red); color: #fff; border: none; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
+#pwa-install-btn:hover { opacity: 0.85; }
+@media (max-width: 500px) { #pwa-install-banner { bottom: 16px; right: 16px; left: 16px; max-width: none; } }
+
+</style>
 </head>
 <body>
-<a href="#main-content" class="skip-link">Skip to main content</a>
 
-{% include nav.html current="supervisorline" %}
+<!-- NAV — inlined here (test render only), now matching nav-updated.html's Phase 1 revision (mobile toggle button added inside .nav-inner) -->
+<nav>
+  <div class="nav-inner">
+    <a href="guides.html" class="nav-logo">Rudolph<span class="nav-logo-accent">CX</span></a>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav-links" aria-label="Open menu">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+    <ul class="nav-links" id="primary-nav-links">
+      <li class="nav-dd">
+        <a href="#">Our Guides</a>
+        <div class="dd-menu">
+          <a href="guides.html" style="font-weight:600;border-bottom:1px solid var(--cream3)">Browse All Guides</a>
+          <a href="aidline.html">Aidline&#8480; <span class="dm-tag">Live</span></a>
+          <a href="caseline.html">Caseline&#8480; <span class="dm-tag">Live</span></a>
+          <a href="chartline.html">Chartline&#8480; <span class="dm-tag">Live</span></a>
+          <a href="lendline.html">Lendline&#8480; <span class="dm-tag">Live</span></a>
+          <a href="workline.html">Workline&#8480; <span class="dm-tag">Live</span></a>
+          <a href="reentryline.html">Reentryline&#8480; <span class="dm-tag">Live</span></a>
+          <a href="supervisorline.html">Supervisorline&#8480; <span class="dm-tag">Live</span></a>
+          <a href="peopleline.html">Peopleline&#8480; <span class="dm-tag">Live</span></a>
+        </div>
+      </li>
+      <li><a href="demos.html">Demo Center</a></li>
+      <li><a href="advisory.html">Advisory Services</a></li>
+      <li><a href="groundwork.html">Groundwork</a></li>
+      <li><a href="methodology.html">Methodology</a></li>
+      <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="book.html">Book Discovery</a></li>
+    </ul>
+  </div>
+</nav>
 
-<!-- HERO -->
-<section class="hero" id="hero">
+<!-- ═══════════════════════════════════════════════════
+     HERO — [TEMPLATE] content, canonical shell
+     ═══════════════════════════════════════════════════ -->
+<section class="hero">
   <div class="hero-left">
-    <div class="hero-eyebrow reveal">Supervisorline℠ · Performance Support · Frontline Supervision</div>
-    <h1 class="hero-title reveal reveal-delay-1">The moment arrives.<br><em>Built for the supervisor</em><br>in the room.</h1>
-    <p class="hero-sub reveal reveal-delay-2">Supervisors face live, high-stakes moments with no time to search a policy manual. Supervisorline℠ surfaces the complete response — routing tier, steps, what to say, when to stop — in the moment it is needed.</p>
-    <a href="#situations" class="hero-cta reveal reveal-delay-3">View situations →</a>
-  </div>
-  <div class="hero-right">
-    <div class="hero-stat reveal reveal-delay-1">
-      <div class="hero-stat-num">47.8%</div>
-      <div class="hero-stat-text">of all EEOC charges are retaliation claims — often triggered by a supervisor's response to a complaint.</div>
-      <div class="hero-stat-source">EEOC / OnPay, 2026</div>
-    </div>
-    <div class="hero-stat reveal reveal-delay-2">
-      <div class="hero-stat-num">41%</div>
-      <div class="hero-stat-text">of frontline managers changed jobs in the past year — often because they felt unprepared for what the role required.</div>
-      <div class="hero-stat-source">Fountain Frontline Report, 2025</div>
-    </div>
-    <div class="hero-stat reveal reveal-delay-3">
-      <div class="hero-stat-num">Personal</div>
-      <div class="hero-stat-text">liability. Managers and supervisors can be held personally liable for FLSA violations — including when they did not know the violations occurred.</div>
-      <div class="hero-stat-source">Burr &amp; Forman, 2025</div>
+    <div class="hero-eyebrow">Supervisorline℠ · Performance Support · Frontline Supervision</div>
+    <h1 class="hero-title">The moment arrives. Built for the supervisor in the room.</h1>
+    <p class="hero-sub">Supervisors face live, high-stakes moments with no time to search a policy manual. Supervisorline℠ surfaces the complete response — routing tier, steps, what to say, when to stop — in the moment it is needed.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary"><span>Book Discovery Call &mdash; $500</span></a>
+      <a href="demos.html" class="btn-outline">See a Live Demo</a>
     </div>
   </div>
+  <div class="hero-right" style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);text-align:center;">[Product art / sector pills — real visual asset not yet built, honestly left blank]</div>
 </section>
 
-<!-- ROUTING GATE -->
-<div class="routing-gate">
-  <div class="routing-inner">
-    <div class="routing-eyebrow">Routing Architecture · Nova v1 · Session 136</div>
-    <h2 class="routing-title">Every situation has a routing tier.<br>Know yours before you act.</h2>
-    <div class="routing-tiers">
-      <div class="routing-tier">
-        <span class="tier-badge tier-1-badge">Tier 1 — Supervisor Handles</span>
-        <h3>Supervisor Owns and Resolves</h3>
-        <p>No protected class allegation. No formal complaint. No leave or accommodation disclosure. Within the supervisor's documented authority. HR notification is discretionary.</p>
-      </div>
-      <div class="routing-tier">
-        <span class="tier-badge tier-2-badge">Tier 2 — Escalate to HR</span>
-        <h3>Stop. Contact HR Before Next Action.</h3>
-        <p>Employee discloses a medical condition, pregnancy, disability, or accommodation need. Any protected class allegation raised, even informally. Termination or PIP with a leave or accommodation in the background. Supervisor is uncertain whether an action would constitute retaliation.</p>
-      </div>
-      <div class="routing-tier">
-        <span class="tier-badge tier-3-badge">Tier 3 — External Reporting</span>
-        <h3>Legal / Compliance Now.</h3>
-        <p>EEOC charge received. DOL WHD complaint filed. NLRB charge. OSHA complaint or recordable injury. Employee has retained legal counsel. No substantive decision is made without legal review.</p>
-      </div>
-    </div>
-    <div class="routing-hard-rule">
-      ⛔ Hard rule: The supervisor cannot make a termination, demotion, or discipline decision that involves any Tier 2 condition without HR sign-off. Any Tier 3 condition goes to Legal/Compliance immediately — not HR, not the supervisor.
-    </div>
-  </div>
-</div>
-
-<!-- SITUATIONS -->
-<main id="main-content">
-<section class="sit-section" id="situations">
-  <div class="sit-section-eyebrow">Situations</div>
-  <h2 class="sit-section-title">25 Situations — All 5 Categories</h2>
-  <div class="sit-section-meta">Sourced from 3-track primary research · Sessions 131 + 136 · 7 governing statutes · 5 categories: Performance &amp; Discipline · Leave &amp; Accommodation · Conflict &amp; Conduct · Mental Health &amp; Crisis · Safety · Wages &amp; Pay · Rudolph CX LLC</div>
-
-  <div class="sit-grid">
-
-    <!-- S-01: Verbal Coaching -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-01</div>
-        <div class="sit-card-title">Verbal Coaching Conversation — Performance Issue</div>
-        <div class="sit-card-tags">
-          <span class="sit-tag sit-tag-t1">Tier 1</span>
-        </div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 — Supervisor Handles · Escalate to Tier 2 if protected class emerges</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Before the conversation: confirm the specific performance issue, dates, and observable behaviors. Do not enter a coaching conversation based on impressions — document the specific facts you will address.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Open with the purpose: "I want to talk with you about [specific behavior/performance issue]. This is a coaching conversation — I want to understand your perspective and make sure we're aligned on expectations." Do not open with accusation.</span></li>
-          <li><span class="sit-step-num">3.</span><span>State the specific issue, with dates and observable examples. "On [date], I observed [specific behavior]. The expectation is [standard]. The gap I'm seeing is [specific gap]."</span></li>
-          <li><span class="sit-step-num">4.</span><span>Ask — do not assume. "Is there something going on that I should know about?" Listen fully before responding. If the employee discloses a medical condition, leave need, or protected class issue: <strong>stop the coaching conversation immediately and route to HR (Tier 2).</strong></span></li>
-          <li><span class="sit-step-num">5.</span><span>If no Tier 2 trigger: confirm the expectation going forward, the support you will provide, and the timeline for follow-up. Document in your own supervisor notes: date, issue discussed, employee's response, agreed next steps. Do not over-document or create a paper trail that implies termination is imminent unless that is the actual next step.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; NLRA Section 7 — Right to Representation</div>
-          If the employee asks to have a coworker present for a conversation they reasonably believe could result in discipline, they may have Weingarten rights if they are in a union. Non-union employees have no statutory right to representation during an investigative interview, but your organization's policy may grant it. Know your policy before the conversation.
-        </div>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; Immediate Tier 2 Triggers</div>
-          If the employee discloses a medical condition, mentions FMLA, references a pregnancy or accommodation need, or raises a discrimination or harassment allegation during the coaching conversation — stop immediately. Document that you stopped. Contact HR before any next step.
-        </div>
-        <div class="sit-card-reg">Title VII · ADA · FMLA · NLRA Section 7 · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- S-02: Written Warning -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-02</div>
-        <div class="sit-card-title">Written Warning Delivery</div>
-        <div class="sit-card-tags">
-          <span class="sit-tag sit-tag-t1">Tier 1</span>
-          <span class="sit-tag sit-tag-t2">→ Tier 2 if protected class</span>
-        </div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 — Supervisor initiates · HR should review warning before delivery</div>
-        <div class="sit-stat">
-          <span class="sit-stat-figure">47.8%</span>
-          <span class="sit-stat-text">of EEOC charges are retaliation claims. Discipline delivered shortly after a complaint creates timeline exposure. Know your timeline before you deliver.</span>
-          <span class="sit-stat-source">EEOC / OnPay, 2026</span>
-        </div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Before delivery: confirm HR has reviewed the written warning. Confirm the employee has no open EEOC complaint, active leave request, or recent accommodation request that could create a retaliation timeline. If any of these are present: route to HR (Tier 2) before delivering the warning.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Deliver in private. Have a second supervisor or HR present as a witness. Do not deliver a written warning in a public space or with non-supervisory employees present.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Read the warning aloud or give the employee time to read it. State the specific policy violation, the prior coaching conversation (if applicable), the dates, and the expectation going forward. Do not editorialize or extend the conversation beyond the written document.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Ask the employee to sign as acknowledgment — not agreement. If they refuse: note "Employee declined to sign" on the document, have the witness sign, and retain. A refusal to sign does not invalidate the warning.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document: date, time, who was present, employee's response, whether they signed. Forward to HR for the personnel file. Note any commitments made by either party during the conversation.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; Retaliation Timeline Risk</div>
-          If the employee has filed a complaint, raised a protected class issue, or taken protected leave in the past 90 days, and a written warning is delivered shortly after, a retaliation claim becomes viable regardless of the warning's substantive merit. Have HR review the timing before delivery.
-        </div>
-        <div class="sit-card-reg">Title VII · ADA · FMLA anti-retaliation · ADEA · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- S-03: FMLA Leave Request -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-03</div>
-        <div class="sit-card-title">FMLA Leave Request — Employee Discloses</div>
-        <div class="sit-card-tags">
-          <span class="sit-tag sit-tag-t2">Tier 2 — HR Immediately</span>
-        </div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge" style="background:#fdf4e0;color:var(--amber);border:1px solid #e0c888;">Tier 2 — Route to HR before any action · 5-business-day notice deadline</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>The employee does not need to say the words "FMLA" to trigger your obligation. If they mention a serious health condition, a family member's serious health condition, a surgery, childbirth, or a need for more than a few days off for a medical reason — FMLA may apply. Contact HR within 5 business days of becoming aware.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Do not deny, delay, or discourage. Do not say "let's see how you feel" or "can you wait until after the project?" Do not ask for more details than necessary to identify whether the request may be FMLA-qualifying. The employee is not required to diagnose their own condition.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Contact HR immediately. HR will: provide the FMLA notice within 5 business days, send the certification form, and manage the interactive process. Your role ends at the contact point — HR owns the FMLA process.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Document: the date the employee raised the leave need, the words they used, and that you immediately contacted HR. Do not document the employee's medical details — that is HR's domain, not yours.</span></li>
-          <li><span class="sit-step-num">5.</span><span>During approved FMLA leave: do not contact the employee about work unless absolutely necessary and HR has cleared the contact. The supervisor cannot contact the employee's health care provider to authenticate or clarify a certification.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; Direct Contact Prohibited</div>
-          Under FMLA regulations, the direct supervisor cannot contact the employee's health care provider to authenticate or clarify a medical certification. Only HR or a health care professional designated by the employer may make that contact. Supervisors who attempt it create independent FMLA violations.
-        </div>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; PWFA Overlay</div>
-          If the leave need is pregnancy-related, PWFA also applies. The employee may be entitled to a reasonable accommodation short of leave — modified duties, schedule changes, more frequent breaks. HR must conduct the interactive process. Do not assume leave is the only option.
-        </div>
-        <div class="sit-card-reg">FMLA 29 CFR § 825 · PWFA (effective June 2023) · ADA · DOL FMLA regulations · Supervisor contact prohibition</div>
-      </div>
-    </div>
-
-    <!-- S-04: Harassment Complaint -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-04</div>
-        <div class="sit-card-title">Harassment Complaint Received — Employee Reports to Supervisor</div>
-        <div class="sit-card-tags">
-          <span class="sit-tag sit-tag-t2">Tier 2 — HR Immediately</span>
-        </div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge" style="background:#fdf4e0;color:var(--amber);border:1px solid #e0c888;">Tier 2 — Route to HR immediately · Do not investigate yourself</div>
-        <div class="sit-stat">
-          <span class="sit-stat-figure">47.8%</span>
-          <span class="sit-stat-text">of EEOC charges involve retaliation. The most common trigger: the supervisor's response to the initial complaint.</span>
-          <span class="sit-stat-source">EEOC / OnPay, 2026</span>
-        </div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Listen without judgment. Do not minimize ("are you sure that's how it happened?"), promise a specific outcome ("I'll make sure that person is fired"), or express disbelief. Your posture in this moment determines whether the employee will cooperate with HR's investigation.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Do not investigate yourself. Do not call in the accused employee. Do not ask other coworkers what they saw. Any investigation you conduct independently can taint the formal investigation HR must conduct and creates independent liability for you and the organization.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Contact HR immediately — same day, same shift if possible. Inform HR: that a complaint was made, the general nature of the allegation, and the identity of the complainant (unless HR instructs otherwise). HR owns the process from this point forward.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Tell the employee: "I am required to report this to HR. They will follow up with you directly. You will not be retaliated against for making this report — retaliation is prohibited." Do not promise confidentiality beyond what HR will actually maintain.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document: date and time the employee came to you, their exact words (to the extent you can accurately recall), your immediate response, and that you contacted HR. Do not share this documentation with anyone other than HR.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; If the Complaint Is About You</div>
-          If the employee is making a complaint about your conduct: do not attempt to manage this yourself. Contact HR immediately and disclose that you are the subject of the complaint. Do not retaliate. Do not have further one-on-one contact with the complainant unless HR specifically authorizes it.
-        </div>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; 8 States Have Mandatory Supervisor Training</div>
-          CA, CT, DE, IL, ME, NY, WA, PR require mandatory harassment training for supervisors. CA: 2 hours, every 2 years. NY: annual. CT: within 6 months of assuming a supervisory role. Know your jurisdiction's requirement.
-        </div>
-        <div class="sit-card-reg">Title VII · ADEA · ADA · PWFA · Anti-retaliation provisions all statutes · EEOC Harassment Guidance</div>
-      </div>
-    </div>
-
-    <!-- S-05: Off-the-Clock Work -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-05</div>
-        <div class="sit-card-title">Off-the-Clock Work Situation — Supervisor Becomes Aware</div>
-        <div class="sit-card-tags">
-          <span class="sit-tag sit-tag-t1">Tier 1 → correct immediately</span>
-          <span class="sit-tag sit-tag-t2">Tier 2/3 if pattern or complaint</span>
-        </div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 if isolated and corrected · Tier 2 if systemic · Tier 3 if DOL complaint filed</div>
-        <div class="sit-stat">
-          <span class="sit-stat-figure">$259M</span>
-          <span class="sit-stat-text">recovered in back wages for 177,000 workers in FY2025. Off-the-clock work is one of the most common FLSA violations — and supervisors are personally liable.</span>
-          <span class="sit-stat-source">U.S. Department of Labor, January 2026</span>
-        </div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>If you become aware that an employee is performing work before clocking in, after clocking out, during an unpaid meal break, or on their personal device after hours: you are legally required to address it. "Suffer or permit" to work means the employer owes the wages regardless of whether the supervisor explicitly authorized the work.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Stop the off-the-clock work immediately. Tell the employee directly: "I need you to stop working until you are clocked in. If you need to stay past your scheduled end time, clock back in. Do not perform work off the clock." Be clear and direct.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Correct the timekeeping for the current pay period. Work with HR/payroll to ensure the employee is compensated for any time already worked off the clock. Failure to compensate creates back pay liability plus potential liquidated damages (doubling the amount owed).</span></li>
-          <li><span class="sit-step-num">4.</span><span>Determine whether this is isolated (one employee, one incident) or systemic (a practice across the team or department). If systemic: route to HR (Tier 2) and do not attempt to resolve independently. A pattern of off-the-clock work is a wage theft investigation waiting to happen.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document: date and nature of the off-the-clock work discovered, correction made, timekeeping adjustment, and the conversation with the employee. If a DOL complaint has already been filed: route to Legal (Tier 3) immediately.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; Personal Liability — You Are an Employer Under FLSA</div>
-          Supervisors and managers who control the terms of employment — including who is assigned work and when they work — can be held personally liable for FLSA violations. Personal liability applies even when the supervisor did not know the violation was occurring. "I didn't know they were working" is not a complete defense if the supervisor had reason to know.
-        </div>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; Tip Theft — Separate Violation</div>
-          Supervisors are prohibited from keeping any portion of tips earned by employees. If tips are being pooled and any portion is directed to supervisors or managers: this is a separate FLSA violation. Contact HR (Tier 2) immediately and do not continue the practice.
-        </div>
-        <div class="sit-card-reg">FLSA 29 U.S.C. § 206-207 · "Suffer or permit" standard · Personal supervisor liability · Back wages up to 3 years (willful) + liquidated damages · DOL WHD</div>
-      </div>
-    </div>
-
-
-    <!-- ======================== PERFORMANCE & DISCIPLINE (S-06 through S-09) ======================== -->
-
-    <!-- S-06: PIP Initiation -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-06</div>
-        <div class="sit-card-title">PIP Initiation — Performance Improvement Plan</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t2">Tier 2 — HR Must Review Before Delivery</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t2">Tier 2 — HR reviews and approves PIP before supervisor delivers</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Before initiating a PIP: confirm with HR that the performance issue is documented, that prior coaching conversations are on record, and that no Tier 2 conditions exist in the background (active leave request, accommodation, recent protected class complaint). A PIP delivered to an employee who recently returned from FMLA or requested an ADA accommodation creates strong retaliation exposure.</span></li>
-          <li><span class="sit-step-num">2.</span><span>HR must review the PIP document before delivery. The PIP must state: specific performance gaps with measurable standards, the timeline for improvement, the support the organization will provide, and the consequence if standards are not met. Vague PIPs are challenged and lost.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Deliver the PIP in a private meeting with an HR representative present. Explain each section. Give the employee time to read. Ask if they have questions — do not shut down the conversation.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the employee discloses a medical condition, leave need, or protected class issue during or immediately after PIP delivery: pause the PIP process and contact HR. A disclosure during a PIP conversation can restart the interactive process obligation and may require the PIP to be held.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document every check-in during the PIP period. Positive progress as well as continued gaps. If the employee meets the PIP standards: close it formally. Continued documentation of only failures creates one-sided records that look punitive in litigation.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; Pretextual PIP Risk</div>
-          A PIP initiated shortly after a complaint, accommodation request, or protected class disclosure is a retaliation claim waiting to happen regardless of the underlying performance issue's legitimacy. HR must evaluate the timing before any PIP is initiated.
-        </div>
-        <div class="sit-card-reg">Title VII · ADA · FMLA anti-retaliation · ADEA · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- S-07: Termination Conversation -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-07</div>
-        <div class="sit-card-title">Termination Conversation</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t2">Tier 2 — HR Required</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t2">Tier 2 — HR approves before any termination conversation occurs</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>No termination conversation happens without HR approval. Before the conversation: HR must confirm documentation is complete, there are no Tier 2 conditions in the background, the termination is consistent with how similar situations were handled for other employees, and legal has reviewed if there is any EEOC/DOL activity connected to this employee.</span></li>
-          <li><span class="sit-step-num">2.</span><span>The conversation should be brief. State the decision clearly: "Today is your last day. We are ending your employment." Do not explain at length, debate the decision, or invite negotiation. The decision is made — the conversation is notification, not discussion.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Have HR or a second supervisor present as a witness. Be compassionate but clear. Do not apologize in a way that implies the decision is wrong. Do not make statements about what the employee "should have done" — these become evidence.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Provide: information about final pay (per state law — many states require immediate or next-business-day payment), COBRA/benefits continuation notice, separation agreement if applicable (HR handles this), and return of company property.</span></li>
-          <li><span class="sit-step-num">5.</span><span>If the employee becomes emotionally distressed or makes a protected class allegation during the termination conversation: document the exact words used. Do not change the termination decision based on an in-the-moment statement — but flag it to HR and Legal immediately after the meeting.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; If the Employee Is on Leave or Has an Open Accommodation Request</div>
-          Terminating an employee while they are on FMLA leave, or while an ADA accommodation request is pending, is presumptively retaliatory. HR and Legal must review before any termination conversation occurs in these circumstances.
-        </div>
-        <div class="sit-card-reg">Title VII · ADA · FMLA · ADEA · WARN Act (for larger layoffs) · State final pay laws vary</div>
-      </div>
-    </div>
-
-    <!-- S-08: Progressive Discipline Decision Point -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-08</div>
-        <div class="sit-card-title">Progressive Discipline Decision Point — Next Step</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1</span><span class="sit-tag sit-tag-t2">→ Tier 2 for final warning or termination</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 for early steps · Tier 2 when final warning or termination is the next step</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Before deciding the next disciplinary step: confirm what the prior steps were and what was documented. Progressive discipline requires consistency — the same step for the same issue at the same stage. Skipping steps or jumping to termination without documentation invites challenge.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Confirm what your organization's progressive discipline policy states. Policy defines the steps — verbal warning, written warning, final warning, termination. Deviating from policy without documented justification creates inconsistency that is hard to defend.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Check: has this same issue been handled consistently for other employees? If one employee was verbally warned for the same issue and this employee is being written up, document why the difference is justified. Inconsistent treatment by protected class is a disparate treatment claim.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the next step is a final warning or termination: route to Tier 2. HR must review before the next conversation with the employee. No final warning or termination without HR sign-off.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the decision and rationale before the conversation happens — not after. A well-dated pre-conversation memo establishes the decision was not reactive to anything the employee said in the meeting.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; Consistency Is the Defense</div>
-          The single most effective defense against a discrimination claim in a discipline case is documented, consistent application of the same standard to all employees. Build that record from the first coaching conversation.
-        </div>
-        <div class="sit-card-reg">Title VII · ADEA · ADA · Organizational policy governs steps · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- S-09: Insubordination in the Moment -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-09</div>
-        <div class="sit-card-title">Insubordination in the Moment — Employee Refuses Direction</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1 — de-escalate first</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 — supervisor manages in the moment · Tier 2 if safety concern or formal complaint follows</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Do not escalate the confrontation. Raising your voice, making threats, or issuing ultimatums in the moment makes the situation worse and creates a hostile environment allegation risk. Lower your register, create physical space, and lower the stakes of the immediate exchange.</span></li>
-          <li><span class="sit-step-num">2.</span><span>State the directive clearly and once: "I need you to [specific action] by [specific time]. We can discuss your concerns after." Do not repeat the directive five times — repetition signals that the employee can negotiate the outcome.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee continues to refuse: end the immediate conversation. "We'll pause here and continue this conversation after your shift / in my office at [time]." Do not conduct a discipline conversation on the floor in front of other employees.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the employee's refusal involves a safety concern (they are refusing to do something because they believe it is unsafe): this is protected activity under OSHA. Do not discipline for a safety-related refusal until you have confirmed the safety concern is unfounded. Contact HR if the employee cites safety as the reason for refusal.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document immediately after the incident: exact words the employee used, your response, witnesses present, time, location. Document while it is fresh. This contemporaneous record is critical if the situation escalates to formal discipline.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; NLRA Section 7 — Protected Concerted Activity</div>
-          If the employee is refusing a directive in coordination with other employees (a group refusal, a work slowdown, or a complaint about working conditions on behalf of the group), this may be protected concerted activity under the NLRA. Do not discipline for group refusals related to wages, hours, or working conditions without HR review.
-        </div>
-        <div class="sit-card-reg">OSHA General Duty Clause · NLRA Section 7 · Title VII (if refusal tied to protected class issue) · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- ======================== LEAVE & ACCOMMODATION (S-10 through S-13) ======================== -->
-
-    <!-- S-10: ADA Accommodation Request -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-10</div>
-        <div class="sit-card-title">ADA Accommodation Request — Employee Discloses Disability</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t2">Tier 2 — HR Immediately</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t2">Tier 2 — HR owns the interactive process · Supervisor does not conduct alone</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>The employee does not need to use the word "disability" or "accommodation" to trigger your ADA obligation. If they disclose a medical condition that affects their ability to perform their job, or ask for a change in duties, schedule, or equipment for a medical reason — route to HR immediately.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Do not deny the request yourself. Do not say "we can't do that" or "that's not how we operate" before HR conducts the interactive process. The ADA requires a good-faith interactive process — an immediate denial by the supervisor bypasses it entirely and creates direct liability.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Contact HR the same day. HR will: initiate the interactive process, request medical documentation (through proper channels — not you), evaluate whether a reasonable accommodation exists, and document the process.</span></li>
-          <li><span class="sit-step-num">4.</span><span>During the interactive process: continue to treat the employee as you would any other employee. Do not alter their schedule, duties, or workload unilaterally while accommodation is pending — changes without HR guidance can themselves become ADA claims.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document that you received the disclosure and immediately contacted HR. Do not document the medical details the employee shared — that is HR's domain and must be kept in a separate file from the personnel file under ADA confidentiality requirements.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; ADA Confidentiality — Medical Information Is Not Personnel Information</div>
-          Medical information shared during an ADA accommodation request must be kept in a separate, confidential file — not the employee's general personnel file. Supervisors who share an employee's medical information with coworkers, other supervisors, or anyone without a need to know create independent ADA violations.
-        </div>
-        <div class="sit-card-reg">ADA 42 U.S.C. § 12101 · ADAAA · Interactive process requirement · Medical record confidentiality 29 CFR § 1630.14</div>
-      </div>
-    </div>
-
-    <!-- S-11: Return from Leave -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-11</div>
-        <div class="sit-card-title">Return from Leave — Reinstatement and Post-Leave Issues</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t2">Tier 2 — HR coordinates reinstatement</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t2">Tier 2 — HR manages reinstatement · Supervisor does not determine position on return alone</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>When an employee returns from FMLA leave: they are entitled to restoration to the same position or an equivalent position with the same pay, benefits, and terms. You cannot return them to a lesser position, reduce their duties, or change their schedule as a result of the leave.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Before the return date: contact HR to confirm the reinstatement plan. If the employee's position was backfilled, HR must determine whether the backfill is displaced or whether an equivalent position exists. The supervisor does not make this determination independently.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee returns with restrictions (can't lift, needs modified schedule): an ADA interactive process may be required simultaneously with the FMLA reinstatement. Contact HR immediately — the overlap of FMLA reinstatement and ADA accommodation is a high-exposure situation.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not initiate performance conversations, PIPs, or discipline within a short window of an employee's return from protected leave unless those actions were already in progress before the leave began and are documented as such. The timing creates retaliation exposure.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the return: date, position restored, any agreed modifications (through HR), and that the return was processed per the leave policy. File with HR — not in your own notes only.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; Post-FMLA ADA Additional Leave</div>
-          When FMLA exhausts and the employee still cannot return, ADA may require additional unpaid leave as a reasonable accommodation. HR and Legal must evaluate. The supervisor cannot simply terminate when FMLA runs out without this analysis.
-        </div>
-        <div class="sit-card-reg">FMLA 29 CFR § 825.214 (restoration) · ADA post-FMLA leave analysis · PWFA if pregnancy-related · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- S-12: PWFA / Pregnancy Accommodation -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-12</div>
-        <div class="sit-card-title">Pregnancy / PWFA Disclosure — Accommodation Request</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t2">Tier 2 — HR Immediately</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t2">Tier 2 — HR owns PWFA interactive process · Do not deny or delay</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>The PWFA (effective June 2023) requires covered employers to provide reasonable accommodations to employees with limitations related to pregnancy, childbirth, or related medical conditions — even if those limitations do not rise to the level of a disability under the ADA. The PWFA is broader than the ADA for this population.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Common PWFA accommodations: more frequent or longer bathroom breaks, modified schedule or shift, temporary reassignment from strenuous duties, ability to sit while working, closer parking. These are presumptively reasonable. Do not deny them without HR review.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Contact HR the same day the employee makes any pregnancy-related request or disclosure that touches their ability to perform their job. HR initiates the interactive process and coordinates with the employee on documentation needs.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not ask the employee for more medical detail than necessary. Do not ask questions about the pregnancy beyond what is needed to understand the limitation and evaluate the accommodation request.</span></li>
-          <li><span class="sit-step-num">5.</span><span>The PWFA prohibits retaliation. Any adverse action taken after a PWFA accommodation request — including schedule changes that disadvantage the employee, performance documentation that begins post-disclosure, or expressions of frustration about coverage — creates retaliation exposure.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; PWFA: 7 EEOC Lawsuits Filed in 2025 Including $100,000 Consent Decree</div>
-          EEOC enforcement of PWFA is active. Supervisors who deny pregnancy-related accommodation requests without HR review are creating direct organizational and personal liability.
-        </div>
-        <div class="sit-card-reg">PWFA (effective June 27, 2023) · ADA · Title VII Pregnancy Discrimination Act · EEOC PWFA enforcement 2025</div>
-      </div>
-    </div>
-
-    <!-- S-13: Repeated Illness Call-Outs / Pattern of Absences -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-13</div>
-        <div class="sit-card-title">Pattern of Absences — Repeated Illness Call-Outs</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1 initially</span><span class="sit-tag sit-tag-t2">→ Tier 2 if medical pattern emerges</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 for attendance conversation · Tier 2 if FMLA/ADA trigger is present</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Before any attendance conversation: review the pattern. Are the absences on specific days (every Monday)? Are they related to a medical condition the employee has disclosed? Are they connected to a family member's health? Each pattern carries different legal exposure.</span></li>
-          <li><span class="sit-step-num">2.</span><span>If the absences may be FMLA-qualifying (related to a serious health condition of the employee or family member, or occurring intermittently for a medical reason): do not address them as a pure attendance issue. Contact HR before any attendance conversation. The employee may be entitled to FMLA-protected intermittent leave.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If no FMLA trigger is identified: conduct a private conversation about the attendance pattern. State the specific absences, the impact on the team, and the attendance standard. Ask openly: "Is there something going on I should know about?" Listen fully. If the employee discloses a medical condition: route to HR (Tier 2) immediately.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not issue discipline for absences that turn out to be FMLA-qualifying. Discipline for FMLA-protected absences is an FMLA interference claim — one of the most straightforward claims to prove.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the attendance record accurately. Date, reason given (if any), and impact. Do not editorialize ("clearly does not want to be here") — stick to observable facts.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; Intermittent FMLA — Do Not Count It Against Attendance</div>
-          If an employee is on approved intermittent FMLA, their FMLA-protected absences cannot count toward attendance discipline. Tracking them or including them in an attendance warning creates FMLA interference liability. HR must flag which absences are FMLA-protected.
-        </div>
-        <div class="sit-card-reg">FMLA 29 CFR § 825 (intermittent leave) · ADA reasonable accommodation for chronic conditions · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- ======================== CONFLICT & CONDUCT (S-14 through S-17) ======================== -->
-
-    <!-- S-14: Workplace Conflict Between Employees -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-14</div>
-        <div class="sit-card-title">Workplace Conflict Between Employees — Supervisor Mediates</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1</span><span class="sit-tag sit-tag-t2">→ Tier 2 if protected class raised</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 for interpersonal conflict · Tier 2 immediately if harassment or discrimination raised</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Meet with each employee separately first. Do not bring them together until you understand each perspective. In a joint meeting before individual conversations, you risk one party dominating or the other party feeling ambushed.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Listen for protected class content in each employee's account. If either employee describes the other's behavior in terms that reference race, gender, religion, national origin, disability, age, or any other protected class: stop the informal mediation and route to HR (Tier 2) immediately. You are no longer mediating a personality conflict — you are handling a potential discrimination or harassment situation.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If no protected class content: focus each conversation on observable behavior and its impact on work. "When X happens, the effect on the team is Y." Do not ask employees to diagnose each other's motivations.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If appropriate, bring the employees together for a structured conversation. State the ground rules: focus on behaviors, not character; each person speaks, the other listens; the goal is to define what both parties will do differently going forward.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the resolution: what each party agreed to, date, and that you will follow up in 30 days. If the conflict continues or escalates after the conversation: escalate to HR (Tier 2).</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; Do Not Promise Confidentiality You Cannot Keep</div>
-          If either employee discloses something during an individual conversation that rises to a harassment or discrimination allegation, you are required to report it to HR. Do not promise confidentiality before you know what the employee will say.
-        </div>
-        <div class="sit-card-reg">Title VII · ADA · NLRA Section 7 · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- S-15: Employee Accused of Misconduct -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-15</div>
-        <div class="sit-card-title">Employee Accused of Misconduct — Supervisor Receives Report</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t2">Tier 2 — HR Immediately</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t2">Tier 2 — HR owns any investigation · Supervisor does not investigate</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Receive the report. Do not minimize, dismiss, or immediately defend the accused employee. "I find that hard to believe" and "that doesn't sound like them" are statements that can be used to show the organization failed to take the complaint seriously.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Contact HR immediately. The supervisor's role ends at intake. HR will determine whether to investigate, how to investigate, and what interim measures are needed while the investigation proceeds (e.g., separating the parties).</span></li>
-          <li><span class="sit-step-num">3.</span><span>Do not tell the accused employee about the complaint before HR decides how to proceed. Premature disclosure can compromise the investigation, create a retaliation risk, or cause destruction of evidence.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the accused employee is the supervisor's peer or a senior leader: route directly to HR. Do not attempt to manage a situation involving someone at or above your level.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document: what was reported, by whom, in what words, on what date. Forward to HR. Do not share with anyone else on the team.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; No Informal Resolution for Misconduct Allegations</div>
-          Do not attempt to resolve a misconduct allegation informally — talking to both parties, getting them to shake hands, or telling the complainant "I'll have a word with them." This approach fails the complainant, fails the accused's right to a fair process, and creates organizational liability.
-        </div>
-        <div class="sit-card-reg">Title VII · EEOC Harassment Guidance · Organizational investigation policy · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- S-16: Employee Discusses Wages with Coworker — Supervisor Wants to Discipline -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-16</div>
-        <div class="sit-card-title">Employee Discusses Wages with Coworker — Supervisor Considers Discipline</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t3">Tier 3 — Do Not Discipline</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge" style="background:#fdf0ee;color:var(--red);border:1px solid #e0b0a8;">Tier 3 — Do not discipline · NLRB violation risk · Contact HR and Legal before any action</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Stop. Under Section 7 of the NLRA, employees have the right to discuss their wages, hours, and working conditions with each other. This right applies to virtually all private-sector non-supervisory employees regardless of whether they are in a union.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Do not issue a verbal warning, written warning, or any form of discipline for wage discussions between employees. Do not send an email telling employees not to share pay information. Discipline for protected wage discussion is an NLRA violation — an unfair labor practice charge filed with the NLRB.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Contact HR immediately. If your organization has a policy that restricts wage discussions among employees, that policy is likely unenforceable and itself an NLRA violation. HR and Legal need to evaluate.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not retaliate in any indirect way — reducing hours, reassigning shifts, increasing scrutiny. Any adverse action connected to the wage discussion creates NLRB exposure and potential back pay liability.</span></li>
-          <li><span class="sit-step-num">5.</span><span>The only wage-related conversation supervisors may restrict: employees disclosing wage information they accessed through their supervisory role (e.g., payroll access) as part of their job duties — not wages they disclosed about themselves. Know the distinction.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; This Is Not Discretionary</div>
-          NLRA Section 7 is a federal right. Disciplining an employee for wage discussion is an unfair labor practice. It does not matter what the employee handbook says, what the supervisor was told by a prior manager, or whether the organization is union or non-union. Contact Legal before any action.
-        </div>
-        <div class="sit-card-reg">NLRA Section 7 · NLRB unfair labor practice charges · Section 8(a)(1) employer interference prohibition</div>
-      </div>
-    </div>
-
-    <!-- S-17: No Call / No Show -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-17</div>
-        <div class="sit-card-title">No Call / No Show — Employee Absent Without Notice</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1</span><span class="sit-tag sit-tag-t2">→ Tier 2 if medical emergency or protected leave</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 initially · Tier 2 if FMLA or medical emergency surfaces</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Attempt contact. Call the employee's direct number, then any emergency contact on file. Document each attempt with the time and outcome. Multiple contact attempts establish that the absence was unexcused — not that the organization failed to check.</span></li>
-          <li><span class="sit-step-num">2.</span><span>After the employee returns or makes contact: have a private conversation before they resume work. "I need to understand what happened. You were scheduled [day/shift] and we didn't hear from you." Listen fully before any disciplinary response.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee explains a medical emergency — their own or a family member's — assess whether the absence may be FMLA-qualifying. If yes: contact HR (Tier 2) before issuing any discipline. A no-call/no-show that turns out to be FMLA-protected cannot be disciplined as an attendance violation.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the employee provides no reason or an unprotected reason: follow the progressive discipline policy for unexcused absences. Document the conversation and the disciplinary step taken.</span></li>
-          <li><span class="sit-step-num">5.</span><span>If the employee has not contacted the organization after a defined period (typically 3 consecutive days per policy): consult HR before treating the absence as a voluntary resignation. "Job abandonment" terminations without confirmed contact attempts are challenged and sometimes reversed.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; Three-Day No Call May Not Be Job Abandonment</div>
-          Some states have specific job abandonment statutes or regulations. Some collective bargaining agreements define abandonment differently than policy. And a hospitalization or other emergency can explain even a multi-day no-call. HR must confirm before any termination for job abandonment.
-        </div>
-        <div class="sit-card-reg">FMLA 29 CFR § 825.303 (employee notice requirements) · Organizational attendance policy · State law varies · Rudolph CX Methodology</div>
-      </div>
-    </div>
-
-    <!-- ======================== MENTAL HEALTH & CRISIS (S-18 through S-20) ======================== -->
-
-    <!-- S-18: Employee in Mental Health Distress -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-18</div>
-        <div class="sit-card-title">Employee in Mental Health Distress — Supervisor Observes</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t2">Tier 2 — HR and EAP</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t2">Tier 2 — HR and EAP · Do not attempt to assess or treat</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>If you observe signs of significant distress — crying, withdrawal, erratic behavior, statements about hopelessness or not wanting to be here — respond with human compassion first. "I can see you're having a hard time. I want to make sure you're okay." Create a private space for the conversation.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Do not attempt to diagnose, assess risk level, or counsel the employee on mental health. You are not equipped to make clinical assessments and should not try. Your role is to connect the employee to support — not to provide it yourself.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Contact HR immediately. If the organization has an Employee Assistance Program (EAP): provide the employee with EAP contact information. The EAP is confidential — the supervisor and employer do not learn what the employee discusses with the EAP.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the employee makes any statement that suggests they may harm themselves or others: this is a crisis. Do not leave them alone. Contact HR and, if the threat appears imminent, contact emergency services. This is the one situation where the supervisor cannot simply pass the situation to HR and step back.</span></li>
-          <li><span class="sit-step-num">5.</span><span>After the immediate situation: document in general terms (employee appeared distressed, HR was notified, EAP information was provided). Do not document specific statements about the employee's mental health in your supervisor notes — route that documentation through HR.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; ADA May Apply</div>
-          Mental health conditions — including depression, anxiety, PTSD, and bipolar disorder — can qualify as disabilities under the ADA. If the employee's distress is related to a mental health condition, an accommodation request may follow. HR must manage that process.
-        </div>
-        <div class="sit-card-reg">ADA (mental health as disability) · MHPAEA (2024 parity rule provisions currently paused under federal non-enforcement policy while agencies draft replacement rules, targeted late 2026; 2013 rule + CAA 2021 NQTL analysis requirement still in effect) · EAP confidentiality · OSHA General Duty Clause (workplace violence)</div>
-      </div>
-    </div>
-
-    <!-- S-19: Personal Crisis Disclosure -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-19</div>
-        <div class="sit-card-title">Personal Crisis Disclosure — Employee Shares Outside Circumstances</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1 — support and refer</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 — supervisor responds with compassion · Tier 2 if leave need emerges</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Listen. An employee disclosing a personal crisis — domestic violence, serious illness in the family, financial emergency, housing crisis — is extending trust. Receive it without judgment, without problem-solving immediately, and without minimizing.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Separate the person from the performance. You may need to address the employee's performance or attendance — but not in the same conversation as the crisis disclosure. "Thank you for telling me. Right now I just want to make sure you know we support you. We can talk about work logistics separately."</span></li>
-          <li><span class="sit-step-num">3.</span><span>Provide EAP information. "Our EAP is confidential — no one here learns what you discuss with them. They can help with a range of personal situations." Do not require them to use it — offer it.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the crisis may require leave: ask HR about available options — FMLA (if applicable), state leave laws, organizational leave policies. Do not promise specific leave arrangements before checking with HR.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Do not share what the employee disclosed with other team members, even informally. "You should know [name] is going through something" violates the employee's privacy and trust, and in some circumstances (domestic violence) can create safety risks.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; Domestic Violence and Workplace Safety</div>
-          If an employee discloses a domestic violence situation and you have reason to believe it could affect workplace safety (an abuser may come to the workplace), contact HR immediately. Several states have specific legal protections for domestic violence survivors that affect leave rights and employer obligations.
-        </div>
-        <div class="sit-card-reg">ADA (crisis may disclose underlying disability) · State domestic violence leave laws vary · FMLA if family health need · EAP confidentiality</div>
-      </div>
-    </div>
-
-    <!-- S-20: Grief — Death of a Coworker -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-20</div>
-        <div class="sit-card-title">Grief — Death of a Coworker or Coworker's Family Member</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1 — supervisor leads response</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 — supervisor manages team response · HR coordinates policy and leave</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Acknowledge the loss directly with the team. Do not avoid it or pretend it is not affecting people. "I know many of you are aware of [what happened]. I want to acknowledge how hard this is. We are here to support each other." Silence from the supervisor amplifies distress.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Give people permission to not be okay. Performance expectations may need to flex temporarily. Check in with individual employees, especially those who were close to the deceased. Be present — not just task-focused.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Connect to EAP. Grief counseling is often an EAP service. Make the information available without requiring use. "I want everyone to know our EAP is available for grief support — it's confidential and completely optional."</span></li>
-          <li><span class="sit-step-num">4.</span><span>Coordinate with HR on bereavement leave if applicable. Know your organization's policy — how many days, for which relationships, with what documentation requirements. Do not apply the policy inconsistently across the team.</span></li>
-          <li><span class="sit-step-num">5.</span><span>In the weeks that follow: continue to check in. Grief does not resolve in the bereavement leave window. Employees who return quickly may still be significantly impacted. Notice behavioral changes and offer EAP proactively if distress continues.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-navy">
-          <div class="sit-callout-label">The Supervisor's Role in Grief</div>
-          Supervisors are not grief counselors — but they are the person the team sees first. How you respond in the first 24 hours shapes how the team experiences the organization's care for them. Being present, naming the loss, and creating permission to feel it is the supervisor's job.
-        </div>
-        <div class="sit-card-reg">Organizational bereavement policy · ADA if grief triggers underlying mental health condition · EAP referral protocol</div>
-      </div>
-    </div>
-
-    <!-- ======================== SAFETY (S-21 through S-22) ======================== -->
-
-    <!-- S-21: Workplace Injury — OSHA First Response -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-21</div>
-        <div class="sit-card-title">Workplace Injury — OSHA First Response</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t2">Tier 2 — HR and Safety Immediately</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t2">Tier 2 — Safety officer and HR immediately · Supervisor secures scene and documents</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Ensure the injured employee receives immediate medical attention. Do not delay care to complete paperwork. If the injury requires emergency medical response: call 911 first.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Secure the scene. Preserve the conditions as they existed at the time of the injury. Do not move equipment, clean up spills, or alter the environment until safety has evaluated the scene — preserving the scene is required for OSHA investigation.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Contact the safety officer and HR immediately. They will determine: whether the injury is OSHA-recordable, whether OSHA reporting is required (fatalities and hospitalizations have 8-hour and 24-hour reporting deadlines), and how to conduct the incident investigation.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Document witness information while the scene is fresh — names of anyone who observed the incident or was nearby. Do not coach witnesses on what to say. Do not suggest the employee was at fault before any investigation.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Do not retaliate against the injured employee for reporting the injury or for filing a workers' compensation claim. Adverse actions following a workplace injury report are OSHA-retaliation violations under Section 11(c).</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; OSHA Reporting Deadlines Are Hard</div>
-          Fatalities: report to OSHA within 8 hours. In-patient hospitalization, amputation, or loss of an eye: report within 24 hours. These are not optional — failure to report on time is a separate OSHA violation.
-        </div>
-        <div class="sit-card-reg">OSHA General Duty Clause · OSHA recordkeeping (29 CFR § 1904) · OSHA Section 11(c) anti-retaliation · Workers' compensation state law</div>
-      </div>
-    </div>
-
-    <!-- S-22: Workplace Violence Threat -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-22</div>
-        <div class="sit-card-title">Workplace Violence Threat — Employee Makes Threatening Statement</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t3">Tier 3 — Security / Legal / HR</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge" style="background:#fdf0ee;color:var(--red);border:1px solid #e0b0a8;">Tier 3 — Do not attempt to de-escalate alone · Security, HR, and Legal immediately</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Take every threat seriously. Do not make a judgment call about whether the person "really means it." Document the exact words used, context, and witnesses. Treat as credible until security and HR assess.</span></li>
-          <li><span class="sit-step-num">2.</span><span>If the threat is immediate and specific: call 911 first. Your job is to protect people in the space, not to manage the situation alone. Get others away from the individual if it can be done safely.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Contact security and HR simultaneously. Do not confront the employee alone. Do not attempt to "talk them down" unless you have specific training. You are not the right person to de-escalate a credible workplace violence situation.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Document exactly what was said, by whom, to whom, in what context, and who witnessed it. Do not paraphrase — use quotation marks for the actual words. This documentation is the foundation of both the security response and any subsequent legal action.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Do not share the threat details broadly with the team before security has assessed and a communication plan is in place. Uncoordinated disclosure can escalate fear or tip off the individual that the threat has been reported.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; OSHA General Duty Clause — Workplace Violence Is a Safety Issue</div>
-          Employers have an obligation under the OSHA General Duty Clause to maintain a workplace free from recognized hazards, including workplace violence. Failure to respond to a documented threat that later results in harm creates OSHA liability.
-        </div>
-        <div class="sit-card-reg">OSHA General Duty Clause · ADA (mental health may be relevant to response) · State criminal statutes · NLRA (if threat related to labor activity)</div>
-      </div>
-    </div>
-
-    <!-- ======================== WAGES & PAY (S-23 through S-25) ======================== -->
-
-    <!-- S-23: Pay Range Question from Employee -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-23</div>
-        <div class="sit-card-title">Pay Range Question — Employee Asks What the Range Is for Their Role</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1 — answer per policy</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 — supervisor answers per pay transparency policy · Tier 2 if pay equity allegation raised</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Know your jurisdiction. Multiple states (count varies by source, roughly 14-17) plus Washington D.C. have active pay transparency laws and the list is expanding — many require employers to provide pay ranges upon request or to include them in job postings. Verify the current count and requirements for this employee's location before responding.</span></li>
-          <li><span class="sit-step-num">2.</span><span>If your jurisdiction requires disclosure and your organization has a policy: provide the range as stated in policy. Do not editorialize about where the employee falls within it without HR guidance — that conversation is more complex than a range disclosure.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee asks where they fall within the range: you can share their current rate if you have it and policy permits. If they then raise a concern about why they are at a particular point in the range relative to peers: this is now a potential pay equity conversation. Route to HR (Tier 2).</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not tell an employee the range is confidential if you are in a jurisdiction that requires disclosure — that statement itself may be an NLRA or state pay transparency violation.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the conversation: what the employee asked, what you provided, and any follow-up requested. If the conversation escalated to a pay equity concern: note that HR was contacted.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; 17 States + D.C. Have Active Pay Transparency Laws</div>
-          CA, CO, CT, DE (eff. 2027), HI, IL, ME, MD, MA, MN, NV, NJ, NY, RI, VT, WA, plus D.C. Affecting an estimated 65% of U.S. employers. Know your state's specific requirement before any pay range conversation.
-        </div>
-        <div class="sit-card-reg">State pay transparency laws (2026) · NLRA Section 7 (wage discussion rights) · EPA / Title VII if pay equity issue surfaces</div>
-      </div>
-    </div>
-
-    <!-- S-24: Raise Conversation Delivery -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-24</div>
-        <div class="sit-card-title">Raise Conversation Delivery — Merit Cycle or Adjustment</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1</span><span class="sit-tag sit-tag-t2">→ Tier 2 if pay equity allegation raised</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 for standard delivery · Tier 2 immediately if protected class disparity raised</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Before the conversation: know the rationale for the raise decision. Be able to explain it in terms of performance, role scope, market data, or tenure — not in terms of the employee's financial situation, their willingness to accept less, or subjective impressions. Unexplained disparities between similarly situated employees are pay equity claims.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Deliver the amount and effective date clearly. Do not hedge or make the employee guess. "Your merit increase is X%, effective [date]. Your new rate is $Y." Then explain the rationale: "This reflects [performance factors]."</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee is disappointed and asks how their raise compares to others: do not reveal other employees' specific rates. You can explain the process: "Increases are determined by [factors] and applied consistently across the team." Do not speculate about what others received.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the employee raises a concern that their raise is lower than a colleague's because of their race, gender, age, or other protected class: route to HR immediately (Tier 2). Do not attempt to resolve a pay equity allegation in the raise conversation.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the conversation: amount communicated, effective date, employee's response, and any follow-up questions raised. If a pay equity concern was raised: note that HR was contacted.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn">
-          <div class="sit-callout-label">&#9888; Comments During Raise Conversations Create Exposure</div>
-          Statements interpreted as discriminatory during a raise conversation — "you're doing well for someone who just came back from leave," "you shouldn't need more given your family situation" — create independent Title VII claims. Stick to performance and process language.
-        </div>
-        <div class="sit-card-reg">EPA · Title VII · ADEA · State equal pay laws · NLRA Section 7 (wage discussion rights cannot be restricted) · PBW Law 2026</div>
-      </div>
-    </div>
-
-    <!-- S-25: Tip Pool Question or Complaint -->
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">S-25</div>
-        <div class="sit-card-title">Tip Pool Question or Complaint — Employee Raises Concern</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-t1">Tier 1 — explain policy</span><span class="sit-tag sit-tag-t2">→ Tier 2/3 if supervisor taking tips</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="routing-badge routing-badge-t1">Tier 1 to explain lawful tip policy · Tier 2+3 immediately if supervisor participation alleged</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Know the rule before the conversation: under the FLSA, tips always belong to the employees who earned them. Employers and supervisors are prohibited from keeping any portion of employees' tips for any reason. Tip credits and tip pools have specific rules — know your organization's policy and whether it complies.</span></li>
-          <li><span class="sit-step-num">2.</span><span>A lawful tip pool: employers who pay the full minimum wage (not using a tip credit) may operate a tip pool that includes non-tipped workers (e.g., cooks, dishwashers). Supervisors and managers are excluded from the pool — always.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee is asking how the tip pool works: explain the policy in plain terms. "Tips are pooled among [positions]. [X%] goes to [position]. Here's how it breaks down." If you do not know the details: get them from HR before the conversation.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the employee alleges that a supervisor or manager has been receiving a share of the tip pool: this is a FLSA violation. Route to HR and Legal (Tier 2 + Tier 3) immediately. Do not attempt to investigate or resolve this yourself. The DOL WHD will.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the conversation: what the employee asked, what you explained, and whether a potential violation was raised. If a violation was raised: note HR was contacted.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt">
-          <div class="sit-callout-label">&#9888; Supervisors Cannot Participate in Tip Pools — Ever</div>
-          FLSA prohibition is absolute: managers and supervisors cannot keep any portion of employees' tips, regardless of how the tip pool is structured or what the organization's policy says. A policy that gives supervisors a tip share is an unenforceable FLSA violation.
-        </div>
-        <div class="sit-card-reg">FLSA 29 U.S.C. § 203(m) · Tip pool rules (Consolidated Appropriations Act 2018) · DOL WHD tip enforcement · State tip laws may be stricter</div>
-      </div>
-    </div>
-
-
-  </div><!-- end sit-grid -->
-</section>
-</main>
-
-<!-- DISCLAIMER -->
-<div class="disclaimer-section">
-  <div class="disclaimer-inner">
-    <div class="disclaimer-text">
-      This guide supports supervisors in navigating live workplace moments. It does not constitute legal advice. When in doubt about legal exposure, consult HR before acting. Supervisors have personal liability under FLSA — including for violations they did not know occurred. Regulatory citations reflect research as of Session 131 (June 2026). Verify currency before applying. Built from 3-track primary source research · Rudolph CX LLC · Nova routing rules Session 136
-    </div>
-  </div>
-</div>
-
-<!-- PRICING -->
-{% include guide-pricing.html family="supervisorline_peopleline" guide_name="Supervisorline" possessive="your organization" discovery_note="We&rsquo;ll understand your organization&rsquo;s policies, escalation structure, and the live moments your team faces." %}
-
-<!-- CONTACT -->
-<section class="contact-section" id="contact">
+<!-- ═══════════════════════════════════════════════════
+     HOW IT WORKS — real facts, LOCKS.md §32
+     ═══════════════════════════════════════════════════ -->
+<section class="how-section section" id="how-it-works">
   <div class="section-inner">
-    <div class="contact-eyebrow">Start Here</div>
-    <h2 class="contact-title">Request a custom build<br>for your organization.</h2>
-    <p class="contact-sub">Tell us your role and industry. We'll send a sample built from a situation your supervisors face — before any commitment.</p>
-    <a href="https://book.squareup.com/appointments/mduphd9nbedqey/location/LB8E62TY4W9N1/services" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;background:#1e3a5f;color:#fff;padding:14px 28px;border-radius:3px;text-decoration:none;transition:opacity 0.2s;margin-bottom:1.5rem;">Book Discovery Call &mdash; $300 &rarr;</a>
-    <form class="contact-form" id="contact-form" onsubmit="handleSubmit(event)">
-      <input type="text" name="name" placeholder="Your name" required>
-      <input type="email" name="email" placeholder="Work email" required>
-      <input type="text" name="org" placeholder="Organization" required>
-      <select name="industry">
-        <option value="" disabled selected>Industry</option>
-        <option>Healthcare</option>
-        <option>Financial Services</option>
-        <option>Workforce Development</option>
-        <option>Reentry / Social Services</option>
-        <option>Retail / Hospitality</option>
-        <option>Government / Nonprofit</option>
-        <option>Other</option>
-      </select>
-      <textarea name="message" placeholder="What situations does your team face most often?"></textarea>
-      <button type="submit">Send request →</button>
-    </form>
-      <p style="margin-top:1rem;font-family:var(--mono);font-size:0.7rem;color:rgba(247,244,238,0.5);letter-spacing:0.04em;">or email: <a href="mailto:jamal@rudolphcx.com" style="color:rgba(247,244,238,0.75);">jamal@rudolphcx.com</a></p>
+    <div class="section-eyebrow reveal">From Intake to Delivery</div>
+    <h2 class="section-title reveal">Three stages. <em>One standard.</em></h2>
+    <div class="steps-3 reveal">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Discovery — $500</div>
+        <div class="step-subtitle">Your operation, assessed.</div>
+        <p class="step-desc">We assess your role, your highest-stakes situations, your source material, and your volume. You leave with a scoped estimate and an honest fit answer.</p>
+        <div class="step-badge">Credited in full toward build</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Build</div>
+        <div class="step-subtitle">Built from inside your role.</div>
+        <p class="step-desc">Constructed from official job aids and verified source documents. Situation-first design, not information categories.</p>
+        <div class="step-badge" style="color:var(--dim)"><span style="width:5px;height:5px;border-radius:50%;background:var(--dim);display:inline-block"></span>&nbsp;Build-time figure not yet re-verified this session</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Live — Day One</div>
+        <div class="step-subtitle">In the worker's hands. Ready.</div>
+        <p class="step-desc">Delivered as a custom HTML console. No app download, no login wall, no learning curve.</p>
+        <div class="step-badge">Live on delivery day</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Rudolph<span>CX</span></div>
-  <div class="footer-copy">Rudolph CX LLC &middot; Durham, NC &middot; rudolphcx.com</div>
-  <div class="footer-links">
-    <a href="/privacy.html">Privacy</a>
-    <a href="/terms.html">Terms</a>
-    <a href="#contact">Contact</a>
+<!-- ═══════════════════════════════════════════════════
+     BENEFITS — shell only; metrics [TEMPLATE], not invented
+     ═══════════════════════════════════════════════════ -->
+<section class="benefits-section section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Why It Works</div>
+    <h2 class="section-title reveal">Built to hold up under real conditions.</h2>
+    <div class="benefits-grid reveal">
+      <div class="benefit-card">
+        <div class="benefit-metric">Zero</div>
+        <div class="benefit-metric-label">typed data entry</div>
+        <div class="benefit-title">No Case-Specific Storage</div>
+        <p class="benefit-desc">Nothing typed in is ever saved. Every note is a generic, identical-every-time template the specialist fills in on their own system of record.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">Day One</div>
+        <div class="benefit-metric-label">deployment</div>
+        <div class="benefit-title">No IT Rollout</div>
+        <p class="benefit-desc">Delivered as a single HTML file. No app download, no login wall, no account setup, no subscription activation.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">Offline</div>
+        <div class="benefit-metric-label">always available</div>
+        <div class="benefit-title">Works Without Internet</div>
+        <p class="benefit-desc">Installs to any device and keeps working with no connection — the guide is there in the moment, signal or not.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">In Full</div>
+        <div class="benefit-metric-label">credited to build</div>
+        <div class="benefit-title">Discovery Isn't a Pitch</div>
+        <p class="benefit-desc">The $500 discovery call is real working time — and if you proceed, it's credited in full toward your build.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">Source</div>
+        <div class="benefit-metric-label">verified</div>
+        <div class="benefit-title">Built From Real Documents</div>
+        <p class="benefit-desc">Every step traces to your own job aids, policy manuals, and regulatory source material — never invented, never generic.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">50/50</div>
+        <div class="benefit-metric-label">payment split</div>
+        <div class="benefit-title">Clear Payment Terms</div>
+        <p class="benefit-desc">Half before work begins, half on delivery. No surprise invoicing, no ambiguity about when money moves.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     PRODUCT SHOWCASE — shell only, per Session 209: must be
+     rebuilt to real call/case handling, not filled here
+     ═══════════════════════════════════════════════════ -->
+<section class="showcase-section section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">See It Work</div>
+    <h2 class="section-title reveal">The real console, not a mockup.</h2>
+    <div class="showcase-frame reveal">Real, working Supervisorline demo &mdash; case review walkthrough. Shows the real guide surfacing a case's routing, steps, and hard stops &mdash; not a mockup UI that could drift from the real product. Available on request via Book Discovery, or as a pre-built situation in the Demo Center once live.</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     MOMENT QUOTE — canonical, verbatim
+     ═══════════════════════════════════════════════════ -->
+<section class="moment-section">
+  <div class="moment-inner">
+    <div class="moment-eyebrow reveal">The Moment</div>
+    <p class="moment-quote reveal">&ldquo;This is the moment. You're in the moment. You can't miss the moment because you can never relive that moment. And that moment is like a crossroad. If you in it, you cross the road. If not, you may get stuck at the crossroad.&rdquo;</p>
+    <div class="moment-attr reveal">Jamal Rudolph, Founder</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FAQ — shell + accordion JS; copy must be real per-guide,
+     never the prototype's fabricated figures
+     ═══════════════════════════════════════════════════ -->
+<section class="faq-section section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Questions</div>
+    <h2 class="section-title reveal">What people ask before they book.</h2>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" type="button">Is this appropriate for regulated industries &mdash; healthcare, financial, government?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. Rudolph CX holds an active SAM.gov registration (CAGE Code 21D84, UEI FN7DXBSUVHN7, EIN 42-2269436) and operates under the standard that every deliverable may be cited, questioned, or audited by government officials, regulatory bodies, or compliance teams.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Do workers need to download anything or log in?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">No. The guide is a single HTML file that opens in any browser. There's no app download, no login wall, no account setup. It works the same on day one as it does a year later.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">What happens to information a worker types into the guide?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Nothing case-specific is ever stored. The guide never accepts typed or free-form data entry of any kind — not a name field, not a note field. Case documentation is always a generic, blank template the worker fills in on your own system of record, outside the guide.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     PRICING — real include, real data, CSS now reconciled
+     ═══════════════════════════════════════════════════ -->
+<!-- PRICING — inlined here exactly as _includes/guide-pricing.html + _data/pricing.yml render for family="supervisorline_peopleline", guide_name="Supervisorline" -->
+<section class="pricing-section" id="pricing">
+<div class="section-inner">
+<div class="pricing-block">
+<div class="pb-eyebrow reveal">Pricing</div>
+<h2 class="pb-title reveal">One process. One contract.<br>Built for your supervisors.</h2>
+<p class="pb-sub reveal">Supervisorline follows the same proven build process as every Rudolph CX guide. It starts with a discovery call.</p>
+
+<div class="pb-discovery reveal">
+<div class="pb-discovery-tag">Discovery Call</div>
+<div class="pb-discovery-price">$500</div>
+<div class="pb-discovery-note">60 minutes. Non-refundable. Credits in full to your first invoice if you proceed.</div>
+</div>
+
+<div class="pb-discovery reveal">
+<div class="pb-discovery-tag">System-Language Fitting Fee</div>
+<div class="pb-discovery-price">$500</div>
+<div class="pb-discovery-note">One-time, applied to every build. Adapts the guide's language to your actual internal systems and terminology at build time.</div>
+</div>
+
+<div class="reveal" style="margin-top:8px">
+<div class="pb-tiers-label" style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold,#c49a3c);margin-bottom:14px">Supervisorline &amp; Peopleline &mdash; HR/People Operations</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Foundation</div><div style="font-size:12px;color:var(--dim,#4a453e)">Single category build</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$5,000</div>
+</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Full Build</div><div style="font-size:12px;color:var(--dim,#4a453e)">Standalone / cold sale</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$12,000</div>
+</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Full Build</div><div style="font-size:12px;color:var(--dim,#4a453e)">Existing Rudolph CX client (cross-sell)</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$9,600&ndash;10,200</div>
+</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Enterprise</div><div style="font-size:12px;color:var(--dim,#4a453e)">Multi-entity, custom routing, ongoing legal review</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$20,000+</div>
+</div>
+<div class="pb-tiers-note" style="margin-top:12px">50% deposit before work begins, 50% on delivery.</div>
+</div>
+
+<div class="retainer-block reveal">
+<div class="retainer-label">Annual Update Retainer</div>
+<div class="retainer-price">20% <span style="font-size:15px;color:var(--dim);font-weight:400;">of build price</span></div>
+<p class="retainer-note">Keeps your guide current as regulations, policies, or platform workflows change. Covers one annual review cycle with revisions. Scoped changes outside the annual cycle are billed as change orders.</p>
+</div>
+
+<a href="https://book.squareup.com/appointments/mduphd9nbedqey/location/LB8E62TY4W9N1/services" target="_blank" rel="noopener" class="pb-cta">Book Discovery Call &mdash; $500</a>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER — Rudolph CX brand persists (LOCKS.md §33)
+     ═══════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Rudolph<span style="color:var(--red)">CX</span></div>
+      <div class="footer-legal">
+        Rudolph CX LLC · Durham, NC 27703<br>
+        EIN 42-2269436 · CAGE 21D84 · UEI FN7DXBSUVHN7
+      </div>
+      <div class="footer-tagline">Every moment has a right move.&#8480;</div>
+    </div>
+    <div class="footer-legal"><a href="aidline.html">Aidline&#8480;</a>
+        <a href="caseline.html">Caseline&#8480;</a>
+        <a href="chartline.html">Chartline&#8480;</a>
+        <a href="lendline.html">Lendline&#8480;</a>
+        <a href="workline.html">Workline&#8480;</a>
+        <a href="reentryline.html">Reentryline&#8480;</a>
+        <a href="supervisorline.html">Supervisorline&#8480;</a>
+        <a href="peopleline.html">Peopleline&#8480;</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="about.html">About</a></div>
   </div>
 </footer>
 
-<script>
-function toggleSit(header) {
-  const body = header.nextElementSibling;
-  const isOpen = header.classList.contains('open');
-  document.querySelectorAll('.sit-card-header.open').forEach(h => {
-    h.classList.remove('open');
-    h.setAttribute('aria-expanded', 'false');
-    h.nextElementSibling.classList.remove('open');
-  });
-  if (!isOpen) {
-    header.classList.add('open');
-    header.setAttribute('aria-expanded', 'true');
-    body.classList.add('open');
-  }
-}
+<!-- ═══════════════════════════════════════════════════
+     PWA INSTALL BANNER — generalized markup
+     ═══════════════════════════════════════════════════ -->
+<div id="pwa-install-banner" role="complementary" aria-label="Install guide for offline use">
+  <div class="pwa-text">
+    <strong>Save for offline use</strong>
+    Install this guide to your device &mdash; works without internet.
+  </div>
+  <button id="pwa-install-btn">Install</button>
+</div>
 
-// Keyboard support
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.sit-card-header').forEach(function(h) {
-    h.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSit(h); }
+<script>
+/* ── Mobile nav ── */
+(function() {
+  var toggle = document.getElementById('nav-toggle');
+  var links = document.getElementById('primary-nav-links') || document.querySelector('.nav-links');
+  if (!toggle || !links) return;
+
+  function closeMenu() {
+    links.classList.remove('mobile-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.nav-dd.mobile-dd-open').forEach(function(dd) { dd.classList.remove('mobile-dd-open'); });
+  }
+
+  toggle.addEventListener('click', function() {
+    var open = links.classList.toggle('mobile-open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  /* On mobile, tapping "Our Guides" opens the submenu instead of relying on hover (touch has no hover) */
+  document.querySelectorAll('.nav-dd > a').forEach(function(ddLink) {
+    ddLink.addEventListener('click', function(e) {
+      if (window.innerWidth > 900) return; /* desktop keeps real hover behavior */
+      e.preventDefault();
+      ddLink.closest('.nav-dd').classList.toggle('mobile-dd-open');
     });
   });
 
-  // Reveal animations
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
+  document.addEventListener('click', function(e) {
+    if (window.innerWidth > 900) return;
+    if (!e.target.closest('nav')) closeMenu();
+  });
+  window.addEventListener('resize', function() { if (window.innerWidth > 900) closeMenu(); });
+})();
+
+/* ── FAQ accordion ── */
+document.querySelectorAll('.faq-q').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(i) { i.classList.remove('open'); i.querySelector('.faq-icon').textContent = '+'; });
+    if (!wasOpen) { item.classList.add('open'); btn.querySelector('.faq-icon').textContent = '−'; }
+  });
 });
 
-// Contact form handler
-async function handleSubmit(e) {
-  e.preventDefault();
-  const btn = e.target.querySelector('button');
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
+/* ── Scroll reveal ── */
+if ('IntersectionObserver' in window) {
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+} else {
+  document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('is-visible'); });
+}
 
-  const formData = new FormData(e.target);
-  const data = Object.fromEntries(formData);
+/* ── PWA: service worker registration + install prompt ──
+   Pattern extracted from Aidline's existing code (read live this
+   session). Structurally coherent; not confirmed by an actual
+   install test — flag this if it doesn't work in practice. ── */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw-supervisorline.js');
+  });
 
-  // Webhook — Apps Script CRM intake
-  try {
-    await fetch('https://script.google.com/macros/s/AKfycbxbjH4789HDt-9w5zlPsKSiw8G0kPSco3hdm36V1hQcOcly6LgFP-nnXtStywHR2qIlHw/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({
-        token:   'RCX-WEBHOOK-2026-SECURE',
-        method:  'crm_intake',
-        name:    data.name || '',
-        org:     data.org || '',
-        email:   data.email || '',
-        message: `Industry: ${data.industry || 'Not specified'}\n\n${data.message || ''}`,
-        source:  'Supervisorline discovery form'
-      })
+  var deferredPrompt;
+  var banner = document.getElementById('pwa-install-banner');
+  var installBtn = document.getElementById('pwa-install-btn');
+
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (banner) banner.classList.add('visible');
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(result) {
+        console.log('PWA install result:', result.outcome);
+        deferredPrompt = null;
+        if (banner) banner.classList.remove('visible');
+      });
     });
-  } catch(err) { console.log('Webhook:', err); }
+  }
 
-  // HubSpot
-  try {
-    await fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fields: [
-          { name: 'firstname', value: data.name },
-          { name: 'email', value: data.email },
-          { name: 'company', value: data.org },
-          { name: 'message', value: `Industry: ${data.industry || 'Not specified'}\n\n${data.message || ''}` }
-        ],
-        context: { pageUri: window.location.href, pageName: 'Supervisorline℠' }
-      })
-    });
-  } catch(err) { console.log('HubSpot:', err); }
-
-  // EmailJS
-  try {
-    emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
-    await emailjs.send('service_u94nvbm', 'template_875pqb4', {
-      from_name: data.name, from_email: data.email,
-      organization: data.org, industry: data.industry || 'Not specified',
-      message: data.message || '', guide: 'Supervisorline℠'
-    });
-  } catch(err) { console.log('EmailJS:', err); }
-
-  btn.textContent = 'Sent — we\'ll be in touch.';
-  e.target.reset();
+  window.addEventListener('appinstalled', function() {
+    if (banner) banner.classList.remove('visible');
+    console.log('PWA installed successfully');
+  });
 }
 </script>
+
 </body>
 </html>
