@@ -1,0 +1,24 @@
+{
+  "name": "Aidline Demo\u2120 \u2014 Performance Support Guide",
+  "short_name": "Aidline Demo",
+  "description": "Rudolph CX LLC \u2014 Aidline Demo Performance Support Guide. Built for the moment the situation is live.",
+  "start_url": "/aidline-demo.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7f4ee",
+  "theme_color": "#8a6d1a",
+  "icons": [
+    {
+      "src": "/aidline-demo-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/aidline-demo-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
