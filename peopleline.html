@@ -266,6 +266,13 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
 @media (max-width: 500px) { #pwa-install-banner { bottom: 16px; right: 16px; left: 16px; max-width: none; } }
 
 </style>
+<style>
+.sit-list-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--cream3); border: 1px solid var(--cream3); margin-top: 40px; }
+.sit-list-item { background: var(--cream); padding: 18px 24px; display: flex; align-items: baseline; gap: 12px; }
+.sit-list-code { font-family: var(--mono); font-size: 10px; color: var(--red); font-weight: 600; letter-spacing: 0.02em; flex-shrink: 0; }
+.sit-list-title { font-size: 14px; color: var(--ink2); line-height: 1.5; font-weight: 400; }
+@media (max-width: 700px) { .sit-list-grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 
@@ -342,6 +349,36 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
   <div class="section-inner">
     <div class="section-eyebrow reveal">What It Covers</div>
     <h2 class="section-title reveal">Situations Peopleline&#8480; handles.</h2>
+    <div class="sit-list-grid">
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-01</span><span class="sit-list-title">Harassment Complaint Intake — HR Receives Formal or Informal Report</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-02</span><span class="sit-list-title">Retaliation Complaint — Employee Reports Adverse Action After Protected Activity</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-03</span><span class="sit-list-title">Anonymous Complaint — HR Receives Report Without Named Complainant</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-04</span><span class="sit-list-title">Employee Bypasses Supervisor — Comes Directly to HR</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-05</span><span class="sit-list-title">Manager Accused of Misconduct by Their Team</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-06</span><span class="sit-list-title">Supervisor Requests Termination Approval — HR Pre-Termination Review</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-07</span><span class="sit-list-title">Termination With Open Accommodation or Active Leave</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-08</span><span class="sit-list-title">Pretextual PIP — HR Identifies Possible Pretext in Discipline Process</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-09</span><span class="sit-list-title">Probationary Termination — Employee in Introductory Period</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-10</span><span class="sit-list-title">Inconsistent Discipline — HR Identifies Disparate Treatment Pattern</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-11</span><span class="sit-list-title">FMLA / ADA / PWFA Overlap — Three-Law Situation</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-12</span><span class="sit-list-title">Supervisor-Denied Accommodation — Employee Appeals to HR</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-13</span><span class="sit-list-title">Disability Disclosed During Performance Conversation</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-14</span><span class="sit-list-title">Formal Grievance Escalation — Employee Files Written Grievance</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-15</span><span class="sit-list-title">Senior Leader Accused of Misconduct — High-Visibility Investigation</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-16</span><span class="sit-list-title">EEOC Charge Received — Formal External Complaint</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-17</span><span class="sit-list-title">Domestic Violence Affecting Work — Safety and Leave Considerations</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-18</span><span class="sit-list-title">RIF Selection List Review — Disparate Impact Analysis</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-19</span><span class="sit-list-title">Merit Cycle Review — Protected Class Pay Pattern Analysis</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-20</span><span class="sit-list-title">Pay Equity Complaint Received — Employee Alleges Pay Discrimination</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-21</span><span class="sit-list-title">Supervisor Made Pay Transparency Violation — NLRA or State Law</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-22</span><span class="sit-list-title">Retention Raise Creates Comparator Exposure</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-23</span><span class="sit-list-title">Pay Range Question Escalated — Employee Alleges Disparity After Disclosure</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-24</span><span class="sit-list-title">Involuntary Separation Conversation Support — HR in the Room</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-25</span><span class="sit-list-title">ADA Accommodation Escalation — Employee Discloses Medical Condition Directly to HR</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-26</span><span class="sit-list-title">Return from Leave — Reinstatement Dispute or Restriction Question</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-27</span><span class="sit-list-title">Misconduct Complaint Escalation — Formal Complaint Beyond Supervisor Authority</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">P-28</span><span class="sit-list-title">Mental Health Crisis Escalation — HR Coordination and ADA Consideration</span></div>
+    </div>
     <p style="font-size:15px;color:var(--ink3);line-height:1.8;font-weight:300;max-width:640px;" class="reveal">28 real situations, built from official source material and live role experience. Full situation-by-situation detail is available on request during your discovery call.</p>
   </div>
 </section>
