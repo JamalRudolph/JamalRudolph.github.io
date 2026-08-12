@@ -256,12 +256,127 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
   </div>
 </nav>
 
-<section class="section" style="padding-top:180px;padding-bottom:160px;text-align:center;">
-  <div class="section-inner">
+<style>
+.demo-hero { padding: 180px 60px 80px; text-align: center; }
+.demo-hero-inner { max-width: 760px; margin: 0 auto; }
+.demo-honest-note { margin-top: 28px; padding: 20px 24px; background: var(--cream2); border-left: 3px solid var(--gold); text-align: left; font-size: 13px; color: var(--ink3); line-height: 1.8; font-weight: 300; }
+.demo-honest-note strong { color: var(--ink); font-weight: 600; }
+.demo-grid-section { padding: 0 60px 100px; }
+.demo-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--cream3); border: 1px solid var(--cream3); }
+.demo-card { background: var(--cream); padding: 40px 32px; display: flex; flex-direction: column; }
+.demo-card-family { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 14px; }
+.demo-card-title { font-family: var(--serif); font-size: 24px; font-weight: 600; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.01em; }
+.demo-card-situation { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: 0.04em; margin-bottom: 18px; }
+.demo-card-desc { font-size: 13px; color: var(--ink3); line-height: 1.75; font-weight: 300; margin-bottom: 24px; flex-grow: 1; }
+.demo-card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+.demo-card-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink3); background: var(--cream2); padding: 4px 10px; border: 1px solid var(--cream3); }
+.demo-card-cta { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 13px 0; background: var(--ink); color: var(--cream); text-decoration: none; text-align: center; transition: background 0.2s; }
+.demo-card-cta:hover { background: var(--red); }
+@media (max-width: 900px) { .demo-grid { grid-template-columns: 1fr; } }
+.demo-listing-section { padding: 0 60px 140px; }
+.demo-listing-inner { max-width: 1200px; margin: 0 auto; }
+.demo-listing-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-bottom: 24px; padding-top: 56px; border-top: 1px solid var(--cream3); }
+.demo-listing-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--cream3); border: 1px solid var(--cream3); margin-bottom: 40px; }
+.demo-listing-item { background: white; padding: 24px 20px; }
+.demo-listing-name { font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.demo-listing-sector { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
+.demo-listing-link { font-family: var(--mono); font-size: 10px; color: var(--red); text-decoration: none; letter-spacing: 0.04em; }
+.demo-listing-link:hover { text-decoration: underline; }
+.demo-cta-box { background: var(--ink); padding: 48px 56px; text-align: center; }
+.demo-cta-title { font-family: var(--serif); font-size: 28px; color: var(--cream); margin-bottom: 12px; }
+.demo-cta-desc { font-size: 14px; color: rgba(247,244,238,0.6); max-width: 480px; margin: 0 auto 28px; line-height: 1.7; font-weight: 300; }
+@media (max-width: 900px) { .demo-listing-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 560px) { .demo-listing-grid { grid-template-columns: 1fr; } }
+</style>
+
+<section class="demo-hero">
+  <div class="demo-hero-inner">
     <div class="section-eyebrow reveal" style="justify-content:center;">Demo Center</div>
-    <h1 class="section-title reveal">Live demos are in progress.</h1>
-    <p style="font-size:16px;color:var(--ink3);line-height:1.8;font-weight:300;max-width:560px;margin:0 auto 32px;" class="reveal">Real, interactive demonstrations of the guide console &mdash; not a mockup &mdash; are being built. In the meantime, the fastest way to see the real product is a discovery call, where we can walk through a live guide together.</p>
-    <a href="book.html" class="btn-primary reveal"><span>Book a Discovery Call</span></a>
+    <h1 class="section-title reveal">See the console in the actual moment.</h1>
+    <p style="font-size:16px;color:var(--ink3);line-height:1.8;font-weight:300;" class="reveal">Three real, interactive demonstrations &mdash; not mockups, not screenshots. Each one runs a genuine live situation from start to finish, the same way a specialist would work it in the field.</p>
+    <div class="demo-honest-note reveal">
+      <strong>Why three, not eight:</strong> every Rudolph CX guide is priced and built within one of three families &mdash; Aidline-family (call-desk guides), Chartline (HIPAA-governed clinical), and Supervisorline/Peopleline (HR &amp; people operations). One real, complete demo per family shows the actual console mechanics &mdash; hard stops, verification gates, case-note generation &mdash; that every guide in that family shares. It is not a claim that all eight guides have their own built demo.
+    </div>
+  </div>
+</section>
+
+<section class="demo-grid-section">
+  <div class="demo-grid">
+
+    <div class="demo-card reveal">
+      <div class="demo-card-family">Aidline-Family</div>
+      <div class="demo-card-title">Aidline&#8480;</div>
+      <div class="demo-card-situation">S-05 &middot; Claim Denied, Appeal Rights</div>
+      <p class="demo-card-desc">A live call-desk simulation: identity verification, a real regulatory hard stop, and the appeal-rights walkthrough &mdash; paced exactly as it plays out on a real call, including the case-note template it produces at the end.</p>
+      <div class="demo-card-tags">
+        <span class="demo-card-tag">Hard Stop Gate</span>
+        <span class="demo-card-tag">Offline / PWA</span>
+      </div>
+      <a href="aidline-demo.html" class="demo-card-cta"><span>Launch Demo &rarr;</span></a>
+    </div>
+
+    <div class="demo-card reveal">
+      <div class="demo-card-family">Chartline</div>
+      <div class="demo-card-title">Chartline&#8480;</div>
+      <div class="demo-card-situation">HIPAA Verification Failure</div>
+      <p class="demo-card-desc">Identity can't be verified. The console holds a hard compliance line with citation, channel-neutral by design &mdash; the same logic applies whether the request comes by phone, portal, chat, or email &mdash; and resolves through two real, honest paths forward.</p>
+      <div class="demo-card-tags">
+        <span class="demo-card-tag">HIPAA Compliance</span>
+        <span class="demo-card-tag">Channel-Neutral</span>
+      </div>
+      <a href="chartline-demo.html" class="demo-card-cta"><span>Launch Demo &rarr;</span></a>
+    </div>
+
+    <div class="demo-card reveal">
+      <div class="demo-card-family">Supervisorline &amp; Peopleline</div>
+      <div class="demo-card-title">Supervisorline&#8480; &rarr; Peopleline&#8480;</div>
+      <div class="demo-card-situation">S-04 &rarr; P-01 &middot; Harassment Escalation</div>
+      <p class="demo-card-desc">The only two-console demo, because these two guides are architecturally linked, not just co-priced. Watch a supervisor's real S-04 harassment allegation escalate directly into Peopleline's P-01 intake &mdash; the actual documented handoff between the two consoles.</p>
+      <div class="demo-card-tags">
+        <span class="demo-card-tag">Two-Console Handoff</span>
+        <span class="demo-card-tag">HR &amp; People Ops</span>
+      </div>
+      <a href="supervisorline-demo.html" class="demo-card-cta"><span>Launch Demo &rarr;</span></a>
+    </div>
+
+  </div>
+</section>
+
+<section class="demo-listing-section">
+  <div class="demo-listing-inner">
+    <div class="demo-listing-label">The Other Five Guides</div>
+    <div class="demo-listing-grid">
+      <div class="demo-listing-item">
+        <div class="demo-listing-name">Caseline&#8480;</div>
+        <div class="demo-listing-sector">Social Services</div>
+        <a href="caseline.html" class="demo-listing-link">View Guide &rarr;</a>
+      </div>
+      <div class="demo-listing-item">
+        <div class="demo-listing-name">Lendline&#8480;</div>
+        <div class="demo-listing-sector">Financial Services</div>
+        <a href="lendline.html" class="demo-listing-link">View Guide &rarr;</a>
+      </div>
+      <div class="demo-listing-item">
+        <div class="demo-listing-name">Workline&#8480;</div>
+        <div class="demo-listing-sector">Workforce Development</div>
+        <a href="workline.html" class="demo-listing-link">View Guide &rarr;</a>
+      </div>
+      <div class="demo-listing-item">
+        <div class="demo-listing-name">Reentryline&#8480;</div>
+        <div class="demo-listing-sector">Reentry &amp; Justice</div>
+        <a href="reentryline.html" class="demo-listing-link">View Guide &rarr;</a>
+      </div>
+      <div class="demo-listing-item">
+        <div class="demo-listing-name">Peopleline&#8480; (solo)</div>
+        <div class="demo-listing-sector">HR &middot; People Ops</div>
+        <a href="peopleline.html" class="demo-listing-link">View Guide &rarr;</a>
+      </div>
+    </div>
+    <div class="demo-cta-box">
+      <div class="demo-cta-title">Want to see your own guide live?</div>
+      <p class="demo-cta-desc">Every guide runs on the same real console architecture shown above. A discovery call is the fastest way to walk through the specific one you need.</p>
+      <a href="book.html" class="btn-primary"><span>Book a Discovery Call</span></a>
+    </div>
   </div>
 </section>
 
