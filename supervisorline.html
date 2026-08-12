@@ -266,6 +266,13 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
 @media (max-width: 500px) { #pwa-install-banner { bottom: 16px; right: 16px; left: 16px; max-width: none; } }
 
 </style>
+<style>
+.sit-list-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--cream3); border: 1px solid var(--cream3); margin-top: 40px; }
+.sit-list-item { background: var(--cream); padding: 18px 24px; display: flex; align-items: baseline; gap: 12px; }
+.sit-list-code { font-family: var(--mono); font-size: 10px; color: var(--red); font-weight: 600; letter-spacing: 0.02em; flex-shrink: 0; }
+.sit-list-title { font-size: 14px; color: var(--ink2); line-height: 1.5; font-weight: 400; }
+@media (max-width: 700px) { .sit-list-grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 
@@ -342,6 +349,33 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
   <div class="section-inner">
     <div class="section-eyebrow reveal">What It Covers</div>
     <h2 class="section-title reveal">Situations Supervisorline&#8480; handles.</h2>
+    <div class="sit-list-grid">
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-01</span><span class="sit-list-title">Verbal Coaching Conversation — Performance Issue</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-02</span><span class="sit-list-title">Written Warning Delivery</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-06</span><span class="sit-list-title">PIP Initiation — Performance Improvement Plan</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-07</span><span class="sit-list-title">Termination Conversation</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-08</span><span class="sit-list-title">Progressive Discipline Decision Point — Next Step Selection</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-09</span><span class="sit-list-title">Insubordination in the Moment — Refusal of Direct Work Order</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-03</span><span class="sit-list-title">FMLA Leave Request — Employee Discloses Need</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-10</span><span class="sit-list-title">ADA Accommodation Request — Medical Condition Disclosed</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-11</span><span class="sit-list-title">Return from Leave — Reinstatement &amp; Restrictions</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-12</span><span class="sit-list-title">PWFA / Pregnancy Accommodation Request</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-13</span><span class="sit-list-title">Pattern of Absences — Repeated Illness Call-Outs</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-04</span><span class="sit-list-title">Harassment / Protected-Class Allegation</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-14</span><span class="sit-list-title">Interpersonal Workplace Conflict (Non-Protected)</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-15</span><span class="sit-list-title">Formal Misconduct Complaint Received</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-16</span><span class="sit-list-title">Employee Discusses Wages with Coworker — Supervisor Considers Discipline</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-17</span><span class="sit-list-title">No Call / No Show Incident</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-18</span><span class="sit-list-title">Employee in Severe Mental Health Distress</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-19</span><span class="sit-list-title">Personal Crisis Disclosure (Family/Domestic)</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-20</span><span class="sit-list-title">Grief / Death of Coworker or Family Member</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-05</span><span class="sit-list-title">Off-the-Clock Work Situation</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-21</span><span class="sit-list-title">Workplace Injury — OSHA First Response</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-22</span><span class="sit-list-title">Workplace Violence Threat</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-23</span><span class="sit-list-title">Pay Range Inquiry from Employee</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-24</span><span class="sit-list-title">Raise / Compensation Adjustment Delivery</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">S-25</span><span class="sit-list-title">Tip Pool Question or Complaint — Employee Raises Concern</span></div>
+    </div>
     <p style="font-size:15px;color:var(--ink3);line-height:1.8;font-weight:300;max-width:640px;" class="reveal">25 real situations, built from official source material and live role experience. Full situation-by-situation detail is available on request during your discovery call.</p>
   </div>
 </section>
