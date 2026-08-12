@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supervisorline℠ — Performance Support Console | Rudolph CX</title>
+<meta name="description" content="Interactive Performance Support Tool (PST) for frontline supervisors navigating live employee-facing moments in regulated industries.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg-dark: #0b131e;
+  --bg-card: #121e2d;
+  --bg-card-hover: #172639;
+  --bg-panel: #1a2a3e;
+  --border-subtle: #243850;
+  --border-strong: #38557a;
+  
+  --navy-accent: #2e629d;
+  --navy-light: #4382cc;
+  --text-main: #f0f4f8;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  
+  --tier1-color: #38bdf8;
+  --tier1-bg: rgba(56, 189, 248, 0.12);
+  --tier1-border: rgba(56, 189, 248, 0.35);
+  
+  --tier2-color: #fbbf24;
+  --tier2-bg: rgba(251, 191, 36, 0.12);
+  --tier2-border: rgba(251, 191, 36, 0.35);
+  
+  --tier3-color: #f87171;
+  --tier3-bg: rgba(248, 113, 113, 0.14);
+  --tier3-border: rgba(248, 113, 113, 0.45);
+  
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-mono: 'DM Mono', monospace;
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.app-header {
+  background: rgba(11, 19, 30, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-title span {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  background: var(--navy-accent);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.brand-sub {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  border-left: 1px solid var(--border-subtle);
+  padding-left: 0.75rem;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.gate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+.gate-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.main-layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.control-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 1.25rem;
+}
+
+.panel-heading {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-box {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.search-input {
+  width: 100%;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 0.65rem 0.75rem 0.65rem 2.2rem;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--navy-light);
+  box-shadow: 0 0 0 2px rgba(67, 130, 204, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-main);
+}
+
+.filter-btn.active {
+  background: var(--bg-panel);
+  border-color: var(--border-strong);
+  color: #fff;
+  font-weight: 500;
+}
+
+.count-pill {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: var(--bg-dark);
+  color: var(--text-dim);
+}
+
+.wizard-box {
+  background: linear-gradient(145deg, #122236 0%, #0d1826 100%);
+  border: 1px solid var(--navy-accent);
+  border-radius: 6px;
+  padding: 1.25rem;
+}
+
+.wizard-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+
+.wizard-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.wizard-btn {
+  width: 100%;
+  background: var(--navy-accent);
+  color: #fff;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.wizard-btn:hover {
+  background: var(--navy-light);
+}
+
+.tb-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 1rem;
+}
+.tb-panel-title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 0.6rem;
+}
+.tb-row {
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.5rem 0;
+  font-size: 0.76rem;
+}
+.tb-row:last-child { border-bottom: none; }
+.tb-row strong { color: var(--text-main); display: block; }
+.tb-row span { color: var(--text-dim); }
+.tb-row .tb-used { display: block; margin-top: 2px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim); }
+
+.note-select {
+  width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  color: var(--text-main);
+  padding: 0.6rem;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+.note-output {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: var(--text-main);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.stat-banner {
+  background: var(--bg-card);
+  border-left: 3px solid var(--tier2-color);
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.stat-highlight {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--tier2-color);
+  display: block;
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+
+.content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+#browsableCards {
+  scroll-margin-top: 75px;
+}
+
+.category-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.category-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.category-count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  font-weight: normal;
+}
+
+.situation-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.situation-card:hover {
+  border-color: var(--border-strong);
+}
+
+.situation-header {
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  user-select: none;
+  background: var(--bg-card);
+}
+
+.situation-header:hover {
+  background: var(--bg-card-hover);
+}
+
+.sit-code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  min-width: 42px;
+}
+
+.sit-title {
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.sit-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tier-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tier-pill.t1 {
+  background: var(--tier1-bg);
+  color: var(--tier1-color);
+  border: 1px solid var(--tier1-border);
+}
+
+.tier-pill.t2 {
+  background: var(--tier2-bg);
+  color: var(--tier2-color);
+  border: 1px solid var(--tier2-border);
+}
+
+.tier-pill.t3 {
+  background: var(--tier3-bg);
+  color: var(--tier3-color);
+  border: 1px solid var(--tier3-border);
+}
+
+.chevron {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.situation-card.open .chevron {
+  transform: rotate(180deg);
+}
+
+.situation-body {
+  display: none;
+  padding: 1.25rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+  background: #0e1724;
+}
+
+.situation-card.open .situation-body {
+  display: block;
+}
+
+.step-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.step-item {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  line-height: 1.55;
+}
+
+.step-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--navy-light);
+  background: var(--bg-card);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-strong);
+}
+
+.step-item.step-hidden {
+  display: none;
+}
+
+.step-progress-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.6rem;
+}
+
+.step-nav-row {
+  margin-bottom: 1.25rem;
+}
+
+.step-nav-btn {
+  background: var(--navy-accent);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 0.9rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.step-nav-btn:hover {
+  background: var(--navy-light);
+}
+
+.step-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.halt-callout {
+  background: var(--tier3-bg);
+  border: 1px solid var(--tier3-border);
+  border-left: 4px solid var(--tier3-color);
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+  color: #fca5a5;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.halt-header {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tier3-color);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.statute-disclaimer {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.65rem 0.85rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  margin-top: 1rem;
+}
+
+.statute-citation {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.guardrail-console {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 1.25rem;
+  margin-top: 2rem;
+}
+
+.guardrail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.guardrail-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rule-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.note-input-wrapper {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.note-textarea {
+  width: 100%;
+  height: 90px;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 0.75rem;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  resize: vertical;
+}
+
+.note-textarea:focus {
+  outline: none;
+  border-color: var(--navy-light);
+}
+
+.guardrail-alert {
+  display: none;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--tier3-color);
+  color: #fca5a5;
+  padding: 0.65rem 0.85rem;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  margin-bottom: 0.75rem;
+}
+
+.guardrail-alert.active {
+  display: block;
+}
+
+.suggestion-box {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
+
+/* Modal styling for wizard */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 540px;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.modal-step {
+  display: none;
+}
+
+.modal-step.active {
+  display: block;
+}
+
+.wizard-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.opt-btn {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  text-align: left;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.opt-btn:hover {
+  background: var(--bg-panel);
+  border-color: var(--navy-light);
+}
+
+
+.new-console-panel { background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 6px; padding: 1.5rem; margin-bottom: 2rem; }
+.setup-grid2 { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:1rem; margin-bottom:1.25rem; }
+.setup-field2 label { display:block; font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-dim); margin-bottom:0.4rem; }
+.setup-field2 select { width:100%; background:var(--bg-dark); border:1px solid var(--border-subtle); border-radius:4px; padding:0.6rem 0.75rem; color:var(--text-main); font-family:var(--font-sans); font-size:0.85rem; }
+.console-main-grid { display:grid; grid-template-columns:1.4fr 1fr; gap:1.5rem; align-items:start; }
+@media (max-width:900px){ .console-main-grid{grid-template-columns:1fr;} .setup-grid2{grid-template-columns:1fr;} }
+.note-panel2 { background: var(--bg-panel); border:1px solid var(--border-subtle); border-radius:6px; padding:1.25rem; position:sticky; top:1rem; }
+.note-panel2 h3 { font-family:var(--font-serif); font-size:1.15rem; color:#fff; margin-bottom:0.25rem; }
+.note-panel2 label { display:block; font-size:0.72rem; font-weight:600; color:var(--text-muted); margin-bottom:0.3rem; margin-top:0.8rem; }
+.note-panel2 input, .note-panel2 textarea, .note-panel2 select { width:100%; background:var(--bg-dark); border:1px solid var(--border-subtle); border-radius:4px; padding:0.55rem 0.7rem; color:var(--text-main); font-family:var(--font-sans); font-size:0.82rem; }
+.note-preview2 { background:var(--bg-dark); border:1px solid var(--border-subtle); border-radius:4px; padding:0.85rem; font-family:var(--font-mono); font-size:0.72rem; color:var(--text-main); white-space:pre-wrap; max-height:240px; overflow-y:auto; margin-top:0.5rem; }
+.copy-btn2 { width:100%; background:var(--navy-accent); color:#fff; border:none; padding:0.7rem; border-radius:4px; font-family:var(--font-mono); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; cursor:pointer; margin-top:0.85rem; }
+.copy-btn2:hover { background:var(--navy-light); }
+.zhl-gate2 { border:1px solid var(--tier2-border); background:var(--tier2-bg); border-radius:6px; padding:0.85rem; margin-top:0.85rem; }
+.zhl-gate2 .zhl-head2 { font-family:var(--font-mono); font-size:0.68rem; text-transform:uppercase; color:var(--tier2-color); margin-bottom:0.5rem; }
+.zhl-opt2 { display:block; width:100%; text-align:left; background:var(--bg-dark); border:1px solid var(--border-subtle); border-radius:4px; padding:0.5rem 0.65rem; font-size:0.72rem; color:var(--text-main); margin-bottom:0.4rem; cursor:pointer; }
+.zhl-opt2:hover { border-color:var(--navy-light); }
+.zhl-opt2.selected { border-color:var(--tier1-color); background:var(--tier1-bg); }
+.guardrail-alert2 { display:none; background:var(--tier3-bg); border:1px solid var(--tier3-color); color:#fca5a5; padding:0.5rem 0.65rem; border-radius:4px; font-size:0.72rem; margin-top:0.4rem; }
+.guardrail-alert2.active { display:block; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand-wrapper">
+    <div class="brand-title">
+      Supervisorline℠ <span>PST</span>
+    </div>
+    <div class="brand-sub">
+      Frontline Performance Support Console · Rudolph CX LLC
+    </div>
+  </div>
+  <div class="header-status">
+    <div class="gate-badge">
+      <div class="gate-dot"></div>
+      Zero-Health-Logging Standard Applied Throughout (29 CFR § 1630.14)
+    </div>
+  </div>
+</header>
+
+<div id="phase1-disclaimer" style="background:#1a2c4a; color:#8ab4e8; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; text-align:center; padding:8px 16px;">
+    DEMO MODE — one real, linked pair of situations from Supervisorline &amp; Peopleline. This conversation illustrates how the guides support a real conversation in your own systems &mdash; they provide the procedures and rules, not your phone, CRM, or intake system.
+    <a href="book.html" style="color:#8ab4e8; text-decoration:underline; margin-left:8px;">Book a discovery call &rarr;</a>
+</div>
+
+<a href="#browsableCards" style="display:block; background:var(--navy-accent); color:#fff; text-align:center; padding:0.6rem; font-family:var(--font-mono); font-size:0.78rem; text-decoration:none; letter-spacing:0.03em;">
+  &darr; This is 1 of 25 real situations &mdash; a sample, not the full guide
+</a>
+
+<div class="main-layout">
+  
+  <aside class="sidebar">
+    
+    <div class="control-panel">
+      <div class="panel-heading">
+        <span>Rapid Search & Filters</span>
+      </div>
+      
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search keywords, laws, scenarios..." onkeyup="handleSearchInput()">
+      </div>
+
+      <div class="filter-group">
+        <button class="filter-btn active" onclick="setFilter('all', this)">
+          <span>All Situations</span>
+          <span class="count-pill">1</span>
+        </button>
+        <button class="filter-btn" onclick="setFilter('t1', this)">
+          <span>Tier 1 — Supervisor Handles</span>
+          <span class="count-pill">0</span>
+        </button>
+        <button class="filter-btn" onclick="setFilter('t2', this)">
+          <span>Tier 2 — Escalate to HR</span>
+          <span class="count-pill">1</span>
+        </button>
+        <button class="filter-btn" onclick="setFilter('t3', this)">
+          <span>Threat Assessment — External Reporting</span>
+          <span class="count-pill">0</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="wizard-box">
+      <div class="wizard-title">In-The-Moment Router</div>
+      <div class="wizard-desc">
+        Unsure of your tier right now? Answer 3 quick questions to establish the proper escalation route immediately.
+      </div>
+      <button class="wizard-btn" onclick="openWizard()">Launch Escalation Wizard →</button>
+    </div>
+
+    <div class="wizard-box" style="margin-top:0.75rem;">
+      <div class="wizard-title">Blank Case Note Templates</div>
+      <div class="wizard-desc">
+        Zero employee data pre-filled. Select a situation, copy the template, paste into your own system of record.
+      </div>
+      <button class="wizard-btn" onclick="openNoteModal()">Open Case Note Templates →</button>
+    </div>
+
+    <div class="tb-panel" style="margin-top:0.75rem;">
+      <div class="tb-panel-title">Transfer Board</div>
+      <div id="transfer-board-list"></div>
+    </div>
+
+    <div class="stat-banner">
+      <span class="stat-highlight">47.8%</span>
+      <strong>of all EEOC charges are retaliation claims</strong> — EEOC FY2024 data (largest single charge category for the 17th consecutive year). Retaliation claims are most frequently triggered by supervisor actions immediately following an employee complaint or disclosure.
+    </div>
+
+    <div class="suggestion-box" style="margin-top:0.5rem;">
+      <strong>Note:</strong> This console is guidance-only. It does not capture, store, or generate case notes — record documentation directly in your organization's own system of record.
+    </div>
+
+    <!-- LIVE HANDOFF SIMULATION -->
+    <div id="handoffSimPanel" style="border-top:1px solid rgba(255,255,255,0.1); margin-top:12px; padding-top:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.06em; color:#8ab4e8; display:flex; align-items:center; gap:5px;">
+                <span id="hoLiveDot" style="width:6px;height:6px;border-radius:50%;background:#c0392b;display:inline-block;"></span>
+                LIVE CONVERSATION
+            </span>
+            <span id="hoTimer" style="font-family:'DM Mono',monospace; font-size:9px; color:#8a97ad;">00:00</span>
+        </div>
+        <div id="hoTranscript" style="height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:8px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); font-family:'DM Mono',monospace; font-size:10.5px; line-height:1.5; color:#dfe6f0;"></div>
+        <div style="display:flex; gap:6px; margin-top:8px; align-items:center;">
+            <button id="hoPlayBtn" class="filter-btn" style="font-size:9px; padding:4px 8px;" onclick="toggleHoPlayback()">&#9654; Play</button>
+            <button class="filter-btn" style="font-size:9px; padding:4px 8px;" onclick="stepHoOnce()">&#9197; Step</button>
+            <button class="filter-btn" style="font-size:9px; padding:4px 8px;" onclick="location.reload()">&#8635; Reset</button>
+        </div>
+    </div>
+
+  </aside>
+
+  <main class="content-area" id="situationsContainer">
+    <div class="category-group" data-cat="perf">
+      <div class="category-title">
+        <span>Performance &amp; Discipline</span>
+        <span class="category-count">Situations S-04</span>
+      </div>
+<div class="situation-card" data-tier="t2" id="s04">
+        <div class="situation-header" onclick="toggleCard('s04')">
+          <span class="sit-code">S-04</span>
+          <span class="sit-title">Harassment / Protected-Class Allegation</span>
+          <div class="sit-badge-row">
+            <span class="tier-pill t2">Tier 2 — Escalate to HR</span>
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+        <div class="situation-body">
+          <ul class="step-list">
+            <li class="step-item"><span class="step-num">1</span><span>Treat all allegations seriously — even informal, offhand, or "don't report this" comments trigger mandatory escalation.</span></li>
+            <li class="step-item"><span class="step-num">2</span><span>Listen attentively without offering personal opinions, promises of secrecy, or defensive arguments.</span></li>
+            <li class="step-item"><span class="step-num">3</span><span>State required duty: "I take this seriously. Under company policy, I must report this immediately to HR so it can be reviewed objectively."</span></li>
+            <li class="step-item"><span class="step-num">4</span><span>Report details to HR immediately.</span></li>
+          </ul>
+          <div class="halt-callout" data-hardstop="true">
+            <div class="halt-header">⛔ Hard Stop — No Independent Investigation</div>
+            Do not conduct an independent investigation or interview the accused parties yourself. Report to HR immediately and let an authorized investigator take it from there.
+          </div>
+          <div class="statute-disclaimer">
+            <span class="statute-citation">Disclaimer & Governing Citations:</span> This guide supports supervisors in navigating live workplace moments. It does not constitute legal advice. When in doubt about legal exposure, consult HR before acting. Supervisors have personal liability under FLSA — including for violations they did not know occurred. <strong>Citations: Title VII (42 U.S.C. § 2000e-2), ADEA, ADA, Faragher/Ellerth Affirmative Defense Standard.</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+</main>
+</div>
+
+<div class="modal-overlay" id="wizardModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeWizard()">✕</button>
+    
+    <!-- Step 1 -->
+    <div class="modal-step active" id="wStep1">
+      <h3 style="font-family:var(--font-serif); font-size:1.25rem; color:#fff; margin-bottom:0.5rem;">Escalation Wizard: Question 1</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted);">Is there an external agency filing (EEOC, DOL, NLRB, OSHA), attorney involved, or active violence/criminal threat?</p>
+      <div class="wizard-options">
+        <button class="opt-btn" onclick="finishWizard('t3', 'Critical External Trigger: Requires immediate Legal/Compliance escalation.')">YES — Agency charge, lawyer, OSHA injury, or violence threat</button>
+        <button class="opt-btn" onclick="nextWizardStep(2)">NO — Internal workplace scenario</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="modal-step" id="wStep2">
+      <h3 style="font-family:var(--font-serif); font-size:1.25rem; color:#fff; margin-bottom:0.5rem;">Escalation Wizard: Question 2</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted);">Has the employee disclosed a medical condition, disability, pregnancy, leave need, OR made a protected-class harassment/discrimination allegation?</p>
+      <div class="wizard-options">
+        <button class="opt-btn" onclick="finishWizard('t2', 'Tier 2 Trigger: Medical/Leave disclosure or protected-class allegation requires HR clearance before taking action.')">YES — Medical, Leave, Accommodation, Pregnancy, or Harassment mentioned</button>
+        <button class="opt-btn" onclick="nextWizardStep(3)">NO — Pure performance, operational conflict, or standard question</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="modal-step" id="wStep3">
+      <h3 style="font-family:var(--font-serif); font-size:1.25rem; color:#fff; margin-bottom:0.5rem;">Escalation Wizard: Question 3</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted);">Are you contemplating termination, demotion, or discipline against someone with an active leave/accommodation in the background?</p>
+      <div class="wizard-options">
+        <button class="opt-btn" onclick="finishWizard('t2', 'Tier 2 Trigger: Discipline touching active leave/accommodation requires HR pre-approval.')">YES — Background leave or accommodation exists</button>
+        <button class="opt-btn" onclick="finishWizard('t1', 'Tier 1 Resolution: Supervisor handles within standard authority. Follow procedural steps.')">NO — Within supervisor standard operational authority</button>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="modal-step" id="wStepResult">
+      <h3 style="font-family:var(--font-serif); font-size:1.35rem; color:#fff; margin-bottom:0.5rem;" id="wResultTitle">Routing Result</h3>
+      <p style="font-size:0.88rem; color:var(--text-main); margin-bottom:1rem;" id="wResultDesc"></p>
+      <ol class="step-list" id="wResultSteps" style="margin-bottom:1.25rem;"></ol>
+      <button class="wizard-btn" onclick="closeWizard()">Return to Console Guidance</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="noteModal">
+  <div class="modal-box" style="max-width:640px;">
+    <button class="modal-close" onclick="closeNoteModal()">✕</button>
+    <h3 style="font-family:var(--font-serif); font-size:1.25rem; color:#fff; margin-bottom:0.25rem;">Blank Case Note Templates</h3>
+    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Zero employee data is pre-filled. Select a template, copy it, and paste into your organization's own system of record.</p>
+    <select class="note-select" id="note-select" onchange="renderNoteTemplate()"></select>
+    <pre class="note-output" id="note-output"></pre>
+    <button class="wizard-btn" style="margin-top:0.75rem;" onclick="copyNoteTemplate(this)">Copy Template to Clipboard</button>
+  </div>
+</div>
+
+<script>
+// Universal final step appended to every situation's step-through.
+// Language reviewed: Nova (legal boundary — advisory content vs.
+// data-capture, per DECISIONS.md §15) + Bree (copy). Same language
+// locked for Peopleline this session.
+const FINAL_STEP_TEXT = "Record this situation in your organization's own system of record (Workday, ADP, HR Acuity, or equivalent) — not in this console. Do not draft, paste, or retype case narrative, verbatim statements, names, or any other case-specific detail here; this tool exists to walk you through the protocol, not to hold the record.";
+
+const SITUATIONS_INDEX = [
+  {
+    "id": "s01",
+    "code": "S-01",
+    "title": "Verbal Coaching Conversation — Performance Issue"
+  },
+  {
+    "id": "s02",
+    "code": "S-02",
+    "title": "Written Warning Delivery"
+  },
+  {
+    "id": "s06",
+    "code": "S-06",
+    "title": "PIP Initiation — Performance Improvement Plan"
+  },
+  {
+    "id": "s07",
+    "code": "S-07",
+    "title": "Termination Conversation"
+  },
+  {
+    "id": "s08",
+    "code": "S-08",
+    "title": "Progressive Discipline Decision Point — Next Step Selection"
+  },
+  {
+    "id": "s09",
+    "code": "S-09",
+    "title": "Insubordination in the Moment — Refusal of Direct Work Order"
+  },
+  {
+    "id": "s03",
+    "code": "S-03",
+    "title": "FMLA Leave Request — Employee Discloses Need"
+  },
+  {
+    "id": "s10",
+    "code": "S-10",
+    "title": "ADA Accommodation Request — Medical Condition Disclosed"
+  },
+  {
+    "id": "s11",
+    "code": "S-11",
+    "title": "Return from Leave — Reinstatement & Restrictions"
+  },
+  {
+    "id": "s12",
+    "code": "S-12",
+    "title": "PWFA / Pregnancy Accommodation Request"
+  },
+  {
+    "id": "s13",
+    "code": "S-13",
+    "title": "Pattern of Absences — Repeated Illness Call-Outs"
+  },
+  {
+    "id": "s04",
+    "code": "S-04",
+    "title": "Harassment / Protected-Class Allegation"
+  },
+  {
+    "id": "s14",
+    "code": "S-14",
+    "title": "Interpersonal Workplace Conflict (Non-Protected)"
+  },
+  {
+    "id": "s15",
+    "code": "S-15",
+    "title": "Formal Misconduct Complaint Received"
+  },
+  {
+    "id": "s16",
+    "code": "S-16",
+    "title": "Employee Discusses Wages with Coworker — Supervisor Considers Discipline"
+  },
+  {
+    "id": "s17",
+    "code": "S-17",
+    "title": "No Call / No Show Incident"
+  },
+  {
+    "id": "s18",
+    "code": "S-18",
+    "title": "Employee in Severe Mental Health Distress"
+  },
+  {
+    "id": "s19",
+    "code": "S-19",
+    "title": "Personal Crisis Disclosure (Family/Domestic)"
+  },
+  {
+    "id": "s20",
+    "code": "S-20",
+    "title": "Grief / Death of Coworker or Family Member"
+  },
+  {
+    "id": "s05",
+    "code": "S-05",
+    "title": "Off-the-Clock Work Situation"
+  },
+  {
+    "id": "s21",
+    "code": "S-21",
+    "title": "Workplace Injury — OSHA First Response"
+  },
+  {
+    "id": "s22",
+    "code": "S-22",
+    "title": "Workplace Violence Threat"
+  },
+  {
+    "id": "s23",
+    "code": "S-23",
+    "title": "Pay Range Inquiry from Employee"
+  },
+  {
+    "id": "s24",
+    "code": "S-24",
+    "title": "Raise / Compensation Adjustment Delivery"
+  },
+  {
+    "id": "s25",
+    "code": "S-25",
+    "title": "Tip Pool Question or Complaint — Employee Raises Concern"
+  }
+];
+
+const NOTE_TEMPLATES = {
+  s01: "VERBAL COACHING CONVERSATION NOTE\nSituation: S-01 \u2014 Verbal Coaching Conversation \u2014 Performance Issue\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Specific Issue / Date / Observable Behavior: [FILL IN]\n- Employee Response: [FILL IN]\n- Future Commitment Agreed: [FILL IN]\n- Re-Evaluation Date: [FILL IN]",
+  s02: "WRITTEN WARNING DELIVERY NOTE\nSituation: S-02 \u2014 Written Warning Delivery\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- HR Pre-Review Confirmed (Y/N): [FILL IN]\n- Witness Present (Y): [FILL IN]\n- Policy Violation Cited: [FILL IN]\n- Signature Obtained (Y/N \u2014 if No, Refused/Witnessed): [FILL IN]",
+  s06: "PIP INITIATION NOTE\nSituation: S-06 \u2014 PIP Initiation \u2014 Performance Improvement Plan\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- HR Review Completed Before Issuance (Y/N): [FILL IN]\n- Leave/Accommodation/Complaint Status Verified (Y/N): [FILL IN]\n- 30/60/90 Day Metrics Set (Y/N): [FILL IN]\n- Disability/Medical Disclosure During Rollout (Y/N \u2014 pause required if Yes): [FILL IN]",
+  s07: "TERMINATION CONVERSATION NOTE\nSituation: S-07 \u2014 Termination Conversation\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- HR Present (Confirmed): [FILL IN]\n- Statement Delivered As Scripted (Y/N): [FILL IN]\n- Final Pay/Benefits/COBRA Handed Over (Y/N): [FILL IN]\n- Company Assets Collected (Y/N): [FILL IN]",
+  s08: "PROGRESSIVE DISCIPLINE DECISION NOTE\nSituation: S-08 \u2014 Progressive Discipline Decision Point \u2014 Next Step Selection\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Prior Documentation Reviewed (Y/N): [FILL IN]\n- Comparator Treatment Verified (Y/N): [FILL IN]\n- Next Step Selected: [FILL IN]\n- HR Pre-Clearance Required (Y/N \u2014 if Final Written/Suspension): [FILL IN]",
+  s09: "INSUBORDINATION / DIRECT ORDER REFUSAL NOTE\nSituation: S-09 \u2014 Insubordination in the Moment \u2014 Refusal of Direct Work Order\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Direct Order Given (Verbatim): [FILL IN]\n- Business Necessity Explained (Y/N): [FILL IN]\n- Continued Refusal (Y/N): [FILL IN]\n- Relieved From Duty / Reported to HR (Y/N): [FILL IN]",
+  s03: "FMLA LEAVE DISCLOSURE NOTE\nSituation: S-03 \u2014 FMLA Leave Request \u2014 Employee Discloses Need\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Verbal Trigger Recognized (Date): [FILL IN]\n- Nature of Disclosure (Medical/Surgery/Family Care): [FILL IN]\n- Directed to HR Leave Administrator (Y/N/Date): [FILL IN]",
+  s10: "ADA ACCOMMODATION DISCLOSURE NOTE\nSituation: S-10 \u2014 ADA Accommodation Request \u2014 Medical Condition Disclosed\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Disclosure Date: [FILL IN]\n- Routed to HR Immediately (Y/N): [FILL IN]\n- Work Restrictions Captured (Restrictions Only \u2014 No Diagnosis): [FILL IN]",
+  s11: "RETURN FROM LEAVE \u2014 REINSTATEMENT NOTE\nSituation: S-11 \u2014 Return from Leave \u2014 Reinstatement & Restrictions\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Fitness-for-Duty Clearance Verified (Y/N): [FILL IN]\n- Position Restored (Same/Equivalent): [FILL IN]\n- Medical Restrictions Attached (Y/N): [FILL IN]\n- HR Coordination for Light Duty (Y/N): [FILL IN]",
+  s12: "PWFA / PREGNANCY ACCOMMODATION NOTE\nSituation: S-12 \u2014 PWFA / Pregnancy Accommodation Request\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Accommodation Requested: [FILL IN]\n- Multi-Law Overlap Present (FMLA/ADA/PWFA) (Y/N): [FILL IN]\n- Legal Flag Applied If Overlap (Y/N): [FILL IN]",
+  s13: "ATTENDANCE PATTERN REVIEW NOTE\nSituation: S-13 \u2014 Pattern of Absences \u2014 Repeated Illness Call-Outs\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Call-Out Dates Reviewed: [FILL IN]\n- Policy Requirement Cited: [FILL IN]\n- Discussion Held (Date): [FILL IN]",
+  s04: "HARASSMENT / PROTECTED-CLASS ALLEGATION NOTE\nSituation: S-04 \u2014 Harassment / Protected-Class Allegation\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Allegation Received (Date/Time): [FILL IN]\n- Reported to HR Immediately (Y/N/Time): [FILL IN]\n- Confidentiality/No Personal Opinion Given (Confirmed): [FILL IN]",
+  s14: "INTERPERSONAL CONFLICT (NON-PROTECTED) NOTE\nSituation: S-14 \u2014 Interpersonal Workplace Conflict (Non-Protected)\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Protected-Class/Bullying/Safety Elements Screened Out (Confirmed): [FILL IN]\n- 1-on-1 Conversations Held (Y/N): [FILL IN]\n- Alignment Meeting Held (Y/N): [FILL IN]",
+  s15: "FORMAL MISCONDUCT COMPLAINT NOTE\nSituation: S-15 \u2014 Formal Misconduct Complaint Received\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Time/Date/Parties Documented: [FILL IN]\n- Anti-Retaliation Statement Given (Y/N): [FILL IN]\n- Escalated to HR (Date): [FILL IN]\n- Investigator Assigned (Via HR): [FILL IN]",
+  s16: "WAGE DISCUSSION / NLRA SECTION 7 NOTE\nSituation: S-16 \u2014 Employee Discusses Wages with Coworker \u2014 Supervisor Considers Discipline\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Discipline Considered But Not Applied (Confirmed): [FILL IN]\n- Section 7 Right Acknowledged (Confirmed): [FILL IN]\n- Operational Concern Addressed Separately (Y/N): [FILL IN]",
+  s17: "NO CALL / NO SHOW NOTE\nSituation: S-17 \u2014 No Call / No Show Incident\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Outreach Attempted (Time): [FILL IN]\n- Response Received (Y/N): [FILL IN]\n- Emergency Disclosed Subsequently (Y/N \u2014 halt discipline, escalate HR Tier 2 if Yes): [FILL IN]",
+  s18: "SEVERE MENTAL HEALTH DISTRESS NOTE\nSituation: S-18 \u2014 Employee in Severe Mental Health Distress\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Immediate Safety/Presence Confirmed (Y/N): [FILL IN]\n- EAP Contact Provided (Y/N): [FILL IN]\n- HR (Tier 2) Contacted (Y/N/Time): [FILL IN]\n- Self-Harm/Active Threat \u2014 911/Security Notified (Y/N): [FILL IN]",
+  s19: "PERSONAL CRISIS DISCLOSURE NOTE\nSituation: S-19 \u2014 Personal Crisis Disclosure (Family/Domestic)\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Confidentiality Maintained Within Supervisor/HR Chain (Confirmed): [FILL IN]\n- EAP/Hotline/Leave Info Provided (Y/N): [FILL IN]\n- HR (Tier 2) Connection Made If Extended Leave Needed (Y/N): [FILL IN]",
+  s20: "GRIEF / DEATH OF COWORKER OR FAMILY MEMBER NOTE\nSituation: S-20 \u2014 Grief / Death of Coworker or Family Member\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Bereavement Leave Guidelines Shared (Y/N): [FILL IN]\n- Schedule Coverage Coordinated (Y/N): [FILL IN]\n- EAP Grief Resources Distributed (Y/N): [FILL IN]",
+  s05: "OFF-THE-CLOCK WORK / FLSA NOTE\nSituation: S-05 \u2014 Off-the-Clock Work Situation\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Off-the-Clock Activity Identified (Date/Description): [FILL IN]\n- Employee Instructed to Log All Time (Y/N): [FILL IN]\n- Payroll Records Adjusted (Y/N): [FILL IN]",
+  s21: "WORKPLACE INJURY / OSHA FIRST RESPONSE NOTE\nSituation: S-21 \u2014 Workplace Injury \u2014 OSHA First Response\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Medical Attention / 911 Provided (Y/N): [FILL IN]\n- Scene Secured (Y/N): [FILL IN]\n- Initial Facts Gathered (Time/Location/Witnesses): [FILL IN]\n- Safety Officer & HR Notified (Y/N/Time): [FILL IN]",
+  s22: "WORKPLACE VIOLENCE THREAT NOTE\nSituation: S-22 \u2014 Workplace Violence Threat\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Emergency Protocol Triggered (Y/N): [FILL IN]\n- Corporate Security/Legal/HR Notified (Y/N/Time): [FILL IN]\n- Statements Documented Verbatim (Y/N): [FILL IN]",
+  s23: "PAY RANGE INQUIRY NOTE\nSituation: S-23 \u2014 Pay Range Inquiry from Employee\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Range Provided (Y/N): [FILL IN]\n- Objective Factors Explained (Y/N): [FILL IN]\n- Protected-Class Disparity Alleged (Y/N \u2014 escalate HR Tier 2 if Yes): [FILL IN]",
+  s24: "RAISE / COMPENSATION ADJUSTMENT DELIVERY NOTE\nSituation: S-24 \u2014 Raise / Compensation Adjustment Delivery\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Increase Communicated (Amount/Effective Date): [FILL IN]\n- Performance Criteria Cited (Y/N): [FILL IN]\n- Pay Equity Allegation Raised (Y/N \u2014 escalate HR Tier 2 if Yes): [FILL IN]",
+  s25: "TIP POOL QUESTION / COMPLAINT NOTE\nSituation: S-25 \u2014 Tip Pool Question or Complaint \u2014 Employee Raises Concern\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID \u2014 do not enter name here]\n\nRECORD:\n- Tip Pool Rules Explained (Y/N): [FILL IN]\n- Supervisor/Manager Exclusion Confirmed (Y/N): [FILL IN]\n- Withheld/Taken Tips Alleged (Y/N \u2014 escalate HR Tier 2 + DOL WHD referral if Yes): [FILL IN]",
+};
+
+const FALLBACK_NOTE_TEMPLATE = "BRIEF SUPERVISOR NOTE (No Specific Template Applies)\nDate: [DATE]\nSupervisor Identifier: [SUPERVISOR ID]\nEmployee Reference: [EMPLOYEE ID]\n\nMatter Summary: [BRIEF DESCRIPTION]\nEscalated to HR (Y/N/Date): [FILL IN]\nAction Taken: [FILL IN]";
+const TRANSFER_BOARD = [
+  {
+    "dest": "HR (Tier 2)",
+    "contact": "Escalation for leave, accommodation, discipline pre-clearance, protected-class allegations, and pay-equity concerns",
+    "used": [
+      "S-02",
+      "S-06",
+      "S-07",
+      "S-08",
+      "S-09",
+      "S-03",
+      "S-10",
+      "S-11",
+      "S-04",
+      "S-15",
+      "S-17",
+      "S-18",
+      "S-19",
+      "S-22",
+      "S-23",
+      "S-24"
+    ]
+  },
+  {
+    "dest": "Legal",
+    "contact": "Multi-law overlap (FMLA/ADA/PWFA) and workplace violence threat assessment",
+    "used": [
+      "S-12",
+      "S-22"
+    ]
+  },
+  {
+    "dest": "Corporate Security",
+    "contact": "Active threats, workplace violence, self-harm/active-threat mental health crises",
+    "used": [
+      "S-18",
+      "S-22"
+    ]
+  },
+  {
+    "dest": "EAP (Employee Assistance Program)",
+    "contact": "Mental health distress, personal/family crisis, grief support",
+    "used": [
+      "S-18",
+      "S-19",
+      "S-20"
+    ]
+  },
+  {
+    "dest": "Safety Officer",
+    "contact": "Workplace injury, OSHA recordkeeping and incident evaluation",
+    "used": [
+      "S-21"
+    ]
+  },
+  {
+    "dest": "Emergency Services (911)",
+    "contact": "Active danger, medical emergency, explicit self-harm or violent threat",
+    "used": [
+      "S-18",
+      "S-21",
+      "S-22"
+    ]
+  }
+];
+
+
+function openNoteModal() {
+  document.getElementById('noteModal').classList.add('active');
+}
+function closeNoteModal() {
+  document.getElementById('noteModal').classList.remove('active');
+}
+
+function populateNoteSelect() {
+  const sel = document.getElementById('note-select');
+  sel.innerHTML = '<option value="fallback">— No Specific Template Applies —</option>';
+  SITUATIONS_INDEX.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = s.code + ' — ' + s.title;
+    sel.appendChild(opt);
+  });
+}
+
+function renderNoteTemplate() {
+  const k = document.getElementById('note-select').value;
+  const t = NOTE_TEMPLATES[k];
+  document.getElementById('note-output').textContent = t || FALLBACK_NOTE_TEMPLATE;
+}
+
+function copyNoteTemplate(btn) {
+  const t = document.getElementById('note-output').textContent;
+  const d = document.createElement('textarea');
+  d.value = t;
+  document.body.appendChild(d);
+  d.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(d);
+  const original = btn.textContent;
+  btn.textContent = 'Copied.';
+  setTimeout(() => { btn.textContent = original; }, 2200);
+}
+
+function renderTransferBoard() {
+  document.getElementById('transfer-board-list').innerHTML = TRANSFER_BOARD.map(t => `
+    <div class="tb-row">
+      <strong>${t.dest}</strong>
+      <span>${t.contact}</span>
+      <span class="tb-used">Used by: ${t.used.join(', ')}</span>
+    </div>`).join('');
+}
+
+
+function toggleCard(cardId) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const opening = !card.classList.contains('open');
+  card.classList.toggle('open');
+  if (opening) {
+    initStepThrough(cardId);
+  }
+}
+
+function initStepThrough(cardId) {
+  const card = document.getElementById(cardId);
+  const stepList = card.querySelector('.step-list');
+  if (!stepList) return;
+
+  if (!stepList.querySelector('.final-step-item')) {
+    const li = document.createElement('li');
+    li.className = 'step-item final-step-item';
+    const num = stepList.querySelectorAll('.step-item').length + 1;
+    li.innerHTML = `<span class="step-num">${num}</span><span><strong>Final Step — Documentation:</strong> ${FINAL_STEP_TEXT}</span>`;
+    stepList.appendChild(li);
+  }
+
+  if (!card.querySelector('.step-nav-row')) {
+    const navRow = document.createElement('div');
+    navRow.className = 'step-nav-row';
+    navRow.innerHTML = `
+      <div class="step-progress-label" id="${cardId}-progress"></div>
+      <div style="display:flex; gap:0.6rem;">
+        <button type="button" class="step-nav-btn" onclick="stepNav('${cardId}', -1)" id="${cardId}-prev">&larr; Previous</button>
+        <button type="button" class="step-nav-btn" onclick="stepNav('${cardId}', 1)" id="${cardId}-next">Next &rarr;</button>
+      </div>
+    `;
+    stepList.insertAdjacentElement('afterend', navRow);
+  }
+
+  card.dataset.stepIndex = '0';
+  renderStepThrough(cardId);
+}
+
+function renderStepThrough(cardId) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const items = Array.from(card.querySelectorAll('.step-list .step-item'));
+  const idx = parseInt(card.dataset.stepIndex || '0', 10);
+  items.forEach((el, i) => el.classList.toggle('step-hidden', i !== idx));
+
+  const progress = document.getElementById(`${cardId}-progress`);
+  if (progress) progress.textContent = `Step ${idx + 1} of ${items.length}`;
+
+  const prevBtn = document.getElementById(`${cardId}-prev`);
+  const nextBtn = document.getElementById(`${cardId}-next`);
+  if (prevBtn) prevBtn.disabled = idx === 0;
+
+  const isFinal = idx === items.length - 1;
+  if (nextBtn) {
+    nextBtn.textContent = isFinal ? 'Done — Start Over' : 'Next \u2192';
+    nextBtn.setAttribute('onclick', isFinal ? `resetStepThrough('${cardId}')` : `stepNav('${cardId}', 1)`);
+  }
+}
+
+function resetStepThrough(cardId) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  card.dataset.stepIndex = '0';
+  renderStepThrough(cardId);
+}
+
+function stepNav(cardId, direction) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const items = card.querySelectorAll('.step-list .step-item');
+  let idx = parseInt(card.dataset.stepIndex || '0', 10);
+  idx = Math.max(0, Math.min(items.length - 1, idx + direction));
+  card.dataset.stepIndex = String(idx);
+  renderStepThrough(cardId);
+}
+
+let currentFilter = 'all';
+
+function setFilter(filterType, btnEl) {
+  currentFilter = filterType;
+  
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  
+  filterSituations();
+  scrollToResults();
+}
+
+let filterBeforeSearch = null;
+function handleSearchInput() {
+  const query = document.getElementById('searchInput').value;
+  if (query.trim() !== '' && currentFilter !== 'all') {
+    // typing a real query overrides any active tier — search means search everything
+    if (filterBeforeSearch === null) filterBeforeSearch = currentFilter;
+    currentFilter = 'all';
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    const allBtn = Array.from(document.querySelectorAll('.filter-btn')).find(b => b.textContent.includes('All Situations'));
+    if (allBtn) allBtn.classList.add('active');
+  } else if (query.trim() === '' && filterBeforeSearch !== null) {
+    // search cleared — restore whatever tier was active before
+    currentFilter = filterBeforeSearch;
+    filterBeforeSearch = null;
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    const restoredBtn = Array.from(document.querySelectorAll('.filter-btn')).find(b => b.getAttribute('onclick').includes(`'${currentFilter}'`));
+    if (restoredBtn) restoredBtn.classList.add('active');
+  }
+  filterSituations();
+}
+
+function filterSituations() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  const cards = document.querySelectorAll('.situation-card');
+  let visibleCount = 0;
+  
+  cards.forEach(card => {
+    const cardTier = card.getAttribute('data-tier');
+    const textContent = card.textContent.toLowerCase();
+    
+    const matchesTier = (currentFilter === 'all') || (cardTier === currentFilter);
+    const matchesQuery = query === '' || textContent.includes(query);
+    
+    if (matchesTier && matchesQuery) {
+      card.style.display = 'block';
+      visibleCount++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+  updateResultsCount(visibleCount, query);
+}
+
+function scrollToResults() {
+  const target = document.getElementById('browsableCards');
+  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+const TIER_LABELS = { all: 'All Situations', t1: 'Tier 1', t2: 'Tier 2', t3: 'Threat Assessment' };
+
+function updateResultsCount(count, query) {
+  let banner = document.getElementById('resultsCountBanner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'resultsCountBanner';
+    banner.style.cssText = 'font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom:1rem; padding:0.5rem 0.85rem; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:4px;';
+    const anchor = document.getElementById('browsableCards');
+    anchor.parentElement.insertBefore(banner, anchor.nextSibling);
+  }
+  const queryPart = query ? ` matching "${query}"` : '';
+  const tierPart = currentFilter !== 'all'
+    ? ` — narrowed to ${TIER_LABELS[currentFilter]} only. Click "All Situations" to search everything.`
+    : '';
+  banner.innerText = `Showing ${count} of 25 situations${queryPart}${tierPart}`;
+  banner.style.borderColor = (count === 0 && currentFilter !== 'all') ? 'var(--tier2-color)' : 'var(--border-subtle)';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const searchEl = document.getElementById('searchInput');
+  if (searchEl) {
+    searchEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { scrollToResults(); }
+    });
+  }
+  populateNoteSelect();
+  renderNoteTemplate();
+  renderTransferBoard();
+  toggleCard('s04');
+});
+
+function openWizard() {
+  document.getElementById('wizardModal').classList.add('active');
+  showWizardStep(1);
+}
+
+function closeWizard() {
+  document.getElementById('wizardModal').classList.remove('active');
+}
+
+function showWizardStep(stepNum) {
+  document.querySelectorAll('.modal-step').forEach(step => step.classList.remove('active'));
+  document.getElementById('wStep' + stepNum).classList.add('active');
+}
+
+function nextWizardStep(stepNum) {
+  showWizardStep(stepNum);
+}
+
+// Immediate-action steps shown on the wizard result screen.
+// t3 is reused verbatim from S-22 (Workplace Violence Threat), already
+// audited. t2 and t1 are new synthesized guidance, NOT lifted from a
+// single audited situation card (Tier 2 alone covers 9 different
+// situations) — flagged for a Nova pass before treating as final,
+// same standard as the rest of the guide.
+const WIZARD_RESULT_STEPS = {
+  t3: [
+    "If active danger exists: trigger emergency protocol, evacuate/shelter the area, and call 911.",
+    "For explicit threats or violent statements: isolate the parties safely and notify Corporate Security, Legal, and HR immediately.",
+    "Document exact statements verbatim with time, location, and witness names for legal proceedings.",
+    "Do not attempt to resolve this internally, and do not continue the conversation past this point."
+  ],
+  t2: [
+    "Stop the specific action you were taking (discipline, coaching, scheduling decision) — do not proceed further on your own.",
+    "Do not ask follow-up questions about medical, disability, or protected-class detail, and do not request or record diagnosis or clinical detail of any kind.",
+    "Contact HR before taking any further action on this matter.",
+    "The situation list below is now filtered to the 9 Tier 2 situations — find the one matching what's happening for full step-by-step guidance."
+  ],
+  t1: [
+    "You have standard supervisory authority to handle this directly.",
+    "The situation list below is now filtered to Tier 1 — find the specific situation matching what's happening for full step-by-step guidance.",
+    "If new information changes the picture (a medical, leave, or protected-class element appears), stop and re-run this wizard."
+  ]
+};
+
+function finishWizard(tier, summary) {
+  document.querySelectorAll('.modal-step').forEach(step => step.classList.remove('active'));
+  const resStep = document.getElementById('wStepResult');
+  const titleEl = document.getElementById('wResultTitle');
+  const descEl = document.getElementById('wResultDesc');
+  const stepsEl = document.getElementById('wResultSteps');
+  
+  if (tier === 't3') {
+    titleEl.textContent = '⛔ THREAT ASSESSMENT — IMMEDIATE ESCALATION';
+    titleEl.style.color = 'var(--tier3-color)';
+  } else if (tier === 't2') {
+    titleEl.textContent = '⚠️ TIER 2 — ESCALATE TO HR (PEOPLELINE℠)';
+    titleEl.style.color = 'var(--tier2-color)';
+  } else {
+    titleEl.textContent = '✅ TIER 1 — SUPERVISOR HANDLES';
+    titleEl.style.color = 'var(--tier1-color)';
+  }
+  
+  descEl.textContent = summary;
+
+  const steps = WIZARD_RESULT_STEPS[tier] || [];
+  stepsEl.innerHTML = steps.map((s, i) => `<li class="step-item"><span class="step-num">${i + 1}</span><span>${s}</span></li>`).join('');
+
+  resStep.classList.add('active');
+  
+  // Set console filter to highlight the selected tier
+  const btn = document.querySelector(`.filter-btn[onclick*="${tier}"]`);
+  setFilter(tier, btn);
+}
+function syncHeaderScrollOffset() {
+  const header = document.querySelector('.app-header');
+  const target = document.getElementById('browsableCards');
+  if (header && target) {
+    target.style.scrollMarginTop = (header.getBoundingClientRect().height + 15) + 'px';
+  }
+}
+window.addEventListener('load', syncHeaderScrollOffset);
+window.addEventListener('resize', syncHeaderScrollOffset);
+
+</script>
+    <!-- TRANSITION + PHASE 2 OVERLAY -->
+    <div id="transitionScreen" style="display:none; position:fixed; inset:0; background:#0a0f18; z-index:9998; align-items:center; justify-content:center; flex-direction:column;">
+        <div style="font-family:'DM Mono',monospace; color:#8ab4e8; font-size:13px; letter-spacing:0.1em; margin-bottom:16px;">ESCALATING TO HR</div>
+        <div style="width:280px; height:3px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden;">
+            <div id="transitionBar" style="width:0%; height:100%; background:#8ab4e8; transition:width 1.4s ease;"></div>
+        </div>
+    </div>
+    <div id="phase2Container" style="display:none; position:fixed; inset:0; z-index:9997; background:#f7f4ee;">
+        <iframe id="phase2Frame" style="width:100%; height:100%; border:none;"></iframe>
+        <div style="position:fixed; top:0; left:0; right:0; background:#0d2a4a; color:#8ab4e8; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.04em; text-align:center; padding:6px 16px; z-index:9999;">
+            DEMO MODE, PHASE 2 — the same request, now with HR. Peopleline provides the procedures and rules, not your case management system.
+        </div>
+        <div id="hoTranscript2" style="position:fixed; bottom:12px; left:12px; width:340px; height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:8px; background:rgba(255,255,255,0.95); border:1px solid #dfe6ee; font-family:'DM Mono',monospace; font-size:10.5px; line-height:1.5; z-index:9999; box-shadow:0 4px 20px rgba(0,0,0,0.15);"></div>
+    </div>
+
+    <script>
+        // LIVE HANDOFF SIMULATION — spans two real, isolated consoles (Supervisorline
+        // in the main page, Peopleline in an iframe) connected by the real, documented
+        // upstream link between S-04 and P-01. No phone-specific language; the
+        // conversation is neutral about how the original disclosure happened.
+        // Peopleline's real, scoped-to-P-01 content, embedded directly rather than
+        // fetched as a separate file -- avoids the file:// same-origin restriction
+        // that blocks iframes from loading sibling files when opened by double-click.
+        const PEOPLELINE_PHASE_HTML = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Peopleline\u2120 \u2014 Rudolph CX Investigation & ER Console</title>\n    <style>\n        :root {\n            --bg-canvas: #F7F5F0;\n            --bg-surface: #FCFAF6;\n            --bg-surface-alt: #EFECE6;\n            --border-hairline: #E1DDD4;\n            --border-dark: #1C1B1A;\n            --text-main: #1C1B1A;\n            --text-muted: #5E5B54;\n            --text-light: #8C887E;\n            --accent-rust: #BA4A21;\n            --accent-rust-hover: #9E3D1A;\n            --accent-ochre: #8F5E14;\n            --accent-green: #2B5E3B;\n            --accent-crimson: #942323;\n            --font-serif: \"Georgia\", \"Cambria\", \"Times New Roman\", serif;\n            --font-sans: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;\n            --font-mono: \"Courier New\", Courier, monospace;\n            --transition-smooth: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);\n        }\n\n        *, *::before, *::after {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n        }\n\n        body {\n            background-color: var(--bg-canvas);\n            color: var(--text-main);\n            font-family: var(--font-sans);\n            font-size: 14px;\n            line-height: 1.5;\n            -webkit-font-smoothing: antialiased;\n            overflow-x: hidden;\n            min-height: 100vh;\n            display: flex;\n            flex-direction: column;\n        }\n\n        .site-header {\n            background-color: var(--bg-surface);\n            border-bottom: 2px solid var(--border-dark);\n            padding: 1rem 2rem;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            position: sticky;\n            top: 0;\n            z-index: 100;\n        }\n\n        .brand-block {\n            display: flex;\n            align-items: baseline;\n            gap: 12px;\n        }\n\n        .brand-title {\n            font-family: var(--font-serif);\n            font-size: 1.6rem;\n            font-weight: 700;\n            letter-spacing: -0.02em;\n            color: var(--text-main);\n        }\n\n        .brand-subtitle {\n            font-size: 0.75rem;\n            text-transform: uppercase;\n            letter-spacing: 0.12em;\n            color: var(--accent-rust);\n            font-weight: 700;\n        }\n\n        .gate-badge {\n            display: flex;\n            align-items: center;\n            gap: 8px;\n            background-color: rgba(186, 74, 33, 0.08);\n            border: 1px solid rgba(186, 74, 33, 0.3);\n            padding: 6px 14px;\n            border-radius: 20px;\n            font-size: 0.78rem;\n            font-weight: 600;\n            color: var(--accent-rust);\n        }\n\n        .gate-pulse {\n            width: 8px;\n            height: 8px;\n            background-color: var(--accent-rust);\n            border-radius: 50%;\n            display: inline-block;\n            box-shadow: 0 0 0 0 rgba(186, 74, 33, 0.4);\n            animation: pulse-ring 2s infinite;\n        }\n\n        .system-record-banner {\n            background-color: #EAE6DF;\n            border-bottom: 1px solid var(--border-hairline);\n            padding: 6px 2rem;\n            font-size: 0.78rem;\n            color: var(--text-muted);\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n        }\n\n        .system-record-banner span strong {\n            color: var(--text-main);\n        }\n\n        @keyframes pulse-ring {\n            0% { box-shadow: 0 0 0 0 rgba(186, 74, 33, 0.5); }\n            70% { box-shadow: 0 0 0 6px rgba(186, 74, 33, 0); }\n            100% { box-shadow: 0 0 0 0 rgba(186, 74, 33, 0); }\n        }\n\n        .nav-ledger {\n            background-color: var(--bg-surface-alt);\n            border-bottom: 1px solid var(--border-hairline);\n            padding: 0 2rem;\n            display: flex;\n            gap: 2rem;\n            overflow-x: auto;\n        }\n\n        .nav-item {\n            padding: 1rem 0;\n            font-size: 0.85rem;\n            font-weight: 600;\n            text-transform: uppercase;\n            letter-spacing: 0.08em;\n            color: var(--text-muted);\n            background: none;\n            border: none;\n            border-bottom: 2px solid transparent;\n            cursor: pointer;\n            transition: var(--transition-smooth);\n            white-space: nowrap;\n        }\n\n        .nav-item:hover {\n            color: var(--text-main);\n        }\n\n        .nav-item.active {\n            color: var(--accent-rust);\n            border-bottom-color: var(--accent-rust);\n        }\n\n        .main-container {\n            flex: 1;\n            padding: 2rem;\n            max-width: 1600px;\n            width: 100%;\n            margin: 0 auto;\n        }\n\n        .view-pane {\n            display: none;\n            opacity: 0;\n            transition: opacity 0.3s ease;\n        }\n\n        .view-pane.active {\n            display: block;\n            opacity: 1;\n        }\n\n        .section-header {\n            border-bottom: 1px solid var(--border-dark);\n            padding-bottom: 0.75rem;\n            margin-bottom: 1.5rem;\n            display: flex;\n            justify-content: space-between;\n            align-items: flex-end;\n        }\n\n        .section-title {\n            font-family: var(--font-serif);\n            font-size: 1.75rem;\n            font-weight: 400;\n            color: var(--text-main);\n        }\n\n        .section-meta {\n            font-size: 0.8rem;\n            color: var(--text-muted);\n            font-style: italic;\n        }\n\n        .filter-ribbon {\n            display: flex;\n            flex-wrap: wrap;\n            gap: 8px;\n            margin-bottom: 1.5rem;\n            align-items: center;\n        }\n\n        .search-box {\n            background: var(--bg-surface);\n            border: 1px solid var(--border-hairline);\n            padding: 8px 14px;\n            font-family: var(--font-sans);\n            font-size: 0.85rem;\n            width: 260px;\n            border-radius: 4px;\n            color: var(--text-main);\n            outline: none;\n        }\n\n        .search-box:focus {\n            border-color: var(--border-dark);\n        }\n\n        .cat-chip {\n            background: var(--bg-surface);\n            border: 1px solid var(--border-hairline);\n            padding: 6px 14px;\n            border-radius: 4px;\n            font-size: 0.78rem;\n            font-weight: 600;\n            color: var(--text-muted);\n            cursor: pointer;\n            transition: var(--transition-smooth);\n        }\n\n        .cat-chip:hover, .cat-chip.active {\n            background: var(--border-dark);\n            color: var(--bg-canvas);\n            border-color: var(--border-dark);\n        }\n\n        .catalog-grid {\n            display: grid;\n            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));\n            gap: 1.25rem;\n            margin-bottom: 2rem;\n        }\n\n        .sit-card {\n            background-color: var(--bg-surface);\n            border: 1px solid var(--border-hairline);\n            padding: 1.25rem;\n            border-radius: 4px;\n            cursor: pointer;\n            transition: var(--transition-smooth);\n            position: relative;\n            display: flex;\n            flex-direction: column;\n            justify-content: space-between;\n        }\n\n        .sit-card:hover {\n            border-color: var(--border-dark);\n            transform: translateY(-2px);\n            box-shadow: 0 4px 12px rgba(0,0,0,0.04);\n        }\n\n        .sit-card.featured {\n            border: 2px solid var(--accent-rust);\n            background: #FFFDF9;\n        }\n\n        .sit-code {\n            font-family: var(--font-mono);\n            font-weight: 700;\n            font-size: 0.8rem;\n            color: var(--accent-rust);\n            letter-spacing: 0.05em;\n        }\n\n        .sit-title {\n            font-family: var(--font-serif);\n            font-size: 1.1rem;\n            font-weight: 700;\n            margin: 6px 0 10px 0;\n            color: var(--text-main);\n            line-height: 1.3;\n        }\n\n        .sit-upstream {\n            font-size: 0.75rem;\n            background: var(--bg-surface-alt);\n            padding: 4px 8px;\n            border-radius: 3px;\n            display: inline-block;\n            color: var(--text-muted);\n            margin-bottom: 12px;\n            font-family: var(--font-mono);\n        }\n\n        .sit-desc {\n            font-size: 0.82rem;\n            color: var(--text-muted);\n            display: -webkit-box;\n            -webkit-line-clamp: 3;\n            -webkit-box-orient: vertical;\n            overflow: hidden;\n            margin-bottom: 1rem;\n        }\n\n        .card-footer {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            border-top: 1px dashed var(--border-hairline);\n            padding-top: 10px;\n            margin-top: auto;\n        }\n\n        .card-cat {\n            font-size: 0.7rem;\n            text-transform: uppercase;\n            letter-spacing: 0.08em;\n            color: var(--text-light);\n            font-weight: 700;\n        }\n\n        .btn-link {\n            font-size: 0.8rem;\n            font-weight: 700;\n            color: var(--accent-rust);\n            background: none;\n            border: none;\n            cursor: pointer;\n            text-decoration: underline;\n        }\n\n        .detail-overlay {\n            position: fixed;\n            top: 0; left: 0; right: 0; bottom: 0;\n            background: rgba(28, 27, 26, 0.6);\n            z-index: 200;\n            display: none;\n            align-items: center;\n            justify-content: center;\n            padding: 2rem;\n            backdrop-filter: blur(2px);\n        }\n\n        .detail-modal {\n            background: var(--bg-surface);\n            border: 2px solid var(--border-dark);\n            width: 100%;\n            max-width: 900px;\n            max-height: 90vh;\n            overflow-y: auto;\n            padding: 2.5rem;\n            position: relative;\n            box-shadow: 0 20px 40px rgba(0,0,0,0.15);\n        }\n\n        .close-btn {\n            position: absolute;\n            top: 1.5rem;\n            right: 1.5rem;\n            background: none;\n            border: 1px solid var(--border-dark);\n            width: 32px;\n            height: 32px;\n            font-size: 1.2rem;\n            cursor: pointer;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n        }\n\n        .detail-header {\n            margin-bottom: 1.5rem;\n            border-bottom: 1px solid var(--border-hairline);\n            padding-bottom: 1rem;\n        }\n\n        .detail-code {\n            font-family: var(--font-mono);\n            color: var(--accent-rust);\n            font-weight: bold;\n            font-size: 0.9rem;\n        }\n\n        .detail-title {\n            font-family: var(--font-serif);\n            font-size: 1.8rem;\n            margin: 4px 0 8px 0;\n        }\n\n        .procedural-list {\n            list-style-type: none;\n            margin: 1.5rem 0;\n        }\n\n        .procedural-list li {\n            position: relative;\n            padding-left: 2rem;\n            margin-bottom: 1rem;\n            font-size: 0.92rem;\n            line-height: 1.6;\n        }\n\n        .procedural-list li::before {\n            content: attr(data-step);\n            position: absolute;\n            left: 0;\n            top: 2px;\n            width: 22px;\n            height: 22px;\n            background: var(--border-dark);\n            color: var(--bg-canvas);\n            border-radius: 50%;\n            font-size: 0.7rem;\n            font-weight: bold;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n        }\n\n        .callout-box {\n            background: #FFF8F5;\n            border-left: 4px solid var(--accent-rust);\n            padding: 1rem 1.25rem;\n            margin: 1.5rem 0;\n            font-size: 0.88rem;\n        }\n\n        .callout-title {\n            font-weight: 700;\n            color: var(--accent-rust);\n            margin-bottom: 4px;\n            text-transform: uppercase;\n            font-size: 0.75rem;\n            letter-spacing: 0.05em;\n        }\n\n        .citations-bar {\n            background: var(--bg-surface-alt);\n            padding: 0.75rem 1rem;\n            font-family: var(--font-mono);\n            font-size: 0.78rem;\n            color: var(--text-muted);\n            border-radius: 4px;\n            margin-top: 1.5rem;\n        }\n\n        .wizard-layout {\n            display: grid;\n            grid-template-columns: 280px 1fr;\n            gap: 2rem;\n        }\n\n        .wizard-steps-tracker {\n            border-right: 1px solid var(--border-hairline);\n            padding-right: 1.5rem;\n        }\n\n        .tracker-step {\n            padding: 1rem 0;\n            border-bottom: 1px solid var(--border-hairline);\n            opacity: 0.5;\n            transition: var(--transition-smooth);\n        }\n\n        .tracker-step.active {\n            opacity: 1;\n            font-weight: 700;\n        }\n\n        .tracker-step.completed {\n            opacity: 0.8;\n            color: var(--accent-green);\n        }\n\n        .step-num {\n            font-family: var(--font-mono);\n            font-size: 0.75rem;\n            color: var(--accent-rust);\n            display: block;\n        }\n\n        .form-group {\n            margin-bottom: 1.5rem;\n        }\n\n        .form-label {\n            display: block;\n            font-weight: 700;\n            font-size: 0.82rem;\n            text-transform: uppercase;\n            letter-spacing: 0.05em;\n            margin-bottom: 6px;\n        }\n\n        .form-control, select, textarea {\n            width: 100%;\n            background: var(--bg-surface);\n            border: 1px solid var(--border-hairline);\n            padding: 10px 14px;\n            font-family: var(--font-sans);\n            font-size: 0.9rem;\n            color: var(--text-main);\n            border-radius: 4px;\n            outline: none;\n            transition: var(--transition-smooth);\n        }\n\n        .form-control:focus, select:focus, textarea:focus {\n            border-color: var(--border-dark);\n            box-shadow: 0 0 0 2px rgba(28,27,26,0.05);\n        }\n\n        .copy-btn {\n            background: var(--accent-rust);\n            color: #fff;\n            border: none;\n            padding: 10px 18px;\n            border-radius: 4px;\n            font-family: var(--font-sans);\n            font-size: 0.85rem;\n            font-weight: 700;\n            cursor: pointer;\n            transition: var(--transition-smooth);\n        }\n        .copy-btn:hover { background: var(--accent-rust-hover); }\n\n        .template-output {\n            background: var(--bg-surface);\n            border: 1px solid var(--border-hairline);\n            border-radius: 4px;\n            padding: 1.5rem;\n            font-family: var(--font-mono);\n            font-size: 0.85rem;\n            line-height: 1.6;\n            white-space: pre-wrap;\n            color: var(--text-main);\n        }\n\n        .tb-block { }\n        .tb-title {\n            font-family: var(--font-serif);\n            font-size: 1.1rem;\n            font-weight: 700;\n            margin-bottom: 12px;\n            border-bottom: 1px solid var(--border-hairline);\n            padding-bottom: 8px;\n        }\n        .tb-row {\n            display: flex;\n            justify-content: space-between;\n            gap: 16px;\n            align-items: flex-start;\n            background: var(--bg-surface);\n            border: 1px solid var(--border-hairline);\n            border-radius: 4px;\n            padding: 12px 16px;\n            margin-bottom: 8px;\n            font-size: 0.85rem;\n        }\n        .tb-row strong { min-width: 220px; }\n        .tb-row span { color: var(--text-muted); }\n        .tb-row .tb-used { display: block; margin-top: 4px; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-light); }\n\n        .checkbox-group {\n            display: flex;\n            align-items: flex-start;\n            gap: 10px;\n            margin-bottom: 1rem;\n            background: var(--bg-surface);\n            padding: 12px;\n            border: 1px solid var(--border-hairline);\n            border-radius: 4px;\n        }\n\n        .checkbox-group input[type=\"checkbox\"] {\n            margin-top: 3px;\n            accent-color: var(--accent-rust);\n            width: 16px;\n            height: 16px;\n            cursor: pointer;\n        }\n\n        .btn-primary {\n            background: var(--border-dark);\n            color: var(--bg-canvas);\n            border: 1px solid var(--border-dark);\n            padding: 12px 24px;\n            font-size: 0.85rem;\n            font-weight: 700;\n            text-transform: uppercase;\n            letter-spacing: 0.08em;\n            cursor: pointer;\n            border-radius: 4px;\n            transition: var(--transition-smooth);\n        }\n\n        .btn-primary:hover {\n            background: var(--accent-rust);\n            border-color: var(--accent-rust);\n        }\n\n        .btn-secondary {\n            background: transparent;\n            color: var(--text-main);\n            border: 1px solid var(--border-hairline);\n            padding: 12px 24px;\n            font-size: 0.85rem;\n            font-weight: 700;\n            text-transform: uppercase;\n            letter-spacing: 0.08em;\n            cursor: pointer;\n            border-radius: 4px;\n            transition: var(--transition-smooth);\n        }\n\n        .btn-secondary:hover {\n            border-color: var(--border-dark);\n        }\n\n        .builder-layout {\n            display: grid;\n            grid-template-columns: 1fr 1fr;\n            gap: 2rem;\n        }\n\n        .preview-document {\n            background: #FFFFFF;\n            border: 1px solid var(--border-hairline);\n            box-shadow: 0 8px 24px rgba(0,0,0,0.05);\n            padding: 2.5rem;\n            font-family: var(--font-mono);\n            font-size: 0.82rem;\n            line-height: 1.6;\n            white-space: pre-wrap;\n            min-height: 500px;\n            position: relative;\n        }\n\n        .copy-banner {\n            position: sticky;\n            top: 0;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            background: var(--bg-surface-alt);\n            padding: 8px 14px;\n            border-bottom: 1px solid var(--border-hairline);\n            margin: -2.5rem -2.5rem 1.5rem -2.5rem;\n            font-family: var(--font-sans);\n        }\n\n        .toast-msg {\n            position: fixed;\n            bottom: 2rem;\n            right: 2rem;\n            background: var(--border-dark);\n            color: #FFF;\n            padding: 12px 24px;\n            border-radius: 4px;\n            font-size: 0.85rem;\n            font-weight: 600;\n            box-shadow: 0 8px 16px rgba(0,0,0,0.2);\n            opacity: 0;\n            transform: translateY(20px);\n            transition: var(--transition-smooth);\n            z-index: 999;\n            pointer-events: none;\n        }\n\n        .toast-msg.show {\n            opacity: 1;\n            transform: translateY(0);\n        }\n\n        .docket-table {\n            width: 100%;\n            border-collapse: collapse;\n            background: var(--bg-surface);\n            border: 1px solid var(--border-hairline);\n        }\n\n        .docket-table th {\n            background: var(--bg-surface-alt);\n            font-size: 0.75rem;\n            text-transform: uppercase;\n            letter-spacing: 0.08em;\n            text-align: left;\n            padding: 12px 16px;\n            border-bottom: 1px solid var(--border-hairline);\n        }\n\n        .docket-table td {\n            padding: 14px 16px;\n            border-bottom: 1px solid var(--border-hairline);\n            font-size: 0.88rem;\n        }\n\n        .docket-table tr:hover {\n            background: #FAF8F3;\n        }\n\n        .status-tag {\n            padding: 4px 8px;\n            border-radius: 3px;\n            font-size: 0.72rem;\n            font-weight: bold;\n            text-transform: uppercase;\n        }\n\n        .status-open { background: rgba(186, 74, 33, 0.1); color: var(--accent-rust); }\n        .status-active { background: rgba(143, 94, 20, 0.1); color: var(--accent-ochre); }\n        .status-closed { background: rgba(43, 94, 59, 0.1); color: var(--accent-green); }\n\n        .benchmark-grid {\n            display: grid;\n            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));\n            gap: 1.5rem;\n            margin-bottom: 2rem;\n        }\n\n        .bench-card {\n            background: var(--bg-surface);\n            border: 1px solid var(--border-hairline);\n            padding: 1.5rem;\n            border-top: 4px solid var(--accent-rust);\n        }\n\n        .bench-stat {\n            font-family: var(--font-serif);\n            font-size: 2.2rem;\n            font-weight: 700;\n            color: var(--accent-rust);\n            line-height: 1.1;\n            margin-bottom: 8px;\n        }\n\n        .bench-cite {\n            font-size: 0.75rem;\n            font-weight: 700;\n            text-transform: uppercase;\n            letter-spacing: 0.05em;\n            color: var(--text-muted);\n            margin-top: 12px;\n            border-top: 1px solid var(--border-hairline);\n            padding-top: 8px;\n        }\n\n        .warning-gate-alert {\n            background: #FFF2F2;\n            border: 1px solid var(--accent-crimson);\n            color: var(--accent-crimson);\n            padding: 12px 16px;\n            border-radius: 4px;\n            font-size: 0.82rem;\n            margin-top: 8px;\n            display: none;\n        }\n\n        /* Responsive adjustments */\n        @media (max-width: 900px) {\n            .wizard-layout, .builder-layout {\n                grid-template-columns: 1fr;\n            }\n            .site-header {\n                flex-direction: column;\n                align-items: flex-start;\n                gap: 10px;\n            }\n            .catalog-grid {\n                grid-template-columns: 1fr;\n            }\n        }\n    </style>\n</head>\n<body>\n\n    <div class=\"system-record-banner\">\n        <span>\ud83d\udd12 <strong>Guidance Only \u2014 No Case Data Entered or Stored:</strong> This console does not accept, generate, or retain case-specific information. Record all case documentation directly in your organization's system of record (Workday, ADP, HR Acuity), per your organization's own investigation procedure.</span>\n    </div>\n\n    <header class=\"site-header\">\n        <div class=\"brand-block\">\n            <h1 class=\"brand-title\">Peopleline\u2120</h1>\n            <span class=\"brand-subtitle\">Rudolph CX ER & Investigation Console</span>\n        </div>\n        <div class=\"gate-badge\">\n            <span class=\"gate-pulse\"></span>\n            <span>Zero-Health-Logging Standard Applied Throughout (29 CFR \u00a71630.14(c)(1))</span>\n        </div>\n    </header>\n\n    <nav class=\"nav-ledger\">\n        <button class=\"nav-item active\" onclick=\"switchTab('catalog')\">1. Situation Protocol Catalog (28)</button>\n        <button class=\"nav-item\" onclick=\"switchTab('intelligence')\">2. EEOC Benchmark Intelligence</button>\n        <button class=\"nav-item\" onclick=\"switchTab('notes')\">3. Blank Case Note Templates</button>\n        <button class=\"nav-item\" onclick=\"switchTab('transfer')\">4. Transfer Board</button>\n    </nav>\n\n    <main class=\"main-container\">\n\n        <section id=\"pane-catalog\" class=\"view-pane active\">\n            <div class=\"section-header\">\n                <div>\n                    <h2 class=\"section-title\">Investigation & Employee Relations Protocols</h2>\n                    <p class=\"section-meta\">28 standard situations paired with supervisor upstream escalation paths</p>\n                </div>\n            </div>\n\n            <div class=\"filter-ribbon\">\n                <input type=\"text\" id=\"cat-search\" class=\"search-box\" placeholder=\"Search by keyword, code, or statute...\" oninput=\"filterSituations()\">\n                <button class=\"cat-chip active\" onclick=\"filterCategory('ALL', this)\">All Categories (28)</button>\n                <button class=\"cat-chip\" onclick=\"filterCategory('Investigation Intake', this)\">Investigation Intake</button>\n                <button class=\"cat-chip\" onclick=\"filterCategory('Termination & Discipline Review', this)\">Termination & Discipline</button>\n                <button class=\"cat-chip\" onclick=\"filterCategory('Leave & Accommodation Escalation', this)\">Leave & Accommodation</button>\n                <button class=\"cat-chip\" onclick=\"filterCategory('Conflict & Sensitive', this)\">Conflict & Sensitive</button>\n                <button class=\"cat-chip\" onclick=\"filterCategory('Wages & Pay', this)\">Wages & Pay</button>\n            </div>\n\n            <div id=\"catalog-container\" class=\"catalog-grid\">\n                <!-- Dynamically populated via JS -->\n            </div>\n        </section>\n\n\n\n        <!-- Docket Section Removed -->\n\n        <section id=\"pane-intelligence\" class=\"view-pane\">\n            <div class=\"section-header\">\n                <div>\n                    <h2 class=\"section-title\">EEOC & ER Benchmark Intelligence</h2>\n                    <p class=\"section-meta\">Official enforcement statistics & ER risk metrics \u2014 used verbatim without alteration</p>\n                </div>\n            </div>\n\n            <div class=\"benchmark-grid\">\n                <div class=\"bench-card\">\n                    <div class=\"bench-stat\">15.5</div>\n                    <p>discrimination, harassment, and retaliation issues per 1,000 employees</p>\n                    <div class=\"bench-cite\">HR Acuity Tenth Annual Benchmark Study, June 2026</div>\n                </div>\n\n                <div class=\"bench-card\">\n                    <div class=\"bench-stat\">47.8%</div>\n                    <p>of all EEOC charges are retaliation claims</p>\n                    <div class=\"bench-cite\">EEOC, FY2024</div>\n                </div>\n\n                <div class=\"bench-card\">\n                    <div class=\"bench-stat\">88,531</div>\n                    <p>new EEOC discrimination charges in FY2024, a 9.2% increase</p>\n                    <div class=\"bench-cite\">EEOC.gov</div>\n                </div>\n\n                <div class=\"bench-card\">\n                    <div class=\"bench-stat\">$660M</div>\n                    <p>$660 million secured for workers in FY2025</p>\n                    <div class=\"bench-cite\">EEOC.gov</div>\n                </div>\n\n                <div class=\"bench-card\">\n                    <div class=\"bench-stat\">96.5%</div>\n                    <p>favorable result in district court resolutions, FY2025</p>\n                    <div class=\"bench-cite\">EEOC.gov</div>\n                </div>\n            </div>\n\n            <div style=\"background: var(--bg-surface); border: 1px solid var(--border-hairline); padding: 2rem; border-radius: 4px; margin-top: 2rem;\">\n                <h3 style=\"font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 1rem;\">ER Exposure & Retaliation Risk \u2014 What The Benchmarks Mean</h3>\n                <p style=\"color: var(--text-muted); margin-bottom: 1rem; font-size: 0.88rem;\">\n                    These are national benchmark rates, not an estimate for any specific organization. Use them as awareness context, not a calculated figure for your organization's headcount \u2014 that determination belongs in your organization's own workforce analytics, not this console.\n                </p>\n                <div style=\"display: flex; gap: 2rem; background: var(--bg-canvas); padding: 1.25rem; border-radius: 4px;\">\n                    <div>\n                        <span style=\"font-size: 0.75rem; text-transform: uppercase; color: var(--text-light); font-weight: 700; display: block;\">National ER Issue Rate</span>\n                        <span style=\"font-family: var(--font-serif); font-size: 1.8rem; font-weight: bold; color: var(--accent-rust);\">15.5 / 1,000</span>\n                        <span style=\"font-size: 0.72rem; color: var(--text-light);\">discrimination, harassment &amp; retaliation issues per 1,000 employees</span>\n                    </div>\n                    <div style=\"border-left: 1px solid var(--border-hairline); padding-left: 2rem;\">\n                        <span style=\"font-size: 0.75rem; text-transform: uppercase; color: var(--text-light); font-weight: 700; display: block;\">Retaliation Share of ER Matters</span>\n                        <span style=\"font-family: var(--font-serif); font-size: 1.8rem; font-weight: bold; color: var(--accent-crimson);\">47.8%</span>\n                        <span style=\"font-size: 0.72rem; color: var(--text-light);\">of all EEOC charges are retaliation claims</span>\n                    </div>\n                </div>\n            </div>\n        </section>\n\n        <section id=\"pane-notes\" class=\"view-pane\">\n            <div class=\"section-header\">\n                <div>\n                    <h2 class=\"section-title\">Blank Case Note Templates</h2>\n                    <p class=\"section-meta\">Zero employee/matter data is pre-filled. Select a template, copy it, and paste into your organization's own system of record.</p>\n                </div>\n            </div>\n\n            <div style=\"display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;\">\n                <select class=\"form-control\" id=\"template-select\" style=\"max-width:420px;\" onchange=\"renderTemplate()\">\n                    <option value=\"fallback\">\u2014 No Specific Template Applies \u2014</option>\n                    <!-- Populated via JS from SITUATIONS -->\n                </select>\n                <button type=\"button\" class=\"copy-btn\" onclick=\"copyTemplate()\">Copy Template to Clipboard</button>\n            </div>\n            <pre class=\"template-output\" id=\"template-output\"></pre>\n        </section>\n\n        <section id=\"pane-transfer\" class=\"view-pane\">\n            <div class=\"section-header\">\n                <div>\n                    <h2 class=\"section-title\">Transfer Board</h2>\n                    <p class=\"section-meta\">Real routing destinations and sources drawn directly from the 28 situation protocols \u2014 no case data, routing only.</p>\n                </div>\n            </div>\n\n            <div class=\"tb-block\">\n                <div class=\"tb-title\">Refers To</div>\n                <div id=\"transfer-board-list\"></div>\n            </div>\n\n            <div class=\"tb-block\" style=\"margin-top:24px;\">\n                <div class=\"tb-title\">Receives From (Upstream Source, Per Situation)</div>\n                <div id=\"receives-from-list\"></div>\n            </div>\n        </section>\n\n    </main>\n\n    <div id=\"detail-overlay\" class=\"detail-overlay\">\n        <div class=\"detail-modal\">\n            <button class=\"close-btn\" onclick=\"closeDetailModal()\">&times;</button>\n            <div id=\"detail-modal-body\">\n                <!-- Populated via JS -->\n            </div>\n        </div>\n    </div>\n\n    <!-- Notification Toast -->\n    <div id=\"toast\" class=\"toast-msg\">Copied to clipboard successfully!</div>\n\n    <script>\n        const SITUATIONS = [\n{\n                code: \"P-01\",\n                category: \"Investigation Intake\",\n                title: \"Harassment Complaint Intake \u2014 HR Receives Formal or Informal Report\",\n                upstream: \"Supervisorline S-04 \u00b7 Supervisor escalated upon receipt\",\n                desc: \"Harassment Complaint Intake \u2014 HR Receives Formal or Informal Report\",\n                steps: [\n                    \"Conduct an intake conversation with the complainant within 24\u201348 hours. The complainant's willingness to cooperate depends significantly on how quickly and seriously HR responds. Do not delay.\",\n                    \"Document the intake verbatim where possible. Capture: what the complainant alleges, when, how often, who was present, whether witnesses exist, whether the complainant told anyone else, and what outcome they seek. Use the complainant's language \u2014 do not paraphrase.\",\n                    \"Assess interim measures before investigation begins. Do parties need to be separated? Does the complainant need a schedule change or different reporting structure during the investigation? Interim measures are not punitive \u2014 they preserve investigation integrity and protect the complainant.\",\n                    \"Brief Legal before interviewing the accused. If this complaint may escalate to an EEOC charge or litigation, the investigation may need to be conducted under attorney-client privilege. Determine that before the first interview.\",\n                    \"Tell the complainant: the investigation will be thorough, as confidential as possible (not completely confidential), and conducted without retaliation. Do not promise a specific outcome or timeline beyond what you can deliver.\"\n                ],\n                callout: \"\u26a0 Anti-Retaliation Obligation Begins at Intake \u2014 From the moment a complaint is received, any adverse action against the complainant is potentially retaliatory regardless of whether a formal investigation is open. Document every action taken regarding the complainant during and after the investigation.\",\n                citations: \"Title VII \u00b7 ADEA \u00b7 ADA \u00b7 PWFA \u00b7 EEOC Harassment Guidance (2024) \u00b7 Anti-retaliation provisions all statutes\"\n            }\n];\n\n        let mockDocket = [\n// Docket removed \u2014 Peopleline does not persist case data (Ephemeral Session Mode)\n        ];\n\nconst NOTE_TEMPLATES = {\n  p01: \"HARASSMENT COMPLAINT INTAKE NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Intake Conducted Within 24-48hrs: [FILL IN]\\n- Interim Measures Assessed: [FILL IN]\\n- Legal Briefed (Y/N/Date): [FILL IN]\\n- Investigation Opened (Y/N): [FILL IN]\",\n  p02: \"RETALIATION COMPLAINT NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Protected Activity Date: [FILL IN]\\n- Adverse Action Date: [FILL IN]\\n- Pre-Existing Documentation Reviewed (Y/N): [FILL IN]\\n- Legal Briefed (Y/N/Date): [FILL IN]\",\n  p03: \"ANONYMOUS COMPLAINT NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Specificity of Allegation Assessed: [FILL IN]\\n- Pattern Identified (Y/N): [FILL IN]\\n- Independent/External Investigator Assigned (Y/N): [FILL IN]\\n- Investigation Opened (Y/N \\u2014 if No, reason): [FILL IN]\",\n  p04: \"DIRECT-TO-HR INTAKE NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Reason Employee Bypassed Supervisor: [FILL IN]\\n- Supervisor Notified (Y/N/Date): [FILL IN]\\n- Legal Briefed Before Notification If Complaint Involves Supervisor (Y/N): [FILL IN]\\n- Ownership Assigned To: [FILL IN]\",\n  p05: \"MANAGER MISCONDUCT INVESTIGATION NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Direct Leader + Legal Briefed (Date): [FILL IN]\\n- Administrative Leave Decision: [FILL IN]\\n- Investigator Assigned: [FILL IN]\\n- Team Communication Issued (Y/N/Date): [FILL IN]\",\n  p06: \"PRE-TERMINATION REVIEW NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Checklist Items (a-e) Status: [FILL IN]\\n- Comparator Treatment Reviewed (Y/N): [FILL IN]\\n- Legal Review Triggered (Y/N): [FILL IN]\\n- Separation Agreement Considered (Y/N): [FILL IN]\",\n  p07: \"TERMINATION W/ OPEN ACCOMMODATION OR LEAVE NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Legal Briefed (Date): [FILL IN]\\n- Termination Rationale Predates Protected Activity (Y/N): [FILL IN]\\n- Post-FMLA ADA Analysis Complete (Y/N): [FILL IN]\\n- Legal Owns Final Decision (Confirmed): [FILL IN]\",\n  p08: \"PRETEXTUAL PIP REVIEW NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Pretext Indicators Identified: [FILL IN]\\n- Comparator Data Pulled (Y/N): [FILL IN]\\n- Legal Briefed (Y/N/Date): [FILL IN]\\n- PIP Outcome (Modified/Withdrawn/Proceeded): [FILL IN]\",\n  p09: \"PROBATIONARY TERMINATION REVIEW NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Protected Class / Recent Complaint Status: [FILL IN]\\n- Rationale Specificity Confirmed (Y/N): [FILL IN]\\n- Legal Briefed If Flagged (Y/N): [FILL IN]\",\n  p10: \"DISPARATE DISCIPLINE PATTERN REVIEW NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Pattern Identified: [FILL IN]\\n- Discipline Records Reviewed (Date Range): [FILL IN]\\n- Legal Briefed (Date): [FILL IN]\\n- Pending Discipline Held (Y/N): [FILL IN]\",\n  p11: \"FMLA/ADA/PWFA OVERLAP NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Applicable Statutes: [FILL IN]\\n- FMLA Notices Issued (Y/N/Date): [FILL IN]\\n- ADA Interactive Process Initiated (Y/N): [FILL IN]\\n- Legal Briefed (Y/N): [FILL IN]\",\n  p12: \"SUPERVISOR-DENIED ACCOMMODATION APPEAL NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- New Intake Opened (Date): [FILL IN]\\n- Interactive Process Outcome: [FILL IN]\\n- Supervisor Coaching Needed (Y/N): [FILL IN]\\n- Legal Review of Undue-Hardship If Denied (Y/N): [FILL IN]\",\n  p13: \"DISABILITY DISCLOSURE DURING PERFORMANCE CONVERSATION NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Discipline Process Paused (Y/N/Date): [FILL IN]\\n- Legal Briefed (Y/N): [FILL IN]\\n- Interactive Process Outcome: [FILL IN]\\n- Files Maintained Separately (Confirmed): [FILL IN]\",\n  p14: \"FORMAL GRIEVANCE NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Acknowledgment Sent (Date): [FILL IN]\\n- Protected-Class Content Assessed (Y/N): [FILL IN]\\n- Investigator Assigned: [FILL IN]\\n- Legal Briefed Before Written Decision (Y/N): [FILL IN]\\n- Written Decision Issued (Date): [FILL IN]\",\n  p15: \"SENIOR LEADER MISCONDUCT INVESTIGATION NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- CHRO + Legal Briefed (Date/Time): [FILL IN]\\n- External Investigator Engaged (Y/N): [FILL IN]\\n- Administrative Leave Decision: [FILL IN]\\n- Board Notification Required (Y/N): [FILL IN]\",\n  p16: \"EEOC CHARGE RECEIVED NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Legal Briefed (Date, same day required): [FILL IN]\\n- Litigation Hold Issued (Y/N/Date): [FILL IN]\\n- Document Collection Status: [FILL IN]\\n- Anti-Retaliation Communication Issued (Y/N): [FILL IN]\",\n  p17: \"DOMESTIC VIOLENCE / SAFETY NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Safety Protocol Activated (Y/N): [FILL IN]\\n- Applicable State DV Leave Law: [FILL IN]\\n- EAP Info Provided (Y/N): [FILL IN]\",\n  p18: \"RIF SELECTION LIST REVIEW NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Disparate Impact Analysis Complete (Y/N): [FILL IN]\\n- ADEA/OWBPA Review Complete (Y/N): [FILL IN]\\n- Legal Briefed (Y/N): [FILL IN]\\n- WARN Act Notice Status: [FILL IN]\",\n  p19: \"MERIT CYCLE DISPARATE IMPACT REVIEW NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Disparate Impact Analysis Complete (Y/N): [FILL IN]\\n- Source of Disparity Identified: [FILL IN]\\n- Legal Briefed (Y/N): [FILL IN]\\n- Communication Held Pending Review (Y/N): [FILL IN]\",\n  p20: \"PAY EQUITY COMPLAINT NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Legal Briefed (Date, same day required): [FILL IN]\\n- Litigation Hold Issued (Y/N): [FILL IN]\\n- Comparator Analysis Status: [FILL IN]\\n- Anti-Retaliation Communication to Supervisor (Y/N): [FILL IN]\",\n  p21: \"PAY TRANSPARENCY / NLRA VIOLATION NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Violation Type (NLRA Sec.7 / State Pay Transparency): [FILL IN]\\n- Discipline Rescinded (Y/N/Date): [FILL IN]\\n- Legal Briefed (Y/N): [FILL IN]\\n- Policy Revised (Y/N): [FILL IN]\",\n  p22: \"RETENTION RAISE COMPARATOR REVIEW NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Comparator Impact Assessed (Y/N): [FILL IN]\\n- Legal Briefed If Disparity Created (Y/N): [FILL IN]\\n- Business Reason Documented (Y/N): [FILL IN]\",\n  p23: \"PAY RANGE QUESTION ESCALATION NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Nature of Concern (General / Protected-Class Allegation): [FILL IN]\\n- P-20 Protocol Initiated If Protected-Class (Y/N): [FILL IN]\\n- Legal Briefed (Y/N): [FILL IN]\",\n  p24: \"INVOLUNTARY SEPARATION CONVERSATION NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Logistics Confirmed Pre-Conversation (Y/N): [FILL IN]\\n- Contemporaneous Notes Taken (Y/N): [FILL IN]\\n- Conversation Paused (Y/N \\u2014 reason if Yes): [FILL IN]\",\n  p25: \"ADA ACCOMMODATION ESCALATION NOTE (DIRECT TO HR)\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Interactive Process Opened (Date): [FILL IN]\\n- Essential Functions Reviewed (Y/N): [FILL IN]\\n- Accommodation Outcome: [FILL IN]\\n- Legal Review If Denial (Y/N): [FILL IN]\",\n  p26: \"RETURN FROM LEAVE / REINSTATEMENT NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Position Status (Same / Equivalent / Disputed): [FILL IN]\\n- New Restrictions Disclosed (Y/N): [FILL IN]\\n- Parallel ADA Process Opened If New Restrictions (Y/N): [FILL IN]\",\n  p27: \"MISCONDUCT COMPLAINT ESCALATION NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Protected-Class Content Screened (Y/N \\u2014 routes to P-01 if Yes): [FILL IN]\\n- Investigator Assigned: [FILL IN]\\n- CBA Reviewed If Union Environment (Y/N): [FILL IN]\",\n  p28: \"MENTAL HEALTH CRISIS ESCALATION NOTE\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER \\u2014 do not enter name here]\\n\\nRECORD:\\n- Immediate Safety Confirmed at Supervisor Level (Y/N): [FILL IN]\\n- ADA Interactive Process Opened (Y/N): [FILL IN]\\n- Fitness-for-Duty Evaluation Needed (Y/N): [FILL IN]\\n- Legal Coordination If FFD Needed (Y/N): [FILL IN]\",\n};\n\nconst FALLBACK_NOTE_TEMPLATE = \"BRIEF HR CASE NOTE (No Specific Template Applies)\\nDate: [DATE]\\nSpecialist (HR) Identifier: [SPECIALIST ID]\\nEmployee / Matter Reference: [EMPLOYEE ID OR MATTER NUMBER]\\n\\nMatter Summary: [BRIEF DESCRIPTION]\\nLegal Briefed (Y/N/Date): [FILL IN]\\nAction Taken: [FILL IN]\\nFollow-Up Date: [DATE]\";const TRANSFER_BOARD = [\n  {\n    \"dest\": \"Legal / Employment Counsel\",\n    \"contact\": \"Internal or outside employment counsel \u2014 the near-universal referral point for investigation, termination, leave, and pay-equity matters\",\n    \"used\": [\n      \"p01\",\n      \"p02\",\n      \"p04\",\n      \"p05\",\n      \"p06\",\n      \"p07\",\n      \"p08\",\n      \"p09\",\n      \"p10\",\n      \"p11\",\n      \"p12\",\n      \"p13\",\n      \"p14\",\n      \"p15\",\n      \"p16\",\n      \"p18\",\n      \"p19\",\n      \"p20\",\n      \"p21\",\n      \"p22\",\n      \"p23\",\n      \"p24\",\n      \"p25\",\n      \"p28\"\n    ]\n  },\n  {\n    \"dest\": \"CHRO\",\n    \"contact\": \"Chief HR Officer \u2014 senior-leader misconduct investigations, briefed alongside Legal within hours of intake\",\n    \"used\": [\n      \"p15\"\n    ]\n  },\n  {\n    \"dest\": \"External Investigator (engaged via Legal)\",\n    \"contact\": \"Independent investigator for HRBP-conflict or senior-leader cases \u2014 selected and engaged by Legal\",\n    \"used\": [\n      \"p03\",\n      \"p05\",\n      \"p15\"\n    ]\n  },\n  {\n    \"dest\": \"EAP (Employee Assistance Program)\",\n    \"contact\": \"Confidential employee support \u2014 DV and mental health crisis situations\",\n    \"used\": [\n      \"p17\",\n      \"p28\"\n    ]\n  }\n];\n\nconst RECEIVES_FROM = [\n  {\n    \"code\": \"P-01\",\n    \"upstream\": \"Supervisorline S-04 \u00b7 Supervisor escalated upon receipt\"\n  },\n  {\n    \"code\": \"P-02\",\n    \"upstream\": \"Any prior complaint, accommodation request, or protected leave triggers retaliation watch\"\n  },\n  {\n    \"code\": \"P-03\",\n    \"upstream\": \"May arrive via hotline, anonymous form, third-party report, or supervisor relay\"\n  },\n  {\n    \"code\": \"P-04\",\n    \"upstream\": \"Employee chose not to go to supervisor \u2014 HR must treat this as a formal intake\"\n  },\n  {\n    \"code\": \"P-05\",\n    \"upstream\": \"May arrive via team members, skip-level report, or HR direct intake\"\n  },\n  {\n    \"code\": \"P-06\",\n    \"upstream\": \"Supervisorline S-07 \u00b7 Supervisor cannot terminate without HR sign-off\"\n  },\n  {\n    \"code\": \"P-07\",\n    \"upstream\": \"P-06 gate \u2014 any open accommodation or leave triggers this situation\"\n  },\n  {\n    \"code\": \"P-08\",\n    \"upstream\": \"P-06 pre-termination review or employee complaint about PIP\"\n  },\n  {\n    \"code\": \"P-09\",\n    \"upstream\": \"Supervisor requests termination during probationary period\"\n  },\n  {\n    \"code\": \"P-10\",\n    \"upstream\": \"HR review of discipline records or supervisor escalation request reveals pattern\"\n  },\n  {\n    \"code\": \"P-11\",\n    \"upstream\": \"Supervisorline S-03, S-10, S-12 \u00b7 Employee leave or accommodation involves multiple statutes\"\n  },\n  {\n    \"code\": \"P-12\",\n    \"upstream\": \"Supervisor denied or delayed accommodation without HR review\"\n  },\n  {\n    \"code\": \"P-13\",\n    \"upstream\": \"Supervisorline S-01, S-02, S-06 \u2014 supervisor paused and escalated upon disclosure\"\n  },\n  {\n    \"code\": \"P-14\",\n    \"upstream\": \"Employee has exhausted informal resolution and filed a formal written grievance\"\n  },\n  {\n    \"code\": \"P-15\",\n    \"upstream\": \"P-05 or direct HR intake \u2014 accused is VP, Director, or C-suite\"\n  },\n  {\n    \"code\": \"P-16\",\n    \"upstream\": \"Tier 3 trigger \u00b7 Legal owns from this moment \u00b7 HR coordinates document collection\"\n  },\n  {\n    \"code\": \"P-17\",\n    \"upstream\": \"Employee disclosure or supervisor escalation \u2014 DV situation creating workplace impact\"\n  },\n  {\n    \"code\": \"P-18\",\n    \"upstream\": \"Leadership presents proposed RIF selection list for HR/Legal review\"\n  },\n  {\n    \"code\": \"P-19\",\n    \"upstream\": \"Annual merit cycle or triggered by pay equity complaint\"\n  },\n  {\n    \"code\": \"P-20\",\n    \"upstream\": \"Employee raises pay equity concern with supervisor (Supervisorline S-24) &rarr; escalated to HR\"\n  },\n  {\n    \"code\": \"P-21\",\n    \"upstream\": \"Supervisorline S-16 \u2014 supervisor disciplined employee for discussing wages\"\n  },\n  {\n    \"code\": \"P-22\",\n    \"upstream\": \"Leadership requests retention raise for individual employee \u00b7 HR must assess comparator impact\"\n  },\n  {\n    \"code\": \"P-23\",\n    \"upstream\": \"Supervisorline S-23 \u2014 supervisor provided pay range \u00b7 Employee now alleges they should be higher in range\"\n  },\n  {\n    \"code\": \"P-24\",\n    \"upstream\": \"P-06 approval complete \u00b7 HR attends all involuntary separations as witness and process anchor\"\n  },\n  {\n    \"code\": \"P-25\",\n    \"upstream\": \"Supervisorline S-10 \u00b7 Supervisor paused and escalated upon medical condition disclosure\"\n  },\n  {\n    \"code\": \"P-26\",\n    \"upstream\": \"Supervisorline S-11 \u00b7 Employee returning from FMLA leave, restoration question or restriction disclosed\"\n  },\n  {\n    \"code\": \"P-27\",\n    \"upstream\": \"Supervisorline S-15 \u00b7 Formal misconduct complaint received, beyond supervisor's authority to resolve\"\n  },\n  {\n    \"code\": \"P-28\",\n    \"upstream\": \"Supervisorline S-18 \u00b7 Employee in severe mental health distress, immediate safety addressed, HR case follow-up\"\n  }\n];\n\n\nfunction populateTemplateSelect() {\n    const sel = document.getElementById('template-select');\n    SITUATIONS.forEach(s => {\n        const opt = document.createElement('option');\n        opt.value = s.code.toLowerCase().replace('-', '');\n        opt.textContent = s.code + ' \u2014 ' + s.title;\n        sel.appendChild(opt);\n    });\n}\n\nfunction renderTemplate() {\n    const k = document.getElementById('template-select').value;\n    const t = NOTE_TEMPLATES[k];\n    document.getElementById('template-output').textContent = t || FALLBACK_NOTE_TEMPLATE;\n}\n\nfunction copyTemplate() {\n    const t = document.getElementById('template-output').textContent;\n    const d = document.createElement('textarea');\n    d.value = t;\n    document.body.appendChild(d);\n    d.select();\n    try { document.execCommand('copy'); } catch (e) {}\n    document.body.removeChild(d);\n    showToast('Blank template copied.');\n}\n\nfunction renderTransferBoard() {\n    document.getElementById('transfer-board-list').innerHTML = TRANSFER_BOARD.map(t => `\n        <div class=\"tb-row\">\n            <strong>${t.dest}</strong>\n            <span>${t.contact}<span class=\"tb-used\">Used by: ${t.used.map(c => c.toUpperCase().replace(/^P(\\d)/, 'P-$1')).join(', ')}</span></span>\n        </div>`).join('');\n\n    document.getElementById('receives-from-list').innerHTML = RECEIVES_FROM.map(r => `\n        <div class=\"tb-row\">\n            <strong>${r.code}</strong>\n            <span>${r.upstream}</span>\n        </div>`).join('');\n}\n\n        window.onload = function() {\n            renderCatalog(SITUATIONS);\n            populateTemplateSelect();\n            renderTemplate();\n            renderTransferBoard();\n            openDetailModal('P-01');\n        };\n\n        function switchTab(paneId) {\n            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));\n            document.querySelectorAll('.view-pane').forEach(pane => pane.classList.remove('active'));\n\n            const targetBtn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.getAttribute('onclick').includes(paneId));\n            if (targetBtn) targetBtn.classList.add('active');\n\n            const targetPane = document.getElementById(`pane-${paneId}`);\n            if (targetPane) {\n                targetPane.classList.add('active');\n            }\n        }\n\n        function renderCatalog(items) {\n            const container = document.getElementById('catalog-container');\n            container.innerHTML = '';\n\n            items.forEach(sit => {\n                const card = document.createElement('div');\n                card.className = `sit-card ${sit.featured ? 'featured' : ''}`;\n                card.onclick = () => openDetailModal(sit.code);\n\n                card.innerHTML = `\n                    <div>\n                        <span class=\"sit-code\">${sit.code}</span>\n                        <h3 class=\"sit-title\">${sit.title}</h3>\n                        <span class=\"sit-upstream\">Upstream: ${sit.upstream}</span>\n                        <p class=\"sit-desc\">${sit.desc}</p>\n                    </div>\n                    <div class=\"card-footer\">\n                        <span class=\"card-cat\">${sit.category}</span>\n                        <button class=\"btn-link\">View Protocol &rarr;</button>\n                    </div>\n                `;\n                container.appendChild(card);\n            });\n        }\n\n        function filterCategory(cat, btn) {\n            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));\n            btn.classList.add('active');\n\n            if (cat === 'ALL') {\n                renderCatalog(SITUATIONS);\n            } else {\n                const filtered = SITUATIONS.filter(s => s.category === cat);\n                renderCatalog(filtered);\n            }\n        }\n\n        function filterSituations() {\n            const query = document.getElementById('cat-search').value.toLowerCase();\n            const filtered = SITUATIONS.filter(s => \n                s.title.toLowerCase().includes(query) || \n                s.code.toLowerCase().includes(query) || \n                s.desc.toLowerCase().includes(query) ||\n                s.citations.toLowerCase().includes(query)\n            );\n            renderCatalog(filtered);\n        }\n\n        // Universal final step appended to every situation's protocol.\n        // Language reviewed: Nova (legal boundary \u2014 advisory content vs.\n        // data-capture, per DECISIONS.md \u00a715) + Bree (copy, matched to the\n        // guide's existing step voice). Locked this session.\n        const FINAL_STEP_TEXT = \"Record this situation in your organization's own system of record (Workday, ADP, HR Acuity, or equivalent) \u2014 not in this console. Do not draft, paste, or retype case narrative, verbatim statements, names, or any other case-specific detail here; this tool exists to walk you through the protocol, not to hold the record.\";\n\n        let currentDetailSituation = null;\n        let currentStepIndex = 0;\n\n        function openDetailModal(code) {\n            const sit = SITUATIONS.find(s => s.code === code);\n            if (!sit) return;\n\n            currentDetailSituation = sit;\n            currentStepIndex = 0;\n\n            const modalBody = document.getElementById('detail-modal-body');\n\n            modalBody.innerHTML = `\n                <div class=\"detail-header\">\n                    <span class=\"detail-code\">${sit.code} \u2014 ${sit.category}</span>\n                    <h2 class=\"detail-title\">${sit.title}</h2>\n                    <span class=\"sit-upstream\">Upstream Link: ${sit.upstream}</span>\n                </div>\n\n                ${sit.callout ? `\n                    <div class=\"callout-box\">\n                        <div class=\"callout-title\">Critical Compliance Obligation</div>\n                        <p>${sit.callout}</p>\n                    </div>\n                ` : ''}\n\n                <div class=\"citations-bar\">\n                    <strong>Legal & Regulatory Citations:</strong> ${sit.citations}\n                </div>\n\n                <h4 style=\"text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--text-muted); margin-top: 1.5rem; margin-bottom: 8px;\">Mandatory Procedural Action Steps</h4>\n\n                <div id=\"step-progress\" style=\"font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;\"></div>\n                <div id=\"step-content\" class=\"procedural-step-active\"></div>\n\n                <div style=\"margin-top: 2rem; display: flex; gap: 1rem; justify-content: space-between;\">\n                    <div style=\"display: flex; gap: 1rem;\">\n                        <button class=\"btn-secondary\" id=\"step-prev-btn\" onclick=\"prevStep()\">&larr; Previous</button>\n                        <button class=\"btn-primary\" id=\"step-next-btn\" onclick=\"nextStep()\">Next &rarr;</button>\n                    </div>\n                    <button class=\"btn-secondary\" onclick=\"closeDetailModal()\">Close Protocol Window</button>\n                </div>\n            `;\n\n            renderCurrentStep();\n            document.getElementById('detail-overlay').style.display = 'flex';\n        }\n\n        function totalStepCount(sit) {\n            // Real steps + one universal final documentation-redirect step.\n            return (sit.steps ? sit.steps.length : 0) + 1;\n        }\n\n        function renderCurrentStep() {\n            const sit = currentDetailSituation;\n            if (!sit) return;\n\n            const total = totalStepCount(sit);\n            const isFinalStep = currentStepIndex === total - 1;\n            const stepText = isFinalStep ? FINAL_STEP_TEXT : sit.steps[currentStepIndex];\n\n            document.getElementById('step-progress').textContent = `Step ${currentStepIndex + 1} of ${total}`;\n\n            const finalStepMarkup = isFinalStep\n                ? '<div class=\"final-step-label\" style=\"font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-rust); font-weight: 700; margin-bottom: 6px;\">Final Step \u2014 Documentation</div>'\n                : '';\n\n            document.getElementById('step-content').innerHTML = `\n                ${finalStepMarkup}\n                <p style=\"font-size: 0.95rem; line-height: 1.6;\">${stepText}</p>\n            `;\n\n            document.getElementById('step-prev-btn').disabled = currentStepIndex === 0;\n            const nextBtn = document.getElementById('step-next-btn');\n            if (isFinalStep) {\n                nextBtn.textContent = 'Close Protocol Window';\n                nextBtn.setAttribute('onclick', 'closeDetailModal()');\n            } else {\n                nextBtn.textContent = 'Next \u2192';\n                nextBtn.setAttribute('onclick', 'nextStep()');\n            }\n        }\n\n        function nextStep() {\n            if (!currentDetailSituation) return;\n            const total = totalStepCount(currentDetailSituation);\n            if (currentStepIndex < total - 1) {\n                currentStepIndex++;\n                renderCurrentStep();\n            }\n        }\n\n        function prevStep() {\n            if (currentStepIndex > 0) {\n                currentStepIndex--;\n                renderCurrentStep();\n            }\n        }\n\n        function closeDetailModal() {\n            document.getElementById('detail-overlay').style.display = 'none';\n            currentDetailSituation = null;\n            currentStepIndex = 0;\n        }\n\n        function showToast(msg) {\n            const toast = document.getElementById('toast');\n            toast.textContent = msg;\n            toast.classList.add('show');\n            setTimeout(() => {\n                toast.classList.remove('show');\n            }, 3000);\n        }\n    <\/script>\n</body>\n</html>\n";
+
+
+        const HO_SCRIPT = [
+            { speaker: 'EMPLOYEE', text: "Can I talk to you about something? ...Actually, never mind. Don't report this, I don't want to make it a big deal.", phase: 1 },
+            { speaker: 'SUPERVISOR', text: "I hear you, and whatever this is, I take it seriously \u2014 even if you'd rather I didn't act on it.", phase: 1, action: 'checkS1' },
+            { speaker: 'EMPLOYEE', text: "Okay... someone on the team made a comment about me that really bothered me.", phase: 1 },
+            { speaker: 'SUPERVISOR', text: "Thank you for telling me. I'm not going to offer an opinion on it right now, or promise this stays just between us.", phase: 1, action: 'checkS2' },
+            { speaker: 'SUPERVISOR', text: "I take this seriously. Under company policy, I have to report this immediately to HR so it can be reviewed objectively.", phase: 1, action: 'checkS3' },
+            { speaker: 'SUPERVISOR', text: "I'm not going to look into this myself \u2014 I'm escalating it to HR right now so someone trained can take it from here.", phase: 1, action: 'checkS4' },
+            { speaker: 'SYSTEM', text: 'Escalating to HR \u2014 Supervisorline S-04 \u2192 Peopleline P-01.', phase: 'transition' },
+            { speaker: 'SYSTEM', text: 'HR has received the escalation.', phase: 2 },
+            { speaker: 'HR', text: "I've received this from your supervisor. I'm going to set up time to talk with you directly within the next day or two.", phase: 2, action: 'checkP1' },
+            { speaker: 'HR', text: "I'll document exactly what you tell me in your own words \u2014 I won't paraphrase it.", phase: 2, action: 'checkP2' },
+            { speaker: 'HR', text: "Before anything else moves forward, I'm also going to check whether you need any changes to your day-to-day setup while this is being looked into.", phase: 2, action: 'checkP3' },
+            { speaker: 'SYSTEM', text: 'Anti-retaliation protection is active from this moment forward, regardless of investigation status.', phase: 2, action: 'checkP5' }
+        ];
+
+        let hoIndex = 0;
+        let hoPlaying = false;
+        let hoInterval = null;
+        let hoSeconds = 0;
+        let hoTimerInterval = null;
+        let hoInPhase2 = false;
+
+        function appendHoLine(speaker, text) {
+            const colors = { EMPLOYEE: '#3a3a3a', SUPERVISOR: '#1a4a8a', HR: '#5a1a6a', SYSTEM: '#8a6d1a' };
+            const targetId = hoInPhase2 ? 'hoTranscript2' : 'hoTranscript';
+            const box = document.getElementById(targetId);
+            if (!box) return;
+            const line = document.createElement('div');
+            line.style.cssText = 'padding:6px 8px; border-left:2px solid ' + (colors[speaker]||'#888') + '; background:' + (hoInPhase2 ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.05)') + '; color:' + (hoInPhase2 ? '#222' : '#dfe6f0') + ';';
+            line.innerHTML = '<div style="font-size:8px; letter-spacing:0.05em; color:' + (colors[speaker]||'#888') + '; margin-bottom:2px;">' + speaker + '</div><div>' + text + '</div>';
+            box.appendChild(line);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function runHoAction(action) {
+            try {
+                if (action && action.startsWith('checkS')) {
+                    const idx = parseInt(action.replace('checkS', ''), 10) - 1;
+                    if (typeof stepNav === 'function' && typeof renderStepThrough === 'function') {
+                        const card = document.getElementById('s04');
+                        if (card) { card.dataset.stepIndex = String(idx); renderStepThrough('s04'); }
+                    }
+                } else if (action && action.startsWith('checkP')) {
+                    const idx = parseInt(action.replace('checkP', ''), 10) - 1;
+                    const frame = document.getElementById('phase2Frame');
+                    if (frame && frame.contentWindow && typeof frame.contentWindow.nextStep === 'function') {
+                        // advance the real Peopleline modal's own step navigation
+                        if (idx > 0) frame.contentWindow.nextStep();
+                    }
+                }
+            } catch(e) { console.warn('Handoff action failed:', action, e); }
+        }
+
+        function runTransition() {
+            const screen = document.getElementById('transitionScreen');
+            screen.style.display = 'flex';
+            setTimeout(() => { document.getElementById('transitionBar').style.width = '100%'; }, 50);
+            setTimeout(() => {
+                screen.style.display = 'none';
+                document.getElementById('phase2Container').style.display = 'block';
+                // Load Peopleline's embedded content now, not via a file fetch --
+                // works identically whether this file is opened by double-click or
+                // served over HTTP.
+                document.getElementById('phase2Frame').srcdoc = PEOPLELINE_PHASE_HTML;
+                hoInPhase2 = true;
+            }, 1600);
+        }
+
+        function stepHoOnce() {
+            if (hoIndex >= HO_SCRIPT.length) return;
+            const beat = HO_SCRIPT[hoIndex];
+            if (beat.phase === 'transition') {
+                appendHoLine(beat.speaker, beat.text);
+                runTransition();
+            } else {
+                appendHoLine(beat.speaker, beat.text);
+                if (beat.action) runHoAction(beat.action);
+            }
+            hoIndex++;
+            if (hoIndex >= HO_SCRIPT.length) {
+                pauseHoPlayback();
+                document.getElementById('hoLiveDot').style.background = '#4a7c4a';
+            }
+        }
+
+        function toggleHoPlayback() {
+            if (hoPlaying) { pauseHoPlayback(); } else { playHoSim(); }
+        }
+
+        function playHoSim() {
+            hoPlaying = true;
+            const btn = document.getElementById('hoPlayBtn');
+            if (btn) btn.innerHTML = '&#9208; Pause';
+            hoInterval = setInterval(() => {
+                if (hoIndex >= HO_SCRIPT.length) { pauseHoPlayback(); return; }
+                stepHoOnce();
+            }, 3000);
+            if (!hoTimerInterval) {
+                hoTimerInterval = setInterval(() => {
+                    hoSeconds++;
+                    const m = String(Math.floor(hoSeconds/60)).padStart(2,'0');
+                    const s = String(hoSeconds%60).padStart(2,'0');
+                    const el = document.getElementById('hoTimer');
+                    if (el) el.textContent = m + ':' + s;
+                }, 1000);
+            }
+        }
+
+        function pauseHoPlayback() {
+            hoPlaying = false;
+            const btn = document.getElementById('hoPlayBtn');
+            if (btn) btn.innerHTML = '&#9654; Play';
+            if (hoInterval) { clearInterval(hoInterval); hoInterval = null; }
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw-supervisorline-demo.js').catch(err => {
+                    console.warn('Service worker registration failed:', err);
+                });
+            });
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(() => { playHoSim(); }, 1500);
+        });
+    </script>
+
+</body>
+</html>
