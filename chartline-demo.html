@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="manifest-chartline-demo.json">
+    <meta name="theme-color" content="#2d6ab0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chartline&#8480; Field Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Epilogue:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #17293b; --paper: #f2f8fc; --carolina: #4b9cd3; --carolina-light: #e8f3fa;
+    --carolina-border: #a9d3ea; --carolina-deep: #1f4e79; --amber: #c8780a; --amber-light: #fdf6ec;
+    --halt: #b83020; --rule: #d5e4ee; --muted: #5c7488; --card: #ffffff; --card-border: #d8e6f0;
+    --header-bg: #1f4e79; --header-border: #163c5e; --sidebar-bg: #eaf3fa;
+  }
+  * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: 'Epilogue', sans-serif; background: var(--paper); color: var(--ink); font-size: 14.5px; line-height: 1.55; display: flex; flex-direction: column; overflow: hidden; }
+  .skip-link { position:absolute; top:-100%; left:0; background:var(--ink); color:#fff; padding:0.5rem 1rem; font-family:'DM Mono',monospace; font-size:0.78rem; z-index:9999; text-decoration:none; }
+  .skip-link:focus { top:0; }
+
+  header.console-header { background: var(--header-bg); border-bottom: 1px solid var(--header-border); padding: 0.75rem 1.4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; flex-shrink: 0; }
+  .wordmark { font-family: 'Instrument Serif', serif; font-size: 1.4rem; color: #f2f8fc; }
+  .wordmark span { color: #aed4ec; }
+  .ref-notice { font-family: 'DM Mono', monospace; font-size: 0.64rem; color: #f0d8a8; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.15); padding: 0.32rem 0.65rem; border-radius: 3px; }
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  .instr-badge { font-family: 'DM Mono', monospace; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.05em; color: #d8ecf7; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.35rem 0.7rem; border-radius: 3px; }
+
+  .workspace { flex: 1; display: flex; overflow: hidden; }
+  aside.sidebar { width: 300px; flex-shrink: 0; background: var(--sidebar-bg); border-right: 1px solid var(--card-border); display: flex; flex-direction: column; overflow-y: auto; }
+  .sb-search { padding: 12px; border-bottom: 1px solid var(--card-border); }
+  .sb-search input { width: 100%; background: #fff; border: 1px solid var(--card-border); border-radius: 5px; padding: 7px 10px; color: var(--ink); font-size: 12px; outline: none; }
+  .sb-search input:focus { border-color: var(--carolina); }
+  .sb-filters { display: flex; gap: 5px; padding: 0 12px 10px; }
+  .sb-filter-btn { flex: 1; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600; padding: 5px; border-radius: 4px; background: #fff; border: 1px solid var(--card-border); color: var(--muted); cursor: pointer; }
+  .sb-filter-btn.active { background: var(--carolina); color: #fff; border-color: var(--carolina); }
+  .sb-section-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); padding: 12px 12px 6px; text-transform: uppercase; }
+  .sit-item { margin: 0 10px 6px; padding: 9px 10px; border-radius: 6px; border: 1px solid var(--card-border); background: #fff; cursor: pointer; }
+  .sit-item:hover { border-color: var(--carolina-border); }
+  .sit-item.active { border-color: var(--carolina); background: var(--carolina-light); }
+  .sit-tier-badge { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-bottom: 4px; }
+  .sit-tier-badge.t1 { background: var(--carolina-light); color: var(--carolina-deep); }
+  .sit-tier-badge.t2 { background: var(--amber-light); color: var(--amber); }
+  .sit-title { font-size: 12.5px; font-weight: 600; }
+  .sit-steps-n { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .mission-rules-card { margin: 4px 10px 10px; padding: 10px; border-radius: 6px; background: var(--amber-light); border: 1px solid #e6cf9e; }
+  .mission-rules-title { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; color: var(--amber); text-transform: uppercase; margin-bottom: 3px; }
+  .mission-rules-sub { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+  .mr-row { font-size: 11px; padding: 3px 0; color: var(--ink); line-height: 1.4; }
+
+  .scripts-card { margin: 4px 10px 14px; padding: 10px; border-radius: 6px; background: #fff; border: 1px solid var(--card-border); }
+  .scripts-title { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; color: var(--carolina-deep); text-transform: uppercase; margin-bottom: 8px; }
+  .us-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 6px; border-radius: 4px; cursor: pointer; margin-bottom: 2px; }
+  .us-row:hover { background: var(--carolina-light); }
+  .us-tag { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; color: var(--carolina-deep); background: var(--carolina-light); padding: 2px 6px; border-radius: 3px; }
+  .us-text { font-size: 10.5px; color: var(--muted); margin-left: 8px; flex: 1; }
+
+  main.main-panel { flex: 1; overflow-y: auto; padding: 20px 24px; position: relative; }
+  .panel-inner { max-width: 780px; margin: 0 auto; }
+  .empty-state { text-align: center; padding: 100px 20px; color: var(--muted); }
+  .empty-state h2 { font-size: 18px; margin-bottom: 8px; color: var(--ink); font-family: 'Instrument Serif', serif; font-weight: 400; }
+
+  .sit-hdr { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .sit-hdr-title { font-family: 'Instrument Serif', serif; font-size: 24px; font-weight: 400; }
+  .sit-hdr-code { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .view-tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--rule); }
+  .view-tab { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; padding: 9px 16px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; }
+  .view-tab.active { color: var(--carolina-deep); border-bottom-color: var(--carolina); }
+
+  .warn-banner { background: #fdf0ee; border: 1px solid #e0b0a8; border-radius: 6px; padding: 11px 14px; margin-bottom: 14px; font-size: 12.5px; color: #7a2018; display: flex; gap: 9px; }
+  .warn-banner strong { color: var(--halt); }
+
+  .esc-banner { background: var(--amber-light); border: 1px solid #e0c888; border-radius: 6px; padding: 11px 14px; margin-bottom: 14px; font-size: 12.5px; color: #7a4810; }
+  .esc-banner strong { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.05em; display: block; margin-bottom: 3px; text-transform: uppercase; color: var(--amber); }
+
+  .setup-block { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .setup-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+  .setup-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 4px; }
+  .setup-field label { font-size: 9.5px; color: var(--muted); display: block; margin-bottom: 3px; }
+  .setup-field-value { background: var(--sidebar-bg); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px 9px; font-size: 11.5px; color: var(--ink); }
+  .setup-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--card-border); line-height: 1.6; }
+
+  .steps-block { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .steps-header { margin-bottom: 10px; }
+  .steps-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+  .steps-sub { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+  .step-row { display: flex; gap: 9px; padding: 8px 9px; border-radius: 5px; margin-bottom: 5px; background: var(--sidebar-bg); border: 1px solid var(--card-border); cursor: pointer; }
+  .step-row.hard { border-color: #e0b0a8; background: #fdf0ee; }
+  .step-row.done { opacity: 0.55; }
+  .step-row.done .step-text { text-decoration: line-through; }
+  .step-row input { margin-top: 2px; accent-color: var(--carolina); }
+  .step-text { font-size: 12px; flex: 1; }
+  .hard-tag { font-family: 'DM Mono', monospace; font-size: 8px; font-weight: 700; color: var(--halt); background: #fdf0ee; padding: 1px 5px; border-radius: 3px; margin-right: 6px; white-space: nowrap; height: fit-content; }
+
+  .script-block { background: var(--carolina-light); border: 1px solid var(--carolina-border); border-radius: 8px; padding: 14px 16px; }
+  .script-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .script-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--carolina-deep); text-transform: uppercase; }
+  .script-copy { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; background: none; border: 1px solid var(--carolina-border); color: var(--carolina-deep); padding: 4px 9px; border-radius: 4px; cursor: pointer; }
+  .script-text { font-size: 13px; font-style: italic; line-height: 1.6; color: var(--ink); }
+
+  .mo-block { margin-top: 16px; }
+  .mo-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+  .mo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 10px; }
+  .mo-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 7px; padding: 11px 12px; }
+  .mo-card-label { font-size: 12px; font-weight: 700; margin-bottom: 5px; color: var(--carolina-deep); }
+  .mo-card-text { font-size: 10.5px; color: var(--muted); line-height: 1.5; }
+
+  .doc-block { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .doc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .doc-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+  .doc-sub { font-size: 10.5px; color: var(--muted); margin-bottom: 10px; }
+  .doc-copy { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; background: var(--carolina); border: none; color: #fff; padding: 5px 11px; border-radius: 4px; cursor: pointer; }
+  .note-output { background: var(--sidebar-bg); border: 1px solid var(--card-border); border-radius: 5px; padding: 12px; font-family: 'DM Mono', monospace; font-size: 10.5px; line-height: 1.65; white-space: pre-wrap; color: var(--ink); min-height: 160px; max-height: 400px; overflow-y: auto; }
+  .email-preview { background: var(--sidebar-bg); border: 1px solid var(--card-border); border-radius: 5px; padding: 12px; font-size: 11.5px; line-height: 1.65; white-space: pre-wrap; color: var(--ink); }
+
+  aside.right-sidebar { width: 250px; flex-shrink: 0; background: var(--sidebar-bg); border-left: 1px solid var(--card-border); padding: 14px; overflow-y: auto; }
+  .tb-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--amber); text-transform: uppercase; margin-bottom: 10px; }
+  .tb-row { background: var(--card); border: 1px solid var(--card-border); border-radius: 6px; padding: 9px 10px; margin-bottom: 7px; display: flex; justify-content: space-between; align-items: center; }
+  .tb-name { font-size: 11px; font-weight: 700; }
+  .tb-sub { font-size: 9px; color: var(--muted); margin-top: 1px; }
+  .tb-code { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; background: var(--sidebar-bg); border: 1px solid var(--card-border); color: var(--muted); padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+  .tb-code:hover { border-color: var(--carolina); color: var(--carolina-deep); }
+
+  #toast-zone { position: fixed; bottom: 18px; right: 18px; z-index: 999; }
+  .toast { background: var(--carolina-deep); border: 1px solid var(--carolina); border-radius: 6px; padding: 9px 14px; font-size: 11px; color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+  ::-webkit-scrollbar { width: 7px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+</style>
+</head>
+<body>
+<a href="#main-panel" class="skip-link">Skip to main content</a>
+
+<header class="console-header">
+  <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <div class="wordmark">Chart<span>line</span>&#8480;</div>
+    <span class="ref-notice">Reference tool only — not legal advice. Verify HIPAA guidance currency.</span>
+  </div>
+  <div class="header-right">
+    <span class="instr-badge">STANDALONE REFERENCE — NO DATA ENTERED HERE</span>
+  </div>
+</header>
+
+<div style="background:#0d2a4a; color:#7fb3e8; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.04em; text-align:center; padding:8px 16px;">
+    DEMO MODE — one real, illustrative situation from Chartline. This conversation illustrates how the guide supports a real request in your own system, whether by phone, in person, or otherwise — Chartline provides the procedures and rules; it does not replace your phone, CRM, or intake system. Your built guide covers your full role and source material, not just this sample.
+    <a href="book.html" style="color:#7fb3e8; text-decoration:underline; margin-left:8px;">Book a discovery call &rarr;</a>
+</div>
+
+<div class="workspace">
+  <aside class="sidebar">
+    <div class="sb-search">
+      <input type="text" id="search-input" placeholder="Search active scenarios..." oninput="renderSituations()">
+    </div>
+    <div class="sb-filters">
+      <button class="sb-filter-btn active" id="filter-all" onclick="setFilter('all')">ALL</button>
+      <button class="sb-filter-btn" id="filter-tier1" onclick="setFilter('tier1')">TIER I</button>
+      <button class="sb-filter-btn" id="filter-tier2" onclick="setFilter('tier2')">TIER II</button>
+    </div>
+    <div class="sb-section-label">Situations</div>
+    <div id="situation-list"></div>
+
+    <!-- LIVE REQUEST SIMULATION — channel-neutral, matches the real console's own
+         "Origin (Phone/Email/Chat/Portal)" framing rather than assuming a phone call. -->
+    <div id="requestSimPanel" style="border-top:1px solid #dfe6ee; margin-top:12px; padding-top:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.06em; color:#2d6ab0; display:flex; align-items:center; gap:5px;">
+                <span id="reqLiveDot" style="width:6px;height:6px;border-radius:50%;background:#c0392b;display:inline-block;"></span>
+                REQUEST RECEIVED
+            </span>
+            <span id="reqTimer" style="font-family:'DM Mono',monospace; font-size:9px; color:#8a97a8;">00:00</span>
+        </div>
+        <div id="reqTranscript" style="height:280px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:8px; background:#f4f7fb; border:1px solid #dfe6ee; font-family:'DM Mono',monospace; font-size:10.5px; line-height:1.5;"></div>
+        <div style="display:flex; gap:6px; margin-top:8px; align-items:center;">
+            <button id="reqPlayBtn" class="sb-filter-btn" style="font-size:9px; padding:4px 8px;" onclick="toggleReqPlayback()">&#9654; Play</button>
+            <button class="sb-filter-btn" style="font-size:9px; padding:4px 8px;" onclick="stepReqOnce()">&#9197; Step</button>
+            <button class="sb-filter-btn" style="font-size:9px; padding:4px 8px;" onclick="resetReqSim()">&#8635; Reset</button>
+        </div>
+    </div>
+
+    <div class="sb-section-label" style="margin-top:8px;">Every Case, Always</div>
+    <div class="mission-rules-card">
+      <div class="mission-rules-title">Mission Rules</div>
+      <div class="mission-rules-sub">Standing rules — reference only, not this case's steps</div>
+      <div id="mission-rules-list"></div>
+    </div>
+
+    <div class="scripts-card">
+      <div class="scripts-title">Universal Scripts</div>
+      <div id="universal-scripts-list"></div>
+    </div>
+  </aside>
+
+  <main class="main-panel" id="main-panel">
+    <div class="panel-inner" id="panel-inner"></div>
+  </main>
+
+  <aside class="right-sidebar">
+    <div class="tb-title">Directory Transfer Board</div>
+    <div id="transfer-board-list"></div>
+  </aside>
+</div>
+
+<div id="toast-zone"></div>
+
+<script>
+/* ============================================================
+   STANDALONE INSTRUCTIONS ONLY — no work happens in this console.
+   Step checkboxes are personal, ephemeral, on-screen tracking for
+   the specialist during the call only (cleared on reset) — they do
+   NOT feed into, populate, or alter the Case Note or Email. Those
+   are generic blank templates, identical every time, exactly as
+   they'd be handed to any client for their own system of record.
+
+   Every "Chartline" brand reference previously baked into a
+   deliverable (case notes, emails) has been replaced with
+   [CLIENT ORGANIZATION] / [CLIENT NAME] — this product is white-
+   labeled to the organization that buys it, not branded to
+   end-callers as "Chartline."
+   ============================================================ */
+
+const SITUATIONS = [
+{ id:"case-hipaa-fail", title:"HIPAA Verification Failure", tier:"tier1",
+    recordType:"Service Case", caseType:"HIPAA Verification Failure / Partial Verification", subType:"Compliance Audit Hold",
+    doNotWarning:"STOP \u2014 do not access any PHI. Caller cannot verify identity: do not look up, confirm, or discuss any patient information. (45 CFR \u00a7 164.514(h)).",
+    escalation:"If caller is unable or unwilling to complete verification through either submission option, escalate directly to Legal Records Queue (*221) for verification disputes.",
+    sop:[
+      "STOP — Do not search, verify, or discuss any patient details.",
+      "Open a case to document the attempt — caller name and organization only, no patient info.",
+      "Explain the verification requirements calmly, as fact not apology.",
+      "Explain paths to resolution clearly without releasing any system variables.",
+      "Document and close case as 'HIPAA — Access Denied'."
+    ],
+    hardStops:[0,3],
+    script:"Due to federal HIPAA privacy standards (45 CFR \u00a7 164.514), I cannot access, confirm, or discuss any patient record details without full identity verification. I can document this session and guide you on how to resolve the credential mismatch.",
+    options:[
+      { label:"Secure Digital Portal Upload", text:"Submit credentials securely via our digital portal once prepared. (Tradeoff: Fastest processing [instant verification], but requires the requester to register an account)." },
+      { label:"Centralized Fax Transmission", text:"Transmit credentials directly to our compliance manual queue once prepared. (Tradeoff: Slower manual audit [2-4 business hours], but requires no portal account)." }
+    ],
+    emailSubject:"Notice of Failed HIPAA Security Check", emailClosing:"Thank you for choosing [CLIENT NAME]." }
+];
+
+const MISSION_RULES = [
+  "Verify HIPAA identity context & full caller credentials first.",
+  "Log step completion status in your case system before transfer.",
+  "Apply Minimum Necessary disclosure constraints for all PHI.",
+  "Confirm specialty records have their specific required HIPAA authorization.",
+  "Route judicial subpoenas to Legal/Compliance — do not evaluate them yourself.",
+  "Continuing-care requests are not held for standard delivery holds.",
+  "Before moving on: confirm this is actually resolved, not just addressed — and keep it to the fewest steps this situation genuinely needs."
+];
+
+const TRANSFER_BOARD = [
+  { name:"Records Fulfillment Desk", sub:"Standard & Urgent Deliveries", code:"*554" },
+  { name:"Canvassing Team Queue", sub:"Fact-Finding Treatment Verification", code:"*667" },
+  { name:"Legal Records Queue", sub:"HIPAA & Release Desk", code:"*221" },
+  { name:"Emergency Continuing Care", sub:"Continuum Referral Desk", code:"*911" },
+  { name:"Supervising Billing Auditor", sub:"Dispute Resolution Desk", code:"*808" }
+];
+
+const UNIVERSAL_SCRIPTS = [
+  { tag:"GREET", text:"Thank you for calling [CLIENT NAME] Records Desk. This is [Agent], how can I assist with your clinical records inquiry today?" },
+  { tag:"VERIFY", text:"To ensure full HIPAA compliance and protect patient privacy, may I please verify your organization name and the request reference number?" },
+  { tag:"HOLD", text:"May I place you on a brief, secure hold for up to two minutes while I locate these records in our database?" },
+  { tag:"CHECK IN", text:"Thank you for holding. I have accessed the secure file directory and am ready to review the status with you." },
+  { tag:"TRANSFER", text:"I am initiating a warm transfer directly to our [Department] at extension [Code] to resolve this. One moment please." }
+];
+
+let state = { activeId:null, filter:'all', mainView:'live', completedSteps:{} };
+
+let toastTimer = null;
+function showToast(msg){
+  const zone = document.getElementById('toast-zone');
+  zone.innerHTML = `<div class="toast">${msg}</div>`;
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ zone.innerHTML=''; }, 2200);
+}
+function copyText(text, msg){
+  const d=document.createElement('textarea'); d.value=text; document.body.appendChild(d); d.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(d);
+  showToast(msg||'Copied.');
+}
+
+function setFilter(f){ state.filter=f; ['all','tier1','tier2'].forEach(k=>document.getElementById('filter-'+k).classList.toggle('active', k===f)); renderSituations(); }
+function renderSituations(){
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const list = document.getElementById('situation-list');
+  const filtered = SITUATIONS.filter(s => (state.filter==='all'||s.tier===state.filter) && (s.title.toLowerCase().includes(search) || s.caseType.toLowerCase().includes(search)));
+  list.innerHTML = filtered.map(s=>`<div class="sit-item ${s.id===state.activeId?'active':''}" onclick="openSituation('${s.id}')">
+      <span class="sit-tier-badge ${s.tier==='tier1'?'t1':'t2'}">${s.tier==='tier1'?'TIER I':'TIER II'}</span>
+      <div class="sit-title">${s.title}</div>
+      <div class="sit-steps-n">${s.sop.length} steps</div>
+    </div>`).join('') || '<div style="padding:14px;color:var(--muted);font-size:11px;">No matching situations.</div>';
+}
+function renderMissionRules(){ document.getElementById('mission-rules-list').innerHTML = MISSION_RULES.map(r=>`<div class="mr-row">&#8226; ${r}</div>`).join(''); }
+function renderScripts(){ document.getElementById('universal-scripts-list').innerHTML = UNIVERSAL_SCRIPTS.map(s=>`<div class="us-row" onclick='copyText(${JSON.stringify(s.text)}, "${s.tag} script copied.")'><span class="us-tag">${s.tag}</span><span class="us-text">"${s.text.slice(0,24)}..."</span></div>`).join(''); }
+function renderTransferBoard(){ document.getElementById('transfer-board-list').innerHTML = TRANSFER_BOARD.map(t=>`<div class="tb-row"><div><div class="tb-name">${t.name}</div><div class="tb-sub">${t.sub}</div></div><button class="tb-code" onclick='copyText("${t.code}", "Transfer code ${t.code} copied.")'>${t.code}</button></div>`).join(''); }
+
+function openSituation(id){ state.activeId=id; state.mainView='live'; renderSituations(); renderMain(); }
+function switchSitView(v){ state.mainView=v; renderMain(); }
+function toggleStep(sid, idx){ const key=sid+'-'+idx; state.completedSteps[key]=!state.completedSteps[key]; renderMain(); renderSituations(); }
+
+/* Generic, blank, identical-every-time templates. Nothing here is
+   built from completedSteps or any other session state — that state
+   exists only for the specialist's own visual tracking on screen. */
+function buildNoteTemplate(s){
+  let note = `=== [CLIENT ORGANIZATION] INTERACTION LOG ===\n`;
+  note += `Date: [DATE]\nSpecialist Name/ID: [SPECIALIST]\n`;
+  note += `----------------------------------------\n`;
+  note += `Record Classification: ${s.recordType}\n`;
+  note += `Case Category: ${s.caseType}\n`;
+  note += `Operational Sub-Type: ${s.subType}\n`;
+  note += `----------------------------------------\n`;
+  note += `Origin (Phone/Email/Chat/Portal): [FILL IN]\n`;
+  note += `Channel/Routing Queue: [FILL IN]\n`;
+  note += `----------------------------------------\n`;
+  note += `Steps Completed (check on your own system):\n`;
+  s.sop.forEach(st=>{ note += `  [ ] ${st}\n`; });
+  if(s.escalation){ note += `----------------------------------------\nEscalation (if applicable): [FILL IN — see Escalation note for this situation]\n`; }
+  note += `----------------------------------------\nOutcome / Notes: [FILL IN]\n`;
+  return note;
+}
+function buildEmailTemplate(s){
+  return `Subject: ${s.emailSubject} - Case #[CASE_ID]\n\nDear [REQUESTER NAME],\n\n[FILL IN — case-specific detail from your system]\n\n${s.emailClosing}\n[SPECIALIST NAME]`;
+}
+
+function renderMain(){
+  const el = document.getElementById('panel-inner');
+  if(!state.activeId){
+    el.innerHTML = `<div class="empty-state"><h2>No active case selected</h2><p>Choose a situation from the left, or search by keyword.</p></div>`;
+    return;
+  }
+  const s = SITUATIONS.find(x=>x.id===state.activeId);
+
+  let html = `
+    <div class="sit-hdr"><div><div class="sit-hdr-title">${s.title}</div><div class="sit-hdr-code">${s.tier==='tier1'?'TIER I \u2014 SELF RESOLVE':'TIER II \u2014 ESCALATION QUEUE'}</div></div></div>
+    <div class="view-tabs">
+      <button class="view-tab ${state.mainView==='live'?'active':''}" onclick="switchSitView('live')">Guide</button>
+      <button class="view-tab ${state.mainView==='doc'?'active':''}" onclick="switchSitView('doc')">Documentation Templates</button>
+    </div>`;
+
+  if(state.mainView === 'live'){
+    html += `<div class="warn-banner"><strong>\u26A0</strong><span>${s.doNotWarning}</span></div>`;
+    if(s.escalation) html += `<div class="esc-banner"><strong>Escalation \u2014 What &amp; Where</strong>${s.escalation}</div>`;
+    html += `
+      <div class="setup-block">
+        <div class="setup-title">Case Reference (record these in your own case system)</div>
+        <div class="setup-grid">
+          <div class="setup-field"><label>Record Classification</label><div class="setup-field-value">${s.recordType}</div></div>
+          <div class="setup-field"><label>Case Category</label><div class="setup-field-value">${s.caseType}</div></div>
+          <div class="setup-field"><label>Sub-Type</label><div class="setup-field-value">${s.subType}</div></div>
+        </div>
+        <div class="setup-note">Origin (Phone/Email/Chat/Portal) and Channel/Routing Queue are not selected here — this console holds no case data. Record both directly in your own system of record.</div>
+      </div>
+      <div class="steps-block">
+        <div class="steps-header"><div class="steps-title">Step-By-Step Instructions</div><div class="steps-sub">Checkboxes are for your own on-screen tracking during this call only \u2014 nothing here is saved or carried into documentation.</div></div>
+        ${s.sop.map((text,i)=>{ const key=s.id+'-'+i; const isDone=!!state.completedSteps[key]; const hard=s.hardStops.includes(i); return `<div class="step-row ${hard?'hard':''} ${isDone?'done':''}" onclick="toggleStep('${s.id}',${i})"><input type="checkbox" ${isDone?'checked':''} onclick="event.stopPropagation();toggleStep('${s.id}',${i})">${hard?'<span class="hard-tag">HARD STOP</span>':''}<span class="step-text">${text}</span></div>`; }).join('')}
+      </div>
+      <div class="script-block">
+        <div class="script-header"><div class="script-title">Spoken Verbal Directive</div><button class="script-copy" onclick='copyText(${JSON.stringify(s.script)},"Script copied to clipboard.")'>1-CLICK COPY</button></div>
+        <div class="script-text">"${s.script}"</div>
+      </div>
+      ${s.options.length ? `<div class="mo-block"><div class="mo-title">Options \u2014 Explain All, Requester Chooses</div><div class="mo-grid">${s.options.map(o=>`<div class="mo-card"><div class="mo-card-label">${o.label}</div><div class="mo-card-text">${o.text}</div></div>`).join('')}</div></div>` : ''}
+    `;
+  } else {
+    html += `
+      <div class="doc-block">
+        <div class="doc-header"><div class="doc-title">Case Note Template</div><button class="doc-copy" onclick='copyText(document.getElementById("note-out").textContent,"Case note template copied.")'>Copy Template</button></div>
+        <div class="doc-sub">Generic and blank, identical every time this situation is opened. Copy this into your own case management system and fill it in there \u2014 nothing here is pre-filled from this call.</div>
+        <div class="note-output" id="note-out">${buildNoteTemplate(s)}</div>
+      </div>
+      <div class="doc-block">
+        <div class="doc-header"><div class="doc-title">Email Template</div><button class="doc-copy" onclick='copyText(document.getElementById("email-out").textContent,"Email template copied.")'>Copy Template</button></div>
+        <div class="doc-sub">Blank template — fill in the bracketed fields on your own system before sending. "[CLIENT NAME]" is a placeholder for your organization's actual name.</div>
+        <div class="email-preview" id="email-out">${buildEmailTemplate(s)}</div>
+      </div>
+    `;
+  }
+  el.innerHTML = html;
+}
+
+window.onload = function(){
+  renderSituations(); renderMissionRules(); renderScripts(); renderTransferBoard(); renderMain();
+};
+</script>
+    <script>
+        // LIVE REQUEST SIMULATION — channel-neutral. No "caller," no phone framing;
+        // the real console explicitly supports Phone/Email/Chat/Portal equally, so
+        // the simulated exchange stays neutral about how the request arrived.
+        const REQ_SCRIPT = [
+            { speaker: 'REQUESTER', text: "I need to check the status of a medical records request." },
+            { speaker: 'SPECIALIST', text: "I can help with that. Before I can look into your request, can you provide your full name and the reference number from your request?" },
+            { speaker: 'REQUESTER', text: "I don't have a reference number \u2014 I'm reaching out on behalf of my father. He doesn't really share details with me." },
+            { speaker: 'SYSTEM', text: 'Identity verification cannot be completed with the information provided.', action: 'openSit' },
+            { speaker: 'SPECIALIST', text: "Due to federal HIPAA privacy standards, I'm not able to access, confirm, or discuss any patient record details without full identity verification on file.", action: 'checkStep0' },
+            { speaker: 'REQUESTER', text: "That's frustrating \u2014 I just need to know if it's ready." },
+            { speaker: 'SPECIALIST', text: "I understand. I'm going to open a case to document this attempt, so there's a record of it." , action: 'checkStep1' },
+            { speaker: 'SPECIALIST', text: "I can walk you through exactly how to get verified so we can move forward from here." , action: 'checkStep2' },
+            { speaker: 'SPECIALIST', text: "There are two ways to complete verification: a secure digital portal upload, which is the fastest option, or a fax to our compliance queue if you'd rather not create an account." , action: 'checkStep3' },
+            { speaker: 'REQUESTER', text: "Okay, I'll try the portal \u2014 that sounds easier." },
+            { speaker: 'SPECIALIST', text: "Once your credentials are submitted and verified, we'll be able to fully assist with this request." , action: 'checkStep4' },
+            { speaker: 'SYSTEM', text: "Case documented and closed as 'HIPAA \u2014 Access Denied,' pending verification.", action: 'complete' }
+        ];
+
+        let reqIndex = 0;
+        let reqPlaying = false;
+        let reqInterval = null;
+        let reqSeconds = 0;
+        let reqTimerInterval = null;
+
+        function appendReqLine(speaker, text) {
+            const colors = { REQUESTER: '#3a3a3a', SPECIALIST: '#0d5c2a', SYSTEM: '#8a6d1a' };
+            const box = document.getElementById('reqTranscript');
+            const line = document.createElement('div');
+            line.style.cssText = 'padding:6px 8px; border-left:2px solid ' + (colors[speaker]||'#888') + '; background:rgba(255,255,255,0.7);';
+            line.innerHTML = '<div style="font-size:8px; letter-spacing:0.05em; color:' + (colors[speaker]||'#888') + '; margin-bottom:2px;">' + speaker + '</div><div>' + text + '</div>';
+            box.appendChild(line);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function runReqAction(action) {
+            try {
+                if (action === 'openSit') {
+                    if (typeof openSituation === 'function') openSituation('case-hipaa-fail');
+                } else if (action.startsWith('checkStep')) {
+                    const idx = parseInt(action.replace('checkStep', ''), 10);
+                    if (typeof toggleStep === 'function' && !state.completedSteps['case-hipaa-fail-' + idx]) {
+                        toggleStep('case-hipaa-fail', idx);
+                    }
+                } else if (action === 'complete') {
+                    document.getElementById('reqLiveDot').style.background = '#4a7c4a';
+                }
+            } catch(e) { console.warn('Request action failed:', action, e); }
+        }
+
+        function stepReqOnce() {
+            if (reqIndex >= REQ_SCRIPT.length) return;
+            const beat = REQ_SCRIPT[reqIndex];
+            appendReqLine(beat.speaker, beat.text);
+            if (beat.action) runReqAction(beat.action);
+            reqIndex++;
+            if (reqIndex >= REQ_SCRIPT.length) pauseReqPlayback();
+        }
+
+        function toggleReqPlayback() {
+            if (reqPlaying) { pauseReqPlayback(); } else { playReqSim(); }
+        }
+
+        function playReqSim() {
+            reqPlaying = true;
+            document.getElementById('reqPlayBtn').innerHTML = '&#9208; Pause';
+            reqInterval = setInterval(() => {
+                if (reqIndex >= REQ_SCRIPT.length) { pauseReqPlayback(); return; }
+                stepReqOnce();
+            }, 2800);
+            if (!reqTimerInterval) {
+                reqTimerInterval = setInterval(() => {
+                    reqSeconds++;
+                    const m = String(Math.floor(reqSeconds/60)).padStart(2,'0');
+                    const s = String(reqSeconds%60).padStart(2,'0');
+                    document.getElementById('reqTimer').textContent = m + ':' + s;
+                }, 1000);
+            }
+        }
+
+        function pauseReqPlayback() {
+            reqPlaying = false;
+            document.getElementById('reqPlayBtn').innerHTML = '&#9654; Play';
+            if (reqInterval) { clearInterval(reqInterval); reqInterval = null; }
+        }
+
+        function resetReqSim() {
+            pauseReqPlayback();
+            reqIndex = 0;
+            reqSeconds = 0;
+            document.getElementById('reqTimer').textContent = '00:00';
+            document.getElementById('reqTranscript').innerHTML = '';
+            document.getElementById('reqLiveDot').style.background = '#c0392b';
+            if (reqTimerInterval) { clearInterval(reqTimerInterval); reqTimerInterval = null; }
+            state.activeId = null;
+            state.completedSteps = {};
+            renderSituations();
+            renderMain();
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw-chartline-demo.js').catch(err => {
+                    console.warn('Service worker registration failed:', err);
+                });
+            });
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(() => { playReqSim(); }, 1500);
+        });
+    </script>
+
+</body>
+</html>

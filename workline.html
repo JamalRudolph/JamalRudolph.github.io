@@ -1,291 +1,595 @@
----
----
+<!--
+  RUDOLPH CX LLC — CANONICAL PAGE TEMPLATE
+  Built: Session 210, Phase 1 (resolves DRIFT-209-D + the nav/CSS mismatch found this session)
+
+  WHAT THIS FILE IS: the single source-of-truth markup + CSS + JS pattern that
+  every guide page (Phase 2) and new page (Phase 3, homepage Phase 4) gets
+  rebuilt from. It is NOT itself deployed as a live page. [TEMPLATE] markers
+  show where per-guide content goes — do not treat that copy as final.
+
+  WHAT THIS FIXES:
+  1. DRIFT-209-D — the pricing include (_includes/guide-pricing.html) renders
+     classes (.pricing-block, .pb-discovery, .retainer-block, .pb-cta, .reveal,
+     etc.) that only existed, incompletely, on aidline.html. Every class the
+     real include emits is now styled here, once, matching the include's
+     actual live markup exactly (verified against the live file this session).
+  2. Nav/CSS mismatch (found this session, not previously logged) — the shared
+     _includes/nav.html emits .nav-inner, .nav-dd, .dd-menu, .nav-logo-accent.
+     No page's embedded CSS styled those classes (pages styled .nav-dropdown,
+     .dropdown-menu instead) — the nav has been rendering unstyled on every
+     live page. Fixed here by writing CSS for nav.html's real, current output.
+
+  DESIGN TOKENS: locked per RCX-FOUND-004 / RCX-PROD-001. Not invented here —
+  copied from those values (Cormorant Garamond; #b83224 red; #c49a3c gold;
+  cream/ink palette). Nothing about the palette is a new choice.
+
+  PWA PATTERN: extracted and generalized from Aidline's existing service-
+  worker/manifest/install-banner code (verified this session by reading the
+  source — the pattern is structurally coherent; it has NOT been confirmed
+  working end-to-end in a real browser install by anyone this session or
+  per any HISTORY.md record found). Templatized with {{GUIDE_SLUG}} /
+  {{GUIDE_NAME}} / #2a6e4a placeholders so Phase 2 can generate the
+  remaining six guides' manifest+service-worker pairs from one pattern
+  instead of hand-building each.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-  <meta name="description" content="Workline&#8480; by Rudolph CX — performance support for workforce development and employment services workers navigating live client moments.">
-    <meta property="og:type" content="website">
-  <meta property="og:title" content="Workline℠ — Rudolph CX">
-  <meta property="og:description" content="Performance support for workforce development workers navigating live employment services moments.">
-  <meta property="og:image" content="https://rudolphcx.com/og-default.png">
-  <meta property="og:url" content="https://rudolphcx.com/workline.html">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Workline℠ — Rudolph CX">
-  <meta name="twitter:description" content="Performance support for workforce development workers navigating live employment services moments.">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Workline — Performance Support Guides for Workforce Development | Rudolph CX</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workline&#8480; — Performance Support Guides | Rudolph CX</title>
+<meta name="description" content="Workline&#8480; by Rudolph CX — a custom-built reference guide for employment specialists, workforce center staff, and career navigators.">
 <link rel="manifest" href="/manifest-workline.json">
-<meta name="theme-color" content="#5a2a7a">
+<meta name="theme-color" content="#2a6e4a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; display: flex; align-items: center; padding: 0 40px; }
-.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
-.nav-logo span { color: var(--accent, var(--rust, var(--red, #b83020))); }
-.nav-links { list-style: none; display: flex; align-items: center; gap: 1.75rem; margin: 0 auto; padding: 0; }
-.nav-links a { font-family: var(--sans); font-size: 0.85rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
-.nav-links a:hover { color: var(--ink); }
-.nav-dropdown { position: relative; }
-.nav-dropdown > a::after { content: ' ↓'; font-size: 0.7rem; opacity: 0.5; }
-.nav-dropdown:hover .dropdown-menu,
-.nav-dropdown:focus-within .dropdown-menu { display: flex; flex-direction: column; gap: 2px; }
-.dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
-.dropdown-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); }
-.dropdown-menu a:hover { background: var(--cream2); color: var(--ink); }
-.dm-tag { font-size: 0.65rem; background: var(--accent, var(--rust, var(--red, #b83020))); color: #fff; padding: 1px 5px; border-radius: 2px; }
 
+/* ============================================================
+   DESIGN TOKENS — locked, RCX-FOUND-004 / RCX-PROD-001.
+   Single source of truth. Every page inherits these unchanged.
+   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
---ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
---cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
---forest: #3a6640; --forest2: #4d8055; --forest-light: #eaf2ea;
---amber: #c8780a; --red: #b83020; --gold: #c49a3c;
---serif: 'Cormorant Garamond', Georgia, serif;
---mono: 'DM Mono', monospace;
---sans: 'DM Sans', system-ui, sans-serif;
+  --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
+  --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
+  --red: #b83224; --red2: #d94030; --gold: #c49a3c;
+  --green: #2a6e4a;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', system-ui, sans-serif;
 }
 html { scroll-behavior: smooth; }
-body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; cursor: none; }
-.cursor { width: 10px; height: 10px; background: var(--forest); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.6), 0 0 0 2.5px rgba(58,102,64,0.3); }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; }
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--cream2); }
-::-webkit-scrollbar-thumb { background: var(--forest); }
-/* WCAG 2.1 AA */
-.skip-link { position:absolute; top:-100%; left:0; background:var(--ink); color:var(--cream); padding:0.5rem 1rem; font-family:var(--mono); font-size:0.78rem; z-index:10000; text-decoration:none; border-radius:0 0 4px 0; letter-spacing:0.1em; }
-.skip-link:focus { top:0; outline:3px solid var(--gold); outline-offset:2px; }
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:3px solid var(--forest); outline-offset:2px; }
-
-/* NAV */
-
-/* HERO */
-.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 140px 60px 80px; position: relative; overflow: hidden; }
-.hero::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.7; }
-.hero-left { position: relative; z-index: 1; }
-.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--forest); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
-.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--forest); }
-.hero-title { font-family: var(--serif); font-size: clamp(48px,5.5vw,78px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 32px; }
-.hero-title em { font-style: italic; color: var(--forest); }
-.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 480px; margin-bottom: 32px; font-weight: 300; }
-.offline-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); margin-bottom: 28px; padding: 8px 14px; border: 1px solid var(--cream3); background: white; }
-.offline-dot { width: 6px; height: 6px; background: var(--forest); border-radius: 50%; display: inline-block; flex-shrink: 0; }
-.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-.btn-accent { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; background: var(--forest); color: var(--cream); border: none; cursor: pointer; text-decoration: none; transition: all 0.2s; position: relative; overflow: hidden; display: inline-block; }
-.btn-accent::after { content: ''; position: absolute; inset: 0; background: var(--ink); transform: translateX(-101%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
-.btn-accent:hover::after { transform: translateX(0); }
-.btn-accent span { position: relative; z-index: 1; }
-.btn-sec { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.15s; }
-.btn-sec:hover { color: var(--forest); }
-/* HERO RIGHT */
-.hero-right { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 16px; padding: 20px 20px 40px 40px; }
-.scenario-card { background: white; border: 1px solid var(--cream3); padding: 24px 28px; position: relative; opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
-.scenario-card.visible { opacity: 1; transform: none; }
-.scenario-card.active-sc { border-left: 3px solid var(--forest); }
-.sc-tag { font-family: var(--mono); font-size: 7.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--forest); margin-bottom: 10px; }
-.sc-situation { font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--ink); line-height: 1.4; margin-bottom: 10px; }
-.sc-outcome { font-size: 12px; color: var(--dim); line-height: 1.6; font-weight: 300; }
-.sc-guide-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--forest); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--cream3); }
-/* ELIGIBILITY GATE CALLOUT */
-.elig-gate { background: var(--forest-light); border-left: 3px solid var(--forest); padding: 20px 24px; margin: 40px 0; }
-.elig-gate-label { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--forest); margin-bottom: 8px; }
-.elig-gate-text { font-size: 13px; color: var(--ink3); line-height: 1.7; font-weight: 300; }
-.elig-gate-halt { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); margin-top: 10px; }
-/* MARQUEE */
-.marquee-wrap { border-top: 1px solid var(--cream3); border-bottom: 1px solid var(--cream3); padding: 14px 0; overflow: hidden; background: var(--cream2); position: relative; z-index: 1; }
-.marquee-track { display: flex; animation: marquee 38s linear infinite; width: max-content; }
-.marquee-item { display: flex; align-items: center; gap: 28px; padding: 0 28px; font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
-.marquee-item::after { content: '\00b7'; color: var(--forest); }
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-/* SECTIONS */
-.section { padding: 120px 60px; position: relative; }
-.section-inner { max-width: 1200px; margin: 0 auto; }
-.section-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--forest); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--forest); }
-.section-title { font-family: var(--serif); font-size: clamp(34px,3.8vw,52px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 32px; }
-.section-title em { font-style: italic; color: var(--forest); }
-.split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 64px; }
-.split-text { font-size: 15px; color: var(--ink3); line-height: 1.8; font-weight: 300; }
-.split-text p { margin-bottom: 20px; }
-.split-text strong { color: var(--ink); font-weight: 600; }
-/* Compliance block */
-.compliance-block { background: var(--forest-light); border-left: 2px solid var(--forest); padding: 24px 28px; margin: 32px 0; }
-.cb-label { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--forest); margin-bottom: 12px; }
-.cb-list { list-style: none; }
-.cb-list li { font-size: 12px; color: var(--ink3); line-height: 1.7; font-weight: 300; padding: 4px 0; border-bottom: 1px solid var(--cream3); }
-.cb-list li:last-child { border-bottom: none; }
-.cb-list li::before { content: '§ '; color: var(--forest); font-family: var(--mono); font-size: 10px; }
-/* Pull quote */
-.pull-quote { border-left: 2px solid var(--forest); padding: 24px 32px; background: white; margin: 40px 0; }
-.pq-text { font-family: var(--serif); font-size: 21px; font-weight: 500; color: var(--ink); line-height: 1.45; font-style: italic; margin-bottom: 12px; }
-.pq-attr { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
-/* Feature list */
-.feature-list { list-style: none; }
-.feature-item { display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid var(--cream3); }
-.feature-item:first-child { border-top: 1px solid var(--cream3); }
-.feature-num { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--forest); letter-spacing: 0.1em; flex-shrink: 0; margin-top: 2px; width: 28px; }
-.feature-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
-.feature-desc { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; }
-/* SITUATIONS */
-.situations-section { padding: 120px 60px; background: var(--ink); position: relative; overflow: hidden; }
-.situations-section::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(58,102,64,0.2) 0%, transparent 70%); pointer-events: none; }
-.sit-eyebrow { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--forest2); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-.sit-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--forest2); }
-.sit-title { font-family: var(--serif); font-size: clamp(32px,3.5vw,48px); font-weight: 500; color: var(--cream); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
-.sit-sub { font-size: 15px; color: rgba(247,244,238,0.85); line-height: 1.7; font-weight: 300; max-width: 560px; margin-bottom: 16px; }
-.sit-note { font-family: var(--mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.6); margin-bottom: 48px; }
-.sit-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; }
-.sit-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 28px 24px; position: relative; transition: all 0.3s ease; }
-.sit-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(58,102,64,0.5); }
-.sit-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--forest); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
-.sit-card:hover::before { transform: scaleX(1); }
-.sit-card-n { font-family: var(--mono); font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.9); letter-spacing: 0.1em; margin-bottom: 12px; }
-.sit-card-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--cream); margin-bottom: 6px; letter-spacing: -0.01em; line-height: 1.2; }
-.sit-card-desc { font-size: 11px; color: rgba(247,244,238,0.85); line-height: 1.65; font-weight: 300; }
-.sit-card-reg { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: rgba(200,170,240,1.0); margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); text-transform: uppercase; }
-.sit-card-halt { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; color: rgba(184,48,32,0.8); margin-top: 6px; text-transform: uppercase; }
-/* PRICING */
-.pricing-section { padding: 120px 60px; background: var(--cream); border-top: 1px solid var(--cream3); }
-.pricing-block { max-width: 760px; margin: 0 auto; text-align: center; }
-.pb-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--forest); margin-bottom: 20px; }
-.pb-title { font-family: var(--serif); font-size: clamp(36px,4vw,54px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px; }
-.pb-sub { font-size: 15px; color: var(--ink3); line-height: 1.75; font-weight: 300; max-width: 560px; margin: 0 auto 48px; }
-.pb-discovery { background: white; border: 1px solid var(--cream3); padding: 40px; margin-bottom: 32px; text-align: left; }
-.pb-discovery-tag { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--forest); margin-bottom: 16px; }
-.pb-discovery-price { font-family: var(--serif); font-size: 48px; font-weight: 600; color: var(--ink); line-height: 1; margin-bottom: 8px; }
-.pb-discovery-note { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; max-width: 480px; }
-.pb-tiers-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-bottom: 20px; }
-.pb-tiers-range { font-family: var(--serif); font-size: 36px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
-.pb-tiers-note { font-size: 13px; color: var(--dim); line-height: 1.6; font-weight: 300; margin-bottom: 24px; }
-.retainer-block { margin-top: 24px; padding: 28px 32px; border-left: 3px solid var(--forest); background: white; text-align: left; }
-.retainer-label { font-family: var(--mono); font-size: 8px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--forest); margin-bottom: 10px; }
-.retainer-price { font-family: var(--serif); font-size: 32px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
-.retainer-note { font-size: 13px; color: var(--dim); line-height: 1.7; font-weight: 300; }
-.pb-cta { display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 40px; background: var(--forest); color: var(--cream); text-decoration: none; transition: background 0.2s; }
-.pb-cta:hover { background: var(--ink); }
-/* EQUITY */
-.equity-block { background: var(--cream2); border-top: 1px solid var(--cream3); padding: 60px; }
-/* CONTACT */
-.contact-section { padding: 120px 60px; background: var(--cream2); border-top: 1px solid var(--cream3); text-align: center; }
-.contact-title { font-family: var(--serif); font-size: clamp(36px,4.5vw,64px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
-.contact-title em { font-style: italic; color: var(--forest); }
-.contact-sub { font-size: 16px; color: var(--dim); line-height: 1.7; max-width: 500px; margin: 0 auto 48px; font-weight: 300; }
-.form-wrap { max-width: 560px; margin: 0 auto; text-align: left; }
-.form-group { margin-bottom: 20px; }
-.form-label { font-family: var(--mono); font-size: 8px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); display: block; margin-bottom: 8px; }
-.form-input, .form-select, .form-textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--cream3); background: white; font-family: var(--sans); font-size: 14px; color: var(--ink); font-weight: 300; outline: none; transition: border-color 0.15s; appearance: none; }
-.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--forest); }
-.form-textarea { resize: vertical; min-height: 100px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.form-submit { width: 100%; padding: 16px; background: var(--forest); color: var(--cream); font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
-.form-submit:hover { background: var(--ink); }
-.form-note { font-family: var(--mono); font-size: 9px; color: var(--dim); text-align: center; margin-top: 16px; line-height: 1.6; }
-/* FOOTER */
-footer { padding: 28px 60px; border-top: 1px solid var(--cream3); display: flex; align-items: center; justify-content: space-between; background: var(--cream); flex-wrap: wrap; gap: 12px; }
-.footer-logo { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--ink3); }
-.footer-logo span { color: var(--forest); }
-.footer-back { font-family: var(--mono); font-size: 9px; color: var(--dim); text-decoration: none; letter-spacing: 0.1em; transition: color 0.15s; }
-.footer-back:hover { color: var(--forest); }
-.footer-copy { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.1em; }
-/* REVEAL */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1); }
-.reveal.visible { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-@media (max-width: 900px) {
-
-.hero { grid-template-columns: 1fr; padding: 100px 28px 60px; }
-.hero-right { display: none; }
-.split-layout { grid-template-columns: 1fr; gap: 40px; }
-.sit-grid { grid-template-columns: 1fr; }
-.section, .situations-section, .pricing-section, .contact-section { padding: 80px 28px; }
-.equity-block { padding: 40px 28px; }
-footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: center; }
-.form-row { grid-template-columns: 1fr; }
+::-webkit-scrollbar-thumb { background: var(--red); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
-  .footer-disclaimer { font-family: var(--mono, monospace); font-size: 9px; color: var(--muted, #b5afa6); letter-spacing: 0.04em; line-height: 1.6; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--cream3, #e2ddd3); max-width: 800px; }
-  .form-privacy { font-family: var(--mono, monospace); font-size: 10px; color: var(--muted, #b5afa6); margin-top: 8px; line-height: 1.5; }
-  .form-privacy a { color: var(--muted, #b5afa6); text-decoration: underline; }
+/* ============================================================
+   NAV — CSS written to match _includes/nav.html's REAL, current
+   markup exactly (nav-inner / nav-dd / dd-menu / nav-logo-accent).
+   This is the DRIFT-209-D-adjacent fix: the nav has been shipping
+   unstyled because no page's CSS matched what nav.html emits.
+   ============================================================ */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; }
+.nav-inner { max-width: 1400px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; gap: 2rem; }
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
+.nav-logo-accent { color: var(--red); }
+.nav-links { list-style: none; display: flex; align-items: center; gap: 1.6rem; margin: 0; padding: 0; flex-wrap: nowrap; }
+.nav-links a { font-family: var(--sans); font-size: 0.82rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; white-space: nowrap; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--red); }
+.nav-dd { position: relative; }
+.nav-dd > a::after { content: ' ↓'; font-size: 0.65rem; opacity: 0.5; }
+.nav-dd:hover .dd-menu,
+.nav-dd:focus-within .dd-menu { display: flex; }
+.dd-menu { display: none; flex-direction: column; gap: 2px; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
+.dd-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); gap: 10px; }
+.dd-menu a:hover { background: var(--cream2); color: var(--ink); }
+.dm-tag { font-size: 0.62rem; font-family: var(--mono); background: var(--red); color: #fff; padding: 1px 6px; border-radius: 2px; letter-spacing: 0.04em; }
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; flex-shrink: 0; }
+.nav-toggle .bar { display: block; width: 22px; height: 2px; background: var(--ink); margin: 5px 0; transition: transform 0.2s, opacity 0.2s; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+/* Mobile nav — real slide-down panel + tap-to-open Our Guides submenu (touch has no hover) */
+@media (max-width: 900px) {
+  .nav-toggle { display: block; }
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--cream); border-bottom: 1px solid var(--cream3); flex-direction: column; align-items: stretch; gap: 0; max-height: calc(100vh - 64px); overflow-y: auto; box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+  .nav-links.mobile-open { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links > li > a { display: block; padding: 16px 24px; border-bottom: 1px solid var(--cream3); font-size: 0.95rem; }
+  .nav-dd > a::after { float: right; }
+  .dd-menu { display: none; position: static; box-shadow: none; border: none; border-top: 1px solid var(--cream3); border-radius: 0; background: var(--cream2); padding: 0; min-width: 0; }
+  .nav-dd.mobile-dd-open .dd-menu { display: flex; }
+  .dd-menu a { padding: 14px 36px; border-bottom: 1px solid var(--cream3); border-radius: 0; }
+}
 
-  /* ── PWA INSTALL BANNER ── */
-  #pwa-install-banner {
-    display: none;
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 9998;
-    background: var(--ink, #1a1714);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px;
-    padding: 14px 18px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-    max-width: 300px;
-    font-family: var(--mono, monospace);
-    animation: pwa-slide-in 0.3s ease;
-  }
-  #pwa-install-banner.visible { display: flex; align-items: center; gap: 14px; }
-  #pwa-install-banner .pwa-text { font-size: 11px; color: #e8e3db; line-height: 1.5; letter-spacing: 0.02em; }
-  #pwa-install-banner .pwa-text strong { display: block; font-size: 12px; color: #fff; margin-bottom: 2px; }
-  #pwa-install-btn {
-    flex-shrink: 0;
-    background: var(--red, #b83224);
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-family: var(--mono, monospace);
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.15s;
-  }
-  #pwa-install-btn:hover { opacity: 0.85; }
-  #pwa-dismiss-btn {
-    position: absolute;
-    top: 8px; right: 10px;
-    background: none; border: none;
-    color: rgba(255,255,255,0.4);
-    font-size: 14px; cursor: pointer;
-    line-height: 1; padding: 0;
-  }
-  @keyframes pwa-slide-in {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @media (max-width: 480px) {
-    #pwa-install-banner { bottom: 16px; right: 16px; left: 16px; max-width: none; }
-  }
+/* ============================================================
+   SHARED SECTION SCAFFOLDING
+   ============================================================ */
+.section { padding: 120px 60px; position: relative; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+.section-title { font-family: var(--serif); font-size: clamp(36px,4vw,56px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 32px; }
+.section-title em { font-style: italic; color: var(--red); }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
-.disclaimer-section { background: var(--cream2, #ede9e0); border-top: 1px solid var(--cream3, #e2ddd3); padding: 1.5rem 0; }
-.disclaimer-inner { max-width: 900px; margin: 0 auto; padding: 0 60px; }
-.disclaimer-text { font-family: var(--mono, monospace); font-size: 0.65rem; color: var(--dim, #8a8278); line-height: 1.7; letter-spacing: 0.02em; }
-@media (max-width: 900px) { .disclaimer-inner { padding: 0 24px; } }
+/* ============================================================
+   HERO — thesis section. Per-guide content is [TEMPLATE]; the
+   shell/structure is canonical.
+   ============================================================ */
+.hero { min-height: 92vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 140px 60px 80px; position: relative; overflow: hidden; background-image: linear-gradient(var(--cream3) 1px, transparent 1px), linear-gradient(90deg, var(--cream3) 1px, transparent 1px); background-size: 48px 48px; background-position: center; }
+.hero-inner { position: relative; z-index: 1; max-width: 780px; display: flex; flex-direction: column; align-items: center; }
+.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; justify-content: center; }
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--red); }
+.hero-title { font-family: var(--serif); font-size: clamp(44px,5.5vw,76px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 28px; }
+.hero-title em { font-style: italic; color: var(--red); }
+.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 560px; margin: 0 auto 40px; font-weight: 300; }
+.hero-actions { display: flex; gap: 16px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.btn-primary, .btn-gold, .btn-outline { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; border: none; text-decoration: none; display: inline-block; transition: all 0.2s; cursor: pointer; }
+.btn-primary { background: var(--ink); color: var(--cream); position: relative; overflow: hidden; }
+.btn-primary::after { content: ''; position: absolute; inset: 0; background: var(--red); transform: translateX(-101%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
+.btn-primary:hover::after { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-gold { background: var(--gold); color: var(--ink); }
+.btn-gold:hover { background: #d4a84a; }
+.btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 13px 28px; }
+.btn-outline:hover { background: var(--ink); color: var(--cream); }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; } }
 
-.nav-dd{position:relative}
-.nav-dd>a::after{content:' ↓';font-size:.7rem;opacity:.5}
-.nav-dd:hover .dd-menu,.nav-dd:focus-within .dd-menu{display:flex;flex-direction:column;gap:2px}
-.dd-menu{display:none;position:absolute;top:100%;left:0;background:var(--cream);border:1px solid var(--cream3);border-radius:4px;padding:calc(.5rem + 8px) .5rem .5rem .5rem;min-width:230px;box-shadow:0 4px 20px rgba(0,0,0,.08);z-index:200}
-.dd-menu a{display:flex;align-items:center;justify-content:space-between;padding:.4rem .6rem;border-radius:3px;font-size:.82rem;color:var(--ink3);text-decoration:none}
-.dd-menu a:hover{background:var(--cream2);color:var(--ink)}
-.dm-tag{font-size:.6rem;background:var(--red);color:#fff;padding:1px 5px;border-radius:2px;font-family:var(--mono);letter-spacing:.05em}
-.dd-div{height:1px;background:var(--cream3);margin:4px 0}
+/* ============================================================
+   HOW IT WORKS — 3-step (Discovery → Build → Live). Structural
+   pattern adopted from prototype reference, our facts only.
+   ============================================================ */
+.how-section { padding: 120px 60px; background: white; }
+.steps-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 72px; border: 1px solid var(--cream3); }
+.step { padding: 40px 32px; border-right: 1px solid var(--cream3); transition: background 0.2s; }
+.step:last-child { border-right: none; }
+.step:hover { background: var(--cream); }
+.step-num { font-family: var(--serif); font-size: 56px; font-weight: 600; color: var(--cream3); line-height: 1; margin-bottom: 16px; letter-spacing: -0.04em; transition: color 0.2s; }
+.step:hover .step-num { color: var(--red); opacity: 0.3; }
+.step-title { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.step-subtitle { font-size: 12px; color: var(--red); font-weight: 500; margin-bottom: 14px; }
+.step-desc { font-size: 13px; color: var(--dim); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
+.step-badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); display: flex; align-items: center; gap: 6px; }
+.step-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+@media (max-width: 900px) { .steps-3 { grid-template-columns: 1fr; } .step { border-right: none; border-bottom: 1px solid var(--cream3); } }
+
+/* ============================================================
+   BENEFITS — stat-card grid. Metrics are [TEMPLATE] until each
+   guide's real, sourced numbers exist — do not ship placeholder
+   metrics as if verified.
+   ============================================================ */
+.benefits-section { padding: 120px 60px; background: var(--cream2); }
+.benefits-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--cream3); margin-top: 64px; border: 1px solid var(--cream3); }
+.benefit-card { background: var(--cream2); padding: 36px 32px; }
+.benefit-metric { font-family: var(--serif); font-size: 34px; font-weight: 600; color: var(--red); line-height: 1; margin-bottom: 4px; }
+.benefit-metric-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 18px; }
+.benefit-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.benefit-desc { font-size: 13px; color: var(--ink3); line-height: 1.7; font-weight: 300; }
+@media (max-width: 900px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   PRODUCT SHOWCASE — placeholder shell. [TEMPLATE]: must be
+   rebuilt per-guide to be factually accurate to real call/case
+   handling, per Session 209 direction — not filled here.
+   ============================================================ */
+.showcase-section { padding: 120px 60px; background: var(--ink); }
+.showcase-section .section-title { color: var(--cream); }
+.showcase-section .section-eyebrow { color: var(--gold); }
+.showcase-section .section-eyebrow::before { background: var(--gold); }
+.showcase-frame { margin-top: 56px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); min-height: 320px; display: flex; align-items: center; justify-content: center; color: rgba(247,244,238,0.35); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; padding: 40px; }
+
+/* ============================================================
+   FAQ — accordion. Structural pattern adopted from prototype;
+   copy must be real per-guide fact, not the prototype's fabricated
+   numbers ($300 discovery, 284 situations, pro-bono claims, etc.
+   all rejected — see Session 209).
+   ============================================================ */
+.faq-section { padding: 120px 60px; background: white; }
+.faq-list { margin-top: 56px; max-width: 840px; }
+.faq-item { border-bottom: 1px solid var(--cream3); }
+.faq-q { width: 100%; text-align: left; background: none; border: none; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; cursor: pointer; font-family: var(--serif); font-size: 19px; font-weight: 500; color: var(--ink); }
+.faq-q:hover { color: var(--red); }
+.faq-icon { font-family: var(--mono); font-size: 16px; color: var(--red); flex-shrink: 0; width: 20px; text-align: center; }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-item.open .faq-a { max-height: 600px; }
+.faq-a-inner { padding: 0 0 24px; font-size: 14px; color: var(--ink3); line-height: 1.8; font-weight: 300; max-width: 700px; }
+
+/* ============================================================
+   MOMENT QUOTE — canonical founder quote, verbatim, IDENTITY.md v13.
+   ============================================================ */
+.moment-section { padding: 100px 60px; background: var(--cream2); border-top: 1px solid var(--cream3); border-bottom: 1px solid var(--cream3); }
+.moment-inner { max-width: 820px; margin: 0 auto; }
+.moment-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+.moment-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+.moment-quote { font-family: var(--serif); font-size: clamp(20px,2.6vw,30px); font-weight: 500; color: var(--ink); line-height: 1.5; font-style: italic; margin-bottom: 20px; }
+.moment-attr { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+
+/* ============================================================
+   PRICING — CSS written to match _includes/guide-pricing.html's
+   REAL, current markup exactly (verified against the live include
+   this session). This is the direct DRIFT-209-D fix.
+   ============================================================ */
+.pricing-section { padding: 120px 60px; background: var(--cream); }
+.pricing-block { background: var(--ink); padding: 56px; position: relative; border-left: 4px solid var(--red); }
+.pb-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+.pb-title { font-family: var(--serif); font-size: clamp(28px,3.4vw,42px); font-weight: 500; color: var(--cream); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; }
+.pb-sub { font-size: 14px; color: rgba(247,244,238,0.6); line-height: 1.7; font-weight: 300; max-width: 560px; margin-bottom: 40px; }
+.pb-discovery { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 28px 32px; margin-bottom: 20px; }
+.pb-discovery-tag { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.pb-discovery-price { font-family: var(--serif); font-size: 36px; font-weight: 600; color: var(--cream); line-height: 1; margin-bottom: 10px; letter-spacing: -0.02em; }
+.pb-discovery-note { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; }
+.pb-tiers-note { font-size: 13px; color: rgba(247,244,238,0.45); line-height: 1.7; font-weight: 300; margin-top: 4px; }
+.pb-cta { display: inline-block; margin-top: 32px; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 36px; background: var(--red); color: var(--cream); text-decoration: none; transition: background 0.2s; }
+.pb-cta:hover { background: var(--red2); }
+.retainer-block { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); }
+.retainer-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.retainer-price { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--cream); letter-spacing: -0.02em; margin-bottom: 10px; }
+.retainer-note { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; max-width: 600px; }
+/* the include's own inline styles (price-row, pb-tiers-label) already carry
+   fallback var() values and render correctly without dedicated classes here —
+   verified by reading the include's actual style attributes this session. */
+
+/* ============================================================
+   FOOTER — legal block. Rudolph CX brand persists here per
+   LOCKS.md §33 (reference/marketing surface, not the delivered
+   console).
+   ============================================================ */
+.site-footer { padding: 64px 60px 40px; background: var(--ink); color: rgba(247,244,238,0.5); }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
+.footer-brand { font-family: var(--serif); font-size: 1.2rem; color: var(--cream); margin-bottom: 8px; }
+.footer-legal { font-family: var(--mono); font-size: 10px; line-height: 1.9; color: rgba(247,244,238,0.35); }
+.footer-tagline { font-size: 12px; font-style: italic; color: rgba(247,244,238,0.4); margin-top: 10px; }
+
+/* ============================================================
+   PWA INSTALL BANNER — generalized from Aidline's existing pattern.
+   Structurally sound (read this session); NOT confirmed working
+   end-to-end by an actual install test.
+   ============================================================ */
+#pwa-install-banner { display: none; position: fixed; bottom: 24px; right: 24px; z-index: 500; max-width: 340px; background: var(--ink); border: 1px solid rgba(255,255,255,0.12); padding: 18px 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+#pwa-install-banner.visible { display: flex; align-items: center; gap: 14px; }
+#pwa-install-banner .pwa-text { font-size: 11px; color: #e8e3db; line-height: 1.5; letter-spacing: 0.02em; }
+#pwa-install-banner .pwa-text strong { display: block; font-size: 12px; color: #fff; margin-bottom: 2px; }
+#pwa-install-btn { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 18px; background: var(--red); color: #fff; border: none; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
+#pwa-install-btn:hover { opacity: 0.85; }
+@media (max-width: 500px) { #pwa-install-banner { bottom: 16px; right: 16px; left: 16px; max-width: none; } }
+
 </style>
-<script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246357764.js"></script>
-  <link rel="canonical" href="https://rudolphcx.com/workline.html">
-  <script data-goatcounter="https://rudolphcx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
-<a class="skip-link" href="#main-content">Skip to main content</a>
-<div class="cursor" id="cursor"></div>
 
-{% include nav.html %}
-<!-- ── PWA INSTALL BANNER ── -->
+<!-- NAV — inlined here (test render only), now matching nav-updated.html's Phase 1 revision (mobile toggle button added inside .nav-inner) -->
+<nav>
+  <div class="nav-inner">
+    <a href="guides.html" class="nav-logo">Rudolph<span class="nav-logo-accent">CX</span></a>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav-links" aria-label="Open menu">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+    <ul class="nav-links" id="primary-nav-links">
+      <li><a href="guides.html">Our Guides</a></li>
+      <li><a href="demos.html">Demo Center</a></li>
+      <li><a href="advisory.html">Advisory Services</a></li>
+      <li><a href="groundwork.html">Groundwork</a></li>
+      <li><a href="methodology.html">Methodology</a></li>
+      <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="book.html">Book Discovery</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     HERO — [TEMPLATE] content, canonical shell
+     ═══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Workforce Development &middot; Employment Services</div>
+    <h1 class="hero-title">Built for the<br>moment the<br>client is <em>live.</em></h1>
+    <p class="hero-sub">Workline is a custom-built reference guide for employment specialists, workforce center staff, and career navigators who face live, high-stakes moments with job seekers &mdash; WARN Act notices, UI identity failures, ADA accommodations, EEOC deadlines &mdash; and need the right move right now.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary"><span>Book Discovery Call &mdash; $500</span></a>
+      <a href="demos.html" class="btn-outline">See a Live Demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     HOW IT WORKS — real facts, LOCKS.md §32
+     ═══════════════════════════════════════════════════ -->
+<section class="how-section section" id="how-it-works">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">From Intake to Delivery</div>
+    <h2 class="section-title reveal">Three stages. <em>One standard.</em></h2>
+    <div class="steps-3 reveal">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Discovery — $500</div>
+        <div class="step-subtitle">Your operation, assessed.</div>
+        <p class="step-desc">We assess your role, your highest-stakes situations, your source material, and your volume. You leave with a scoped estimate and an honest fit answer.</p>
+        <div class="step-badge">Credited in full toward build</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Build</div>
+        <div class="step-subtitle">Built from inside your role.</div>
+        <p class="step-desc">Constructed from official job aids and verified source documents. Situation-first design, not information categories.</p>
+        <div class="step-badge" style="color:var(--dim)"><span style="width:5px;height:5px;border-radius:50%;background:var(--dim);display:inline-block"></span>&nbsp;Build-time figure not yet re-verified this session</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Live — Day One</div>
+        <div class="step-subtitle">In the worker's hands. Ready.</div>
+        <p class="step-desc">Delivered as a custom HTML console. No app download, no login wall, no learning curve.</p>
+        <div class="step-badge">Live on delivery day</div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" style="padding-top:80px;">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">What It Covers</div>
+    <h2 class="section-title reveal">Situations Workline&#8480; handles.</h2>
+    <p style="font-size:15px;color:var(--ink3);line-height:1.8;font-weight:300;max-width:640px;" class="reveal">11 real situations, built from official source material and live role experience. Full situation-by-situation detail is available on request during your discovery call.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     BENEFITS — shell only; metrics [TEMPLATE], not invented
+     ═══════════════════════════════════════════════════ -->
+<section class="benefits-section section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Why It Works</div>
+    <h2 class="section-title reveal">Built to hold up under real conditions.</h2>
+    <div class="benefits-grid reveal">
+      <div class="benefit-card">
+        <div class="benefit-metric">Zero</div>
+        <div class="benefit-metric-label">typed data entry</div>
+        <div class="benefit-title">No Case-Specific Storage</div>
+        <p class="benefit-desc">Nothing typed in is ever saved. Every note is a generic, identical-every-time template the specialist fills in on their own system of record.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">Day One</div>
+        <div class="benefit-metric-label">deployment</div>
+        <div class="benefit-title">No IT Rollout</div>
+        <p class="benefit-desc">Delivered as a single HTML file. No app download, no login wall, no account setup, no subscription activation.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">Offline</div>
+        <div class="benefit-metric-label">always available</div>
+        <div class="benefit-title">Works Without Internet</div>
+        <p class="benefit-desc">Installs to any device and keeps working with no connection — the guide is there in the moment, signal or not.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">In Full</div>
+        <div class="benefit-metric-label">credited to build</div>
+        <div class="benefit-title">Discovery Isn't a Pitch</div>
+        <p class="benefit-desc">The $500 discovery call is real working time — and if you proceed, it's credited in full toward your build.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">Source</div>
+        <div class="benefit-metric-label">verified</div>
+        <div class="benefit-title">Built From Real Documents</div>
+        <p class="benefit-desc">Every step traces to your own job aids, policy manuals, and regulatory source material — never invented, never generic.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">50/50</div>
+        <div class="benefit-metric-label">payment split</div>
+        <div class="benefit-title">Clear Payment Terms</div>
+        <p class="benefit-desc">Half before work begins, half on delivery. No surprise invoicing, no ambiguity about when money moves.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     PRODUCT SHOWCASE — shell only, per Session 209: must be
+     rebuilt to real call/case handling, not filled here
+     ═══════════════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════════════
+     MOMENT QUOTE — canonical, verbatim
+     ═══════════════════════════════════════════════════ -->
+<section class="showcase-section section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">See It Work</div>
+    <h2 class="section-title reveal">The real console, not a mockup.</h2>
+    <div class="showcase-frame reveal" style="flex-direction:column;gap:20px;padding:32px;">
+      <img src="workline-console.png" alt="Real screenshot of the Workline guide console" style="max-width:100%;height:auto;border-radius:8px;">
+      <p style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:rgba(247,244,238,0.4);text-align:center;max-width:600px;">The real Workline console, mid-call. Available live during your discovery call, or in the Demo Center.</p>
+    </div>
+  </div>
+</section>
+
+<section class="moment-section">
+  <div class="moment-inner">
+    <div class="moment-eyebrow reveal">The Moment</div>
+    <p class="moment-quote reveal">&ldquo;This is the moment. You're in the moment. You can't miss the moment because you can never relive that moment. And that moment is like a crossroad. If you in it, you cross the road. If not, you may get stuck at the crossroad.&rdquo;</p>
+    <div class="moment-attr reveal">Jamal Rudolph, Founder</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FAQ — shell + accordion JS; copy must be real per-guide,
+     never the prototype's fabricated figures
+     ═══════════════════════════════════════════════════ -->
+<section class="faq-section section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Questions</div>
+    <h2 class="section-title reveal">What people ask before they book.</h2>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" type="button">Is this appropriate for regulated industries &mdash; healthcare, financial, government?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. Rudolph CX holds an active SAM.gov registration (CAGE Code 21D84, UEI FN7DXBSUVHN7, EIN 42-2269436) and operates under the standard that every deliverable may be cited, questioned, or audited by government officials, regulatory bodies, or compliance teams.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Do workers need to download anything or log in?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">No. The guide is a single HTML file that opens in any browser. There's no app download, no login wall, no account setup. It works the same on day one as it does a year later.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">What happens to information a worker types into the guide?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Nothing case-specific is ever stored. The guide never accepts typed or free-form data entry of any kind — not a name field, not a note field. Case documentation is always a generic, blank template the worker fills in on your own system of record, outside the guide.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     PRICING — real include, real data, CSS now reconciled
+     ═══════════════════════════════════════════════════ -->
+<!-- PRICING — inlined here (test render only) exactly as _includes/guide-pricing.html + _data/pricing.yml render for family="aidline", guide_name="Workline"; Phase 2's real file uses the Liquid include, not inline markup -->
+<section class="pricing-section" id="pricing">
+<div class="section-inner">
+<div class="pricing-block">
+<div class="pb-eyebrow reveal">Pricing</div>
+<h2 class="pb-title reveal">One process. One contract.<br>Built for your workforce center.</h2>
+<p class="pb-sub reveal">Workline follows the same proven build process as every Rudolph CX guide. It starts with a discovery call.</p>
+
+<div class="pb-discovery reveal">
+<div class="pb-discovery-tag">Discovery Call</div>
+<div class="pb-discovery-price">$500</div>
+<div class="pb-discovery-note">60 minutes. Non-refundable. Credits in full to your first invoice if you proceed.</div>
+</div>
+
+<div class="pb-discovery reveal">
+<div class="pb-discovery-tag">System-Language Fitting Fee</div>
+<div class="pb-discovery-price">$500</div>
+<div class="pb-discovery-note">One-time, applied to every build. Adapts the guide's language to your actual internal systems and terminology at build time.</div>
+</div>
+
+<div class="reveal" style="margin-top:8px">
+<div class="pb-tiers-label" style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold,#c49a3c);margin-bottom:14px">Aidline-Family &mdash; Aidline, Caseline, Lendline, Workline, Reentryline</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Foundation</div><div style="font-size:12px;color:var(--dim,#4a453e)">3 situations, single role</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$6,500</div>
+</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Standard</div><div style="font-size:12px;color:var(--dim,#4a453e)">5 situations, full role coverage</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$9,500</div>
+</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Comprehensive</div><div style="font-size:12px;color:var(--dim,#4a453e)">8 situations, multiple roles or expanded set</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$14,000</div>
+</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Enterprise</div><div style="font-size:12px;color:var(--dim,#4a453e)">12+ situations, custom multi-role/multi-site scoping</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$20,000+</div>
+</div>
+<div class="pb-tiers-note" style="margin-top:12px">50% deposit before work begins, 50% on delivery.</div>
+</div>
+
+<div class="retainer-block reveal">
+<div class="retainer-label">Annual Update Retainer</div>
+<div class="retainer-price">15% <span style="font-size:15px;color:var(--dim);font-weight:400;">of build price</span></div>
+<p class="retainer-note">Keeps your guide current as regulations, policies, or platform workflows change. Covers one annual review cycle with revisions. Scoped changes outside the annual cycle are billed as change orders.</p>
+</div>
+
+<a href="https://book.squareup.com/appointments/mduphd9nbedqey/location/LB8E62TY4W9N1/services" target="_blank" rel="noopener" class="pb-cta">Book Discovery Call &mdash; $500</a>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER — Rudolph CX brand persists (LOCKS.md §33)
+     ═══════════════════════════════════════════════════ -->
+
+<style>
+.site-footer-v2 { padding: 80px 60px 32px; background: var(--ink); color: rgba(247,244,238,0.5); }
+.footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-brand-name { font-family: var(--serif); font-size: 1.3rem; color: var(--cream); margin-bottom: 4px; }
+.footer-brand-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red2); margin-bottom: 18px; }
+.footer-brand-desc { font-size: 13px; line-height: 1.7; color: rgba(247,244,238,0.4); margin-bottom: 22px; max-width: 260px; }
+.footer-brand-addr { font-size: 11px; line-height: 1.8; color: rgba(247,244,238,0.3); }
+.footer-col-label { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.3); margin-bottom: 18px; }
+.footer-link-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-link-list a { color: rgba(247,244,238,0.55); text-decoration: none; font-size: 13px; }
+.footer-link-list a:hover { color: var(--cream); }
+.footer-guide-tag { font-size: 10px; color: rgba(247,244,238,0.28); margin-top: 1px; }
+.footer-reg-row { display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; }
+.footer-reg-label { color: rgba(247,244,238,0.3); }
+.footer-reg-value { font-family: var(--mono); color: rgba(247,244,238,0.6); }
+.footer-cta-box { margin-top: 20px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+.footer-cta-title { color: var(--cream); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.footer-cta-sub { font-size: 11px; color: rgba(247,244,238,0.4); margin-bottom: 10px; }
+.footer-cta-link { color: var(--gold); font-size: 12px; font-weight: 600; text-decoration: none; }
+.footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 11px; color: rgba(247,244,238,0.25); }
+.footer-tagline-v2 { font-style: italic; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+</style>
+
+<footer class="site-footer-v2">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Rudolph<span style="color:var(--red)">CX</span></div>
+      <div class="footer-brand-sub">Performance Support</div>
+      <p class="footer-brand-desc">Custom performance support consoles for frontline workers who face live, high-stakes moments with people in need &mdash; and need the right move right now.</p>
+      <div class="footer-brand-addr">
+        Rudolph CX LLC<br>
+        Durham, NC &middot; Remote Nationwide<br>
+        Jamal Rudolph, Founder
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-label">Performance Guides</div>
+      <ul class="footer-link-list">
+        <li><a href="aidline.html">Aidline&#8480;<div class="footer-guide-tag">Healthcare &middot; Benefits</div></a></li>
+<li><a href="caseline.html">Caseline&#8480;<div class="footer-guide-tag">Social Services</div></a></li>
+<li><a href="lendline.html">Lendline&#8480;<div class="footer-guide-tag">Financial Services</div></a></li>
+<li><a href="chartline.html">Chartline&#8480;<div class="footer-guide-tag">Healthcare &middot; Clinical</div></a></li>
+<li><a href="workline.html">Workline&#8480;<div class="footer-guide-tag">Workforce Development</div></a></li>
+<li><a href="reentryline.html">Reentryline&#8480;<div class="footer-guide-tag">Reentry &amp; Justice</div></a></li>
+<li><a href="supervisorline.html">Supervisorline&#8480;<div class="footer-guide-tag">HR &middot; Supervision</div></a></li>
+<li><a href="peopleline.html">Peopleline&#8480;<div class="footer-guide-tag">HR &middot; People Ops</div></a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-label">Company</div>
+      <ul class="footer-link-list">
+        <li><a href="about.html">About</a></li>
+<li><a href="methodology.html">Methodology</a></li>
+<li><a href="advisory.html">Advisory Services</a></li>
+<li><a href="groundwork.html">Groundwork</a></li>
+<li><a href="demos.html">Demo Center</a></li>
+<li><a href="pricing.html">Pricing</a></li>
+<li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-label">Federal Registrations</div>
+      <div class="footer-reg-row"><span class="footer-reg-label">EIN</span><span class="footer-reg-value">42-2269436</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">CAGE Code</span><span class="footer-reg-value">21D84</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">UEI</span><span class="footer-reg-value">FN7DXBSUVHN7</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">SAM.gov</span><span class="footer-reg-value">Active</span></div>
+      <div class="footer-cta-box">
+        <div class="footer-cta-title">Ready to build?</div>
+        <div class="footer-cta-sub">Start with the $500 discovery call. Credited in full.</div>
+        <a href="book.html" class="footer-cta-link">Book Discovery &rarr;</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>&copy; 2026 Rudolph CX LLC. All rights reserved. Durham, NC.</div>
+    <div class="footer-tagline-v2">Every moment has a right move.&#8480;</div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════
+     PWA INSTALL BANNER — generalized markup
+     ═══════════════════════════════════════════════════ -->
 <div id="pwa-install-banner" role="complementary" aria-label="Install guide for offline use">
-  <button id="pwa-dismiss-btn" aria-label="Dismiss">&times;</button>
   <div class="pwa-text">
     <strong>Save for offline use</strong>
     Install this guide to your device &mdash; works without internet.
@@ -293,440 +597,98 @@ footer { padding: 20px 28px; flex-direction: column; gap: 8px; text-align: cente
   <button id="pwa-install-btn">Install</button>
 </div>
 
-
-
-<!-- HERO -->
-<section class="hero" id="hero">
-<div class="hero-left" id="main-content">
-<div class="hero-eyebrow reveal">Workforce Development &middot; Employment Services</div>
-<h1 class="hero-title reveal reveal-delay-1">
-Built for the<br>
-moment the<br>
-client is <em>live.</em>
-</h1>
-<p class="hero-sub reveal reveal-delay-2">
-Workline is a custom-built reference guide for employment specialists, workforce center staff, and career navigators who face live, high-stakes moments with job seekers &mdash; WARN Act notices, UI identity failures, ADA accommodations, EEOC deadlines &mdash; and need the right move right now.
-</p>
-<div class="offline-badge reveal reveal-delay-2">
-  <span class="offline-dot"></span>
-  Works offline &mdash; single HTML file, no internet required
-</div>
-<div class="hero-actions reveal reveal-delay-3">
-<a href="https://book.squareup.com/appointments/mduphd9nbedqey/location/LB8E62TY4W9N1/services" target="_blank" rel="noopener" class="btn-accent"><span>Book Discovery Call &mdash; $300</span></a>
-<a href="#situations" class="btn-sec">See What It Covers
-<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-</a>
-</div>
-</div>
-<div class="hero-right">
-<div class="scenario-card active-sc" id="sc1">
-<div class="sc-tag">Workline &mdash; Live Situation</div>
-<div class="sc-situation">&ldquo;Client just got a layoff notice. Their employer is closing the plant in three weeks. They want to know what they&rsquo;re entitled to.&rdquo;</div>
-<div class="sc-outcome">The guide surfaces the WARN Act 60-day notice requirement, the Rapid Response connection path, and the Dislocated Worker eligibility check. The specialist acts correctly without overpromising.</div>
-<div class="sc-guide-label">&#10003; Handled &mdash; Workline found the right move</div>
-</div>
-<div class="scenario-card" id="sc2">
-<div class="sc-tag">Workline &mdash; Live Situation</div>
-<div class="sc-situation">&ldquo;Veteran walked in after a non-veteran who has been waiting 45 minutes. My supervisor is telling me to keep the queue order. What do I do?&rdquo;</div>
-<div class="sc-outcome">The guide surfaces 20 CFR Part 1010 &mdash; Veterans Priority of Service is federal law, not a local policy choice. The specialist knows the answer with a citation. The veteran is served first.</div>
-<div class="sc-guide-label">&#10003; Handled &mdash; Workline found the right move</div>
-</div>
-<div class="scenario-card" id="sc3">
-<div class="sc-tag">Workline &mdash; Live Situation</div>
-<div class="sc-situation">&ldquo;Client says they were discriminated against at work six months ago. They want to file a complaint. Are they too late?&rdquo;</div>
-<div class="sc-outcome">The guide surfaces the 180/300-day EEOC filing window, calculates from the act date (not disclosure date), and gives the referral path. The specialist directs without delay and without giving legal advice.</div>
-<div class="sc-guide-label">&#10003; Handled &mdash; Workline found the right move</div>
-</div>
-</div>
-</section>
-
-<!-- MARQUEE -->
-<div class="marquee-wrap" role="marquee" aria-hidden="true">
-<div class="marquee-track">
-<div class="marquee-item">WARN Act</div><div class="marquee-item">UI Identity Verification</div><div class="marquee-item">ADA Accommodation</div><div class="marquee-item">EEOC Filing</div><div class="marquee-item">Veterans Priority</div><div class="marquee-item">Fair Chance Act</div><div class="marquee-item">Wagner-Peyser</div><div class="marquee-item">Workplace Harassment</div><div class="marquee-item">Rapid Response</div><div class="marquee-item">WIOA Compliant</div><div class="marquee-item">Eligibility Gate</div><div class="marquee-item">20 CFR Part 1010</div><div class="marquee-item">WARN Act</div><div class="marquee-item">UI Identity Verification</div><div class="marquee-item">ADA Accommodation</div><div class="marquee-item">EEOC Filing</div><div class="marquee-item">Veterans Priority</div><div class="marquee-item">Fair Chance Act</div><div class="marquee-item">Wagner-Peyser</div><div class="marquee-item">Workplace Harassment</div><div class="marquee-item">Rapid Response</div><div class="marquee-item">WIOA Compliant</div><div class="marquee-item">Eligibility Gate</div><div class="marquee-item">20 CFR Part 1010</div>
-</div>
-</div>
-
-<!-- PROBLEM -->
-<section class="section" id="what">
-<div class="section-inner">
-<div class="section-eyebrow reveal">The Problem</div>
-<h2 class="section-title reveal">Workforce specialists are trained for the program.<br>Not for the <em>moment inside it.</em></h2>
-<div class="split-layout">
-<div class="split-text reveal">
-<p>Workforce organizations invest in WIOA compliance training, certification programs, and policy documentation. Specialists complete them, understand the eligibility rules, and go to the floor.</p>
-<p>Then the live moments start. A client walks in with a layoff notice from an employer who didn&rsquo;t give 60 days of WARN Act notice. A veteran arrives after a non-veteran who has been waiting &mdash; and the supervisor says keep the queue. An EEOC deadline is six months old and the specialist doesn&rsquo;t know whether it&rsquo;s too late to file.</p>
-<p><strong>This is not a training failure. Training prepared the specialist for the regulation. It didn&rsquo;t prepare them for this specific client, this specific moment, right now.</strong></p>
-<p>Workline is built for that gap. Not a policy binder. Not another system login. A guide that lives inside the moment &mdash; WIOA-compliant, regulation-grounded, and ready the day the specialist goes live.</p>
-</div>
-<div class="split-text reveal">
-<div class="pull-quote">
-<div class="pq-text">&ldquo;Veterans Priority of Service applies to every WIOA-funded program and service. It is not discretionary. A veteran who walks in after a non-veteran who has been waiting is served first when resources are limited.&rdquo;</div>
-<div class="pq-attr">20 CFR Part 1010 &mdash; Veterans Priority of Service, WIOA Implementation</div>
-</div>
-<ul class="feature-list">
-<li class="feature-item">
-<div class="feature-num">01</div>
-<div><div class="feature-title">Built from your organization&rsquo;s policies and platform</div><div class="feature-desc">Every situation in Workline is built from your organization&rsquo;s actual source material, eligibility standards, and referral workflows &mdash; not generic scripts.</div></div>
-</li>
-<li class="feature-item">
-<div class="feature-num">02</div>
-<div><div class="feature-title">WIOA compliance built in from the start</div><div class="feature-desc">WARN Act, Veterans Priority, EEOC deadlines, Fair Chance Act, ADA interactive process &mdash; every situation path is built with the regulatory requirement embedded.</div></div>
-</li>
-<li class="feature-item">
-<div class="feature-num">03</div>
-<div><div class="feature-title">Ready on the day the specialist goes live</div><div class="feature-desc">Delivered as a single HTML file. No login. No app. No friction. Open it when the client is in the room.</div></div>
-</li>
-</ul>
-<div class="compliance-block">
-<div class="cb-label">Regulatory Foundation</div>
-<ul class="cb-list">
-<li>WIOA &mdash; P.L. 113-128 (Adult, Dislocated Worker, Youth titles)</li>
-<li>Veterans Priority of Service &mdash; 20 CFR Part 1010</li>
-<li>WARN Act &mdash; 29 U.S.C. &sect; 2101 &middot; 20 CFR Part 639</li>
-<li>ADA Title I &mdash; 29 CFR Part 1630 (accommodation &amp; interactive process)</li>
-<li>Fair Chance Act &mdash; P.L. 116-92 (criminal history, post-offer only)</li>
-<li>EEOC &mdash; Title VII, ADEA, ADA, EPA, GINA (180/300-day filing window)</li>
-<li>UI Federal Standards &mdash; UIPL 16-21 (identity verification)</li>
-<li>Wagner-Peyser Act &mdash; 20 CFR Part 652 (universal labor exchange)</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- SITUATIONS -->
-<section class="situations-section" id="situations">
-<div class="section-inner">
-<div class="sit-eyebrow">What Workline Covers</div>
-<h2 class="sit-title">The moments that define workforce compliance.</h2>
-<p class="sit-sub">Each situation is sourced from WIOA, WARN Act, EEOC, ADA, Fair Chance Act, and UI federal standards &mdash; verified against primary regulatory citations. Your Workline is then built from your organization&rsquo;s actual policies and platform workflows.</p>
-<div class="sit-note">11 situations &middot; Eligibility gate first, every time &middot; Your Workline is built from your source material</div>
-<div class="sit-grid">
-<div class="sit-card">
-<div class="sit-card-n">S-01</div>
-<div class="sit-card-title">Client Received Layoff Notice</div>
-<div class="sit-card-desc">WARN Act applies to 100+ employee employers. 60-day advance written notice required. Rapid Response connection. Dislocated Worker eligibility check. Back pay liability if WARN was violated.</div>
-<div class="sit-card-reg">WARN Act 29 U.S.C. &sect; 2101 &middot; 20 CFR Part 639</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-n">S-02</div>
-<div class="sit-card-title">UI Claim &mdash; Identity Verification Issue</div>
-<div class="sit-card-desc">ID.me or state equivalent required before UI benefits can be paid. Eligibility determination alone does not release benefits. Walk-through path if client lacks government-issued ID.</div>
-<div class="sit-card-reg">UIPL 16-21 &middot; DOL/ETA UI federal standards</div>
-<div class="sit-card-halt">&#9650; Benefits cannot release without verified identity</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-n">S-03</div>
-<div class="sit-card-title">ADA Accommodation Request</div>
-<div class="sit-card-desc">Client does not need to say &ldquo;disability&rdquo; or cite the ADA to trigger the accommodation process. Interactive process is required &mdash; not optional. Document every step.</div>
-<div class="sit-card-reg">ADA Title I &middot; 29 CFR Part 1630 &middot; EEOC Guidance</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-n">S-04</div>
-<div class="sit-card-title">EEOC Charge &mdash; Discrimination Complaint</div>
-<div class="sit-card-desc">180-day filing window from the discriminatory act (300 days if state law applies). Clock runs from the act, not the date the client told you. EEOC charge is the required first step before any federal lawsuit.</div>
-<div class="sit-card-reg">EEOC &middot; Title VII &middot; ADEA &middot; ADA &middot; EPA &middot; GINA</div>
-<div class="sit-card-halt">&#9650; Missing this deadline bars the claim permanently</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-n">S-05</div>
-<div class="sit-card-title">Veterans Priority of Service</div>
-<div class="sit-card-desc">Ask every client about veteran status at intake. A veteran who walks in after a non-veteran is served first when resources are limited. This is federal law &mdash; not a local policy choice. Document status at intake.</div>
-<div class="sit-card-reg">WIOA P.L. 113-128 &middot; 20 CFR Part 1010</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-n">S-06</div>
-<div class="sit-card-title">Criminal History &mdash; Background Check</div>
-<div class="sit-card-desc">Fair Chance Act: federal contractors may not ask about criminal history before a conditional offer. Question comes post-offer &mdash; not before, not on the application. Verify jurisdiction for broader state bans.</div>
-<div class="sit-card-reg">Fair Chance Act P.L. 116-92 &middot; Effective Dec 2021</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-n">S-07</div>
-<div class="sit-card-title">Wagner-Peyser &mdash; Labor Exchange</div>
-<div class="sit-card-desc">Wagner-Peyser labor exchange services are universally available &mdash; no WIOA eligibility determination required. Use as a service bridge while eligibility is being established. Do not leave a client with nothing.</div>
-<div class="sit-card-reg">Wagner-Peyser Act &middot; 20 CFR Part 652 &middot; WIOA P.L. 113-128</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-n">S-08</div>
-<div class="sit-card-title">Client Alleges Workplace Harassment</div>
-<div class="sit-card-desc">Listen without minimizing. Do not assess what qualifies. Inform client of EEOC filing deadline (180/300 days from last act). Refer immediately. Do not give legal advice. Document date disclosed and referral made.</div>
-<div class="sit-card-reg">EEOC &middot; Title VII &middot; ADEA &middot; ADA &middot; EPA &middot; GINA</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-n">S-09</div>
-<div class="sit-card-title">Rapid Response &mdash; Plant Closure or Mass Layoff</div>
-<div class="sit-card-desc">WIOA Title I Dislocated Worker activity triggered by mass layoff events. Begin as soon as possible after notice &mdash; ideally before the layoff date. Contact state dislocated worker unit. Early engagement improves outcomes.</div>
-<div class="sit-card-reg">WIOA P.L. 113-128 &middot; WARN Act 29 U.S.C. &sect; 2101</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-n">S-10</div>
-<div class="sit-card-title">Client Frustrated &mdash; Services Not Moving</div>
-<div class="sit-card-desc">Acknowledge before explaining. Identify the real bottleneck &mdash; the presenting frustration is rarely the actual obstacle. Do not overpromise timelines. Give the next concrete step and when it will happen.</div>
-<div class="sit-card-reg">WIOA P.L. 113-128 &middot; Rudolph CX Methodology</div>
-</div>
-</div>
-</div>
-<div class="sit-card">
-<div class="sit-card-header" onclick="toggleSit(this)">
-  <div class="sit-card-num">S-11</div>
-  <div class="sit-card-title">Client Describes Wage Theft — Specialist Identifies and Refers</div>
-  <div class="sit-card-tags"><span class="sit-tag sit-tag-halt">DOL Referral</span></div>
-  <div class="sit-card-chevron">&#8964;</div>
-</div>
-<div class="sit-card-body">
-  <div class="sit-stat">
-    <span class="sit-stat-figure">$259M</span>
-    <span class="sit-stat-text">recovered in back wages for 177,000 workers in FY2025 — averaging $1,465 per worker.</span>
-    <span class="sit-stat-source">U.S. Department of Labor, January 2026</span>
-  </div>
-  <ol class="sit-steps">
-    <li><span class="sit-step-num">1.</span><span>Listen for wage theft indicators in the client's description of their employment situation: unpaid final paycheck, missing overtime pay, employer deducting from wages without authorization, misclassified as independent contractor when performing employee duties, or tips withheld by management. These are FLSA violations — name them, do not minimize them.</span></li>
-    <li><span class="sit-step-num">2.</span><span>Ask clarifying questions to document: employer name and address, dates of employment, type of work, pay rate, pay periods affected, and estimated amount owed. The more specific the documentation, the stronger the DOL complaint.</span></li>
-    <li><span class="sit-step-num">3.</span><span>Confirm the client's employment classification. If they were told they were an "independent contractor" but worked set hours, used employer equipment, and had no other clients — they may have been misclassified. Misclassification is one of the most common FLSA violations. Document the working conditions, not just the label.</span></li>
-    <li><span class="sit-step-num">4.</span><span>Refer to DOL Wage and Hour Division: <strong>dol.gov/agencies/whd</strong> or 1-866-4-USWAGE (1-866-487-9243). Filing is free, confidential, and does not require an attorney. Complaints can be filed online, by phone, or at a local WHD office. The statute of limitations is 2 years (3 years for willful violations) — encourage filing promptly.</span></li>
-    <li><span class="sit-step-num">5.</span><span>Document in case notes: indicators identified, employer details recorded, DOL WHD referral made, filing method confirmed, statute of limitations window communicated, and any barriers to filing (immigration status, fear of retaliation) noted and addressed.</span></li>
-  </ol>
-  <div class="sit-callout sit-callout-halt">
-    <div class="sit-callout-label">&#9888; Retaliation Is Illegal</div>
-    Employers cannot legally fire, reduce hours, or otherwise retaliate against a worker for filing a DOL wage complaint. If the client expresses fear of retaliation, name this protection explicitly. FLSA anti-retaliation provisions apply from the moment a complaint is filed.
-  </div>
-  <div class="sit-callout sit-callout-warn">
-    <div class="sit-callout-label">&#10022; NLRA Wage Discussion Rights</div>
-    Under the NLRA, employers cannot prohibit employees from discussing wages with coworkers — and cannot retaliate against them for doing so. If the client was disciplined for talking about pay, this is a separate NLRB violation. Note it in the case record.
-  </div>
-  <div class="sit-card-reg">FLSA 29 U.S.C. § 206-207 · NLRA Section 7 · DOL Wage and Hour Division · WHD complaints confidential · Back wages + liquidated damages recoverable</div>
-</div>
-</div>
-
-</section>
-
-<!-- PRICING -->
-{% include guide-pricing.html family="aidline" guide_name="Workline" possessive="your organization" discovery_note="We&rsquo;ll understand your organization&rsquo;s eligibility workflows, service population, and the live moments your specialists face &mdash; so we can recommend the right build scope before you commit to anything." %}
-
-<!-- EQUITY -->
-<div class="equity-block">
-<div class="section-inner">
-<div style="font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--forest);margin-bottom:12px;">Build Standard</div>
-<h3 style="font-family:var(--serif);font-size:28px;font-weight:500;color:var(--ink);margin-bottom:12px;">Built for everyone in the room.</h3>
-<p style="font-size:14px;color:var(--ink3);line-height:1.75;font-weight:300;max-width:640px;">Every Workline guide is built to serve all workers &mdash; regardless of background, circumstance, or identity. Biased <em>towards</em> is the pattern we catch, not only biased against. This standard applies to every situation, every path, every word.</p>
-</div>
-</div>
-
-<!-- CONTACT -->
-<section class="contact-section" id="contact">
-<div class="section-inner">
-<h2 class="contact-title reveal">Ready to build a guide for<br>your <em>specialists?</em></h2>
-<p class="contact-sub reveal">Tell us about your organization, your service population, and the moments your specialists face. We&rsquo;ll take it from there.</p>
-<div class="form-wrap reveal">
-<div class="form-row">
-<div class="form-group">
-<label class="form-label" for="wl-name">Your Name</label>
-<input class="form-input" id="wl-name" type="text" placeholder="Full name">
-</div>
-<div class="form-group">
-<label class="form-label" for="wl-org">Organization</label>
-<input class="form-input" id="wl-org" type="text" placeholder="Organization name">
-</div>
-</div>
-<div class="form-row">
-<div class="form-group">
-<label class="form-label" for="wl-email">Email</label>
-<input class="form-input" id="wl-email" type="email" placeholder="Work email">
-</div>
-<div class="form-group">
-<label class="form-label" for="wl-role">Role Type</label>
-<select class="form-select" id="wl-role">
-<option value="">Select role</option>
-<option>Employment Specialist</option>
-<option>Career Navigator</option>
-<option>Workforce Center Staff</option>
-<option>Case Manager</option>
-<option>Rapid Response Coordinator</option>
-<option>Program Director</option>
-<option>Other</option>
-</select>
-</div>
-</div>
-<div class="form-group">
-<label class="form-label" for="wl-message">What moments do your specialists struggle with?</label>
-<textarea class="form-textarea" id="wl-message" placeholder="Describe the situations where your specialists need better support..."></textarea>
-</div>
-<button class="form-submit" id="workline-submit" type="button" aria-label="Book Discovery Call for $300">
-<span class="submit-label">Book Discovery Call &mdash; $300</span>
-<span class="submit-loading" style="display:none">Sending&hellip;</span>
-</button>
-<div class="form-note">We&rsquo;ll respond within one business day to schedule your discovery call.<br>The $300 fee is collected at scheduling and credits to your first invoice if you proceed.</div>
-<div id="workline-status" style="margin-top:16px;font-family:var(--mono);font-size:11px;text-align:center;min-height:20px;"></div>
-</div>
-</div>
-</section>
-
-
-<div class="disclaimer-section">
-  <div class="disclaimer-inner">
-    <p class="disclaimer-text">This guide is an operational reference tool for frontline workers. It does not constitute legal, medical, regulatory, or professional advice. Regulatory citations reflect research as of the guide&rsquo;s last build date &mdash; verify currency before applying. Always consult qualified counsel for legal questions. Rudolph CX LLC &middot; Durham, NC &middot; rudolphcx.com</p>
-  </div>
-</div>
-<footer>
-<div class="footer-logo">Rudolph<span>CX</span></div>
-<a href="/" class="footer-back">&larr; Back to rudolphcx.com</a>
-<div class="footer-copy">&#169; 2026 Rudolph CX LLC &middot; Workline &middot; Durham, NC</div>
-  <a href="/terms.html" class="footer-back" style="font-size:9px;">Terms</a>  <a href="/privacy.html" class="footer-back" style="font-size:9px;">Privacy Policy</a>
-</footer>
-
 <script>
-var cursor = document.getElementById('cursor');
-document.addEventListener('mousemove', function(e) {
-cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
-});
-var reveals = document.querySelectorAll('.reveal');
-var observer = new IntersectionObserver(function(entries) {
-entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-reveals.forEach(function(el) { observer.observe(el); });
-setTimeout(function() {
-document.querySelectorAll('.hero .reveal').forEach(function(el) { el.classList.add('visible'); });
-}, 100);
-var cards = document.querySelectorAll('.scenario-card');
-var currentCard = 0;
-cards.forEach(function(c, i) { if (i === 0) c.classList.add('visible'); });
-setInterval(function() {
-cards[currentCard].classList.remove('active-sc');
-currentCard = (currentCard + 1) % cards.length;
-cards.forEach(function(c, i) { c.classList.toggle('visible', i <= currentCard); });
-cards[currentCard].classList.add('active-sc');
-}, 4000);
-// Nav dropdown
-document.querySelectorAll('.nav-dropdown').forEach(function(item) {
-item.addEventListener('click', function(e) {
-var isOpen = this.classList.contains('open');
-document.querySelectorAll('.nav-dropdown').forEach(function(d) { d.classList.remove('open'); });
-if (!isOpen) { this.classList.add('open'); e.stopPropagation(); }
-});
-});
-document.addEventListener('click', function() {
-document.querySelectorAll('.nav-dropdown').forEach(function(d) { d.classList.remove('open'); });
-});
-// WCAG 2.1 AA — keyboard nav
+/* ── Mobile nav ── */
 (function() {
-document.querySelectorAll('.nav-dropdown > a').forEach(function(trigger) {
-trigger.addEventListener('keydown', function(e) {
-var parent = trigger.closest('.nav-dropdown');
-if (e.key === 'Enter' || e.key === ' ') {
-e.preventDefault();
-var isOpen = parent.classList.contains('open');
-document.querySelectorAll('.nav-dropdown').forEach(function(d) {
-d.classList.remove('open');
-var t = d.querySelector(':scope > a'); if (t) t.setAttribute('aria-expanded', 'false');
+  var toggle = document.getElementById('nav-toggle');
+  var links = document.getElementById('primary-nav-links') || document.querySelector('.nav-links');
+  if (!toggle || !links) return;
+
+  function closeMenu() {
+    links.classList.remove('mobile-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.nav-dd.mobile-dd-open').forEach(function(dd) { dd.classList.remove('mobile-dd-open'); });
+  }
+
+  toggle.addEventListener('click', function() {
+    var open = links.classList.toggle('mobile-open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  /* On mobile, tapping "Our Guides" opens the submenu instead of relying on hover (touch has no hover) */
+  document.querySelectorAll('.nav-dd > a').forEach(function(ddLink) {
+    ddLink.addEventListener('click', function(e) {
+      if (window.innerWidth > 900) return; /* desktop keeps real hover behavior */
+      e.preventDefault();
+      ddLink.closest('.nav-dd').classList.toggle('mobile-dd-open');
+    });
+  });
+
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
+  document.addEventListener('click', function(e) {
+    if (window.innerWidth > 900) return;
+    if (!e.target.closest('nav')) closeMenu();
+  });
+  window.addEventListener('resize', function() { if (window.innerWidth > 900) closeMenu(); });
+})();
+
+/* ── FAQ accordion ── */
+document.querySelectorAll('.faq-q').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(i) { i.classList.remove('open'); i.querySelector('.faq-icon').textContent = '+'; });
+    if (!wasOpen) { item.classList.add('open'); btn.querySelector('.faq-icon').textContent = '−'; }
+  });
 });
-if (!isOpen) { parent.classList.add('open'); trigger.setAttribute('aria-expanded', 'true'); }
+
+/* ── Scroll reveal ── */
+if ('IntersectionObserver' in window) {
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+} else {
+  document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('is-visible'); });
 }
-if (e.key === 'Escape') { parent.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
-});
-});
-document.querySelectorAll('.nav-dropdown').forEach(function(item) {
-item.addEventListener('click', function() {
-var t = this.querySelector(':scope > a');
-if (t) t.setAttribute('aria-expanded', this.classList.contains('open') ? 'true' : 'false');
-});
-});
-})();
-// EmailJS
-(function() {
-if (typeof emailjs === 'undefined') return;
-emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
-var btn = document.getElementById('workline-submit');
-var statusEl = document.getElementById('workline-status');
-if (!btn) return;
-btn.addEventListener('click', function() {
-var nameVal = (document.getElementById('wl-name')||{}).value||'';
-var orgVal = (document.getElementById('wl-org')||{}).value||'';
-var emailVal = (document.getElementById('wl-email')||{}).value||'';
-var roleVal = (document.getElementById('wl-role')||{}).value||'';
-var messageVal = (document.getElementById('wl-message')||{}).value||'';
-nameVal=nameVal.trim();orgVal=orgVal.trim();emailVal=emailVal.trim();messageVal=messageVal.trim();
-if (!nameVal||!orgVal||!emailVal||!messageVal) { statusEl.style.color='var(--red)'; statusEl.textContent='Please fill in all required fields.'; return; }
-if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) { statusEl.style.color='var(--red)'; statusEl.textContent='Please enter a valid email address.'; return; }
-var label=btn.querySelector('.submit-label'); var loading=btn.querySelector('.submit-loading');
-btn.disabled=true; if(label)label.style.display='none'; if(loading)loading.style.display='inline'; statusEl.textContent='';
-fetch('https://script.google.com/macros/s/AKfycbxbjH4789HDt-9w5zlPsKSiw8G0kPSco3hdm36V1hQcOcly6LgFP-nnXtStywHR2qIlHw/exec',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:'RCX-WEBHOOK-2026-SECURE',method:'crm_intake',name:nameVal,org:orgVal,email:emailVal,role:roleVal||'',message:messageVal,source:'Workline discovery form'})}).catch(function(err){console.error('Webhook error:',err);});
-var hutk=document.cookie.replace(/(?:(?:^|.*;\s*)hubspotutk\s*=\s*([^;]*).*$)|^.*$/,'$1');
-fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a',{
-method:'POST',headers:{'Content-Type':'application/json'},
-body:JSON.stringify({fields:[{name:'firstname',value:nameVal},{name:'email',value:emailVal},{name:'company',value:orgVal}],context:{hutk:hutk||undefined,pageUri:'rudolphcx.com/workline.html',pageName:'Workline \u2014 Workforce Development Guide'}})
-}).catch(function(err){console.error('HubSpot error:',err);});
-emailjs.send('service_u94nvbm','template_875pqb4',{
-from_name:nameVal,organization:orgVal,reply_to:emailVal,
-role_type:roleVal||'Not specified',message:messageVal,
-source:'Workline discovery form \u2014 rudolphcx.com/workline.html'
-}).then(function(){
-statusEl.style.color='var(--forest)';
-statusEl.textContent='Request received. We will be in touch within one business day.';
-btn.disabled=false; if(label)label.style.display='inline'; if(loading)loading.style.display='none';
-document.getElementById('wl-name').value=''; document.getElementById('wl-org').value='';
-document.getElementById('wl-email').value=''; document.getElementById('wl-role').selectedIndex=0;
-document.getElementById('wl-message').value='';
-}).catch(function(err){
-statusEl.style.color='var(--red)';
-statusEl.textContent='Something went wrong. Please email jamal@rudolphcx.com directly.';
-btn.disabled=false; if(label)label.style.display='inline'; if(loading)loading.style.display='none';
-});
-});
-})();
-</script>
-<script>
+
+/* ── PWA: service worker registration + install prompt ──
+   Pattern extracted from Aidline's existing code (read live this
+   session). Structurally coherent; not confirmed by an actual
+   install test — flag this if it doesn't work in practice. ── */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/sw-workline.js');
   });
+
+  var deferredPrompt;
+  var banner = document.getElementById('pwa-install-banner');
+  var installBtn = document.getElementById('pwa-install-btn');
+
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (banner) banner.classList.add('visible');
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(result) {
+        console.log('PWA install result:', result.outcome);
+        deferredPrompt = null;
+        if (banner) banner.classList.remove('visible');
+      });
+    });
+  }
+
+  window.addEventListener('appinstalled', function() {
+    if (banner) banner.classList.remove('visible');
+    console.log('PWA installed successfully');
+  });
 }
 </script>
 
-<script>
-  // ── PWA INSTALL PROMPT ──
-  (function() {
-    var deferredPrompt = null;
-    var banner = document.getElementById('pwa-install-banner');
-    var installBtn = document.getElementById('pwa-install-btn');
-    var dismissBtn = document.getElementById('pwa-dismiss-btn');
-
-    // Only show if not already installed
-    var dismissed = sessionStorage.getItem('pwa-banner-dismissed');
-    if (dismissed) return;
-
-    window.addEventListener('beforeinstallprompt', function(e) {
-      e.preventDefault();
-      deferredPrompt = e;
-      if (banner) banner.classList.add('visible');
-    });
-
-    if (installBtn) {
-      installBtn.addEventListener('click', function() {
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function(result) {
-          console.log('PWA install result:', result.outcome);
-          deferredPrompt = null;
-          if (banner) banner.classList.remove('visible');
-        });
-      });
-    }
-
-    if (dismissBtn) {
-      dismissBtn.addEventListener('click', function() {
-        if (banner) banner.classList.remove('visible');
-        sessionStorage.setItem('pwa-banner-dismissed', '1');
-      });
-    }
-
-    window.addEventListener('appinstalled', function() {
-      if (banner) banner.classList.remove('visible');
-      console.log('PWA installed successfully');
-    });
-    
-  })();
-</script>
 </body>
 </html>

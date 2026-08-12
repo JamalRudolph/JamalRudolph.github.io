@@ -1,0 +1,2907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="manifest-aidline-demo.json">
+    <meta name="theme-color" content="#8a6d1a">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIDLINE MISSION CONTROL — Rudolph CX</title>
+    
+    <!-- Google Fonts for Tactical Visual Identity -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Epilogue:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Custom Variables representing the Rudolph CX Aidline Palette */
+        :root {
+            --color-paper: #f5f0e8;
+            --color-paper-dark: #ebe3d5;
+            --color-teal: #2a7a72;
+            --color-teal-dark: #1b4d48;
+            --color-teal-light: #e8f4f2;
+            --color-amber: #c8780a;
+            --color-amber-light: #fef3c7;
+            --color-halt: #b83020;
+            --color-halt-light: #fee2e2;
+            --color-ink: #2c2416;
+            --color-muted: #6e6454;
+            --color-white: #ffffff;
+            --color-border: #d4ccbe;
+            --color-grid: rgba(42, 122, 114, 0.08);
+            
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            --font-mono: 'DM Mono', Monaco, monospace;
+            --font-sans: 'Epilogue', system-ui, sans-serif;
+        }
+
+        /* Global Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-paper);
+            color: var(--color-ink);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            line-height: 1.5;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                linear-gradient(var(--color-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+            background-size: 20px 20px;
+            position: relative;
+        }
+
+        /* Immersive Cybernetic CRT Grid Overlay */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(44, 36, 22, 0) 50%, rgba(44, 36, 22, 0.04) 50%);
+            background-size: 100% 4px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* Custom Scrollbar to match tactical aesthetics */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-paper-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-teal);
+            border-radius: 3px;
+        }
+
+        /* Tactical Header Block */
+        .console-header {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid var(--color-teal);
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .brand-title h1 {
+            font-family: var(--font-serif);
+            font-size: 26px;
+            font-weight: normal;
+            line-height: 1;
+            color: var(--color-paper);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-title span {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-teal-light);
+            opacity: 0.8;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* Header Diagnostic Metrics */
+        .header-telemetry {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .telemetry-node {
+            background-color: rgba(42, 122, 114, 0.15);
+            border: 1px solid var(--color-teal);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--color-teal-light);
+        }
+
+        .led-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: blink 2s infinite ease-in-out;
+        }
+        .led-amber { background-color: var(--color-amber); box-shadow: 0 0 8px var(--color-amber); }
+        .led-halt { background-color: var(--color-halt); box-shadow: 0 0 8px var(--color-halt); }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* PERSISTENT UNIVERSAL SCRIPTS RIBBON (Top of UI, Unattached Horizontal Layout) */
+        .universal-scripts-ribbon {
+            background-color: var(--color-paper-dark);
+            border-bottom: 2px solid var(--color-border);
+            padding: 6px 16px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            flex-shrink: 0;
+            align-items: center;
+        }
+
+        .ribbon-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--color-teal-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            margin-right: 6px;
+            border-right: 2px solid var(--color-border);
+            padding-right: 10px;
+        }
+
+        .script-pill {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 4px 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            min-width: 160px;
+            max-width: 200px;
+            flex: 1;
+            position: relative;
+            transition: all 0.15s ease;
+        }
+
+        .script-pill:hover {
+            border-color: var(--color-teal);
+            background-color: var(--color-teal-light);
+            transform: translateY(-1px);
+        }
+
+        .script-pill-header {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: bold;
+            color: var(--color-teal);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1px;
+        }
+
+        .script-pill-snippet {
+            font-size: 11px;
+            color: var(--color-ink);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .script-pill.expanded {
+            max-width: 420px;
+            border-color: var(--color-teal);
+            background-color: var(--color-teal-light);
+            box-shadow: 0 2px 8px rgba(42, 122, 114, 0.25);
+        }
+
+        .script-pill.expanded .script-pill-snippet {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            line-height: 1.4;
+            padding-top: 2px;
+        }
+
+        .script-pill-header .pill-toggle-icon {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: var(--color-muted);
+        }
+
+        /* 5-Column Console Base Grid (Widescreen optimized, zero vertical scrolling to reach rules) */
+        .console-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            height: calc(100vh - 110px);
+        }
+
+        /* COLUMN 1: LEFT NAVIGATION INDEX DECK */
+        .control-panel {
+            width: 250px;
+            border-right: 2px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(245, 240, 232, 0.95);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .search-filter-section {
+            padding: 10px;
+            border-bottom: 2px solid var(--color-border);
+            background-color: var(--color-paper-dark);
+            flex-shrink: 0;
+        }
+
+        .search-box-wrapper {
+            position: relative;
+            margin-bottom: 6px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 6px 8px 6px 26px;
+            border: 2px solid var(--color-border);
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            color: var(--color-ink);
+            background-color: var(--color-white);
+            font-size: 11.5px;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-teal);
+            box-shadow: 0 0 0 3px rgba(42, 122, 114, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            fill: var(--color-muted);
+            pointer-events: none;
+        }
+
+        .tier-filters {
+            display: flex;
+            gap: 3px;
+        }
+
+        .filter-btn {
+            flex: 1;
+            padding: 4px 1px;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background-color: var(--color-white);
+            color: var(--color-muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .filter-btn.active {
+            background-color: var(--color-teal);
+            color: var(--color-paper);
+            border-color: var(--color-teal);
+            box-shadow: 0 2px 4px rgba(42, 122, 114, 0.3);
+        }
+
+        /* Situations Navigation List - Unified Clean Flow (Fixes image_11bf20.png) */
+        .situations-list {
+            flex: 1;
+            overflow-y: auto;
+            background-color: var(--color-white);
+        }
+
+        .situation-item {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--color-paper);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .situation-item:hover {
+            background-color: var(--color-teal-light);
+        }
+
+        .situation-item.selected {
+            background-color: var(--color-teal-light);
+            border-left: 4px solid var(--color-teal);
+            font-weight: 500;
+        }
+
+        /* Badges */
+        .badge {
+            font-family: var(--font-mono);
+            font-size: 8px;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .badge-tier-1 { background-color: var(--color-teal-light); color: var(--color-teal); border: 1px solid var(--color-teal); }
+        .badge-tier-2 { background-color: var(--color-amber-light); color: var(--color-amber); border: 1px solid var(--color-amber); }
+        .badge-tier-3 { background-color: var(--color-halt-light); color: var(--color-halt); border: 1px solid var(--color-halt); }
+
+        /* COLUMN 2 & 3: CENTER WORKSPACE DOCK */
+        .workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-color: var(--color-white);
+            position: relative;
+            border-right: 2px solid var(--color-border);
+        }
+
+        .setup-block {
+            background-color: var(--color-paper-dark);
+            padding: 6px 12px;
+            border-bottom: 2px solid var(--color-border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: inset 0 -2px 8px rgba(0,0,0,0.05);
+        }
+
+        .setup-title {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: var(--color-teal-dark);
+            width: 100%;
+            margin-bottom: -4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .setup-fields {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .setup-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            min-width: 120px;
+            flex: 1;
+        }
+
+        .setup-label {
+            font-family: var(--font-mono);
+            font-size: 8px;
+            text-transform: uppercase;
+            color: var(--color-muted);
+        }
+
+        .setup-select {
+            padding: 3px 6px;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            color: var(--color-ink);
+            background-color: var(--color-white);
+            cursor: pointer;
+            width: 100%;
+        }
+        .setup-static-value {
+            padding: 5px 6px;
+            font-family: var(--font-sans);
+            font-size: 10.5px;
+            line-height: 1.4;
+            color: var(--color-muted);
+            background-color: var(--color-paper-dark);
+            border-radius: 4px;
+            border: 1px solid var(--color-border);
+        }
+
+        /* Tactical HUD (Calculator + Active Radar Scan Matrix) */
+        .diagnostic-widget {
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin: 8px 12px 0 12px;
+            border: 1px solid var(--color-teal);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Cyberpunk Grid scan line overlay for diagnostics */
+        .diagnostic-widget::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: rgba(42, 122, 114, 0.4);
+            animation: radarSweepLine 3s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes radarSweepLine {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        .diag-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            flex: 1;
+        }
+
+        .diag-title {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: var(--color-teal-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .diag-subtitle {
+            font-size: 11px;
+            color: var(--color-paper);
+            opacity: 0.8;
+        }
+
+        .diag-inputs {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .diag-date-input {
+            padding: 2px 4px;
+            border: 1px solid var(--color-teal);
+            border-radius: 4px;
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            outline: none;
+        }
+
+        .diag-output-grid {
+            display: flex;
+            gap: 6px;
+            font-family: var(--font-mono);
+            font-size: 9px;
+        }
+
+        .diag-pill {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(42, 122, 114, 0.3);
+            border-radius: 4px;
+            padding: 2px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diag-pill-val {
+            font-weight: bold;
+            color: var(--color-amber);
+        }
+
+        /* Immersive Radar Canvas Widget */
+        .radar-panel {
+            width: 54px;
+            height: 54px;
+            border: 1px solid var(--color-teal);
+            border-radius: 50%;
+            background-color: #171c12;
+            position: relative;
+            flex-shrink: 0;
+            overflow: hidden;
+            box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.15);
+        }
+
+        .radar-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Active Situation container */
+        .active-situation-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .situation-header-banner {
+            padding: 10px 12px;
+            border-bottom: 2px solid var(--color-border);
+            background-color: var(--color-white);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .situation-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .situation-title-main {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            font-weight: normal;
+            line-height: 1.1;
+            color: var(--color-ink);
+        }
+
+        .citations {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: var(--color-muted);
+        }
+
+        .telemetry-meters {
+            display: flex;
+            gap: 6px;
+        }
+
+        .telemetry-badge {
+            font-family: var(--font-mono);
+            font-size: 8.5px;
+            background-color: var(--color-paper);
+            border: 1px solid var(--color-border);
+            padding: 1px 4px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 3px;
+            background-color: var(--color-paper);
+            border-radius: 1.5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--color-teal);
+            transition: width 0.3s ease;
+        }
+
+        /* Interactive workspace splits */
+        .interaction-pane {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .procedure-steps {
+            width: 48%;
+            border-right: 2px solid var(--color-border);
+            padding: 12px;
+            overflow-y: auto;
+            background-color: var(--color-white);
+        }
+
+        .action-hub {
+            width: 52%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-color: rgba(245, 240, 232, 0.7);
+        }
+
+        .hub-tabs {
+            display: flex;
+            background-color: var(--color-white);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .hub-tab {
+            flex: 1;
+            padding: 8px 4px;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-align: center;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            color: var(--color-muted);
+            transition: all 0.15s ease;
+            text-transform: uppercase;
+        }
+
+        .hub-tab:hover {
+            color: var(--color-teal);
+            background-color: var(--color-paper);
+        }
+
+        .hub-tab.active {
+            color: var(--color-teal);
+            border-bottom-color: var(--color-teal);
+            font-weight: bold;
+            background-color: var(--color-paper);
+        }
+
+        .hub-content {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .hub-content.active {
+            display: block;
+        }
+
+        /* Step checklist aesthetics */
+        .step-checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px 10px;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            background-color: var(--color-white);
+        }
+
+        .step-checkbox-row:hover {
+            border-color: var(--color-teal);
+        }
+
+        .step-checkbox-row.checked {
+            background-color: var(--color-teal-light);
+            border-color: var(--color-teal);
+        }
+
+        .step-num {
+            font-family: var(--font-mono);
+            font-size: 8px;
+            background-color: var(--color-paper-dark);
+            color: var(--color-muted);
+            padding: 1px 3px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .step-checkbox-row.checked .step-num {
+            background-color: var(--color-teal);
+            color: var(--color-paper);
+        }
+
+        .step-desc {
+            font-size: 11.5px;
+            line-height: 1.35;
+            color: var(--color-ink);
+        }
+
+        /* Mission Control Structured Callouts */
+        .hard-stop-card {
+            background-color: var(--color-halt-light);
+            border: 2px solid var(--color-halt);
+            border-radius: 4px;
+            padding: 10px;
+            margin: 4px 0 8px 0;
+        }
+
+        .hard-stop-header {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--color-halt);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .hard-stop-header svg { width: 12px; height: 12px; fill: var(--color-halt); }
+        .hard-stop-body { font-size: 11px; color: var(--color-ink); font-weight: 500; }
+
+        .info-callout-card {
+            background-color: var(--color-teal-light);
+            border: 2px solid var(--color-teal);
+            border-radius: 4px;
+            padding: 10px;
+            margin: 4px 0 8px 0;
+        }
+
+        .info-callout-header {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--color-teal);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .info-callout-header svg { width: 12px; height: 12px; fill: var(--color-teal); }
+        .info-callout-body { font-size: 11px; color: var(--color-ink); font-weight: 500; }
+
+        .warning-callout-card {
+            background-color: var(--color-amber-light);
+            border: 2px solid var(--color-amber);
+            border-radius: 4px;
+            padding: 10px;
+            margin: 4px 0 8px 0;
+        }
+
+        .warning-callout-header {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--color-amber);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .warning-callout-header svg { width: 12px; height: 12px; fill: var(--color-amber); }
+        .warning-callout-body { font-size: 11px; color: var(--color-ink); font-weight: 500; }
+
+        /* Guidance Ref Blocks */
+        .script-block {
+            background-color: var(--color-white);
+            border-left: 3px solid var(--color-teal);
+            padding: 8px 10px;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 8px;
+        }
+
+        .script-block-title {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            color: var(--color-teal);
+            font-weight: bold;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+        }
+
+        .script-block-text {
+            font-size: 11.5px;
+            line-height: 1.35;
+            color: var(--color-ink);
+            white-space: pre-wrap;
+        }
+
+        /* Scoped S-04 Plan Configuration Tab HUD */
+        .multi-option-container {
+            border: 2px solid var(--color-border);
+            border-radius: 4px;
+            background-color: var(--color-white);
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .multi-option-header {
+            background-color: var(--color-paper-dark);
+            padding: 4px 10px;
+            border-bottom: 1px solid var(--color-border);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: bold;
+            color: var(--color-teal-dark);
+        }
+
+        .multi-option-buttons {
+            display: flex;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .multi-option-tab {
+            flex: 1;
+            padding: 6px;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            border-right: 1px solid var(--color-border);
+            cursor: pointer;
+            background-color: var(--color-paper);
+            color: var(--color-muted);
+            transition: all 0.15s ease;
+        }
+
+        .multi-option-tab:last-child { border-right: none; }
+        .multi-option-tab.active {
+            background-color: var(--color-white);
+            color: var(--color-teal);
+            font-weight: bold;
+        }
+
+        .multi-option-details {
+            padding: 10px;
+            font-size: 11.5px;
+            background-color: var(--color-white);
+            color: var(--color-ink);
+        }
+
+        /* Action Templates & Escalations */
+        .template-viewer { display: flex; flex-direction: column; gap: 6px; }
+        .template-text-area {
+            width: 100%;
+            height: 140px;
+            font-family: var(--font-sans);
+            font-size: 11.5px;
+            padding: 8px;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background-color: var(--color-white);
+            color: var(--color-ink);
+            resize: none;
+            line-height: 1.35;
+        }
+
+        .template-text-area:focus { outline: none; border-color: var(--color-teal); }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 6px 10px;
+            background-color: var(--color-teal);
+            color: var(--color-white);
+            border: none;
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            font-size: 10.5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .action-button:hover { background-color: var(--color-teal-dark); }
+        .action-button-amber { background-color: var(--color-amber); }
+        .action-button-amber:hover { background-color: #ab6607; }
+
+        .escalation-box {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .escalation-step {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 6px;
+            align-items: flex-start;
+        }
+
+        .escalation-step:last-child { margin-bottom: 0; }
+        .esc-num {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--color-teal);
+            color: var(--color-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .esc-desc { font-size: 11px; color: var(--color-ink); line-height: 1.3; }
+
+        /* COLUMN 4: UNATTACHED RULES COLUMN (Right Column A, Persistent) */
+        .mission-rules-column {
+            width: 230px;
+            border-right: 2px solid var(--color-border);
+            background-color: var(--color-paper);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            padding: 10px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .sidebar-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            font-family: var(--font-serif);
+            font-size: 14px;
+            color: var(--color-teal-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(42,122,114,0.2);
+            padding-bottom: 2px;
+        }
+
+        .section-header span {
+            font-family: var(--font-mono);
+            font-size: 8px;
+            text-transform: uppercase;
+            color: var(--color-muted);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            padding: 5px 6px;
+            background-color: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .checklist-item:hover {
+            border-color: var(--color-teal);
+        }
+
+        .checklist-checkbox {
+            margin-top: 1px;
+            accent-color: var(--color-teal);
+            cursor: pointer;
+        }
+
+        .checklist-label {
+            font-size: 10.5px;
+            color: var(--color-ink);
+            user-select: none;
+            cursor: pointer;
+            line-height: 1.3;
+        }
+
+        .checklist-item.checked {
+            background-color: var(--color-teal-light);
+            border-color: var(--color-teal);
+        }
+
+        .checklist-item.checked .checklist-label {
+            text-decoration: line-through;
+            color: var(--color-muted);
+        }
+
+        /* COLUMN 5: UNATTACHED TRANSFER BOARD COLUMN (Right Column B, Persistent) */
+        .transfer-board-column {
+            width: 250px;
+            background-color: var(--color-paper);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            overflow-y: auto;
+        }
+
+        .transfer-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .transfer-card {
+            background-color: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 5px 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .transfer-card:hover {
+            border-color: var(--color-teal);
+            background-color: var(--color-teal-light);
+            transform: translateY(-1px);
+        }
+
+        .transfer-dest {
+            font-family: var(--font-mono);
+            font-size: 8px;
+            font-weight: bold;
+            color: var(--color-teal);
+            margin-bottom: 1px;
+        }
+
+        .transfer-code {
+            font-size: 10.5px;
+            color: var(--color-ink);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .copied-indicator {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--color-teal);
+            color: var(--color-white);
+            font-family: var(--font-mono);
+            font-size: 7px;
+            padding: 1px 3px;
+            border-radius: 3px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .transfer-card.copied .copied-indicator,
+        .script-pill.copied .copied-indicator {
+            opacity: 1;
+        }
+
+        /* Toast Notifier */
+        .global-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--color-teal);
+        }
+
+        .global-toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* Splash Screen */
+        .splash-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(44, 36, 22, 0.96);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s ease;
+        }
+
+        .splash-card {
+            background-color: var(--color-paper);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 6px;
+            padding: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 2px solid var(--color-teal);
+            text-align: center;
+        }
+
+        .splash-logo {
+            width: 48px;
+            height: 48px;
+            fill: var(--color-teal);
+            margin: 0 auto 12px auto;
+            display: block;
+        }
+
+        .splash-title {
+            font-family: var(--font-serif);
+            font-size: 28px;
+            color: var(--color-teal-dark);
+            margin-bottom: 2px;
+            font-weight: normal;
+        }
+
+        .splash-subtitle {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-muted);
+            margin-bottom: 16px;
+        }
+
+        .splash-body {
+            font-size: 12.5px;
+            line-height: 1.45;
+            color: var(--color-ink);
+            margin-bottom: 20px;
+        }
+
+        .splash-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: var(--color-teal);
+            color: var(--color-paper);
+            border: none;
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .splash-btn:hover { background-color: var(--color-teal-dark); }
+
+        /* Coachmarks (Strictly trigger on click) */
+        .coachmark {
+            position: absolute;
+            background-color: var(--color-ink);
+            color: var(--color-paper);
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            font-size: 11px;
+            max-width: 220px;
+            z-index: 15000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            border: 1px solid var(--color-teal);
+            line-height: 1.3;
+        }
+
+        .coachmark.active { opacity: 1; pointer-events: auto; }
+        .coachmark-footer {
+            margin-top: 8px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .coachmark-next {
+            background-color: var(--color-white);
+            color: var(--color-teal-dark);
+            border: none;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .coachmark-next:hover { background-color: var(--color-teal-light); }
+        .coachmark-arrow {
+            position: absolute;
+            width: 0; height: 0; border-style: solid;
+        }
+
+        .coachmark-top .coachmark-arrow {
+            bottom: -6px; left: 15px;
+            border-width: 6px 6px 0 6px;
+            border-color: var(--color-ink) transparent transparent transparent;
+        }
+
+        .coachmark-left .coachmark-arrow {
+            right: -6px; top: 15px;
+            border-width: 6px 0 6px 6px;
+            border-color: transparent transparent transparent var(--color-ink);
+        }
+
+        .empty-workspace-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 24px;
+            text-align: center;
+            color: var(--color-muted);
+            background-color: var(--color-paper);
+        }
+
+        .empty-workspace-state h2 {
+            font-family: var(--font-serif);
+            font-size: 24px;
+            font-weight: normal;
+            margin-bottom: 6px;
+            color: var(--color-teal);
+        }
+
+        .empty-workspace-state p { max-width: 340px; font-size: 12.5px; }
+
+        /* Star Trek/ATC Terminal Active System Event Log Tray */
+        .console-log-tray {
+            background-color: var(--color-ink);
+            color: #10b981;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            padding: 4px 12px;
+            border-top: 1px solid var(--color-teal);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: hidden;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .console-log-prefix {
+            color: var(--color-amber);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .console-log-scroller {
+            display: inline-block;
+            animation: scrollLog 20s linear infinite;
+        }
+
+        /* Responsive Grid Adjustments (Fixes image_11b726.png) */
+        @media (max-width: 1200px) {
+            .console-container {
+                flex-direction: column;
+                height: auto;
+                overflow-y: visible;
+            }
+            .control-panel, .mission-rules-column, .transfer-board-column {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px solid var(--color-border);
+            }
+            .workspace {
+                border-right: none;
+            }
+            .interaction-pane {
+                flex-direction: column;
+                height: auto;
+            }
+            .procedure-steps, .action-hub {
+                width: 100%;
+                border-right: none;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Block -->
+    <header class="console-header">
+        <div class="brand-title">
+            <h1>
+                <!-- Inline SVG Logo -->
+                <svg style="width: 20px; height: 20px; fill: var(--color-paper);" viewBox="0 0 100 100">
+                    <path d="M50,10 L90,30 L90,70 L50,90 L10,70 L10,30 Z" fill="none" stroke="currentColor" stroke-width="8"/>
+                    <path d="M50,28 L72,41 L72,59 L50,72 L28,59 L28,41 Z" fill="currentColor"/>
+                </svg>
+                AIDLINE MISSION CONTROL
+            </h1>
+            <span>Federal Benefits Specialist Decisive Environment</span>
+        </div>
+
+        <div class="header-telemetry">
+            <div class="telemetry-node">
+                <div class="led-indicator" id="relayLed"></div>
+                <span>RELAY: NOMINAL</span>
+            </div>
+            <div class="telemetry-node">
+                <div class="led-indicator led-amber" id="warningLed" style="animation: none;"></div>
+                <span id="timerText">SYS TIME: 00:00</span>
+            </div>
+            
+            <button class="action-button" style="padding: 3px 8px; font-size: 9px; font-family: var(--font-mono);" onclick="toggleCoachmarks(event)">
+                DIAGNOSTICS
+            </button>
+            <button class="action-button action-button-amber" style="padding: 3px 8px; font-size: 9px; font-family: var(--font-mono);" onclick="globalReset()">
+                CONSOLE RESET
+            </button>
+        </div>
+    </header>
+
+    <!-- DEMO DISCLAIMER BANNER — honest, visible, never removed -->
+    <div style="background:#3a2a0a; color:#f0c674; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.04em; text-align:center; padding:8px 16px; border-bottom:1px solid #5a4a1a;">
+        DEMO MODE — one real, illustrative situation from Aidline. This conversation illustrates how the guide supports a real call in your own phone system — Aidline provides the procedures and rules; it does not replace your phone, CRM, or intake system. Your built guide covers your full role and source material, not just this sample.
+        <a href="book.html" style="color:#f0c674; text-decoration:underline; margin-left:8px;">Book a discovery call &rarr;</a>
+    </div>
+
+    <!-- PERSISTENT UNIVERSAL SCRIPTS RIBBON (Top Horizontal Command Bar, Unattached) -->
+    <div class="universal-scripts-ribbon" id="scriptsRibbonContainer">
+        <div class="ribbon-label">TACTICAL SCRIPTS (CLICK TO OPEN)</div>
+        
+        <div class="script-pill" id="scriptPill-GREET" onclick="toggleScriptDisplay('GREET', this)">
+            <div class="script-pill-header">GREET <span class="pill-toggle-icon">▾</span></div>
+            <div class="script-pill-snippet">"Thank you for calling [contact center]..."</div>
+        </div>
+
+        <div class="script-pill" id="scriptPill-VERIFY" onclick="toggleScriptDisplay('VERIFY', this)">
+            <div class="script-pill-header">VERIFY <span class="pill-toggle-icon">▾</span></div>
+            <div class="script-pill-snippet">"Before I can discuss your benefits..."</div>
+        </div>
+
+        <div class="script-pill" id="scriptPill-HOLD" onclick="toggleScriptDisplay('HOLD', this)">
+            <div class="script-pill-header">HOLD <span class="pill-toggle-icon">▾</span></div>
+            <div class="script-pill-snippet">"To ensure I provide you with the most..."</div>
+        </div>
+
+        <div class="script-pill" id="scriptPill-CHECKIN" onclick="toggleScriptDisplay('CHECKIN', this)">
+            <div class="script-pill-header">CHECK IN <span class="pill-toggle-icon">▾</span></div>
+            <div class="script-pill-snippet">"Thank you for holding. I am still..."</div>
+        </div>
+
+        <div class="script-pill" id="scriptPill-TRANSFER" onclick="toggleScriptDisplay('TRANSFER', this)">
+            <div class="script-pill-header">TRANSFER <span class="pill-toggle-icon">▾</span></div>
+            <div class="script-pill-snippet">"I am going to transfer your inquiry..."</div>
+        </div>
+    </div>
+
+    <div class="console-container">
+        
+        <!-- COLUMN 1: LEFT NAVIGATION INDEX DECK -->
+        <aside class="control-panel">
+            <div class="search-filter-section" id="step-search-section">
+                <div class="search-box-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Query scenarios (e.g. QLE, PSHB)..." onkeyup="filterSituations()">
+                </div>
+                <div class="tier-filters">
+                    <button class="filter-btn active" onclick="setTierFilter('ALL')">ALL</button>
+                    <button class="filter-btn" onclick="setTierFilter('TIER I')">TIER I</button>
+                    <button class="filter-btn" onclick="setTierFilter('TIER II')">TIER II</button>
+                    <button class="filter-btn" onclick="setTierFilter('TIER III')">TIER III</button>
+                </div>
+            </div>
+
+            <!-- Flow List -->
+            <div class="situations-list" id="situationsListContainer">
+                <!-- Injected programmatically -->
+            </div>
+
+            <!-- LIVE CALL SIMULATION -->
+            <div id="callSimPanel" style="border-top:1px solid var(--color-border); margin-top:12px; padding-top:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-family:var(--font-mono); font-size:9px; letter-spacing:0.06em; color:var(--color-teal); display:flex; align-items:center; gap:5px;">
+                        <span id="callLiveDot" style="width:6px;height:6px;border-radius:50%;background:#c0392b;display:inline-block;"></span>
+                        LIVE CALL
+                    </span>
+                    <span id="callTimer" style="font-family:var(--font-mono); font-size:9px; color:var(--color-ink-light);">00:00</span>
+                </div>
+                <div id="callTranscript" style="height:280px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:8px; background:rgba(0,0,0,0.03); border:1px solid var(--color-border); font-family:var(--font-mono); font-size:10.5px; line-height:1.5;"></div>
+                <div style="display:flex; gap:6px; margin-top:8px; align-items:center;">
+                    <button id="callPlayBtn" class="action-button" style="font-size:9px; padding:4px 8px;" onclick="toggleCallPlayback()">&#9654; Play</button>
+                    <button class="action-button" style="font-size:9px; padding:4px 8px;" onclick="stepCallOnce()">&#9197; Step</button>
+                    <button class="action-button" style="font-size:9px; padding:4px 8px;" onclick="resetCallSim()">&#8635; Reset</button>
+                    <input type="range" id="callSpeed" min="1" max="3" value="2" style="flex:1;" title="Playback speed">
+                </div>
+            </div>
+        </aside>
+
+        <!-- COLUMN 2 & 3: MAIN WORKSPACE -->
+        <main class="workspace">
+            
+            <!-- PARAMETER SETUP BLOCK -->
+            <section class="setup-block" id="step-setup-block">
+                <span class="setup-title">
+                    <svg style="width:10px; height:10px; fill:currentColor;" viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.04,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+                    PRE-PROCEDURE SITUATION SETUP
+                </span>
+                <div class="setup-fields">
+                    <div class="setup-group">
+                        <label class="setup-label">Identity Method — Confirm &amp; Record On Your Own System</label>
+                        <div class="setup-static-value">CSA Claim Number (retired), CSF Claim Number (survivor), or SSN. Name alone does not verify identity — confirm one of these before proceeding.</div>
+                    </div>
+                    <div class="setup-group">
+                        <label class="setup-label">Current Plan Year — Reference Content Applied</label>
+                        <select id="setupPlanYear" class="setup-select" onchange="handlePlanYearDependency();">
+                            <option value="2026">Plan Year 2026 (Active Baseline)</option>
+                            <option value="2025">Plan Year 2025 (Historical)</option>
+                        </select>
+                    </div>
+                    <div class="setup-group">
+                        <label class="setup-label">Enrollment Type — Confirm &amp; Record On Your Own System</label>
+                        <div class="setup-static-value">Self Only, Self Plus One, or Self and Family. Confirm with the caller and record in your own case system — not entered here.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REGULATORY DEADLINE AWARENESS — static reference, not a live calculator.
+                 This situation carries hard regulatory deadlines. Confirm the actual
+                 trigger date and calculate the exact deadline in your own case system —
+                 do not estimate, and do not rely on any tool to calculate it for you. -->
+            <div class="diagnostic-widget">
+                <div class="diag-header">
+                    <div class="diag-title">Regulatory Deadline Awareness</div>
+                    <div class="diag-subtitle">Confirm the trigger date and calculate the exact deadline in your own case system — not calculated here</div>
+                </div>
+                <div class="diag-output-grid" id="diagOutputGrid">
+                    <div class="diag-pill">
+                        <span style="font-size: 7px; opacity:0.7;">QLE WINDOW</span>
+                        <span class="diag-pill-val">31 DAYS FROM EVENT</span>
+                    </div>
+                    <div class="diag-pill">
+                        <span style="font-size: 7px; opacity:0.7;">NEW EMPLOYEE WINDOW</span>
+                        <span class="diag-pill-val" style="color:var(--color-teal-light)">60 DAYS FROM HIRE</span>
+                    </div>
+                    <div class="diag-pill">
+                        <span style="font-size: 7px; opacity:0.7;">APPEAL WINDOW</span>
+                        <span class="diag-pill-val" style="color:var(--color-amber)">90 DAYS FROM DECISION</span>
+                    </div>
+                </div>
+                <!-- Radar visual retained — decorative, not tied to the removed date calculator -->
+                <div class="radar-panel">
+                    <canvas id="radarSweepCanvas" class="radar-canvas" width="100" height="100"></canvas>
+                </div>
+            </div>
+
+            <!-- SITUATION ACTIVE PANEL -->
+            <div id="activeWorkspace" class="active-situation-container" style="display: none;">
+                
+                <div class="situation-header-banner">
+                    <div class="situation-meta-row">
+                        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                            <span id="activeTierBadge" class="badge">TIER I</span>
+                            <span id="activeSituationCode" class="badge" style="background-color: var(--color-ink); color: var(--color-paper); border: 1px solid var(--color-border);">S-01</span>
+                            <h2 id="activeSituationTitle" class="situation-title-main">Initiating scenario...</h2>
+                        </div>
+                        <div id="activeCitations" class="citations">FEHB 5 U.S.C. Ch. 89</div>
+                    </div>
+                    
+                    <div class="telemetry-meters">
+                        <div class="telemetry-badge" id="coverageMeters">
+                            <span class="led-indicator" id="complianceLed" style="width: 6px; height: 6px;"></span>
+                            <span id="compliancePercentage">COMPLIANCE METRIC: 0%</span>
+                        </div>
+                        <div class="telemetry-badge">
+                            <span class="led-indicator led-amber" style="width: 6px; height: 6px; animation: blink 1s infinite;"></span>
+                            <span id="speedTimer">INTERVAL: 0s</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar-container">
+                        <div id="activeProgressBar" class="progress-bar-fill"></div>
+                    </div>
+                </div>
+
+                <div class="interaction-pane">
+                    
+                    <!-- LEFT COLUMN: PROCEDURE CHECKLIST -->
+                    <div class="procedure-steps" id="stepsPane">
+                        <!-- Loaded dynamically -->
+                    </div>
+
+                    <!-- RIGHT COLUMN: ACTION HUD -->
+                    <div class="action-hub" id="actionHubPane">
+                        <div class="hub-tabs">
+                            <div class="hub-tab active" onclick="switchHubTab('guidance')">Verbatim Dispatch</div>
+                            <div class="hub-tab" id="emailTabButton" onclick="switchHubTab('email')">Follow-Up Email</div>
+                            <div class="hub-tab" onclick="switchHubTab('escalation')">Relay Escalation</div>
+                            <div class="hub-tab" onclick="switchHubTab('notes')" id="step-case-notes">Case Notes</div>
+                        </div>
+
+                        <!-- TAB: DISPATCH -->
+                        <div id="tab-guidance" class="hub-content active">
+                            <div id="guidanceViewContainer"></div>
+                        </div>
+
+                        <!-- TAB: EMAIL TEMPLATE -->
+                        <div id="tab-email" class="hub-content">
+                            <div class="template-viewer">
+                                <p style="font-size: 11px; color: var(--color-muted); margin-bottom: 4px;">
+                                    Confirm all member-specific tokens before routing this dispatch:
+                                </p>
+                                <textarea id="emailTemplateArea" class="template-text-area" readonly></textarea>
+                                <button class="action-button" onclick="copyEmailTemplate()">
+                                    Copy Email Draft to Clipboard
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TAB: ESCALATION -->
+                        <div id="tab-escalation" class="hub-content">
+                            <div class="escalation-box" id="escalationViewContainer"></div>
+                        </div>
+
+                        <!-- TAB: AUTO CASE NOTES -->
+                        <div id="tab-notes" class="hub-content">
+                            <div class="notes-assembly-box">
+                                <p style="font-size: 11px; color: var(--color-muted); margin-bottom: 4px;">
+                                    Generic, blank template — identical every time this situation is opened. Copy into your own case system and fill it in there — nothing here is pre-filled from this call:
+                                </p>
+                                <textarea id="caseNotesArea" class="template-text-area" style="height: 120px; font-family: var(--font-mono); font-size:10px;"></textarea>
+                                <div style="display: flex; gap: 6px;">
+                                    <button class="action-button" onclick="copyCaseNotes()">
+                                        Copy Transaction Record
+                                    </button>
+                                    <button class="action-button action-button-amber" onclick="clearCaseNotesOverride()">
+                                        Reset to Blank Template
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- EMPTY DEFAULT STATE -->
+            <div id="emptyWorkspace" class="empty-workspace-state" style="display:none;">
+                <svg style="width: 52px; height: 52px; fill: var(--color-teal); opacity: 0.8; margin-bottom: 12px;" viewBox="0 0 100 100">
+                    <path d="M50,15 L85,35 L85,65 L50,85 L15,65 L15,35 Z" fill="none" stroke="currentColor" stroke-width="4"/>
+                    <path d="M50,30 L70,42 L70,58 L50,70 L30,58 L30,42 Z" fill="currentColor"/>
+                </svg>
+                <h2>Decisive Deck Offline</h2>
+                <p>
+                    Select an active compliance scenario from the left-hand navigation list. Monitor the telemetry rules and ensure all verified safeguards are cleared during live interactions.
+                </p>
+            </div>
+
+            <!-- VERIFICATION GATE — blocking, matches the real Lendline/Workline/Reentryline pattern -->
+            <div id="verificationGate" style="background:#3a2a0a; border:2px solid #5a4a1a; border-radius:4px; margin-top:12px;">
+                <div style="background:#2a1e08; color:#f0c674; padding:8px 16px; font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase;">Identity &amp; Account Verification Required &middot; Every Call</div>
+                <div style="padding:20px 24px;">
+                    <div style="color:#c0392b; font-family:var(--font-mono); font-size:11px; margin-bottom:14px;"><strong>MANDATORY FIRST STEP</strong><br><span style="color:var(--color-ink-light); font-weight:400;">This situation stays locked until every item below is confirmed. Do not discuss account details before this is complete.</span></div>
+                    <div id="gateChecklist">
+                        <div class="checklist-item" onclick="toggleGateItem(0, event)">
+                            <input type="checkbox" id="gate-0" class="checklist-checkbox" onclick="event.stopPropagation(); handleGateCheck(0, this.checked);">
+                            <label class="checklist-label" for="gate-0">Confirm identity: CSA/CSF claim number or SSN &mdash; name alone insufficient</label>
+                        </div>
+                        <div class="checklist-item" onclick="toggleGateItem(1, event)">
+                            <input type="checkbox" id="gate-1" class="checklist-checkbox" onclick="event.stopPropagation(); handleGateCheck(1, this.checked);">
+                            <label class="checklist-label" for="gate-1">Confirm active plan and coverage year</label>
+                        </div>
+                        <div class="checklist-item" onclick="toggleGateItem(2, event)">
+                            <input type="checkbox" id="gate-2" class="checklist-checkbox" onclick="event.stopPropagation(); handleGateCheck(2, this.checked);">
+                            <label class="checklist-label" for="gate-2">Confirm enrollment type (Self Only / Self Plus One / Self and Family)</label>
+                        </div>
+                        <div class="checklist-item" onclick="toggleGateItem(3, event)">
+                            <input type="checkbox" id="gate-3" class="checklist-checkbox" onclick="event.stopPropagation(); handleGateCheck(3, this.checked);">
+                            <label class="checklist-label" for="gate-3">Confirm active coverage period, not a gap/QLE window</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- COLUMN 4: UNATTACHED MISSION RULES COLUMN (Right Column A, Persistent) -->
+        <aside class="mission-rules-column" id="step-mission-rules">
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span>Situational Flags</span>
+                    <span style="font-size: 8px;">Check If Applicable</span>
+                </div>
+                <div id="missionRulesContainer">
+                    <div class="checklist-item" onclick="toggleMissionRule(4, event)">
+                        <input type="checkbox" id="rule-4" class="checklist-checkbox" onclick="event.stopPropagation(); updateMissionRuleCheck(4, this.checked);">
+                        <label class="checklist-label" for="rule-4">If QLE: confirm 31-day window still open, documentation required</label>
+                    </div>
+                    <div class="checklist-item" onclick="toggleMissionRule(5, event)">
+                        <input type="checkbox" id="rule-5" class="checklist-checkbox" onclick="event.stopPropagation(); updateMissionRuleCheck(5, this.checked);">
+                        <label class="checklist-label" for="rule-5">Plan Year 2026: gender-affirming care eliminated per OPM Carrier Letter 2025-01b</label>
+                    </div>
+                    <p style="font-size:9px; color:var(--color-ink-light); font-family:var(--font-mono); padding:8px 12px; line-height:1.5;">Neither flag applies to this situation &mdash; shown here for reference, not required for this call.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- COLUMN 5: UNATTACHED TRANSFER BOARD COLUMN (Right Column B, Persistent) -->
+        <aside class="transfer-board-column" id="step-universal-scripts">
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span>Transfer Board Relays</span>
+                    <span style="font-size: 8px;">Single-Click Copy</span>
+                </div>
+                <div class="transfer-grid">
+                    <div class="transfer-card" onclick="copyRoutingCode('Agency HR — SF-2809, enrollment actions', this)">
+                        <div class="transfer-dest">AGENCY HR</div>
+                        <div class="transfer-code">SF-2809, Enrollment Actions</div>
+                        <span class="copied-indicator">COPIED</span>
+                    </div>
+                    <div class="transfer-card" onclick="copyRoutingCode('OPM Retirement Services — 1-888-767-6738, servicesonline.opm.gov', this)">
+                        <div class="transfer-dest">OPM RETIREMENT SERVICES</div>
+                        <div class="transfer-code">1-888-767-6738 | servicesonline.opm.gov</div>
+                        <span class="copied-indicator">COPIED</span>
+                    </div>
+                    <div class="transfer-card" onclick="copyRoutingCode('Carrier Claims Department — claim disputes, Step 1 appeals', this)">
+                        <div class="transfer-dest">CARRIER CLAIMS DEPT</div>
+                        <div class="transfer-code">Claim Disputes, Step 1 Appeals</div>
+                        <span class="copied-indicator">COPIED</span>
+                    </div>
+                    <div class="transfer-card" onclick="copyRoutingCode('OPM Review — Step 2 appeals, 90-day window', this)">
+                        <div class="transfer-dest">OPM REVIEW</div>
+                        <div class="transfer-code">Step 2 Appeals (90-day window)</div>
+                        <span class="copied-indicator">COPIED</span>
+                    </div>
+                    <div class="transfer-card" onclick="copyRoutingCode('PSHB Carrier / OPM PSHB Resources — separate from standard FEHB', this)">
+                        <div class="transfer-dest">PSHB RESOURCES</div>
+                        <div class="transfer-code">PSHB Carrier / OPM PSHB Resources</div>
+                        <span class="copied-indicator">COPIED</span>
+                    </div>
+                    <div class="transfer-card" onclick="copyRoutingCode('OPM Privacy Act Officer — third-party record requests, not the carrier', this)">
+                        <div class="transfer-dest">OPM PRIVACY ACT OFFICER</div>
+                        <div class="transfer-code">Third-Party Record Requests</div>
+                        <span class="copied-indicator">COPIED</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Active Terminal Event Log Tray -->
+    <div class="console-log-tray">
+        <span class="console-log-prefix">&gt; SYS.LOG_TRX:</span>
+        <div class="console-log-scroller" id="systemLogText">
+            [SYS.SEC.00] COMPLIANCE GRID IS SECURED AND CALIBRATED FOR THE CURRENT CYCLE... INITIALIZING TELEMETRY...
+        </div>
+    </div>
+
+    <!-- Toast Notification Overlay -->
+    <div id="globalToast" class="global-toast">
+        <svg style="width: 12px; height: 12px; fill: currentColor;" viewBox="0 0 24 24">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+        </svg>
+        <span id="toastMessage">Secure Telemetry Copied</span>
+    </div>
+
+    <!-- Splash Screen Onboarding -->
+    <div id="splashScreen" class="splash-overlay">
+        <div class="splash-card">
+            <svg class="splash-logo" viewBox="0 0 100 100">
+                <path d="M50,10 L90,30 L90,70 L50,90 L10,70 L10,30 Z" fill="none" stroke="currentColor" stroke-width="6"/>
+                <path d="M50,25 L75,40 L75,60 L50,75 L25,60 L25,40 Z" fill="currentColor"/>
+            </svg>
+            <h2 class="splash-title">AIDLINE DECK ONLINE</h2>
+            <div class="splash-subtitle">Rudolph CX Mission Control Support System</div>
+            <div class="splash-body">
+                Welcome to the high-stakes Federal Employee benefits navigation interface. This terminal integrates real-time OPM timeline analytics, persistent checklist systems, and active security compliance markers.
+                <br><br>
+                <strong>Acoustic Transceiver Feedback Enabled:</strong> Native tactical synth chimes are active. Click below to initialize console components and establish database link.
+            </div>
+            <button class="splash-btn" onclick="initializeAudioAndCloseSplash()">Initialize Audio &amp; Run Console</button>
+        </div>
+    </div>
+
+    <!-- Diagnostic Coachmarks (Only displayed manually on click, No Auto-Launch) -->
+    <div id="coachmark-search" class="coachmark coachmark-top">
+        <div style="font-weight: bold; margin-bottom: 2px;">1. Search &amp; Limit Filters</div>
+        Use this terminal index to query situations by regulatory keywords or filter by Tiers immediately.
+        <div class="coachmark-footer"><button class="coachmark-next" onclick="advanceCoachmark()">Next →</button></div>
+        <div class="coachmark-arrow"></div>
+    </div>
+
+    <div id="coachmark-scripts" class="coachmark coachmark-left">
+        <div style="font-weight: bold; margin-bottom: 2px;">2. Persistent Command reference</div>
+        Click anywhere on a script or transfer board row to copy its compliant language directly to the system clipboard.
+        <div class="coachmark-footer"><button class="coachmark-next" onclick="advanceCoachmark()">Next →</button></div>
+        <div class="coachmark-arrow"></div>
+    </div>
+
+    <div id="coachmark-setup" class="coachmark coachmark-top">
+        <div style="font-weight: bold; margin-bottom: 2px;">3. Telemetry Parameter Setup</div>
+        Map identity, plan baseline, and enrollment profiles here to auto-compile accurate client transaction logs.
+        <div class="coachmark-footer"><button class="coachmark-next" onclick="advanceCoachmark()">Next →</button></div>
+        <div class="coachmark-arrow"></div>
+    </div>
+
+    <div id="coachmark-notes" class="coachmark coachmark-left">
+        <div style="font-weight: bold; margin-bottom: 2px;">4. Real-time Log Assembly</div>
+        This dynamic module builds an audit-ready administrative case log from active selections instantly.
+        <div class="coachmark-footer"><button class="coachmark-next" onclick="advanceCoachmark()">Done</button></div>
+        <div class="coachmark-arrow"></div>
+    </div>
+
+    <script>
+        // Verbatim Compliance Scenarios S-01 to S-10 (Fix 1 of 2)
+        const SITUATIONS = [
+{
+                id: 'S-05',
+                title: "Claim Denied, Appeal Rights",
+                tier: 'TIER II',
+                citations: "FEHB 5 U.S.C. Ch. 89 / 5 CFR § 890.105 · OPM FEHB Handbook",
+                steps: [
+                    "Confirm the denial date. The appeal process is two steps — do not skip directly to OPM.",
+                    "Step 1: Written reconsideration request to the carrier. The carrier has 30 days to respond after receiving additional information from the member.",
+                    "Step 2: If carrier upholds denial — request OPM review within 90 calendar days of the carrier's final decision (or 120 days if the carrier did not respond within 30 days).",
+                    "Document: denial date, denial reason, appeal submitted date, tracking number.",
+                    "Inform the member: OPM's decision is final and binding on the carrier."
+                ],
+                guidance: [
+                    "Do not suggest bypassing the carrier reconsideration step; premature OPM submissions will be rejected.",
+                    "Emphasize that the subsequent OPM decision is final and binding on the carrier."
+                ],
+                callouts: [
+                    {
+                        type: 'hardstop',
+                        stepIndex: 2, 
+                        title: "Two-Step Appeal Process, 5 CFR § 890.105",
+                        text: "Step 1: Written reconsideration to the carrier — carrier has 30 days to respond. Step 2: If carrier upholds denial, request OPM review within 90 calendar days of the carrier's final decision (or 120 days if no carrier response within 30 days). Do not tell the member they have 60 days from the denial notice to appeal to OPM — that conflates the two steps and is incorrect. OPM's decision is final and binding on the carrier."
+                    }
+                ],
+                multiOption: null,
+                emailTemplate: `SUBJECT: FEHB Claim Denial Appeal Procedure — [SITUATION_SETUP_IDENTIFIER]
+
+Dear Member,
+
+This email outlines the formal, two-step regulatory appeal process for your denied FEHB claim under 5 CFR § 890.105:
+
+STEP 1: CARRIER RECONSIDERATION
+You must file a written request for reconsideration directly with your health insurance carrier within 30 days of the date on your original denial notice.
+
+STEP 2: OPM REVIEW
+If the carrier denies your Step 1 request, or fails to respond within 30 days, you may request OPM review.
+- Timeline: Submit your appeal within 90 calendar days of the carrier's final decision (or 120 days if the carrier did not respond within 30 days).
+
+Please submit your OPM review request to the coordinates found on the Transfer Board of this system. Note that OPM's final decision is binding and represents the end of the administrative appeal path.
+
+Sincerely,
+Federal Benefits Service Desk`,
+                escalation: [
+                    "Step 1: File Step 1 reconsideration directly with Carrier Claims Department.",
+                    "Step 2: If the carrier upholds the denial, request OPM review within 90 days. OPM's decision is final and binding."
+                ]
+            }
+        ];
+
+        // Global variables initialized correctly to resolve any runtime SyntaxErrors
+        let appState = {
+            selectedSituationIndex: null,
+            searchQuery: "",
+            activeFilter: "ALL",
+            checkedSteps: [],
+            missionChecklist: [false, false, false, false, false, false, false],
+            timerSeconds: 0,
+            timerInterval: null,
+            activeMultiOptionIndex: 0,
+            caseNotesOverrideText: "",
+            audioEnabled: false,
+            speedTimerValue: 0,
+            speedInterval: null,
+            radarAngle: 0,
+            activeAlertPulse: false,
+            alertInterval: null
+        };
+
+        // Star Trek LCARS & Air Traffic Control sound synthesizer using native Web Audio API
+        let audioCtx = null;
+
+        function initializeAudioAndCloseSplash() {
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                appState.audioEnabled = true;
+                playBootUpChime();
+                pushSystemLog("TRANSCIEVER NOMINAL: SYNTHESIZER AND GRAPHICS ENGAGED.");
+            } catch(e) {
+                console.warn("Web Audio Context blocked or unavailable.", e);
+            }
+
+            // Close splash overlay
+            const overlay = document.getElementById('splashScreen');
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 500);
+
+            // Run system components — content first, decorative flourishes after
+            renderSituations();
+            updateUI();
+            startSystemTimer();
+            // DEMO SCOPE: auto-select the single available situation so visitors
+            // land directly on real, active content instead of an empty state.
+            try { selectSituation(0); } catch(e) { console.warn('Auto-select failed:', e); }
+            try {
+                startRadarLoop();
+            } catch (radarErr) {
+                console.warn("Radar sweep visual unavailable:", radarErr);
+            }
+        }
+
+        // Native Synth Audio Instruments (Star Trek LCARS Style Synth Chimes)
+        function playNativeTone(freq, type, duration, volume = 0.04) {
+            if (!appState.audioEnabled || !audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.type = type || 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {
+                console.warn(e);
+            }
+        }
+
+        function playMechanicalTick() { playNativeTone(120, 'triangle', 0.03, 0.03); }
+        
+        function playLcarsAcknowledge() {
+            // Retro Trek LCARS high-frequence quick double chime
+            playNativeTone(880, 'sine', 0.08, 0.04);
+            setTimeout(() => {
+                playNativeTone(1046.5, 'sine', 0.12, 0.03);
+            }, 60);
+        }
+
+        function playBootUpChime() {
+            // Classic ascending LCARS operational sweep
+            const notes = [261.6, 329.6, 392.0, 523.3, 659.3];
+            notes.forEach((freq, idx) => {
+                setTimeout(() => {
+                    playNativeTone(freq, 'sine', 0.25, 0.04);
+                }, idx * 100);
+            });
+        }
+
+        function startRedAlertKlaxon() {
+            if (appState.alertInterval) return;
+            appState.alertInterval = setInterval(() => {
+                if (appState.activeAlertPulse) {
+                    // ATC Pulse Red Alert tone
+                    playNativeTone(280, 'sawtooth', 0.35, 0.02);
+                }
+            }, 1000);
+        }
+
+        // System Diagnostic Timers & Logs
+        function startSystemTimer() {
+            appState.timerInterval = setInterval(() => {
+                appState.timerSeconds++;
+                const mins = String(Math.floor(appState.timerSeconds / 60)).padStart(2, '0');
+                const secs = String(appState.timerSeconds % 60).padStart(2, '0');
+                document.getElementById('timerText').innerText = `SYS TIME: ${mins}:${secs}`;
+                
+                // Randomly flicker relay status lights
+                if (Math.random() > 0.85) {
+                    const led = document.getElementById('relayLed');
+                    led.style.opacity = '0.3';
+                    setTimeout(() => { led.style.opacity = '1'; }, 100);
+                }
+            }, 1000);
+        }
+
+        function startSpeedTimer() {
+            if (appState.speedInterval) clearInterval(appState.speedInterval);
+            appState.speedTimerValue = 0;
+            appState.speedInterval = setInterval(() => {
+                appState.speedTimerValue++;
+                const text = document.getElementById('speedTimer');
+                if (text) text.innerText = `INTERVAL: ${appState.speedTimerValue}s`;
+            }, 1000);
+        }
+
+        function resetTimer() {
+            appState.timerSeconds = 0;
+            document.getElementById('timerText').innerText = "SYS TIME: 00:00";
+        }
+
+        function pushSystemLog(msg) {
+            const tray = document.getElementById('systemLogText');
+            if (tray) {
+                const timestamp = new Date().toISOString().substring(11, 19);
+                tray.innerText = `[${timestamp}] ${msg} -- `;
+            }
+        }
+
+        // HTML5 Animated Radar Sweep Component
+        function startRadarLoop() {
+            const canvas = document.getElementById('radarSweepCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            function drawSweep() {
+                ctx.clearRect(0, 0, 100, 100);
+                
+                // Outer ring
+                ctx.strokeStyle = '#2a7a72';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(50, 50, 48, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Inner grid
+                ctx.strokeStyle = 'rgba(42, 122, 114, 0.25)';
+                ctx.beginPath();
+                ctx.arc(50, 50, 25, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Grid axis lines
+                ctx.beginPath();
+                ctx.moveTo(50, 2); ctx.lineTo(50, 98);
+                ctx.moveTo(2, 50); ctx.lineTo(98, 50);
+                ctx.stroke();
+
+                // Radar Sweeping line
+                appState.radarAngle += 0.035;
+                const sweepX = 50 + Math.cos(appState.radarAngle) * 48;
+                const sweepY = 50 + Math.sin(appState.radarAngle) * 48;
+                
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(50, 50);
+                ctx.lineTo(sweepX, sweepY);
+                ctx.stroke();
+
+                // Blinking Compliance Target Dots
+                if (appState.selectedSituationIndex !== null) {
+                    const steps = appState.checkedSteps;
+                    const count = steps.length;
+                    
+                    steps.forEach((checked, i) => {
+                        const angle = (i / count) * Math.PI * 2;
+                        const targetX = 50 + Math.cos(angle) * 32;
+                        const targetY = 50 + Math.sin(angle) * 32;
+
+                        if (checked) {
+                            ctx.fillStyle = '#10b981';
+                            ctx.shadowColor = '#10b981';
+                            ctx.shadowBlur = 4;
+                        } else {
+                            ctx.fillStyle = appState.activeAlertPulse ? 'var(--color-halt)' : 'rgba(110, 100, 84, 0.4)';
+                            ctx.shadowBlur = 0;
+                        }
+                        ctx.beginPath();
+                        ctx.arc(targetX, targetY, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                }
+
+                requestAnimationFrame(drawSweep);
+            }
+            drawSweep();
+        }
+
+        // Manual Coachmarks Trigger (Never Auto-Launch on start)
+        let coachmarksActive = false;
+        let coachmarkStep = 0;
+        const coachmarkSequence = [
+            { id: 'coachmark-search', ref: 'step-search-section', xOffset: 20, yOffset: 30 },
+            { id: 'coachmark-scripts', ref: 'scriptsRibbonContainer', xOffset: 120, yOffset: 35 },
+            { id: 'coachmark-setup', ref: 'step-setup-block', xOffset: 15, yOffset: 55 },
+            { id: 'coachmark-notes', ref: 'step-case-notes', xOffset: -230, yOffset: -40 }
+        ];
+
+        function showCoachmarkStep(index) {
+            coachmarkSequence.forEach((m, i) => {
+                const bubble = document.getElementById(m.id);
+                const element = document.getElementById(m.ref);
+                if (i === index && element) {
+                    const rect = element.getBoundingClientRect();
+                    let top = window.scrollY + rect.top + m.yOffset;
+                    let left = window.scrollX + rect.left + m.xOffset;
+
+                    // Safety clamp: never let a bubble render partially or
+                    // fully outside the visible viewport, regardless of
+                    // what the offset math above produces.
+                    const bubbleWidth = 220; // matches .coachmark max-width
+                    const bubbleHeight = 120; // generous estimate incl. footer
+                    const margin = 12;
+                    top = Math.max(margin, Math.min(top, window.innerHeight - bubbleHeight - margin));
+                    left = Math.max(margin, Math.min(left, window.innerWidth - bubbleWidth - margin));
+
+                    bubble.style.top = `${top}px`;
+                    bubble.style.left = `${left}px`;
+                    bubble.classList.add('active');
+                } else {
+                    bubble.classList.remove('active');
+                }
+            });
+        }
+
+        function advanceCoachmark() {
+            coachmarkStep++;
+            if (coachmarkStep >= coachmarkSequence.length) {
+                coachmarksActive = false;
+                coachmarkSequence.forEach(m => document.getElementById(m.id).classList.remove('active'));
+                pushSystemLog("TACTICAL INTERFACE DIAGNOSTICS TOUR COMPLETE.");
+                return;
+            }
+            showCoachmarkStep(coachmarkStep);
+        }
+
+        function toggleCoachmarks(event) {
+            if (event) event.stopPropagation();
+            playLcarsAcknowledge();
+            coachmarksActive = !coachmarksActive;
+            if (coachmarksActive) {
+                coachmarkStep = 0;
+                showCoachmarkStep(0);
+                pushSystemLog("TACTICAL INTERFACE DIAGNOSTICS DISPLAYED.");
+            } else {
+                coachmarkSequence.forEach(m => document.getElementById(m.id).classList.remove('active'));
+                pushSystemLog("TACTICAL INTERFACE DIAGNOSTICS CLOSED.");
+            }
+        }
+
+        // Filtering Scenarios Index
+        function filterSituations() {
+            appState.searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderSituations();
+        }
+
+        function setTierFilter(tier) {
+            playMechanicalTick();
+            appState.activeFilter = tier;
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                if (btn.innerText.includes(tier) || (tier === 'ALL' && btn.innerText === 'ALL')) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            renderSituations();
+        }
+
+        // Dynamic rendering of index cases (Fixes scrolling and clipping in layout)
+        function renderSituations() {
+            const container = document.getElementById('situationsListContainer');
+            if (!container) return;
+            container.innerHTML = "";
+
+            SITUATIONS.forEach((sit, index) => {
+                const matchesSearch = sit.title.toLowerCase().includes(appState.searchQuery) || 
+                                      sit.id.toLowerCase().includes(appState.searchQuery) ||
+                                      sit.citations.toLowerCase().includes(appState.searchQuery);
+                
+                const matchesTier = appState.activeFilter === "ALL" || sit.tier === appState.activeFilter;
+
+                if (matchesSearch && matchesTier) {
+                    const isSelected = appState.selectedSituationIndex === index;
+                    const item = document.createElement('div');
+                    item.className = `situation-item ${isSelected ? 'selected' : ''}`;
+                    item.onclick = () => selectSituation(index);
+
+                    const leftDetails = document.createElement('div');
+                    leftDetails.style.display = 'flex';
+                    leftDetails.style.alignItems = 'center';
+                    leftDetails.style.gap = '4px';
+                    
+                    const code = document.createElement('div');
+                    code.className = 'badge';
+                    code.style.padding = '1px 3px';
+                    code.style.backgroundColor = 'var(--color-ink)';
+                    code.style.color = 'var(--color-paper)';
+                    code.innerText = sit.id;
+
+                    const title = document.createElement('span');
+                    title.innerText = sit.title;
+
+                    leftDetails.appendChild(code);
+                    leftDetails.appendChild(title);
+
+                    const badge = document.createElement('span');
+                    badge.className = `badge ${sit.tier === 'TIER I' ? 'badge-tier-1' : sit.tier === 'TIER II' ? 'badge-tier-2' : 'badge-tier-3'}`;
+                    badge.innerText = sit.tier;
+
+                    item.appendChild(leftDetails);
+                    item.appendChild(badge);
+                    container.appendChild(item);
+                }
+            });
+        }
+
+        // VERIFICATION GATE — real, blocking. Matches the Lendline/Workline/Reentryline pattern.
+        let demoGateVerified = false;
+        const gateChecks = [false, false, false, false];
+
+        function toggleGateItem(i, event) {
+            if (event.target.tagName !== 'INPUT') {
+                const chk = document.getElementById('gate-' + i);
+                if (chk) { chk.checked = !chk.checked; handleGateCheck(i, chk.checked); }
+            }
+        }
+
+        function handleGateCheck(i, checked) {
+            gateChecks[i] = checked;
+            if (gateChecks.every(c => c === true) && !demoGateVerified) {
+                demoGateVerified = true;
+                // Real pause so the viewer can actually register the gate clearing
+                // before the console opens \u2014 no instant cut.
+                const gateEl = document.getElementById('verificationGate');
+                if (gateEl) gateEl.style.outline = '2px solid #4a7c4a';
+                setTimeout(() => {
+                    if (gateEl) gateEl.style.display = 'none';
+                    selectSituation(0);
+                }, 900);
+            }
+        }
+
+        function selectSituation(index) {
+            if (!demoGateVerified) {
+                const gate = document.getElementById('verificationGate');
+                if (gate) gate.scrollIntoView({behavior: 'smooth', block: 'center'});
+                return;
+            }
+            playLcarsAcknowledge();
+            appState.selectedSituationIndex = index;
+            appState.checkedSteps = SITUATIONS[index].steps.map(() => false);
+            appState.activeMultiOptionIndex = 0;
+            appState.caseNotesOverrideText = "";
+            
+            renderSituations();
+            updateUI();
+            switchHubTab('guidance');
+            startSpeedTimer();
+            pushSystemLog(`ACTIVE SCENARIO SET: ${SITUATIONS[index].id} -- ${SITUATIONS[index].title}.`);
+        }
+
+        function handlePlanYearDependency() {
+            if (appState.selectedSituationIndex === null) return;
+            const currentSit = SITUATIONS[appState.selectedSituationIndex];
+            if (currentSit.id === 'S-07') {
+                renderStepsAndGuidance(currentSit);
+            }
+        }
+
+        function updateUI() {
+            const workspace = document.getElementById('activeWorkspace');
+            const emptyState = document.getElementById('emptyWorkspace');
+
+            if (appState.selectedSituationIndex === null) {
+                workspace.style.display = 'none';
+                emptyState.style.display = demoGateVerified ? 'flex' : 'none';
+                return;
+            }
+
+            workspace.style.display = 'flex';
+            emptyState.style.display = 'none';
+
+            const situation = SITUATIONS[appState.selectedSituationIndex];
+
+            document.getElementById('activeSituationTitle').innerText = situation.title;
+            document.getElementById('activeSituationCode').innerText = situation.id;
+            document.getElementById('activeCitations').innerText = situation.citations;
+            
+            const tierBadge = document.getElementById('activeTierBadge');
+            tierBadge.className = `badge ${situation.tier === 'TIER I' ? 'badge-tier-1' : situation.tier === 'TIER II' ? 'badge-tier-2' : 'badge-tier-3'}`;
+            tierBadge.innerText = situation.tier;
+
+            renderStepsAndGuidance(situation);
+
+            const emailTab = document.getElementById('emailTabButton');
+            if (situation.emailTemplate) {
+                emailTab.style.display = 'block';
+                document.getElementById('emailTemplateArea').value = replaceTemplatePlaceholders(situation.emailTemplate);
+            } else {
+                emailTab.style.display = 'none';
+                if (document.getElementById('tab-email').classList.contains('active')) {
+                    switchHubTab('guidance');
+                }
+            }
+
+            renderEscalation(situation);
+            updateProgress();
+            updateCaseNotes();
+        }
+
+        function renderStepsAndGuidance(situation) {
+            const stepsPane = document.getElementById('stepsPane');
+            if (!stepsPane) return;
+            stepsPane.innerHTML = "";
+
+            const selectedYear = document.getElementById('setupPlanYear').value;
+
+            situation.steps.forEach((step, idx) => {
+                const stepRow = document.createElement('div');
+                const isChecked = appState.checkedSteps[idx];
+                stepRow.className = `step-checkbox-row ${isChecked ? 'checked' : ''}`;
+                stepRow.onclick = () => toggleStep(idx);
+
+                const numBadge = document.createElement('span');
+                numBadge.className = 'step-num';
+                numBadge.innerText = `STEP ${idx + 1}`;
+
+                const textLabel = document.createElement('span');
+                textLabel.className = 'step-desc';
+                textLabel.innerText = step;
+
+                stepRow.appendChild(numBadge);
+                stepRow.appendChild(textLabel);
+                stepsPane.appendChild(stepRow);
+
+                // Add callouts verbatim at designated steps (Fix 1 of 2)
+                if (situation.callouts) {
+                    const matchedCallouts = situation.callouts.filter(c => c.stepIndex === idx);
+                    matchedCallouts.forEach(callout => {
+                        let renderPass = true;
+                        if (callout.conditional) {
+                            if (callout.conditional.field === 'planYear') {
+                                if (selectedYear !== callout.conditional.value) {
+                                    renderPass = false;
+                                }
+                            }
+                        }
+
+                        if (renderPass) {
+                            const calloutCard = document.createElement('div');
+                            let svgIcon = `<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
+
+                            if (callout.type === 'hardstop') {
+                                calloutCard.className = 'hard-stop-card';
+                                calloutCard.innerHTML = `
+                                    <div class="hard-stop-header">${svgIcon} HARD STOP: ${callout.title}</div>
+                                    <div class="hard-stop-body">${callout.text}</div>
+                                `;
+                            } else if (callout.type === 'info') {
+                                calloutCard.className = 'info-callout-card';
+                                calloutCard.innerHTML = `
+                                    <div class="info-callout-header">${svgIcon} INFORMATION: ${callout.title}</div>
+                                    <div class="info-callout-body">${callout.text}</div>
+                                `;
+                            } else if (callout.type === 'warning') {
+                                calloutCard.className = 'warning-callout-card';
+                                calloutCard.innerHTML = `
+                                    <div class="warning-callout-header">${svgIcon} WARNING: ${callout.title}</div>
+                                    <div class="warning-callout-body">${callout.text}</div>
+                                `;
+                            }
+                            stepsPane.appendChild(calloutCard);
+                        }
+                    });
+                }
+            });
+
+            // CLOSING CONFIRMATION — moved here from the old side-panel Mission Rules
+            // list, since it's a wrap-up check, not a mid-call rule.
+            const closingBlock = document.createElement('div');
+            closingBlock.style.cssText = 'margin-top:16px; padding:14px 16px; background:rgba(13,92,74,0.06); border:1px solid var(--color-teal); border-radius:3px; display:flex; align-items:flex-start; gap:10px;';
+            closingBlock.innerHTML = `
+                <input type="checkbox" id="closing-confirm-checkbox" style="margin-top:2px;">
+                <label for="closing-confirm-checkbox" style="font-size:11px; color:var(--color-ink); cursor:pointer;"><strong>Before moving on:</strong> confirm this is actually resolved, not just addressed &mdash; fewest steps this situation genuinely needs.</label>
+            `;
+            stepsPane.appendChild(closingBlock);
+
+            renderActiveGuidanceView(situation);
+        }
+
+        function renderActiveGuidanceView(situation) {
+            const container = document.getElementById('guidanceViewContainer');
+            if (!container) return;
+            container.innerHTML = "";
+
+            situation.guidance.forEach((gText, idx) => {
+                const block = document.createElement('div');
+                block.className = 'script-block';
+                
+                const title = document.createElement('div');
+                title.className = 'script-block-title';
+                title.innerText = `Guidance Reference Checkpoint ${idx + 1}`;
+
+                const text = document.createElement('div');
+                text.className = 'script-block-text';
+                text.innerText = gText;
+
+                block.appendChild(title);
+                block.appendChild(text);
+                container.appendChild(block);
+            });
+
+            // S-04 Multi-Option plan options restricted strictly to verbatim step 3 source text
+            if (situation.multiOption) {
+                const multiBox = document.createElement('div');
+                multiBox.className = 'multi-option-container';
+
+                const header = document.createElement('div');
+                header.className = 'multi-option-header';
+                header.innerText = situation.multiOption.title;
+
+                const tabWrapper = document.createElement('div');
+                tabWrapper.className = 'multi-option-buttons';
+
+                const detailsWrapper = document.createElement('div');
+                detailsWrapper.className = 'multi-option-details';
+                detailsWrapper.id = 'multiOptionTextDetails';
+
+                situation.multiOption.options.forEach((opt, oIdx) => {
+                    const tab = document.createElement('div');
+                    const isActive = appState.activeMultiOptionIndex === oIdx;
+                    tab.className = `multi-option-tab ${isActive ? 'active' : ''}`;
+                    tab.innerText = opt.name;
+                    tab.onclick = () => selectMultiOption(oIdx);
+
+                    tabWrapper.appendChild(tab);
+                    if (isActive) {
+                        detailsWrapper.innerText = opt.details;
+                    }
+                });
+
+                multiBox.appendChild(header);
+                multiBox.appendChild(tabWrapper);
+                multiBox.appendChild(detailsWrapper);
+                container.appendChild(multiBox);
+            }
+        }
+
+        function selectMultiOption(idx) {
+            playMechanicalTick();
+            appState.activeMultiOptionIndex = idx;
+            const situation = SITUATIONS[appState.selectedSituationIndex];
+            
+            const tabs = document.querySelectorAll('.multi-option-tab');
+            tabs.forEach((tab, tIdx) => {
+                if (tIdx === idx) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            document.getElementById('multiOptionTextDetails').innerText = situation.multiOption.options[idx].details;
+            updateCaseNotes();
+        }
+
+        function renderEscalation(situation) {
+            const escContainer = document.getElementById('escalationViewContainer');
+            if (!escContainer) return;
+            escContainer.innerHTML = `
+                <div class="script-block-title" style="margin-bottom: 6px; color: var(--color-ink);">
+                    SYSTEM ROUTING PROTOCOL RELAYS
+                </div>
+            `;
+
+            situation.escalation.forEach((step, index) => {
+                const escStep = document.createElement('div');
+                escStep.className = 'escalation-step';
+
+                const num = document.createElement('div');
+                num.className = 'esc-num';
+                num.innerText = index + 1;
+
+                const desc = document.createElement('div');
+                desc.className = 'esc-desc';
+                desc.innerText = step;
+
+                escStep.appendChild(num);
+                escStep.appendChild(desc);
+                escContainer.appendChild(escStep);
+            });
+        }
+
+        function toggleStep(idx) {
+            playMechanicalTick();
+            appState.checkedSteps[idx] = !appState.checkedSteps[idx];
+            
+            const steps = document.querySelectorAll('.step-checkbox-row');
+            if (steps[idx]) {
+                if (appState.checkedSteps[idx]) {
+                    steps[idx].classList.add('checked');
+                } else {
+                    steps[idx].classList.remove('checked');
+                }
+            }
+
+            // Play Star Trek tactical klaxon alert if checking step triggers a hardstop
+            const situation = SITUATIONS[appState.selectedSituationIndex];
+            let activeHardStopPresent = false;
+
+            if (situation.callouts) {
+                situation.callouts.forEach(callout => {
+                    if (callout.type === 'hardstop' && appState.checkedSteps[callout.stepIndex]) {
+                        activeHardStopPresent = true;
+                    }
+                });
+            }
+
+            const warningLed = document.getElementById('warningLed');
+            if (activeHardStopPresent) {
+                appState.activeAlertPulse = true;
+                warningLed.classList.add('led-halt');
+                warningLed.style.animation = 'blink 0.5s infinite';
+                startRedAlertKlaxon();
+                pushSystemLog("HARD STOP PROTOCOL TRIGGERED! SECURE CASE METRIC IMMEDIATELY.");
+            } else {
+                appState.activeAlertPulse = false;
+                warningLed.classList.remove('led-halt');
+                warningLed.style.animation = 'none';
+                if (appState.alertInterval) {
+                    clearInterval(appState.alertInterval);
+                    appState.alertInterval = null;
+                }
+            }
+
+            updateProgress();
+            updateCaseNotes();
+        }
+
+        function updateProgress() {
+            if (appState.selectedSituationIndex === null) return;
+            const total = appState.checkedSteps.length;
+            const checkedCount = appState.checkedSteps.filter(v => v).length;
+            const percentage = total > 0 ? (checkedCount / total) * 100 : 0;
+            
+            const pBar = document.getElementById('activeProgressBar');
+            if (pBar) pBar.style.width = `${percentage}%`;
+
+            const roundedVal = Math.round(percentage);
+            document.getElementById('compliancePercentage').innerText = `COMPLIANCE METRIC: ${roundedVal}%`;
+
+            const compLed = document.getElementById('complianceLed');
+            if (roundedVal === 100) {
+                compLed.style.backgroundColor = '#10b981';
+                compLed.style.boxShadow = '0 0 8px #10b981';
+            } else if (roundedVal > 0) {
+                compLed.style.backgroundColor = 'var(--color-amber)';
+                compLed.style.boxShadow = '0 0 8px var(--color-amber)';
+            } else {
+                compLed.style.backgroundColor = 'var(--color-halt)';
+                compLed.style.boxShadow = '0 0 8px var(--color-halt)';
+            }
+        }
+
+        function toggleMissionRule(index, event) {
+            if(event.target.tagName !== 'INPUT') {
+                const chk = document.getElementById(`rule-${index}`);
+                if (chk) {
+                    chk.checked = !chk.checked;
+                    updateMissionRuleCheck(index, chk.checked);
+                }
+            }
+        }
+
+        function updateMissionRuleCheck(index, isChecked) {
+            playMechanicalTick();
+            appState.missionChecklist[index] = isChecked;
+            const items = document.querySelectorAll('#missionRulesContainer .checklist-item');
+            if(items[index]) {
+                if(isChecked) {
+                    items[index].classList.add('checked');
+                } else {
+                    items[index].classList.remove('checked');
+                }
+            }
+            updateCaseNotes();
+            pushSystemLog(`MISSION RULE CHECKPOINT ${index} INITIALIZED.`);
+        }
+
+        function switchHubTab(tabName) {
+            playMechanicalTick();
+            const tabs = document.querySelectorAll('.hub-tab');
+            const contents = document.querySelectorAll('.hub-content');
+
+            tabs.forEach(tab => {
+                if (tab.innerText.toLowerCase().includes(tabName.substring(0, 5))) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            contents.forEach(content => {
+                if (content.id === `tab-${tabName}`) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        function replaceTemplatePlaceholders(text) {
+            return text
+                .replace(/\[SITUATION_SETUP_IDENTIFIER\]/g, `[IDENTITY METHOD — FILL IN]`)
+                .replace(/\[ENROLLMENT_TYPE\]/g, `[ENROLLMENT TYPE — FILL IN]`);
+        }
+
+        // Generic, blank, identical-every-time case note template.
+        // Nothing here is built from session state (setup selections, mission
+        // checklist, step completion, multi-option choice) — those exist only
+        // for the specialist's own on-screen tracking during the call. This
+        // fixes the same violation caught and corrected in Chartline tonight.
+        function updateCaseNotes() {
+            if (appState.selectedSituationIndex === null) return;
+
+            const notesArea = document.getElementById('caseNotesArea');
+            if (appState.caseNotesOverrideText !== "" && notesArea && document.activeElement === notesArea) {
+                appState.caseNotesOverrideText = notesArea.value;
+                return;
+            }
+
+            const sit = SITUATIONS[appState.selectedSituationIndex];
+
+            let noteText = `=== [CLIENT ORGANIZATION] INTERACTION LOG ===
+Date: [DATE]
+Specialist Name/ID: [SPECIALIST]
+----------------------------------------
+SITUATION ID: ${sit.id} — ${sit.title}
+REGULATORY BASIS: ${sit.citations}
+----------------------------------------
+Identity Verification Method (CSA/CSF/SSN): [FILL IN]
+Plan Year Confirmed With Caller: [FILL IN]
+Enrollment Type Confirmed: [FILL IN]
+----------------------------------------
+Steps Completed (check on your own system):
+${sit.steps.map(s => `  [ ] ${s}`).join('\n')}
+----------------------------------------
+Escalation / Routing (if applicable): [FILL IN — see this situation's guidance for real routing]
+----------------------------------------
+Outcome / Notes: [FILL IN]
+=== END ===`;
+
+            if (notesArea) { notesArea.value = noteText; }
+        }
+
+        // Tactical Clipboard utilities with double-chime acknowledgements
+        function copyTextToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                playLcarsAcknowledge();
+                showToast("Copied to System Clipboard");
+            } catch (err) {
+                console.error("Copy operation failure: ", err);
+            }
+            
+            document.body.removeChild(textarea);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('globalToast');
+            if (!toast) return;
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        function copyUniversalScript(key, element) {
+            let textToCopy = "";
+            switch (key) {
+                case 'GREET':
+                    textToCopy = "Thank you for calling [contact center]. My name is [Agent]. May I have your name and confirm the annuity claim number or SSN on file?";
+                    break;
+                case 'VERIFY':
+                    textToCopy = "Before I can discuss your benefits, I need to confirm your identity and current plan year. Can you confirm [identifier] and the enrollment type on file?";
+                    break;
+                case 'HOLD':
+                    textToCopy = "To ensure I provide you with the most accurate FEHB/PSHB guidelines, I need to consult our policy references. May I place you on a brief hold for 1 to 2 minutes while I verify this information?";
+                    break;
+                case 'CHECKIN':
+                    textToCopy = "Thank you for holding. I am still reviewing the OPM guidelines regarding your inquiry. It will take another moment. Thank you for your continued patience.";
+                    break;
+                case 'TRANSFER':
+                    textToCopy = "I am going to transfer your inquiry to the designated specialist team who handles this specific tier of enrollment actions. Please remain on the line while I route your call along with my documentation.";
+                    break;
+            }
+
+            copyTextToClipboard(textToCopy);
+            
+            element.classList.add('copied');
+            setTimeout(() => { element.classList.remove('copied'); }, 2000);
+            pushSystemLog(`COPIED UNIVERSAL SCRIPT: ${key}.`);
+        }
+
+        // Full verbatim text for each universal script — read on screen, not
+        // copied to clipboard. These are spoken during a live call, not
+        // pasted into a document.
+        const UNIVERSAL_SCRIPT_TEXT = {
+            GREET: "Thank you for calling [contact center]. My name is [Agent]. May I have your name and confirm the annuity claim number or SSN on file?",
+            VERIFY: "Before I can discuss your benefits, I need to confirm your identity and current plan year. Can you confirm [identifier] and the enrollment type on file?",
+            HOLD: "To ensure I provide you with the most accurate FEHB/PSHB guidelines, I need to consult our policy references. May I place you on a brief hold for 1 to 2 minutes while I verify this information?",
+            CHECKIN: "Thank you for holding. I am still reviewing the OPM guidelines regarding your inquiry. It will take another moment. Thank you for your continued patience.",
+            TRANSFER: "I am going to transfer your inquiry to the designated specialist team who handles this specific tier of enrollment actions. Please remain on the line while I route your call along with my documentation."
+        };
+
+        let openScriptKey = null;
+
+        function toggleScriptDisplay(key, element) {
+            const snippet = element.querySelector('.script-pill-snippet');
+            const icon = element.querySelector('.pill-toggle-icon');
+            const isOpening = openScriptKey !== key;
+
+            // Close whichever pill (if any) is currently open, including
+            // this one if it's the one being toggled off.
+            document.querySelectorAll('.script-pill.expanded').forEach(p => {
+                p.classList.remove('expanded');
+                const pKey = p.id.replace('scriptPill-', '');
+                const pSnippet = p.querySelector('.script-pill-snippet');
+                const pIcon = p.querySelector('.pill-toggle-icon');
+                if (pSnippet) pSnippet.innerText = SCRIPT_PILL_PREVIEWS[pKey];
+                if (pIcon) pIcon.innerText = '▾';
+            });
+
+            if (isOpening) {
+                element.classList.add('expanded');
+                snippet.innerText = UNIVERSAL_SCRIPT_TEXT[key];
+                if (icon) icon.innerText = '▴';
+                openScriptKey = key;
+                pushSystemLog(`SCRIPT OPENED FOR READING: ${key}.`);
+            } else {
+                openScriptKey = null;
+                pushSystemLog(`SCRIPT CLOSED: ${key}.`);
+            }
+        }
+
+        const SCRIPT_PILL_PREVIEWS = {
+            GREET: '"Thank you for calling [contact center]..."',
+            VERIFY: '"Before I can discuss your benefits..."',
+            HOLD: '"To ensure I provide you with the most..."',
+            CHECKIN: '"Thank you for holding. I am still..."',
+            TRANSFER: '"I am going to transfer your inquiry..."'
+        };
+
+        function copyRoutingCode(codeText, element) {
+            copyTextToClipboard(codeText);
+            element.classList.add('copied');
+            setTimeout(() => { element.classList.remove('copied'); }, 2000);
+            pushSystemLog(`ROUTING CODE EXTRACTED: ${codeText}.`);
+        }
+
+        function copyEmailTemplate() {
+            const text = document.getElementById('emailTemplateArea').value;
+            copyTextToClipboard(text);
+        }
+
+        function copyCaseNotes() {
+            const text = document.getElementById('caseNotesArea').value;
+            copyTextToClipboard(text);
+        }
+
+        function clearCaseNotesOverride() {
+            playMechanicalTick();
+            appState.caseNotesOverrideText = "";
+            updateCaseNotes();
+            showToast("Draft Notes Synchronized");
+        }
+
+        // System baseline reset
+        function globalReset() {
+            playNativeTone(220, 'sawtooth', 0.4, 0.03);
+            appState.selectedSituationIndex = null;
+            appState.checkedSteps = [];
+            appState.missionChecklist = [false, false, false, false, false, false, false];
+            appState.activeMultiOptionIndex = 0;
+            appState.caseNotesOverrideText = "";
+            appState.searchQuery = "";
+            appState.activeFilter = "ALL";
+            appState.activeAlertPulse = false;
+            
+            if (appState.alertInterval) {
+                clearInterval(appState.alertInterval);
+                appState.alertInterval = null;
+            }
+
+            document.getElementById('setupPlanYear').value = "2026";
+            document.getElementById('searchInput').value = "";
+
+            const chks = document.querySelectorAll('.checklist-checkbox');
+            chks.forEach(chk => { chk.checked = false; });
+
+            const items = document.querySelectorAll('#missionRulesContainer .checklist-item');
+            items.forEach(item => { item.classList.remove('checked'); });
+
+            const warningLed = document.getElementById('warningLed');
+            warningLed.classList.remove('led-halt');
+            warningLed.style.animation = 'none';
+
+            resetTimer();
+            if (appState.speedInterval) clearInterval(appState.speedInterval);
+            document.getElementById('speedTimer').innerText = "INTERVAL: 0s";
+
+            renderSituations();
+            updateUI();
+            showToast("Console Baseline Reset Successful");
+            pushSystemLog("CONSOLE HARD RESET EXECUTED. BALANCING CORES.");
+        }
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw-aidline-demo.js').catch(err => {
+                    console.warn('Service worker registration failed:', err);
+                });
+            });
+        }
+    </script>
+
+    <script>
+        // LIVE CALL SIMULATION — a real, paced worked example of the console
+        // responding to an actual conversation. Beats fire in sequence; each
+        // beat can append a transcript line and/or drive a real console action.
+        const CALL_SCRIPT = [
+            { speaker: 'CALLER', text: "Hi, I'm calling about my FEHB claim \u2014 it got denied and I don't understand why. Can you help?" },
+            { speaker: 'WORKER', text: "Of course. Before I discuss your benefits, can you confirm your CSA or CSF claim number, or your Social Security number?" },
+            { speaker: 'CALLER', text: "Sure \u2014 it's CSA-4-8-8-1-2." },
+            { speaker: 'SYSTEM', text: 'Identity confirmed.', action: 'checkIdentity' },
+            { speaker: 'WORKER', text: "Thank you. Can you also confirm your current plan year and enrollment type \u2014 Self Only, Self Plus One, or Self and Family?" },
+            { speaker: 'CALLER', text: "Self Plus One, and I believe it's Plan Year 2026." },
+            { speaker: 'SYSTEM', text: 'Plan and coverage year confirmed.', action: 'checkGate1' },
+            { speaker: 'SYSTEM', text: 'Enrollment type confirmed.', action: 'checkGate2' },
+            { speaker: 'SYSTEM', text: 'Active coverage period confirmed \u2014 verification gate cleared.', action: 'checkGate3' },
+            { speaker: 'WORKER', text: "Perfect \u2014 I've confirmed your account is in an active coverage period. I see your claim was denied. Let's go through your appeal options." , action: 'loadSituation' },
+            { speaker: 'CALLER', text: "It was denied about three weeks ago. I don't even know where to start." , action: 'highlightStep1' },
+            { speaker: 'WORKER', text: "No problem \u2014 the appeal process has two steps, and it's important we go through them in order." , action: 'highlightStep2' },
+            { speaker: 'CALLER', text: "Oh \u2014 I thought I could just go straight to OPM." },
+            { speaker: 'WORKER', text: "That's a really common assumption, but that would actually get rejected \u2014 you have to file with the carrier first." , action: 'showHardStop' },
+            { speaker: 'WORKER', text: "I'm going to send you a written summary of exactly what to do." , action: 'showEmailTab' },
+            { speaker: 'CALLER', text: "That would be really helpful, thank you." },
+            { speaker: 'WORKER', text: "Before we wrap up \u2014 I want to make sure this is actually resolved for you, not just addressed. Does the process make sense now?" },
+            { speaker: 'CALLER', text: "Yes, completely. Thank you for explaining it clearly." },
+            { speaker: 'SYSTEM', text: 'Resolution confirmed \u2014 call complete.', action: 'checkResolved' }
+        ];
+
+        let callIndex = 0;
+        let callPlaying = false;
+        let callInterval = null;
+        let callSeconds = 0;
+        let callTimerInterval = null;
+
+        function appendCallLine(speaker, text) {
+            const colors = { CALLER: '#3a3a3a', WORKER: '#0d5c4a', SYSTEM: '#8a6d1a' };
+            const box = document.getElementById('callTranscript');
+            const line = document.createElement('div');
+            line.style.cssText = 'padding:6px 8px; border-left:2px solid ' + (colors[speaker]||'#888') + '; background:rgba(255,255,255,0.6);';
+            line.innerHTML = '<div style="font-size:8px; letter-spacing:0.05em; color:' + (colors[speaker]||'#888') + '; margin-bottom:2px;">' + speaker + '</div><div>' + text + '</div>';
+            box.appendChild(line);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function runCallAction(action) {
+            try {
+                if (action === 'checkIdentity') {
+                    const cb = document.getElementById('gate-0');
+                    if (cb && !cb.checked) { cb.checked = true; handleGateCheck(0, true); }
+                } else if (action === 'checkGate1' || action === 'checkGate2' || action === 'checkGate3') {
+                    const idxMap = { checkGate1: 1, checkGate2: 2, checkGate3: 3 };
+                    const idx = idxMap[action];
+                    const chk = document.getElementById('gate-' + idx);
+                    if (chk && !chk.checked) { chk.checked = true; handleGateCheck(idx, true); }
+                } else if (action === 'checkResolved') {
+                    const chk = document.getElementById('closing-confirm-checkbox');
+                    if (chk && !chk.checked) { chk.checked = true; chk.dispatchEvent(new Event('change', {bubbles:true})); }
+                } else if (action === 'loadSituation') {
+                    if (typeof selectSituation === 'function') selectSituation(0);
+                } else if (action === 'highlightStep1' || action === 'highlightStep2') {
+                    const idx = action === 'highlightStep1' ? 0 : 1;
+                    if (typeof toggleStep === 'function') toggleStep(idx);
+                    const rows = document.querySelectorAll('.step-checkbox-row');
+                    if (rows[idx]) rows[idx].scrollIntoView({behavior:'smooth', block:'center'});
+                } else if (action === 'showHardStop') {
+                    const hs = document.querySelector('.hard-stop-card');
+                    if (hs) hs.scrollIntoView({behavior:'smooth', block:'center'});
+                } else if (action === 'showEmailTab') {
+                    if (typeof switchHubTab === 'function') switchHubTab('email');
+                }
+            } catch(e) { console.warn('Call action failed:', action, e); }
+        }
+
+        function stepCallOnce() {
+            if (callIndex >= CALL_SCRIPT.length) return;
+            const beat = CALL_SCRIPT[callIndex];
+            appendCallLine(beat.speaker, beat.text);
+            if (beat.action) runCallAction(beat.action);
+            callIndex++;
+            if (callIndex >= CALL_SCRIPT.length) {
+                pauseCallPlayback();
+                document.getElementById('callLiveDot').style.background = '#4a7c4a';
+            }
+        }
+
+        function toggleCallPlayback() {
+            if (callPlaying) { pauseCallPlayback(); } else { playCallSim(); }
+        }
+
+        function playCallSim() {
+            callPlaying = true;
+            document.getElementById('callPlayBtn').innerHTML = '&#9208; Pause';
+            const speedEl = document.getElementById('callSpeed');
+            const delay = { '1': 4200, '2': 2800, '3': 1600 }[speedEl.value] || 2800;
+            callInterval = setInterval(() => {
+                if (callIndex >= CALL_SCRIPT.length) { pauseCallPlayback(); return; }
+                stepCallOnce();
+            }, delay);
+            if (!callTimerInterval) {
+                callTimerInterval = setInterval(() => {
+                    callSeconds++;
+                    const m = String(Math.floor(callSeconds/60)).padStart(2,'0');
+                    const s = String(callSeconds%60).padStart(2,'0');
+                    document.getElementById('callTimer').textContent = m + ':' + s;
+                }, 1000);
+            }
+        }
+
+        function pauseCallPlayback() {
+            callPlaying = false;
+            document.getElementById('callPlayBtn').innerHTML = '&#9654; Play';
+            if (callInterval) { clearInterval(callInterval); callInterval = null; }
+        }
+
+        function resetCallSim() {
+            pauseCallPlayback();
+            callIndex = 0;
+            callSeconds = 0;
+            document.getElementById('callTimer').textContent = '00:00';
+            document.getElementById('callTranscript').innerHTML = '';
+            document.getElementById('callLiveDot').style.background = '#c0392b';
+            if (callTimerInterval) { clearInterval(callTimerInterval); callTimerInterval = null; }
+        }
+
+        // Auto-start the call simulation shortly after the console itself loads
+        window.addEventListener('load', () => {
+            setTimeout(() => { playCallSim(); }, 2500);
+        });
+    </script>
+
+</body>
+</html>

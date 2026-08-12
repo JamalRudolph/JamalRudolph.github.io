@@ -1,933 +1,694 @@
----
----
+<!--
+  RUDOLPH CX LLC — CANONICAL PAGE TEMPLATE
+  Built: Session 210, Phase 1 (resolves DRIFT-209-D + the nav/CSS mismatch found this session)
+
+  WHAT THIS FILE IS: the single source-of-truth markup + CSS + JS pattern that
+  every guide page (Phase 2) and new page (Phase 3, homepage Phase 4) gets
+  rebuilt from. It is NOT itself deployed as a live page. [TEMPLATE] markers
+  show where per-guide content goes — do not treat that copy as final.
+
+  WHAT THIS FIXES:
+  1. DRIFT-209-D — the pricing include (_includes/guide-pricing.html) renders
+     classes (.pricing-block, .pb-discovery, .retainer-block, .pb-cta, .reveal,
+     etc.) that only existed, incompletely, on aidline.html. Every class the
+     real include emits is now styled here, once, matching the include's
+     actual live markup exactly (verified against the live file this session).
+  2. Nav/CSS mismatch (found this session, not previously logged) — the shared
+     _includes/nav.html emits .nav-inner, .nav-dd, .dd-menu, .nav-logo-accent.
+     No page's embedded CSS styled those classes (pages styled .nav-dropdown,
+     .dropdown-menu instead) — the nav has been rendering unstyled on every
+     live page. Fixed here by writing CSS for nav.html's real, current output.
+
+  DESIGN TOKENS: locked per RCX-FOUND-004 / RCX-PROD-001. Not invented here —
+  copied from those values (Cormorant Garamond; #b83224 red; #c49a3c gold;
+  cream/ink palette). Nothing about the palette is a new choice.
+
+  PWA PATTERN: extracted and generalized from Aidline's existing service-
+  worker/manifest/install-banner code (verified this session by reading the
+  source — the pattern is structurally coherent; it has NOT been confirmed
+  working end-to-end in a real browser install by anyone this session or
+  per any HISTORY.md record found). Templatized with {{GUIDE_SLUG}} /
+  {{GUIDE_NAME}} / #4a2060 placeholders so Phase 2 can generate the
+  remaining six guides' manifest+service-worker pairs from one pattern
+  instead of hand-building each.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="description" content="Peopleline&#8480; by Rudolph CX — performance support for HR professionals navigating investigations, accommodations, terminations, and compliance moments.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Peopleline℠ — Rudolph CX">
-<meta property="og:description" content="Performance support for HR professionals navigating complex workplace investigation, leave, and compliance moments.">
-<meta property="og:image" content="https://rudolphcx.com/og-default.png">
-<meta property="og:url" content="https://rudolphcx.com/peopleline.html">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Peopleline℠ — Rudolph CX">
-<meta name="twitter:description" content="Performance support for HR professionals navigating complex workplace investigation, leave, and compliance moments.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Peopleline — Performance Support for HR Professionals | Rudolph CX</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Peopleline&#8480; — Performance Support Guides | Rudolph CX</title>
+<meta name="description" content="Peopleline&#8480; by Rudolph CX — HR professionals receive the escalations supervisors cannot manage alone — harassment investigations, accommodation overlaps, termination re">
 <link rel="manifest" href="/manifest-peopleline.json">
 <meta name="theme-color" content="#4a2060">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; display: flex; align-items: center; padding: 0 40px; }
-.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
-.nav-logo span { color: var(--plum); }
-.nav-links { list-style: none; display: flex; align-items: center; gap: 1.75rem; margin: 0 auto; padding: 0; }
-.nav-links a { font-family: var(--sans); font-size: 0.85rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
-.nav-links a:hover { color: var(--ink); }
-.nav-dropdown { position: relative; }
-.nav-dropdown > a::after { content: ' ↓'; font-size: 0.7rem; opacity: 0.5; }
-.nav-dropdown:hover .dropdown-menu, .nav-dropdown:focus-within .dropdown-menu { display: flex; flex-direction: column; gap: 2px; }
-.dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
-.dropdown-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); }
-.dropdown-menu a:hover { background: var(--cream2); color: var(--ink); }
-.dm-tag { font-size: 0.65rem; background: var(--plum); color: #fff; padding: 1px 5px; border-radius: 2px; }
+
+/* ============================================================
+   DESIGN TOKENS — locked, RCX-FOUND-004 / RCX-PROD-001.
+   Single source of truth. Every page inherits these unchanged.
+   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
---ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
---cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
---plum: #4a2060; --plum2: #5e3080; --plum-light: #f2edf8; --plum-border: #c8a8e0;
---amber: #c8780a; --red: #b83020; --gold: #c49a3c;
---serif: 'Cormorant Garamond', Georgia, serif;
---mono: 'DM Mono', monospace;
---sans: 'DM Sans', system-ui, sans-serif;
+  --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
+  --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
+  --red: #b83224; --red2: #d94030; --gold: #c49a3c;
+  --green: #2a6e4a;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', system-ui, sans-serif;
 }
 html { scroll-behavior: smooth; }
 body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; }
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--cream2); }
-::-webkit-scrollbar-thumb { background: var(--plum); }
-.skip-link { position:absolute; top:-100%; left:0; background:var(--ink); color:var(--cream); padding:0.5rem 1rem; font-family:var(--mono); font-size:0.78rem; z-index:10000; text-decoration:none; border-radius:0 0 4px 0; letter-spacing:0.1em; }
-.skip-link:focus { top:0; outline:3px solid var(--gold); outline-offset:2px; }
-a:focus-visible, button:focus-visible { outline:3px solid var(--plum); outline-offset:2px; }
-.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 140px 60px 80px; }
-.hero-left { position: relative; z-index: 1; }
-.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--plum); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
-.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--plum); }
-.hero-title { font-family: var(--serif); font-size: clamp(48px,5.5vw,78px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 32px; }
-.hero-title em { font-style: italic; color: var(--plum); }
-.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.7; max-width: 420px; margin-bottom: 40px; }
-.hero-cta { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--plum); text-decoration: none; border-bottom: 1px solid var(--plum); padding-bottom: 2px; transition: opacity 0.2s; }
-.hero-cta:hover { opacity: 0.7; }
-.hero-right { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 16px; padding-left: 60px; }
-.hero-stat { background: var(--plum-light); border: 1px solid var(--plum-border); border-left: 3px solid var(--plum); border-radius: 4px; padding: 16px 20px; }
-.hero-stat-num { font-family: var(--serif); font-size: 2.2rem; font-weight: 500; color: var(--plum); letter-spacing: -0.02em; line-height: 1; margin-bottom: 6px; }
-.hero-stat-text { font-size: 13px; color: var(--ink3); line-height: 1.5; }
-.hero-stat-source { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.05em; margin-top: 6px; }
-.position-section { background: var(--plum); color: #f7f4ee; padding: 3rem 0; }
-.position-inner { max-width: 1100px; margin: 0 auto; padding: 0 60px; }
-.position-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,244,238,0.55); margin-bottom: 1.5rem; }
-.position-title { font-family: var(--serif); font-size: 1.8rem; font-weight: 400; margin-bottom: 2rem; line-height: 1.2; }
-.position-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-.position-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 1.25rem 1.5rem; }
-.pos-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; display: inline-block; margin-bottom: 0.75rem; background: rgba(255,255,255,0.15); color: rgba(247,244,238,0.9); }
-.position-card h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 500; margin-bottom: 0.5rem; }
-.position-card p { font-size: 0.85rem; line-height: 1.6; color: rgba(247,244,238,0.75); }
-.position-hard-rule { margin-top: 1.5rem; padding: 1rem 1.5rem; background: rgba(184,48,32,0.2); border: 1px solid rgba(184,48,32,0.4); border-left: 3px solid #b83020; border-radius: 4px; font-size: 0.85rem; color: rgba(247,244,238,0.9); line-height: 1.6; }
-.sit-section { max-width: 900px; margin: 0 auto; padding: 5rem 60px; }
-.sit-section-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--plum); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; }
-.sit-section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--plum); }
-.sit-section-title { font-family: var(--serif); font-size: 2rem; font-weight: 400; margin-bottom: 0.5rem; }
-.sit-section-meta { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: 0.05em; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--cream3); }
-.sit-grid { display: flex; flex-direction: column; gap: 1rem; }
-.sit-cat-heading { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--plum); padding: 0.5rem 0; margin-top: 1rem; border-bottom: 1px solid var(--plum-border); }
-.sit-card { background: #fff; border: 1px solid var(--cream3); border-radius: 4px; overflow: hidden; }
-.sit-card-header { display: grid; grid-template-columns: 2.5rem 1fr auto auto; align-items: center; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; user-select: none; transition: background 0.15s; }
-.sit-card-header:hover { background: var(--cream2); }
-.sit-card-header.open { background: var(--plum-light); border-bottom: 1px solid var(--plum-border); }
-.sit-card-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; }
-.sit-card-title { font-family: var(--serif); font-size: 1rem; font-weight: 500; color: var(--ink); }
-.sit-card-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.sit-tag { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; white-space: nowrap; }
-.sit-tag-hr { background: var(--plum-light); color: var(--plum); border: 1px solid var(--plum-border); }
-.sit-tag-legal { background: #fdf0ee; color: var(--red); border: 1px solid #e0b0a8; }
-.sit-tag-eeoc { background: #fdf4e0; color: var(--amber); border: 1px solid #e0c888; }
-.sit-tag-halt { background: #fdf0ee; color: var(--red); border: 1px solid #e0b0a8; }
-.sit-card-chevron { color: var(--muted); font-size: 0.8rem; transition: transform 0.2s; flex-shrink: 0; }
-.sit-card-header.open .sit-card-chevron { transform: rotate(180deg); }
-.sit-card-body { display: none; padding: 1.25rem 1.5rem 1.5rem; }
-.sit-card-body.open { display: block; }
-.sit-stat { background: var(--plum-light); border: 1px solid var(--plum-border); border-left: 3px solid var(--plum); border-radius: 3px; padding: 0.9rem 1.1rem; margin-bottom: 1.25rem; }
-.sit-stat-figure { font-family: var(--serif); font-size: 1.6rem; font-weight: 500; color: var(--plum); }
-.sit-stat-text { font-size: 0.85rem; color: var(--ink2); line-height: 1.5; margin-left: 0.5rem; }
-.sit-stat-source { display: block; font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-top: 0.4rem; letter-spacing: 0.04em; }
-.upstream { font-family: var(--mono); font-size: 0.62rem; color: var(--plum); background: var(--plum-light); border: 1px solid var(--plum-border); border-radius: 2px; padding: 3px 8px; display: inline-block; margin-bottom: 0.75rem; letter-spacing: 0.05em; }
-.sit-steps { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.1rem; }
-.sit-steps li { display: grid; grid-template-columns: 1.5rem 1fr; gap: 0.5rem; font-size: 0.88rem; line-height: 1.6; align-items: start; }
-.sit-step-num { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); padding-top: 0.2rem; }
-.sit-callout { border-radius: 3px; padding: 0.7rem 1rem; font-size: 0.83rem; line-height: 1.55; margin-top: 0.8rem; }
-.sit-callout-halt { background: #fdf0ee; border-left: 3px solid var(--red); color: #7a2018; }
-.sit-callout-warn { background: #fdf6ee; border-left: 3px solid var(--amber); color: #7a4810; }
-.sit-callout-plum { background: var(--plum-light); border-left: 3px solid var(--plum); color: #4a2060; }
-.sit-callout-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.25rem; opacity: 0.7; }
-.sit-card-reg { font-family: var(--mono); font-size: 0.63rem; color: var(--muted); margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--cream3); letter-spacing: 0.03em; }
-.disclaimer-section { background: var(--cream2); border-top: 1px solid var(--cream3); padding: 2rem 0; }
-.disclaimer-inner { max-width: 900px; margin: 0 auto; padding: 0 60px; }
-.disclaimer-text { font-family: var(--mono); font-size: 0.65rem; color: var(--dim); line-height: 1.7; letter-spacing: 0.02em; }
-.pricing-section { padding: 5rem 0; }
-.section-inner { max-width: 1100px; margin: 0 auto; padding: 0 60px; }
-.pb-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--plum); margin-bottom: 1rem; }
-.pb-title { font-family: var(--serif); font-size: 2.2rem; font-weight: 400; line-height: 1.2; margin-bottom: 1rem; }
-.pb-sub { font-size: 0.95rem; color: var(--ink3); line-height: 1.7; margin-bottom: 2rem; }
-.pb-cta { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; background: var(--plum); color: #fff; padding: 14px 28px; border-radius: 3px; text-decoration: none; transition: opacity 0.2s; }
-.pb-cta:hover { opacity: 0.85; }
-.contact-section { background: var(--plum); color: #f7f4ee; padding: 5rem 0; }
-.contact-eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,244,238,0.55); margin-bottom: 1rem; }
-.contact-title { font-family: var(--serif); font-size: 2.2rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.2; }
-.contact-sub { font-size: 0.95rem; color: rgba(247,244,238,0.75); line-height: 1.7; margin-bottom: 2rem; max-width: 480px; }
-.contact-form { display: flex; flex-direction: column; gap: 0.75rem; max-width: 460px; }
-.contact-form input, .contact-form textarea, .contact-form select { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; padding: 0.75rem 1rem; color: #f7f4ee; font-family: var(--sans); font-size: 0.9rem; width: 100%; }
-.contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(247,244,238,0.4); }
-.contact-form textarea { min-height: 100px; resize: vertical; }
-.contact-form button { background: #f7f4ee; color: var(--plum); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 14px 28px; border: none; border-radius: 3px; cursor: pointer; transition: opacity 0.2s; align-self: flex-start; }
-.contact-form button:hover { opacity: 0.85; }
-footer { background: var(--ink); color: rgba(247,244,238,0.5); padding: 2rem 60px; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: var(--serif); font-size: 1.1rem; color: #f7f4ee; }
-.footer-logo span { color: rgba(247,244,238,0.4); }
-.footer-copy { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.06em; }
-.footer-links { display: flex; gap: 1.5rem; }
-.footer-links a { font-family: var(--mono); font-size: 0.62rem; color: rgba(247,244,238,0.4); text-decoration: none; letter-spacing: 0.06em; }
-.footer-links a:hover { color: rgba(247,244,238,0.8); }
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
-.reveal.visible { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-@media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; }
-  .hero-right { padding-left: 0; margin-top: 2rem; }
-  .position-grid { grid-template-columns: 1fr; }
-  .sit-section { padding: 3rem 24px; }
-  .position-inner, .section-inner { padding: 0 24px; }
-  footer { flex-direction: column; gap: 1rem; padding: 2rem 24px; text-align: center; }
-  nav { padding: 0 24px; }
-  .nav-links { display: none; }
+::-webkit-scrollbar-thumb { background: var(--red); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
-/* SHARED NAV SUPPORT (added for nav rebuild) */
-.nav-dd{position:relative}
-.nav-dd>a::after{content:' ↓';font-size:.7rem;opacity:.5}
-.nav-dd:hover .dd-menu,.nav-dd:focus-within .dd-menu{display:flex;flex-direction:column;gap:2px}
-.dd-menu{display:none;position:absolute;top:100%;left:0;background:var(--cream);border:1px solid var(--cream3);border-radius:4px;padding:calc(.5rem + 8px) .5rem .5rem .5rem;min-width:230px;box-shadow:0 4px 20px rgba(0,0,0,.08);z-index:200}
-.dd-menu a{display:flex;align-items:center;justify-content:space-between;padding:.4rem .6rem;border-radius:3px;font-size:.82rem;color:var(--ink3);text-decoration:none}
-.dd-menu a:hover{background:var(--cream2);color:var(--ink)}
-.dm-tag{font-size:.6rem;background:var(--red);color:#fff;padding:1px 5px;border-radius:2px;font-family:var(--mono);letter-spacing:.05em}
-.dd-div{height:1px;background:var(--cream3);margin:4px 0}
+/* ============================================================
+   NAV — CSS written to match _includes/nav.html's REAL, current
+   markup exactly (nav-inner / nav-dd / dd-menu / nav-logo-accent).
+   This is the DRIFT-209-D-adjacent fix: the nav has been shipping
+   unstyled because no page's CSS matched what nav.html emits.
+   ============================================================ */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--cream); border-bottom: 1px solid var(--cream3); height: 64px; }
+.nav-inner { max-width: 1400px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; gap: 2rem; }
+.nav-logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; flex-shrink: 0; }
+.nav-logo-accent { color: var(--red); }
+.nav-links { list-style: none; display: flex; align-items: center; gap: 1.6rem; margin: 0; padding: 0; flex-wrap: nowrap; }
+.nav-links a { font-family: var(--sans); font-size: 0.82rem; color: var(--ink3); text-decoration: none; transition: color 0.15s; white-space: nowrap; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--red); }
+.nav-dd { position: relative; }
+.nav-dd > a::after { content: ' ↓'; font-size: 0.65rem; opacity: 0.5; }
+.nav-dd:hover .dd-menu,
+.nav-dd:focus-within .dd-menu { display: flex; }
+.dd-menu { display: none; flex-direction: column; gap: 2px; position: absolute; top: calc(100% + 8px); left: 0; background: var(--cream); border: 1px solid var(--cream3); border-radius: 4px; padding: 0.5rem; min-width: 220px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); z-index: 200; }
+.dd-menu a { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.6rem; border-radius: 3px; font-size: 0.82rem; color: var(--ink3); gap: 10px; }
+.dd-menu a:hover { background: var(--cream2); color: var(--ink); }
+.dm-tag { font-size: 0.62rem; font-family: var(--mono); background: var(--red); color: #fff; padding: 1px 6px; border-radius: 2px; letter-spacing: 0.04em; }
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; flex-shrink: 0; }
+.nav-toggle .bar { display: block; width: 22px; height: 2px; background: var(--ink); margin: 5px 0; transition: transform 0.2s, opacity 0.2s; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+/* Mobile nav — real slide-down panel + tap-to-open Our Guides submenu (touch has no hover) */
+@media (max-width: 900px) {
+  .nav-toggle { display: block; }
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: var(--cream); border-bottom: 1px solid var(--cream3); flex-direction: column; align-items: stretch; gap: 0; max-height: calc(100vh - 64px); overflow-y: auto; box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+  .nav-links.mobile-open { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links > li > a { display: block; padding: 16px 24px; border-bottom: 1px solid var(--cream3); font-size: 0.95rem; }
+  .nav-dd > a::after { float: right; }
+  .dd-menu { display: none; position: static; box-shadow: none; border: none; border-top: 1px solid var(--cream3); border-radius: 0; background: var(--cream2); padding: 0; min-width: 0; }
+  .nav-dd.mobile-dd-open .dd-menu { display: flex; }
+  .dd-menu a { padding: 14px 36px; border-bottom: 1px solid var(--cream3); border-radius: 0; }
+}
+
+/* ============================================================
+   SHARED SECTION SCAFFOLDING
+   ============================================================ */
+.section { padding: 120px 60px; position: relative; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+.section-title { font-family: var(--serif); font-size: clamp(36px,4vw,56px); font-weight: 500; color: var(--ink); line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 32px; }
+.section-title em { font-style: italic; color: var(--red); }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* ============================================================
+   HERO — thesis section. Per-guide content is [TEMPLATE]; the
+   shell/structure is canonical.
+   ============================================================ */
+.hero { min-height: 92vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 140px 60px 80px; position: relative; overflow: hidden; background-image: linear-gradient(var(--cream3) 1px, transparent 1px), linear-gradient(90deg, var(--cream3) 1px, transparent 1px); background-size: 48px 48px; background-position: center; }
+.hero-inner { position: relative; z-index: 1; max-width: 780px; display: flex; flex-direction: column; align-items: center; }
+.hero-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; justify-content: center; }
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--red); }
+.hero-title { font-family: var(--serif); font-size: clamp(44px,5.5vw,76px); font-weight: 500; color: var(--ink); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 28px; }
+.hero-title em { font-style: italic; color: var(--red); }
+.hero-sub { font-size: 16px; color: var(--ink3); line-height: 1.75; max-width: 560px; margin: 0 auto 40px; font-weight: 300; }
+.hero-actions { display: flex; gap: 16px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.btn-primary, .btn-gold, .btn-outline { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; border: none; text-decoration: none; display: inline-block; transition: all 0.2s; cursor: pointer; }
+.btn-primary { background: var(--ink); color: var(--cream); position: relative; overflow: hidden; }
+.btn-primary::after { content: ''; position: absolute; inset: 0; background: var(--red); transform: translateX(-101%); transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
+.btn-primary:hover::after { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-gold { background: var(--gold); color: var(--ink); }
+.btn-gold:hover { background: #d4a84a; }
+.btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 13px 28px; }
+.btn-outline:hover { background: var(--ink); color: var(--cream); }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; } }
+
+/* ============================================================
+   HOW IT WORKS — 3-step (Discovery → Build → Live). Structural
+   pattern adopted from prototype reference, our facts only.
+   ============================================================ */
+.how-section { padding: 120px 60px; background: white; }
+.steps-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 72px; border: 1px solid var(--cream3); }
+.step { padding: 40px 32px; border-right: 1px solid var(--cream3); transition: background 0.2s; }
+.step:last-child { border-right: none; }
+.step:hover { background: var(--cream); }
+.step-num { font-family: var(--serif); font-size: 56px; font-weight: 600; color: var(--cream3); line-height: 1; margin-bottom: 16px; letter-spacing: -0.04em; transition: color 0.2s; }
+.step:hover .step-num { color: var(--red); opacity: 0.3; }
+.step-title { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.step-subtitle { font-size: 12px; color: var(--red); font-weight: 500; margin-bottom: 14px; }
+.step-desc { font-size: 13px; color: var(--dim); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
+.step-badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); display: flex; align-items: center; gap: 6px; }
+.step-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+@media (max-width: 900px) { .steps-3 { grid-template-columns: 1fr; } .step { border-right: none; border-bottom: 1px solid var(--cream3); } }
+
+/* ============================================================
+   BENEFITS — stat-card grid. Metrics are [TEMPLATE] until each
+   guide's real, sourced numbers exist — do not ship placeholder
+   metrics as if verified.
+   ============================================================ */
+.benefits-section { padding: 120px 60px; background: var(--cream2); }
+.benefits-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--cream3); margin-top: 64px; border: 1px solid var(--cream3); }
+.benefit-card { background: var(--cream2); padding: 36px 32px; }
+.benefit-metric { font-family: var(--serif); font-size: 34px; font-weight: 600; color: var(--red); line-height: 1; margin-bottom: 4px; }
+.benefit-metric-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 18px; }
+.benefit-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.benefit-desc { font-size: 13px; color: var(--ink3); line-height: 1.7; font-weight: 300; }
+@media (max-width: 900px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   PRODUCT SHOWCASE — placeholder shell. [TEMPLATE]: must be
+   rebuilt per-guide to be factually accurate to real call/case
+   handling, per Session 209 direction — not filled here.
+   ============================================================ */
+.showcase-section { padding: 120px 60px; background: var(--ink); }
+.showcase-section .section-title { color: var(--cream); }
+.showcase-section .section-eyebrow { color: var(--gold); }
+.showcase-section .section-eyebrow::before { background: var(--gold); }
+.showcase-frame { margin-top: 56px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); min-height: 320px; display: flex; align-items: center; justify-content: center; color: rgba(247,244,238,0.35); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; padding: 40px; }
+
+/* ============================================================
+   FAQ — accordion. Structural pattern adopted from prototype;
+   copy must be real per-guide fact, not the prototype's fabricated
+   numbers ($300 discovery, 284 situations, pro-bono claims, etc.
+   all rejected — see Session 209).
+   ============================================================ */
+.faq-section { padding: 120px 60px; background: white; }
+.faq-list { margin-top: 56px; max-width: 840px; }
+.faq-item { border-bottom: 1px solid var(--cream3); }
+.faq-q { width: 100%; text-align: left; background: none; border: none; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; cursor: pointer; font-family: var(--serif); font-size: 19px; font-weight: 500; color: var(--ink); }
+.faq-q:hover { color: var(--red); }
+.faq-icon { font-family: var(--mono); font-size: 16px; color: var(--red); flex-shrink: 0; width: 20px; text-align: center; }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.faq-item.open .faq-a { max-height: 600px; }
+.faq-a-inner { padding: 0 0 24px; font-size: 14px; color: var(--ink3); line-height: 1.8; font-weight: 300; max-width: 700px; }
+
+/* ============================================================
+   MOMENT QUOTE — canonical founder quote, verbatim, IDENTITY.md v13.
+   ============================================================ */
+.moment-section { padding: 100px 60px; background: var(--cream2); border-top: 1px solid var(--cream3); border-bottom: 1px solid var(--cream3); }
+.moment-inner { max-width: 820px; margin: 0 auto; }
+.moment-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+.moment-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+.moment-quote { font-family: var(--serif); font-size: clamp(20px,2.6vw,30px); font-weight: 500; color: var(--ink); line-height: 1.5; font-style: italic; margin-bottom: 20px; }
+.moment-attr { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+
+/* ============================================================
+   PRICING — CSS written to match _includes/guide-pricing.html's
+   REAL, current markup exactly (verified against the live include
+   this session). This is the direct DRIFT-209-D fix.
+   ============================================================ */
+.pricing-section { padding: 120px 60px; background: var(--cream); }
+.pricing-block { background: var(--ink); padding: 56px; position: relative; border-left: 4px solid var(--red); }
+.pb-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+.pb-title { font-family: var(--serif); font-size: clamp(28px,3.4vw,42px); font-weight: 500; color: var(--cream); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; }
+.pb-sub { font-size: 14px; color: rgba(247,244,238,0.6); line-height: 1.7; font-weight: 300; max-width: 560px; margin-bottom: 40px; }
+.pb-discovery { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 28px 32px; margin-bottom: 20px; }
+.pb-discovery-tag { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.pb-discovery-price { font-family: var(--serif); font-size: 36px; font-weight: 600; color: var(--cream); line-height: 1; margin-bottom: 10px; letter-spacing: -0.02em; }
+.pb-discovery-note { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; }
+.pb-tiers-note { font-size: 13px; color: rgba(247,244,238,0.45); line-height: 1.7; font-weight: 300; margin-top: 4px; }
+.pb-cta { display: inline-block; margin-top: 32px; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 16px 36px; background: var(--red); color: var(--cream); text-decoration: none; transition: background 0.2s; }
+.pb-cta:hover { background: var(--red2); }
+.retainer-block { margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); }
+.retainer-label { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.retainer-price { font-family: var(--serif); font-size: 28px; font-weight: 600; color: var(--cream); letter-spacing: -0.02em; margin-bottom: 10px; }
+.retainer-note { font-size: 13px; color: rgba(247,244,238,0.5); line-height: 1.7; font-weight: 300; max-width: 600px; }
+/* the include's own inline styles (price-row, pb-tiers-label) already carry
+   fallback var() values and render correctly without dedicated classes here —
+   verified by reading the include's actual style attributes this session. */
+
+/* ============================================================
+   FOOTER — legal block. Rudolph CX brand persists here per
+   LOCKS.md §33 (reference/marketing surface, not the delivered
+   console).
+   ============================================================ */
+.site-footer { padding: 64px 60px 40px; background: var(--ink); color: rgba(247,244,238,0.5); }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; }
+.footer-brand { font-family: var(--serif); font-size: 1.2rem; color: var(--cream); margin-bottom: 8px; }
+.footer-legal { font-family: var(--mono); font-size: 10px; line-height: 1.9; color: rgba(247,244,238,0.35); }
+.footer-tagline { font-size: 12px; font-style: italic; color: rgba(247,244,238,0.4); margin-top: 10px; }
+
+/* ============================================================
+   PWA INSTALL BANNER — generalized from Aidline's existing pattern.
+   Structurally sound (read this session); NOT confirmed working
+   end-to-end by an actual install test.
+   ============================================================ */
+#pwa-install-banner { display: none; position: fixed; bottom: 24px; right: 24px; z-index: 500; max-width: 340px; background: var(--ink); border: 1px solid rgba(255,255,255,0.12); padding: 18px 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+#pwa-install-banner.visible { display: flex; align-items: center; gap: 14px; }
+#pwa-install-banner .pwa-text { font-size: 11px; color: #e8e3db; line-height: 1.5; letter-spacing: 0.02em; }
+#pwa-install-banner .pwa-text strong { display: block; font-size: 12px; color: #fff; margin-bottom: 2px; }
+#pwa-install-btn { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 18px; background: var(--red); color: #fff; border: none; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
+#pwa-install-btn:hover { opacity: 0.85; }
+@media (max-width: 500px) { #pwa-install-banner { bottom: 16px; right: 16px; left: 16px; max-width: none; } }
+
 </style>
-  <script data-goatcounter="https://rudolphcx.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
-<a href="#main-content" class="skip-link">Skip to main content</a>
-{% include nav.html current="peopleline" %}
-<section class="hero" id="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow reveal">Peopleline&#8480; &middot; Performance Support &middot; HR &amp; People Operations</div>
-    <h1 class="hero-title reveal reveal-delay-1">HR owns the process.<br><em>Built for the moment</em><br>it arrives.</h1>
-    <p class="hero-sub reveal reveal-delay-2">HR professionals receive the escalations supervisors cannot manage alone &mdash; harassment investigations, accommodation overlaps, termination reviews, EEOC charges. Peopleline&#8480; surfaces the complete response in the moment it is needed.</p>
-    <a href="#situations" class="hero-cta reveal reveal-delay-3">View situations &rarr;</a>
+
+<!-- NAV — inlined here (test render only), now matching nav-updated.html's Phase 1 revision (mobile toggle button added inside .nav-inner) -->
+<nav>
+  <div class="nav-inner">
+    <a href="guides.html" class="nav-logo">Rudolph<span class="nav-logo-accent">CX</span></a>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="primary-nav-links" aria-label="Open menu">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+    <ul class="nav-links" id="primary-nav-links">
+      <li><a href="guides.html">Our Guides</a></li>
+      <li><a href="demos.html">Demo Center</a></li>
+      <li><a href="advisory.html">Advisory Services</a></li>
+      <li><a href="groundwork.html">Groundwork</a></li>
+      <li><a href="methodology.html">Methodology</a></li>
+      <li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="book.html">Book Discovery</a></li>
+    </ul>
   </div>
-  <div class="hero-right">
-    <div class="hero-stat reveal reveal-delay-1">
-      <div class="hero-stat-num">15.5</div>
-      <div class="hero-stat-text">discrimination, harassment, and retaliation issues per 1,000 employees &mdash; the highest level ever recorded. One-third of organizations have no structured investigation process.</div>
-      <div class="hero-stat-source">HR Acuity Tenth Annual Study, June 2026</div>
-    </div>
-    <div class="hero-stat reveal reveal-delay-2">
-      <div class="hero-stat-num">88,531</div>
-      <div class="hero-stat-text">new EEOC discrimination charges filed in FY2024 &mdash; a 9.2% increase. EEOC secured $660 million for workers in FY2025.</div>
-      <div class="hero-stat-source">EEOC, 2024&ndash;2025</div>
-    </div>
-    <div class="hero-stat reveal reveal-delay-3">
-      <div class="hero-stat-num">96.5%</div>
-      <div class="hero-stat-text">favorable result for EEOC in district court resolutions in FY2025. HR's response in the first 24 hours shapes every outcome that follows.</div>
-      <div class="hero-stat-source">EEOC, 2025</div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     HERO — [TEMPLATE] content, canonical shell
+     ═══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Peopleline℠ · Performance Support · HR &amp; People Operations</div>
+    <h1 class="hero-title">HR owns the process. Built for the moment it arrives.</h1>
+    <p class="hero-sub">HR professionals receive the escalations supervisors cannot manage alone — harassment investigations, accommodation overlaps, termination reviews, EEOC charges. Peopleline℠ surfaces the complete response in the moment it is needed.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary"><span>Book Discovery Call &mdash; $500</span></a>
+      <a href="demos.html" class="btn-outline">See a Live Demo</a>
     </div>
   </div>
 </section>
-<div class="position-section">
-  <div class="position-inner">
-    <div class="position-eyebrow">Nova Routing Architecture &middot; Session 136 &middot; HR Position in the Room</div>
-    <h2 class="position-title">Peopleline&#8480; receives what Supervisorline&#8480; cannot resolve alone.</h2>
-    <div class="position-grid">
-      <div class="position-card">
-        <span class="pos-label">Upstream: Supervisor Tier 2</span>
-        <h3>Escalations from Supervisors</h3>
-        <p>Protected class allegation &mdash; even informal. Leave or accommodation disclosure. Termination with a protected condition in the background. Any situation the supervisor could not manage within their authority.</p>
-      </div>
-      <div class="position-card">
-        <span class="pos-label">HR Owns the Process</span>
-        <h3>HR Investigates, Decides, Coordinates</h3>
-        <p>HR conducts all formal investigations. HR manages the ADA/FMLA/PWFA interactive process. HR reviews terminations involving protected class members. HR coordinates with Legal on Tier 3 triggers.</p>
-      </div>
-      <div class="position-card">
-        <span class="pos-label">Downstream: Tier 3 External</span>
-        <h3>When HR Routes to Legal</h3>
-        <p>EEOC charge received. DOL WHD complaint filed. NLRB charge. Employee has retained counsel. Any situation where HR's internal process is no longer sufficient and Legal must lead.</p>
-      </div>
-    </div>
-    <div class="position-hard-rule">&#9888; Hard rule: All formal investigations, termination decisions involving protected class members, and responses to EEOC/DOL charges require review by qualified legal counsel. HR manages the process &mdash; Legal owns the response to external charges.</div>
-  </div>
-</div>
-<main id="main-content">
-<section class="sit-section" id="situations">
-  <div class="sit-section-eyebrow">Situations</div>
-  <h2 class="sit-section-title">28 Situations &mdash; All 5 Categories</h2>
-  <div class="sit-section-meta">Sourced from 3-track primary research &middot; Session 131 &middot; Nova routing rules Session 136 &middot; 5 categories: Investigation Intake &middot; Termination &amp; Discipline Review &middot; Leave &amp; Accommodation Escalation &middot; Conflict &amp; Sensitive &middot; Wages &amp; Pay &middot; Rudolph CX LLC</div>
-  <div class="sit-grid">
 
-    <div class="sit-cat-heading">Investigation Intake</div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-01</div>
-        <div class="sit-card-title">Harassment Complaint Intake &mdash; HR Receives Formal or Informal Report</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Owns Investigation</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-04 &middot; Supervisor escalated upon receipt</div>
-        <div class="sit-stat"><span class="sit-stat-figure">47.8%</span><span class="sit-stat-text">of all EEOC charges are retaliation claims. Most retaliation claims originate in how the organization responded to the initial complaint.</span><span class="sit-stat-source">EEOC / OnPay, 2026</span></div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Conduct an intake conversation with the complainant within 24&ndash;48 hours. The complainant's willingness to cooperate depends significantly on how quickly and seriously HR responds. Do not delay.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Document the intake verbatim where possible. Capture: what the complainant alleges, when, how often, who was present, whether witnesses exist, whether the complainant told anyone else, and what outcome they seek. Use the complainant's language &mdash; do not paraphrase.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Assess interim measures before investigation begins. Do parties need to be separated? Does the complainant need a schedule change or different reporting structure during the investigation? Interim measures are not punitive &mdash; they preserve investigation integrity and protect the complainant.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Brief Legal before interviewing the accused. If this complaint may escalate to an EEOC charge or litigation, the investigation may need to be conducted under attorney-client privilege. Determine that before the first interview.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Tell the complainant: the investigation will be thorough, as confidential as possible (not completely confidential), and conducted without retaliation. Do not promise a specific outcome or timeline beyond what you can deliver.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; Anti-Retaliation Obligation Begins at Intake</div>From the moment a complaint is received, any adverse action against the complainant is potentially retaliatory regardless of whether a formal investigation is open. Document every action taken regarding the complainant during and after the investigation.</div>
-        <div class="sit-card-reg">Title VII &middot; ADEA &middot; ADA &middot; PWFA &middot; EEOC Harassment Guidance (2024) &middot; Anti-retaliation provisions all statutes</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-02</div>
-        <div class="sit-card-title">Retaliation Complaint &mdash; Employee Reports Adverse Action After Protected Activity</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Investigation</span><span class="sit-tag sit-tag-legal">Legal Review</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Any prior complaint, accommodation request, or protected leave triggers retaliation watch</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Establish the timeline immediately. What protected activity occurred? What adverse action followed? How close in time are they? Proximity alone does not prove retaliation, but it is the foundation of every retaliation claim.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Identify whether the adverse action was already in progress before the protected activity. A discipline process that was documented and underway before the complaint is a much stronger defense than one that appears to have started after. Pull the paper trail before any other step.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Identify who made the adverse decision and whether they knew about the protected activity. A supervisor unaware of the complaint when they made the decision has a stronger defense. A supervisor told about the complaint who then made the decision has significant exposure.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Brief Legal before taking any further action regarding the employee &mdash; whether continuing the discipline process, modifying it, or putting it on hold. Every action HR takes after a retaliation complaint becomes evidence.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the retaliation complaint in full. Open a separate investigation file &mdash; do not fold the retaliation complaint into the original complaint file. They are two separate matters with separate evidentiary records.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; Retaliation Is the Most Common EEOC Charge</div>47.8% of all EEOC charges include retaliation. It is easier to prove than discrimination because it does not require proving discriminatory intent &mdash; only that protected activity occurred and adverse action followed. HR's documentation of the timeline and decision-making is the primary defense.</div>
-        <div class="sit-card-reg">Title VII &sect; 704(a) &middot; ADA &sect; 503 &middot; FMLA anti-retaliation &middot; EEOC enforcement 2025</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-03</div>
-        <div class="sit-card-title">Anonymous Complaint &mdash; HR Receives Report Without Named Complainant</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Investigation</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: May arrive via hotline, anonymous form, third-party report, or supervisor relay</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Treat every anonymous complaint seriously. The absence of a named complainant does not reduce the obligation to investigate &mdash; it changes how you investigate. You cannot go back to the complainant for follow-up, so the initial documentation must be thorough.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Assess the specificity of the allegation. A specific allegation with dates, locations, names, and described behaviors can support an investigation even without a named complainant. A vague allegation requires more context before a formal investigation can proceed.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Consider whether the pattern of allegations points to a specific group of employees who may be experiencing the issue. HR has an independent obligation to address a documented pattern &mdash; not just document and file.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not attempt to identify the anonymous complainant. Efforts to identify and expose an anonymous reporter create retaliation exposure even if no adverse action is taken &mdash; the attempt itself can be retaliatory.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document what was alleged, when HR received it, how HR assessed it, what investigation steps were taken, and the outcome. If no formal investigation was opened: document why and what threshold would trigger one.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn"><div class="sit-callout-label">&#9888; The HRBP Conflict Dilemma</div>If the HRBP assigned to the business unit is close to the accused, assign an independent HR investigator or external investigator. An investigation led by an HRBP with a conflict of interest is a due process challenge.</div>
-        <div class="sit-card-reg">Title VII &middot; EEOC Guidance on workplace investigations &middot; Industry benchmark data &middot; One-third of orgs have no structured process</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-04</div>
-        <div class="sit-card-title">Employee Bypasses Supervisor &mdash; Comes Directly to HR</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Owns from This Point</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Employee chose not to go to supervisor &mdash; HR must treat this as a formal intake</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>When an employee comes directly to HR: receive the report fully. Do not redirect them back to their supervisor &mdash; especially if the complaint involves the supervisor. HR owns the process from this moment.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Ask why the employee chose not to go to the supervisor. The answer often reveals information about the nature of the complaint, prior attempts to resolve, or the supervisor's involvement. Document the response exactly.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Determine whether to notify the supervisor of the complaint. If the complaint involves the supervisor: do not notify until Legal has been briefed and interim measures are in place.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Assess whether the employee has faced any prior adverse action or retaliation risk. Ask directly: "Has anything changed for you at work since [the issue began]?"</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the full intake and assign ownership. HR owns this investigation. Communicate that clearly to both the employee and the supervisor (without disclosing confidential details).</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-plum"><div class="sit-callout-label">HR Position in the Room</div>When an employee goes directly to HR, they are exercising the organization's commitment to open channels. How HR receives that report determines whether other employees believe those channels are real.</div>
-        <div class="sit-card-reg">Title VII &middot; EEOC Guidance &middot; Anti-retaliation provisions &middot; Industry benchmark data</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-05</div>
-        <div class="sit-card-title">Manager Accused of Misconduct by Their Team</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Investigation</span><span class="sit-tag sit-tag-legal">Brief Legal</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: May arrive via team members, skip-level report, or HR direct intake</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Brief the manager's direct leader and Legal before any investigation step. This situation requires leadership awareness &mdash; it affects team operations and has organizational visibility.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Separate the accused manager from the investigation process entirely. They should not be informed of specifics, should not access complainants' personnel files, and should not make decisions affecting complainants during the investigation.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Interview team members individually. Multiple complainants does not mean a coordinated campaign &mdash; it may mean a pattern each employee individually experienced. Document each account separately before identifying patterns.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Assess whether the manager should be placed on administrative leave during the investigation. This is not punitive and does not imply guilt &mdash; it protects investigation integrity and reduces retaliation risk. Brief Legal before implementation.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Communicate to the team &mdash; without disclosing investigation details &mdash; that HR is engaged and the matter is being taken seriously. Silence during a high-visibility investigation damages trust regardless of the outcome.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; If the Accused Manager Is a Senior Leader</div>An investigation of a VP, Director, or C-suite leader requires Legal from the first moment and often requires an external investigator. Internal HR investigations of senior leaders are subject to significant conflict-of-interest challenges.</div>
-        <div class="sit-card-reg">Title VII &middot; EEOC Guidance &middot; Industry benchmark data &middot; External investigation for senior leaders</div>
-      </div>
-    </div>
-
-    <div class="sit-cat-heading">Termination &amp; Discipline Review</div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-06</div>
-        <div class="sit-card-title">Supervisor Requests Termination Approval &mdash; HR Pre-Termination Review</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Gate</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-07 &middot; Supervisor cannot terminate without HR sign-off</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Pre-termination checklist: (a) documentation supported? (b) consistent with similar cases for other employees? (c) open EEOC/NLRB charge or active complaint? (d) employee on or recently returned from protected leave? (e) pending accommodation request? Any "yes" requires Legal review before proceeding.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Review comparator treatment. Pull records for other employees who committed the same or similar violations. If similarly situated employees of a different protected class were treated more leniently, the termination will not survive a disparate treatment challenge.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Confirm the documentation trail is complete: prior coaching, written warnings, PIP if applicable, employee's response at each stage, and the triggering final event.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Determine whether a separation agreement is appropriate. Brief Legal on terms before any promise of severance is made to the supervisor.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Coordinate logistics: final pay per state law, COBRA notice timing, property return, system access revocation. These are legal obligations with specific deadlines &mdash; not administrative afterthoughts.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; Termination With Open Accommodation or Leave</div>Terminating an employee while an ADA accommodation request is pending, or while on FMLA leave, or within a close window after return from protected leave creates presumptive retaliation. Legal must review before any such termination proceeds.</div>
-        <div class="sit-card-reg">Title VII &middot; ADA &middot; FMLA &middot; ADEA &middot; State final pay laws vary &middot; WARN Act (500+ employees, or 50-499 if &ge;33% of site workforce; employer must have 100+ total employees)</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-07</div>
-        <div class="sit-card-title">Termination With Open Accommodation or Active Leave</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-legal">Legal Required</span><span class="sit-tag sit-tag-halt">High Exposure</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: P-06 gate &mdash; any open accommodation or leave triggers this situation</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Stop. Brief Legal before any action. A termination that occurs while an employee is on FMLA leave, ADA accommodation, or PWFA accommodation &mdash; or within a short window after return &mdash; is one of the highest-exposure decisions an organization can make.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Assess whether the termination rationale existed and was documented before the protected activity. Documentation that predates the protected activity is the primary defense. Documentation created or accelerated after the protected activity is a red flag.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Determine whether post-FMLA ADA additional leave analysis has been completed. When FMLA exhausts, the ADA may require additional unpaid leave as a reasonable accommodation. Legal must advise.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the employee is on FMLA and termination is for a legitimate unrelated reason (position elimination): confirm the reason is applied consistently and would have occurred regardless of the leave. Document that determination before the termination.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Legal owns the termination decision in this situation. HR coordinates &mdash; Legal leads.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; Highest-Exposure Termination Category</div>FMLA interference and ADA retaliation claims arising from termination while on leave are among the most common and most expensive employment law outcomes. The employee does not need to prove discriminatory intent &mdash; only that leave or accommodation was connected to the adverse action.</div>
-        <div class="sit-card-reg">FMLA 29 CFR &sect; 825.216 &middot; ADA post-FMLA leave analysis &middot; PWFA &middot; EEOC Guidance on termination during leave</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-08</div>
-        <div class="sit-card-title">Pretextual PIP &mdash; HR Identifies Possible Pretext in Discipline Process</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Investigation</span><span class="sit-tag sit-tag-legal">Brief Legal</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: P-06 pre-termination review or employee complaint about PIP</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Pretext indicators: PIP initiated shortly after protected activity. PIP standards that are impossible to meet. PIP without prior coaching. PIP applied to this employee but not to similarly situated employees with the same issue. Any one is worth stopping to examine.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Pull comparator data before proceeding. Who else has had the same documented performance issues? What was the disciplinary response? Were standards applied consistently? Document this analysis in writing.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If pretext is identified: brief Legal immediately. Do not continue the PIP process while a potential pretext issue is under review.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Consider the supervisor's history with this employee and with protected class members generally. A pattern of more severe discipline for one protected class is a disparate treatment problem HR must address independently.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the HR review, the pretext concern, and the action taken. If the PIP is modified, withdrawn, or held: document why. If it proceeds after Legal review: document that Legal cleared it.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn"><div class="sit-callout-label">&#9888; Disparate Discipline Equals Disparate Treatment</div>More severe outcomes for members of a protected class in similar factual situations is treated the same as disparate pay under Title VII analysis. HR's job is to catch and correct these patterns before they become EEOC charges.</div>
-        <div class="sit-card-reg">Title VII disparate treatment analysis &middot; McDonnell Douglas framework &middot; ADEA &middot; ADA &middot; Pretext doctrine</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-09</div>
-        <div class="sit-card-title">Probationary Termination &mdash; Employee in Introductory Period</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Review</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisor requests termination during probationary period</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Probationary status does not eliminate core employment law protections. An employee terminated during their probationary period is protected by Title VII, the ADA, the ADEA, and the NLRA from their first day of work. Note on FMLA: FMLA protections do not automatically apply at hire; statutory eligibility requires 12 months of service, 1,250 hours worked in the preceding 12 months, and employment at a worksite where the employer has 50 or more employees within 75 miles (29 CFR &sect; 825.110). Do not cross-reference FMLA rights for probationary workers unless tracking an explicit, generous employer policy.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Apply the same pre-termination review as any other termination: protected class, open accommodations, recent complaints, and consistency with other probationary terminations for similar reasons.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee is in a protected class and the termination rationale is vague ("not a good fit," "attitude issues"): require specificity before approving. Vague rationales are the hallmarks of pretext claims. The supervisor must identify observable, documented behaviors.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Confirm whether the employee has raised any complaints, requested accommodations, or taken protected leave during the probationary period. If yes: brief Legal before proceeding.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Process the termination per the same logistics as any termination: final pay per state law, COBRA notice, property return. Documentation requirements are identical to non-probationary terminations.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn"><div class="sit-callout-label">&#9888; Probationary Period Does Not Mean Reduced Risk</div>EEOC charges from employees terminated in their first 90 days are not uncommon. "They were on probation" is not a defense to discrimination.</div>
-        <div class="sit-card-reg">Title VII &middot; ADA &middot; ADEA &middot; FMLA (triggers at 12 months &mdash; may not apply) &middot; State law varies</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-10</div>
-        <div class="sit-card-title">Inconsistent Discipline &mdash; HR Identifies Disparate Treatment Pattern</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Investigation</span><span class="sit-tag sit-tag-legal">Brief Legal</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: HR review of discipline records or supervisor escalation request reveals pattern</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>When HR identifies a supervisor applying different disciplinary standards to different employees &mdash; more lenient with one group, more severe with another &mdash; this is a disparate treatment pattern HR must address before it becomes an EEOC charge.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Pull all discipline records for the supervisor's team over the review period. Map violations, disciplinary responses, and employee protected class characteristics. Look for patterns: are terminations clustering in one group? Are verbal warnings clustering in another?</span></li>
-          <li><span class="sit-step-num">3.</span><span>Brief Legal on the findings before any action is taken regarding the supervisor. A supervisor whose discipline pattern creates Title VII exposure is a management problem that HR addresses through the supervisor's leadership chain.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Determine whether any current pending discipline should be held while the pattern is reviewed. A termination pending while HR has identified an inconsistency pattern has heightened exposure.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the pattern analysis, findings, and corrective action plan. If the supervisor requires training, coaching, or discipline: that is separate from and does not reduce exposure from the underlying pattern.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; Systemic Disparate Impact</div>If the pattern appears across multiple supervisors or departments, it may indicate a systemic disparate impact issue. Systemic cases attract EEOC pattern-or-practice scrutiny. Brief Legal immediately if the pattern is organization-wide.</div>
-        <div class="sit-card-reg">Title VII disparate treatment and disparate impact &middot; ADEA &middot; ADA &middot; McDonnell Douglas framework &middot; EEOC pattern-or-practice guidance</div>
-      </div>
-    </div>
-
-    <div class="sit-cat-heading">Leave &amp; Accommodation Escalation</div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-11</div>
-        <div class="sit-card-title">FMLA / ADA / PWFA Overlap &mdash; Three-Law Situation</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-legal">Legal Required</span><span class="sit-tag sit-tag-hr">HR Manages Process</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-03, S-10, S-12 &middot; Employee leave or accommodation involves multiple statutes</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Identify which statutes apply and run them concurrently. FMLA provides up to 12 weeks of unpaid, job-protected leave. The ADA may require additional leave as a reasonable accommodation beyond FMLA. PWFA requires accommodation for pregnancy-related limitations even below the ADA disability threshold. All three can apply simultaneously.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Brief Legal before any leave denial or limitation decision. The interaction between these three statutes &mdash; particularly ADA post-FMLA leave &mdash; is one of the most litigated areas in employment law.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Initiate the FMLA process within 5 business days of learning the leave may be FMLA-qualifying. Issue the required notices: eligibility notice, rights and responsibilities notice, and designation notice. Failure to provide them tolls the leave clock and creates independent FMLA liability.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Separately initiate the ADA interactive process if the underlying condition may also be a disability. The ADA interactive process is a good-faith dialogue about accommodations &mdash; not the same as FMLA certification.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document every step: notices issued, interactive process discussions, accommodation offers made, employee responses, medical documentation received, and the basis for any decision.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; Post-FMLA ADA Analysis Is Mandatory Before Termination</div>When FMLA exhausts, HR cannot simply authorize termination. The ADA requires a separate analysis of whether additional leave or any other accommodation would allow the employee to perform essential functions. Legal must advise. This analysis must be documented before any termination.</div>
-        <div class="sit-card-reg">FMLA 29 CFR &sect; 825 &middot; ADA 29 CFR &sect; 1630 &middot; PWFA (effective June 2023) &middot; EEOC ADA/FMLA guidance</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-12</div>
-        <div class="sit-card-title">Supervisor-Denied Accommodation &mdash; Employee Appeals to HR</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Owns Interactive Process</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisor denied or delayed accommodation without HR review</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>If a supervisor denied an accommodation request without routing to HR: treat this as a new intake and conduct the interactive process from the beginning. The supervisor's denial does not stand &mdash; only HR (with Legal guidance where needed) can deny an ADA or PWFA accommodation after completing the interactive process.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Contact the employee immediately. "I understand you have an accommodation request. I'd like to talk with you about it directly." Do not reference the supervisor's denial in a way that validates it.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Conduct the interactive process: understand the limitation, identify essential job functions, explore accommodations, consider feasibility, and document the dialogue. The process must be good-faith &mdash; not a search for reasons to deny.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Address the supervisor's conduct separately. A supervisor who denied without HR review needs coaching on the ADA interactive process obligation. If the denial was related to protected class: that is a potential discrimination issue to investigate independently.</span></li>
-          <li><span class="sit-step-num">5.</span><span>If accommodation is denied: Legal must review the undue hardship analysis and confirm it is complete and documented before the denial is communicated to the employee.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; Delay Is Itself an ADA Violation</div>Unreasonable delay in the interactive process &mdash; including delay caused by a supervisor routing the employee in circles &mdash; can itself constitute an ADA violation. HR must initiate immediately upon learning of a denied or delayed accommodation.</div>
-        <div class="sit-card-reg">ADA 29 CFR &sect; 1630.9 &middot; PWFA &middot; Interactive process requirement &middot; EEOC ADA guidance on undue hardship</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-13</div>
-        <div class="sit-card-title">Disability Disclosed During Performance Conversation</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Owns ADA Process</span><span class="sit-tag sit-tag-legal">Brief Legal</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-01, S-02, S-06 &mdash; supervisor paused and escalated upon disclosure</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>When an employee discloses a disability during a performance conversation, HR must immediately separate the performance process from the accommodation process. These are two distinct tracks that must be managed independently.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Put the discipline process on hold while HR initiates the ADA interactive process. Do not allow the discipline process to continue or accelerate while an accommodation request is pending &mdash; that creates the appearance of retaliation for the disclosure.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Brief Legal immediately. Legal must advise on how to manage both tracks without contaminating either.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Conduct the interactive process. Explore whether accommodation would allow the employee to meet the performance standard. If yes: provide the accommodation and assess performance from there. If no: Legal advises on whether the discipline process may proceed.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Maintain ADA confidentiality. The disability disclosure and accommodation process are confidential. Performance documentation and accommodation documentation must be maintained in separate files.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; The Disclosure Changes the Frame</div>Before the disclosure: a performance case. After the disclosure: a performance case that also requires an ADA interactive process before discipline can proceed. The order matters enormously for liability management.</div>
-        <div class="sit-card-reg">ADA &middot; PWFA &middot; FMLA (if leave-qualifying) &middot; ADA confidentiality 29 CFR &sect; 1630.14 &middot; EEOC enforcement 2025</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-14</div>
-        <div class="sit-card-title">Formal Grievance Escalation &mdash; Employee Files Written Grievance</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Investigation</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Employee has exhausted informal resolution and filed a formal written grievance</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Acknowledge receipt of the grievance in writing within the timeframe specified by your grievance policy. A failure to acknowledge within the policy window is itself a procedural violation that undermines the organization's ability to defend the process.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Assess the grievance for protected class content, ADA/FMLA implications, and any claims that could constitute an EEOC-cognizable charge. If any such content is present: brief Legal before conducting the grievance investigation.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Assign an investigator who is independent of the parties and the subject matter. In union environments: review the CBA for grievance procedure requirements and timelines &mdash; these are contractual obligations with specific remedies for breach.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Conduct the investigation per policy: interview the grievant, gather documents, interview witnesses, and analyze the facts against the policy or contractual standard being invoked. Issue a written decision within the policy-specified timeframe.</span></li>
-          <li><span class="sit-step-num">5.</span><span>The written decision must state: findings of fact, the policy or standard applied, and the outcome. If sustained: state the remedy. If denied: state the basis in terms that will hold up to external review.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn"><div class="sit-callout-label">&#9888; A Formal Grievance Is External-Facing</div>How HR responds to a formal grievance is often exhibit A in subsequent EEOC proceedings or litigation. The written decision must be legally defensible. Brief Legal on the decision before it is issued in writing.</div>
-        <div class="sit-card-reg">Organizational grievance policy &middot; CBA if applicable &middot; Title VII &middot; NLRA Section 7 (protected activity)</div>
-      </div>
-    </div>
-
-    <div class="sit-cat-heading">Conflict &amp; Sensitive</div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-15</div>
-        <div class="sit-card-title">Senior Leader Accused of Misconduct &mdash; High-Visibility Investigation</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-legal">External Investigator</span><span class="sit-tag sit-tag-halt">High Exposure</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: P-05 or direct HR intake &mdash; accused is VP, Director, or C-suite</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Brief the CHRO and Legal within hours of receiving the complaint &mdash; not days. A senior leader investigation cannot be managed at the HRBP level. The CHRO and Legal must own the decision-making from the first moment.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Engage an external investigator. Internal HR investigations of senior leaders are credibility challenges &mdash; real and perceived. An external investigator removes the conflict of interest and produces a report more defensible in litigation. Legal selects the investigator.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Determine whether the senior leader should be placed on administrative leave. This decision is made by the CHRO and Legal. If the leader remains in the workplace: establish guardrails to prevent intimidation of witnesses or interference with the investigation.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Manage board communication if the accused is a C-suite officer or if the complaint creates D&amp;O liability exposure. In publicly traded companies, senior leader misconduct investigations may require board notification and disclosure analysis. Legal leads this assessment.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Communicate to the complainant that the matter is being taken seriously, that an independent investigator has been engaged, and that retaliation is prohibited. Give the complainant an HR contact who is not the investigation lead.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; EEOC Secured $660M for Workers in FY2025</div>Senior leader misconduct investigations conducted internally or resulting in no consequence for the accused create both the fact and the appearance of impunity. EEOC enforcement targets organizations where leadership accountability structures fail.</div>
-        <div class="sit-card-reg">Title VII &middot; EEOC enforcement 2025 ($660M secured) &middot; External investigation protocol &middot; D&amp;O considerations for C-suite</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-16</div>
-        <div class="sit-card-title">EEOC Charge Received &mdash; Formal External Complaint</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-legal">Legal Owns Response</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Tier 3 trigger &middot; Legal owns from this moment &middot; HR coordinates document collection</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Brief Legal the same day the charge is received. The EEOC requires a position statement response &mdash; typically within 30 days, sometimes with extension. Legal must lead the response strategy. HR collects and organizes documents &mdash; it does not draft the position statement independently.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Issue a litigation hold immediately. Preserve all documents related to the charging party's employment, the alleged conduct, any investigation, and any challenged decision-making. Failure to preserve after receiving a charge is spoliation.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Do not contact the charging party directly. Once a charge is filed, communication goes through Legal or, if the charging party has representation, through their counsel.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not retaliate against the charging party or any witnesses. Issue a communication to relevant supervisors that the matter is active and retaliation is prohibited. This communication becomes evidence of the organization's commitment to non-retaliation.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Coordinate document collection that Legal will need: complete personnel file, all discipline records, investigation records, emails related to the alleged conduct, comparator records, and relevant policies. Organize chronologically before delivering to Legal.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; EEOC Favorable Result in 96.5% of District Court Resolutions</div>The EEOC's success rate means that cases that survive to litigation are not easily won. The position statement, document collection, and anti-retaliation measures taken immediately after charge receipt determine the organization's litigation posture.</div>
-        <div class="sit-card-reg">Title VII &middot; ADA &middot; ADEA &middot; EEOC charge response process &middot; Litigation hold obligation &middot; Spoliation doctrine</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-17</div>
-        <div class="sit-card-title">Domestic Violence Affecting Work &mdash; Safety and Leave Considerations</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR + Safety</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Employee disclosure or supervisor escalation &mdash; DV situation creating workplace impact</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Lead with safety. If the employee believes an abuser may come to the workplace: activate security protocols, notify building security, and document the threat assessment. Safety comes first.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Many states have domestic violence leave laws providing protected leave for survivors &mdash; for medical attention, legal proceedings, safety planning, or relocation. Know your state's current law. HR must not penalize attendance issues covered by state DV leave protections.</span></li>
-          <li><span class="sit-step-num">3.</span><span>ADA may apply if the DV situation has created or exacerbated a covered disability (PTSD, depression, anxiety). If the employee requests an accommodation for a related mental health condition: initiate the ADA interactive process separately.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Maintain strict confidentiality. The employee's DV situation must not be shared beyond those with a direct need to know. Disclosure without consent can create safety risks and legal liability.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Provide EAP information and DV-specific resources if available. Do not require use. "We have EAP available &mdash; they work with DV situations and it's completely confidential from HR."</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn"><div class="sit-callout-label">&#9888; State DV Leave Laws Vary Significantly</div>CA, CO, IL, NJ, NY, WA and many other states have specific DV leave protections. Some apply to all employers; some have size thresholds. HR must verify the applicable law before any attendance action regarding an employee who has disclosed a DV situation.</div>
-        <div class="sit-card-reg">State DV leave laws vary &middot; ADA (if mental health condition) &middot; FMLA (if serious health condition) &middot; OSHA (workplace safety obligation)</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-18</div>
-        <div class="sit-card-title">RIF Selection List Review &mdash; Disparate Impact Analysis</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-legal">Legal Required</span><span class="sit-tag sit-tag-hr">HR Disparate Impact Analysis</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Leadership presents proposed RIF selection list for HR/Legal review</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Before any RIF list is finalized: conduct a disparate impact analysis. Map selected employees by protected class characteristics. Compare to the composition of the pool from which selections were made. Any protected class appearing disproportionately in the RIF selections triggers further legal analysis.</span></li>
-          <li><span class="sit-step-num">2.</span><span>ADEA considerations are acute in RIFs. If employees over 40 are disproportionately selected: brief Legal immediately. The OWBPA requires specific disclosures in separation agreements for employees over 40, including 45-day consideration period and 7-day revocation rights.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Confirm that selection criteria are objective, documented, and applied consistently. "Performance-based" RIFs must use documented, measurable criteria &mdash; not supervisory impressions.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Assess whether any selected employee has an open accommodation, active complaint, or pending EEOC charge. If yes: brief Legal before finalizing that individual's inclusion.</span></li>
-          <li><span class="sit-step-num">5.</span><span>WARN Act: employers with 100+ total employees must give 60 days advance written notice for a mass layoff of 500+ employees at a single site, or 50-499 employees if that's at least 33% of the site's active workforce, within a 30-day period. Failure creates liability for 60 days of back pay and benefits. State mini-WARN laws may have lower thresholds — check state law separately.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; ADEA + OWBPA Requirements Are Non-Waivable</div>Separation agreements for employees over 40 must meet specific OWBPA requirements. An agreement that doesn't meet OWBPA requirements is unenforceable as a release of ADEA claims &mdash; regardless of business pressure to finalize.</div>
-        <div class="sit-card-reg">Title VII disparate impact (Griggs doctrine) &middot; ADEA &middot; OWBPA &middot; WARN Act (29 U.S.C. &sect; 2101) &middot; ADA &middot; State WARN laws may be broader</div>
-      </div>
-    </div>
-
-    <div class="sit-cat-heading">Wages &amp; Pay</div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-19</div>
-        <div class="sit-card-title">Merit Cycle Review &mdash; Protected Class Pay Pattern Analysis</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Analysis</span><span class="sit-tag sit-tag-legal">Brief Legal if Pattern Found</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Annual merit cycle or triggered by pay equity complaint</div>
-        <div class="sit-stat"><span class="sit-stat-figure">15.5</span><span class="sit-stat-text">issues per 1,000 employees &mdash; an all-time high. Pay equity issues are the fastest-growing category in HR Acuity's benchmark.</span><span class="sit-stat-source">HR Acuity Tenth Annual Study, June 2026</span></div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Before finalizing merit increases: run a disparate impact analysis on proposed increases by protected class. If one group is consistently receiving lower increases than comparable employees in other groups: pause for analysis before the cycle is communicated.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Identify the source of disparities. Are certain supervisors consistently recommending lower increases for members of a protected class? Is the performance rating distribution itself skewed? Are retention raises accruing disproportionately to one group?</span></li>
-          <li><span class="sit-step-num">3.</span><span>Brief Legal if a statistically significant disparity is identified. The EPA imposes strict liability for pay disparities in equal work &mdash; intent does not matter. Title VII covers pay discrimination tied to protected class. Legal must assess before any communication to employees.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not communicate merit increases to employees until the analysis is complete and Legal has cleared the distribution. Correcting a discriminatory merit cycle after communication creates larger liability than catching it before.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the analysis, findings, and any adjustments made. A good-faith pay equity review &mdash; even one that identified and corrected problems &mdash; is a significantly stronger position than an absence of any review.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn"><div class="sit-callout-label">&#9888; Pay Inequity Builds Through Unexamined Decisions</div>Pay disparities rarely originate in deliberate discrimination. They accumulate through small, unexamined decisions across raise, bonus, and retention cycles. The merit cycle review is the most efficient point to catch and correct them.</div>
-        <div class="sit-card-reg">EPA (strict liability) &middot; Title VII pay discrimination &middot; ADEA &middot; State equal pay laws &middot; Industry benchmark data</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-20</div>
-        <div class="sit-card-title">Pay Equity Complaint Received &mdash; Employee Alleges Pay Discrimination</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-legal">Brief Legal Immediately</span><span class="sit-tag sit-tag-hr">HR Investigation</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Employee raises pay equity concern with supervisor (Supervisorline S-24) &rarr; escalated to HR</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Brief Legal the same day. A pay equity complaint is a potential EPA and/or Title VII claim. Legal must assess the exposure before HR conducts any comparator analysis or communicates anything to the complaining employee about their pay relative to peers.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Pull comparator data &mdash; under Legal guidance. Which employees are similarly situated (same job duties, experience level, performance rating, location)? What are their pay rates? Legal will advise on what comparator analysis to conduct and how to protect it under privilege.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Issue a litigation hold on all pay-related records for the complainant and identified comparators. Do not wait for a formal EEOC charge &mdash; a pay equity complaint is sufficient to trigger preservation obligations.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not make any pay adjustments before Legal has reviewed the comparator analysis. An immediate adjustment without complete analysis can create new disparities and may constitute an admission in subsequent proceedings.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Anti-retaliation: document the complaint intake and communicate to the complainant's supervisor that retaliation is prohibited. Any adverse action after the complaint is filed will be scrutinized as potential retaliation.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; EPA Imposes Strict Liability &mdash; Intent Is Not a Defense</div>Under the Equal Pay Act, if a pay disparity exists for equal work and no affirmative defense applies, the employer is liable regardless of intent. The legal analysis must be complete before any response is made.</div>
-        <div class="sit-card-reg">EPA 29 U.S.C. &sect; 206(d) &middot; Title VII pay discrimination &middot; State equal pay laws &middot; Industry benchmark data</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-21</div>
-        <div class="sit-card-title">Supervisor Made Pay Transparency Violation &mdash; NLRA or State Law</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-legal">Brief Legal</span><span class="sit-tag sit-tag-hr">HR Remediation</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-16 &mdash; supervisor disciplined employee for discussing wages</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Assess the nature of the violation: (a) NLRA Section 7 &mdash; supervisor disciplined an employee for discussing wages or issued a policy prohibiting wage discussion. (b) State pay transparency law &mdash; supervisor or organization failed to disclose pay ranges when required. Both require Legal review; both have different remediation paths.</span></li>
-          <li><span class="sit-step-num">2.</span><span>If an employee was disciplined for discussing wages: the discipline must be rescinded immediately. Brief Legal on the rescission process and NLRB unfair labor practice exposure. The rescission must be communicated to the employee in writing.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If a policy prohibits wage discussion: the policy must be revised or rescinded. Brief Legal on how to communicate the change. An unlawful policy in effect for an extended period may require proactive communication to affected employees.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Address the supervisor's conduct through training and, if the violation was deliberate, through discipline. A supervisor who knowingly disciplined an employee for protected wage discussion has committed an unfair labor practice that HR cannot simply absorb as a training gap.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Review all relevant pay-related policies for NLRA compliance. This violation often reveals that the handbook contains a confidentiality clause that inadvertently restricts wage discussions &mdash; a separate remediation item for Legal.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; NLRB Will Act on Unfair Labor Practice Charges</div>NLRB charges are free to file, and the NLRB actively pursues them. An employer who disciplines an employee for wage discussion, and does not promptly remediate, is creating an NLRB case file.</div>
-        <div class="sit-card-reg">NLRA Section 7 &middot; NLRA Section 8(a)(1) &middot; State pay transparency laws (count varies by source, 14-17 states + D.C. as of 2026 — verify current count) &middot; NLRB enforcement</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-22</div>
-        <div class="sit-card-title">Retention Raise Creates Comparator Exposure</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-legal">Brief Legal</span><span class="sit-tag sit-tag-hr">HR Pay Equity Review</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Leadership requests retention raise for individual employee &middot; HR must assess comparator impact</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Before approving any off-cycle retention raise: assess the comparator impact. Who are the similarly situated employees in the same role, level, and location? Will the proposed retention raise create or expand a disparity by protected class?</span></li>
-          <li><span class="sit-step-num">2.</span><span>If the retention raise will create a pay disparity between the recipient and similarly situated employees of a different protected class: brief Legal before approving. The EPA and Title VII pay provisions apply to the resulting disparity regardless of intent.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Consider whether comparable retention situations have been handled consistently. If retention raises have historically been offered more to one demographic group, the pattern itself is a pay equity problem.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Document the business reason for the retention raise: market data, flight risk assessment, skills or experience that justify the premium. The business reason is the foundation of the affirmative defense if the raise is challenged.</span></li>
-          <li><span class="sit-step-num">5.</span><span>After the raise is implemented: monitor for subsequent complaints from comparators. A retention raise that creates a visible disparity often generates inquiries from peers within the next merit cycle.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-warn"><div class="sit-callout-label">&#9888; Retention Raises Accrue Disproportionately in High-Risk Patterns</div>Retention raises, off-cycle adjustments, and market corrections frequently cluster in ways that create protected class disparities &mdash; not because of discriminatory intent, but because they occur outside the structured review process where equity checks happen.</div>
-        <div class="sit-card-reg">EPA &middot; Title VII &middot; State equal pay laws &middot; Industry benchmark data</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-23</div>
-        <div class="sit-card-title">Pay Range Question Escalated &mdash; Employee Alleges Disparity After Disclosure</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Pay Equity Analysis</span><span class="sit-tag sit-tag-legal">Brief Legal if Protected Class Raised</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-23 &mdash; supervisor provided pay range &middot; Employee now alleges they should be higher in range</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Determine the nature of the employee's concern. General dissatisfaction with range position? Or allegation that they are paid less because of a protected class characteristic? The first is a compensation conversation. The second is a pay equity complaint requiring Legal involvement.</span></li>
-          <li><span class="sit-step-num">2.</span><span>If the concern is general: explain the factors that determine range position &mdash; performance, tenure, market data, internal equity. If the organization cannot articulate a non-discriminatory reason: brief Legal.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee raises a protected class allegation &mdash; even informally: treat as a formal pay equity complaint. Brief Legal immediately and initiate the P-20 protocol.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Do not disclose other employees' specific pay rates. You can acknowledge that the organization reviews pay equity without disclosing specific comparator data.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the conversation and the outcome: concern raised, explanation provided, any escalation triggered, and follow-up committed to.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-plum"><div class="sit-callout-label">The Pay Transparency Moment</div>As pay transparency laws require more range disclosure, employees will increasingly compare their position in the range to their expectations and peers. HR must be prepared for this conversation at scale &mdash; with consistent, documented, non-discriminatory explanations for range positioning.</div>
-        <div class="sit-card-reg">State pay transparency laws &middot; EPA &middot; Title VII &middot; NLRA Section 7 (wage discussion rights) &middot; PBW Law 2026</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-24</div>
-        <div class="sit-card-title">Involuntary Separation Conversation Support &mdash; HR in the Room</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Present</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: P-06 approval complete &middot; HR attends all involuntary separations as witness and process anchor</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>HR's role in the termination conversation is witness and process anchor &mdash; not co-communicator. The supervisor or manager delivers the decision. HR is present to ensure the process is followed correctly, answer benefits questions, and document what was said by all parties.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Before the conversation: confirm all logistics are ready &mdash; final paycheck per state law (same-day or next-business-day in most states), COBRA notice prepared, separation agreement if applicable, system access revocation scheduled, property return protocol confirmed.</span></li>
-          <li><span class="sit-step-num">3.</span><span>During the conversation: take contemporaneous notes of what is said by all parties. If the employee makes a statement that could constitute a protected class allegation or a retaliation claim &mdash; document the exact words. These notes are the evidentiary record if the termination is subsequently challenged.</span></li>
-          <li><span class="sit-step-num">4.</span><span>If the employee becomes significantly distressed or raises a new issue during the conversation (discloses a medical condition, makes a protected class allegation): HR may need to pause the conversation and consult Legal before proceeding. Document the pause and the reason.</span></li>
-          <li><span class="sit-step-num">5.</span><span>After the conversation: complete the separation checklist &mdash; COBRA timing, final pay processing, reference policy communication, unemployment documentation, HRIS update. All steps within the legally required timeframes.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-plum"><div class="sit-callout-label">HR Is the Process &mdash; Not the Decision</div>HR's presence in the termination conversation is to ensure legal compliance, complete documentation, and protect the employee's rights &mdash; including final pay and COBRA. HR is not present to soften the message.</div>
-        <div class="sit-card-reg">State final pay laws vary &middot; COBRA (29 U.S.C. &sect; 1161) &middot; WARN Act where applicable &middot; Title VII anti-retaliation &middot; Organizational separation policy</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-25</div>
-        <div class="sit-card-title">ADA Accommodation Escalation &mdash; Employee Discloses Medical Condition Directly to HR</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Owns Interactive Process</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-10 &middot; Supervisor paused and escalated upon medical condition disclosure</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Confirm the supervisor paused any discipline or performance process and routed the disclosure to HR without probing for diagnosis detail, per the Zero-Health-Logging Gate. HR, not the supervisor, owns everything from this point.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Open the ADA interactive process directly with the employee. Request only what is needed to establish the limitation and identify workable accommodations &mdash; not a full medical history.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Identify the essential functions of the employee's position and evaluate whether current duties, modified duties, or reassignment could accommodate the limitation.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Document the interactive process dialogue. It must be a good-faith exchange &mdash; not a search for reasons to deny. Request medical documentation only when the need for accommodation is not obvious.</span></li>
-          <li><span class="sit-step-num">5.</span><span>If an accommodation is feasible: implement it and set a review date. If not: Legal must confirm the undue-hardship analysis is complete and documented before the denial is communicated to the employee.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; Unreasonable Delay Is Itself an ADA Violation</div>HR must initiate the interactive process immediately upon learning of a denied, delayed, or newly disclosed accommodation need &mdash; a delay caused by routing the employee in circles is not a neutral act.</div>
-        <div class="sit-card-reg">ADA 29 CFR &sect; 1630.9 &middot; 29 CFR &sect; 1630.2(o)(3) interactive process &middot; EEOC undue-hardship guidance</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-26</div>
-        <div class="sit-card-title">Return from Leave &mdash; Reinstatement Dispute or Restriction Question</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Owns Reinstatement Analysis</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-11 &middot; Employee returning from FMLA leave, restoration question or restriction disclosed</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Confirm the employee is being returned to the same or an equivalent position &mdash; same pay, benefits, schedule, shift, and status. An employee has no greater right to reinstatement than if continuously employed, but the employer bears the burden of proving the position would not otherwise exist.</span></li>
-          <li><span class="sit-step-num">2.</span><span>If the original role was eliminated or filled during the leave: verify and document an independent business reason unconnected to the leave itself before finalizing any non-restoration decision.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee returns with new medical restrictions: this is a separate ADA trigger. Do not process it as a straight reinstatement question &mdash; open a parallel ADA interactive process alongside the restoration analysis.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Confirm any fitness-for-duty certification requirement was applied under a uniformly applied policy, not selectively to this employee.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Document the full reinstatement reasoning before communicating the decision to the employee.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-plum"><div class="sit-callout-label">Restoration Is Not Automatic, But Denial Requires Proof</div>The employer must be able to show the employee would not otherwise have been employed at the time reinstatement is requested &mdash; this is an affirmative burden, not a default.</div>
-        <div class="sit-card-reg">FMLA 29 CFR &sect; 825.216 &middot; 29 CFR &sect; 825.214 &middot; ADA interactive process where restrictions are present</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-27</div>
-        <div class="sit-card-title">Misconduct Complaint Escalation &mdash; Formal Complaint Beyond Supervisor Authority</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Owns Investigation</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-15 &middot; Formal misconduct complaint received, beyond supervisor's authority to resolve</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Scope the complaint first: if it contains protected-class content, route it through the harassment intake protocol (P-01) instead. This card covers general misconduct &mdash; policy violation, safety, integrity &mdash; without protected-class content.</span></li>
-          <li><span class="sit-step-num">2.</span><span>Assign an investigator who is independent of the accused's chain of command and has no conflict of interest in the outcome.</span></li>
-          <li><span class="sit-step-num">3.</span><span>Preserve evidence immediately &mdash; relevant records, access logs, communications &mdash; before it can be altered or lost.</span></li>
-          <li><span class="sit-step-num">4.</span><span>In union environments: review the CBA for investigatory-interview requirements (Weingarten rights) before conducting interviews.</span></li>
-          <li><span class="sit-step-num">5.</span><span>Determine findings and discipline consistent with how similar prior cases were handled. Document the comparator analysis.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-plum"><div class="sit-callout-label">Consistency Is the Defense</div>An investigation and discipline decision that cannot be shown to be consistent with prior similar cases is the fact pattern most disparate-treatment claims are built on.</div>
-        <div class="sit-card-reg">Title VII &middot; NLRA (Weingarten rights, union environments) &middot; Organizational investigation policy</div>
-      </div>
-    </div>
-
-    <div class="sit-card">
-      <div class="sit-card-header" onclick="toggleSit(this)" role="button" tabindex="0" aria-expanded="false">
-        <div class="sit-card-num">P-28</div>
-        <div class="sit-card-title">Mental Health Crisis Escalation &mdash; HR Coordination and ADA Consideration</div>
-        <div class="sit-card-tags"><span class="sit-tag sit-tag-hr">HR Coordinates, Not Clinical</span></div>
-        <div class="sit-card-chevron">&#8964;</div>
-      </div>
-      <div class="sit-card-body">
-        <div class="upstream">Upstream: Supervisorline S-18 &middot; Employee in severe mental health distress, immediate safety addressed, HR case follow-up</div>
-        <ol class="sit-steps">
-          <li><span class="sit-step-num">1.</span><span>Confirm immediate safety was already addressed at the supervisor level &mdash; EAP contact, emergency services if needed &mdash; before this reaches HR as a case.</span></li>
-          <li><span class="sit-step-num">2.</span><span>HR's role from here is coordination, not clinical assessment. Do not attempt to diagnose or informally evaluate fitness for duty.</span></li>
-          <li><span class="sit-step-num">3.</span><span>If the employee discloses an ongoing condition needing accommodation: open the ADA interactive process, including consideration of "regarded as" disability coverage where applicable.</span></li>
-          <li><span class="sit-step-num">4.</span><span>Maintain strict confidentiality. Health information is filed separately and shared with the supervisor only as restrictions and accommodations &mdash; never diagnosis or clinical detail, per the Zero-Health-Logging Gate.</span></li>
-          <li><span class="sit-step-num">5.</span><span>If a fitness-for-duty evaluation is genuinely necessary: it must be job-related and consistent with business necessity, and coordinated through Legal &mdash; not requested informally.</span></li>
-        </ol>
-        <div class="sit-callout sit-callout-halt"><div class="sit-callout-label">&#9888; Confidentiality Is a Recordkeeping Rule, Not a Courtesy</div>Medical information collected from an employee must be kept in separate confidential files. Supervisors may be told resulting restrictions and accommodations &mdash; never the underlying diagnosis.</div>
-        <div class="sit-card-reg">ADA 29 CFR &sect; 1630.14(c)(1) &middot; 29 CFR &sect; 1630.2(o)(3) &middot; EEOC mental health condition guidance</div>
-      </div>
-    </div>
-
-
-  </div><!-- end sit-grid -->
-</section>
-</main>
-
-<div class="disclaimer-section">
-  <div class="disclaimer-inner">
-    <div class="disclaimer-text">This guide supports HR professionals in managing complex workplace situations. It does not constitute legal advice. All formal investigations, termination decisions involving protected class members, and responses to EEOC/DOL charges require review by qualified legal counsel. Regulatory citations audited Session 202 (July 2026) &mdash; full primary-source review of all situations plus escalation routing to Supervisorline&#8480;. 16 of 17 statutory/statistical citations confirmed accurate on first build (commit 1a2424534, P-09 correction applied). Four escalation gaps identified in routing to Supervisorline&#8480; and closed with new situations P-25&ndash;P-28. Verify currency before applying. Built from 3-track primary source research &middot; Nova routing rules Session 136 &middot; Rudolph CX LLC</div>
-  </div>
-</div>
-
-{% include guide-pricing.html family="supervisorline_peopleline" guide_name="Peopleline" possessive="your organization" discovery_note="We&rsquo;ll understand your organization&rsquo;s HR policies, legal routing gates, and the live moments your HR team faces." %}
-
-<section class="contact-section" id="contact">
+<!-- ═══════════════════════════════════════════════════
+     HOW IT WORKS — real facts, LOCKS.md §32
+     ═══════════════════════════════════════════════════ -->
+<section class="how-section section" id="how-it-works">
   <div class="section-inner">
-    <div class="contact-eyebrow">Start Here</div>
-    <h2 class="contact-title">Request a custom build<br>for your organization.</h2>
-    <p class="contact-sub">Tell us your role and industry. We'll send a sample built from a situation your HR team faces &mdash; before any commitment.</p>
-    <a href="https://book.squareup.com/appointments/mduphd9nbedqey/location/LB8E62TY4W9N1/services" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;background:#4a2060;color:#fff;padding:14px 28px;border-radius:3px;text-decoration:none;transition:opacity 0.2s;margin-bottom:1.5rem;">Book Discovery Call &mdash; $300 &rarr;</a>
-    <form class="contact-form" id="contact-form" onsubmit="handleSubmit(event)">
-      <input type="text" name="name" placeholder="Your name" required>
-      <input type="email" name="email" placeholder="Work email" required>
-      <input type="text" name="org" placeholder="Organization" required>
-      <select name="industry">
-        <option value="" disabled selected>Industry</option>
-        <option>Healthcare</option>
-        <option>Financial Services</option>
-        <option>Workforce Development</option>
-        <option>Reentry / Social Services</option>
-        <option>Retail / Hospitality</option>
-        <option>Government / Nonprofit</option>
-        <option>Other</option>
-      </select>
-      <textarea name="message" placeholder="What HR situations does your team face most often?"></textarea>
-      <button type="submit">Send request &rarr;</button>
-    </form>
-      <div style="margin-top:1.5rem;font-family:var(--mono);font-size:0.72rem;color:rgba(247,244,238,0.55);letter-spacing:0.06em;">or email directly: <a href="mailto:jamal@rudolphcx.com" style="color:rgba(247,244,238,0.75);">jamal@rudolphcx.com</a></div>
+    <div class="section-eyebrow reveal">From Intake to Delivery</div>
+    <h2 class="section-title reveal">Three stages. <em>One standard.</em></h2>
+    <div class="steps-3 reveal">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Discovery — $500</div>
+        <div class="step-subtitle">Your operation, assessed.</div>
+        <p class="step-desc">We assess your role, your highest-stakes situations, your source material, and your volume. You leave with a scoped estimate and an honest fit answer.</p>
+        <div class="step-badge">Credited in full toward build</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Build</div>
+        <div class="step-subtitle">Built from inside your role.</div>
+        <p class="step-desc">Constructed from official job aids and verified source documents. Situation-first design, not information categories.</p>
+        <div class="step-badge" style="color:var(--dim)"><span style="width:5px;height:5px;border-radius:50%;background:var(--dim);display:inline-block"></span>&nbsp;Build-time figure not yet re-verified this session</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Live — Day One</div>
+        <div class="step-subtitle">In the worker's hands. Ready.</div>
+        <p class="step-desc">Delivered as a custom HTML console. No app download, no login wall, no learning curve.</p>
+        <div class="step-badge">Live on delivery day</div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" style="padding-top:80px;">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">What It Covers</div>
+    <h2 class="section-title reveal">Situations Peopleline&#8480; handles.</h2>
+    <p style="font-size:15px;color:var(--ink3);line-height:1.8;font-weight:300;max-width:640px;" class="reveal">28 real situations, built from official source material and live role experience. Full situation-by-situation detail is available on request during your discovery call.</p>
   </div>
 </section>
 
-<footer>
-  <div class="footer-logo">Rudolph<span>CX</span></div>
-  <div class="footer-copy">Rudolph CX LLC &middot; Durham, NC &middot; rudolphcx.com</div>
-  <div class="footer-links">
-    <a href="/privacy.html">Privacy</a>
-    <a href="/terms.html">Terms</a>
-    <a href="#contact">Contact</a>
+<!-- ═══════════════════════════════════════════════════
+     BENEFITS — shell only; metrics [TEMPLATE], not invented
+     ═══════════════════════════════════════════════════ -->
+<section class="benefits-section section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Why It Works</div>
+    <h2 class="section-title reveal">Built to hold up under real conditions.</h2>
+    <div class="benefits-grid reveal">
+      <div class="benefit-card">
+        <div class="benefit-metric">Zero</div>
+        <div class="benefit-metric-label">typed data entry</div>
+        <div class="benefit-title">No Case-Specific Storage</div>
+        <p class="benefit-desc">Nothing typed in is ever saved. Every note is a generic, identical-every-time template the specialist fills in on their own system of record.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">Day One</div>
+        <div class="benefit-metric-label">deployment</div>
+        <div class="benefit-title">No IT Rollout</div>
+        <p class="benefit-desc">Delivered as a single HTML file. No app download, no login wall, no account setup, no subscription activation.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">Offline</div>
+        <div class="benefit-metric-label">always available</div>
+        <div class="benefit-title">Works Without Internet</div>
+        <p class="benefit-desc">Installs to any device and keeps working with no connection — the guide is there in the moment, signal or not.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">In Full</div>
+        <div class="benefit-metric-label">credited to build</div>
+        <div class="benefit-title">Discovery Isn't a Pitch</div>
+        <p class="benefit-desc">The $500 discovery call is real working time — and if you proceed, it's credited in full toward your build.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">Source</div>
+        <div class="benefit-metric-label">verified</div>
+        <div class="benefit-title">Built From Real Documents</div>
+        <p class="benefit-desc">Every step traces to your own job aids, policy manuals, and regulatory source material — never invented, never generic.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-metric">50/50</div>
+        <div class="benefit-metric-label">payment split</div>
+        <div class="benefit-title">Clear Payment Terms</div>
+        <p class="benefit-desc">Half before work begins, half on delivery. No surprise invoicing, no ambiguity about when money moves.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     PRODUCT SHOWCASE — shell only, per Session 209: must be
+     rebuilt to real call/case handling, not filled here
+     ═══════════════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════════════
+     MOMENT QUOTE — canonical, verbatim
+     ═══════════════════════════════════════════════════ -->
+<section class="showcase-section section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">See It Work</div>
+    <h2 class="section-title reveal">The real console, not a mockup.</h2>
+    <div class="showcase-frame reveal" style="flex-direction:column;gap:20px;padding:32px;">
+      <img src="peopleline-console.png" alt="Real screenshot of the Peopleline guide console" style="max-width:100%;height:auto;border-radius:8px;">
+      <p style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:rgba(247,244,238,0.4);text-align:center;max-width:600px;">The real Peopleline console, mid-call. Available live during your discovery call, or in the Demo Center.</p>
+    </div>
+  </div>
+</section>
+
+<section class="moment-section">
+  <div class="moment-inner">
+    <div class="moment-eyebrow reveal">The Moment</div>
+    <p class="moment-quote reveal">&ldquo;This is the moment. You're in the moment. You can't miss the moment because you can never relive that moment. And that moment is like a crossroad. If you in it, you cross the road. If not, you may get stuck at the crossroad.&rdquo;</p>
+    <div class="moment-attr reveal">Jamal Rudolph, Founder</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FAQ — shell + accordion JS; copy must be real per-guide,
+     never the prototype's fabricated figures
+     ═══════════════════════════════════════════════════ -->
+<section class="faq-section section">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Questions</div>
+    <h2 class="section-title reveal">What people ask before they book.</h2>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" type="button">Is this appropriate for regulated industries &mdash; healthcare, financial, government?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. Rudolph CX holds an active SAM.gov registration (CAGE Code 21D84, UEI FN7DXBSUVHN7, EIN 42-2269436) and operates under the standard that every deliverable may be cited, questioned, or audited by government officials, regulatory bodies, or compliance teams.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">Do workers need to download anything or log in?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">No. The guide is a single HTML file that opens in any browser. There's no app download, no login wall, no account setup. It works the same on day one as it does a year later.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button">What happens to information a worker types into the guide?<span class="faq-icon">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Nothing case-specific is ever stored. The guide never accepts typed or free-form data entry of any kind — not a name field, not a note field. Case documentation is always a generic, blank template the worker fills in on your own system of record, outside the guide.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     PRICING — real include, real data, CSS now reconciled
+     ═══════════════════════════════════════════════════ -->
+<!-- PRICING — inlined here exactly as _includes/guide-pricing.html + _data/pricing.yml render for family="supervisorline_peopleline", guide_name="Peopleline" -->
+<section class="pricing-section" id="pricing">
+<div class="section-inner">
+<div class="pricing-block">
+<div class="pb-eyebrow reveal">Pricing</div>
+<h2 class="pb-title reveal">One process. One contract.<br>Built for your HR team.</h2>
+<p class="pb-sub reveal">Peopleline follows the same proven build process as every Rudolph CX guide. It starts with a discovery call.</p>
+
+<div class="pb-discovery reveal">
+<div class="pb-discovery-tag">Discovery Call</div>
+<div class="pb-discovery-price">$500</div>
+<div class="pb-discovery-note">60 minutes. Non-refundable. Credits in full to your first invoice if you proceed.</div>
+</div>
+
+<div class="pb-discovery reveal">
+<div class="pb-discovery-tag">System-Language Fitting Fee</div>
+<div class="pb-discovery-price">$500</div>
+<div class="pb-discovery-note">One-time, applied to every build. Adapts the guide's language to your actual internal systems and terminology at build time.</div>
+</div>
+
+<div class="reveal" style="margin-top:8px">
+<div class="pb-tiers-label" style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold,#c49a3c);margin-bottom:14px">Supervisorline &amp; Peopleline &mdash; HR/People Operations</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Foundation</div><div style="font-size:12px;color:var(--dim,#4a453e)">Single category build</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$5,000</div>
+</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Full Build</div><div style="font-size:12px;color:var(--dim,#4a453e)">Standalone / cold sale</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$12,000</div>
+</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Full Build</div><div style="font-size:12px;color:var(--dim,#4a453e)">Existing Rudolph CX client (cross-sell)</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$9,600&ndash;10,200</div>
+</div>
+<div class="price-row" style="display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--cream3,#e2ddd3)">
+  <div><div style="font-family:var(--serif);font-size:20px;color:var(--cream,#f7f4ee)">Enterprise</div><div style="font-size:12px;color:var(--dim,#4a453e)">Multi-entity, custom routing, ongoing legal review</div></div>
+  <div style="font-family:var(--serif);font-size:22px;color:var(--gold,#c49a3c)">$20,000+</div>
+</div>
+<div class="pb-tiers-note" style="margin-top:12px">50% deposit before work begins, 50% on delivery.</div>
+</div>
+
+<div class="retainer-block reveal">
+<div class="retainer-label">Annual Update Retainer</div>
+<div class="retainer-price">20% <span style="font-size:15px;color:var(--dim);font-weight:400;">of build price</span></div>
+<p class="retainer-note">Keeps your guide current as regulations, policies, or platform workflows change. Covers one annual review cycle with revisions. Scoped changes outside the annual cycle are billed as change orders.</p>
+</div>
+
+<a href="https://book.squareup.com/appointments/mduphd9nbedqey/location/LB8E62TY4W9N1/services" target="_blank" rel="noopener" class="pb-cta">Book Discovery Call &mdash; $500</a>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER — Rudolph CX brand persists (LOCKS.md §33)
+     ═══════════════════════════════════════════════════ -->
+
+<style>
+.site-footer-v2 { padding: 80px 60px 32px; background: var(--ink); color: rgba(247,244,238,0.5); }
+.footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-brand-name { font-family: var(--serif); font-size: 1.3rem; color: var(--cream); margin-bottom: 4px; }
+.footer-brand-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red2); margin-bottom: 18px; }
+.footer-brand-desc { font-size: 13px; line-height: 1.7; color: rgba(247,244,238,0.4); margin-bottom: 22px; max-width: 260px; }
+.footer-brand-addr { font-size: 11px; line-height: 1.8; color: rgba(247,244,238,0.3); }
+.footer-col-label { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.3); margin-bottom: 18px; }
+.footer-link-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-link-list a { color: rgba(247,244,238,0.55); text-decoration: none; font-size: 13px; }
+.footer-link-list a:hover { color: var(--cream); }
+.footer-guide-tag { font-size: 10px; color: rgba(247,244,238,0.28); margin-top: 1px; }
+.footer-reg-row { display: flex; justify-content: space-between; font-size: 11px; padding: 6px 0; }
+.footer-reg-label { color: rgba(247,244,238,0.3); }
+.footer-reg-value { font-family: var(--mono); color: rgba(247,244,238,0.6); }
+.footer-cta-box { margin-top: 20px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+.footer-cta-title { color: var(--cream); font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.footer-cta-sub { font-size: 11px; color: rgba(247,244,238,0.4); margin-bottom: 10px; }
+.footer-cta-link { color: var(--gold); font-size: 12px; font-weight: 600; text-decoration: none; }
+.footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 11px; color: rgba(247,244,238,0.25); }
+.footer-tagline-v2 { font-style: italic; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+</style>
+
+<footer class="site-footer-v2">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Rudolph<span style="color:var(--red)">CX</span></div>
+      <div class="footer-brand-sub">Performance Support</div>
+      <p class="footer-brand-desc">Custom performance support consoles for frontline workers who face live, high-stakes moments with people in need &mdash; and need the right move right now.</p>
+      <div class="footer-brand-addr">
+        Rudolph CX LLC<br>
+        Durham, NC &middot; Remote Nationwide<br>
+        Jamal Rudolph, Founder
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-label">Performance Guides</div>
+      <ul class="footer-link-list">
+        <li><a href="aidline.html">Aidline&#8480;<div class="footer-guide-tag">Healthcare &middot; Benefits</div></a></li>
+<li><a href="caseline.html">Caseline&#8480;<div class="footer-guide-tag">Social Services</div></a></li>
+<li><a href="lendline.html">Lendline&#8480;<div class="footer-guide-tag">Financial Services</div></a></li>
+<li><a href="chartline.html">Chartline&#8480;<div class="footer-guide-tag">Healthcare &middot; Clinical</div></a></li>
+<li><a href="workline.html">Workline&#8480;<div class="footer-guide-tag">Workforce Development</div></a></li>
+<li><a href="reentryline.html">Reentryline&#8480;<div class="footer-guide-tag">Reentry &amp; Justice</div></a></li>
+<li><a href="supervisorline.html">Supervisorline&#8480;<div class="footer-guide-tag">HR &middot; Supervision</div></a></li>
+<li><a href="peopleline.html">Peopleline&#8480;<div class="footer-guide-tag">HR &middot; People Ops</div></a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-label">Company</div>
+      <ul class="footer-link-list">
+        <li><a href="about.html">About</a></li>
+<li><a href="methodology.html">Methodology</a></li>
+<li><a href="advisory.html">Advisory Services</a></li>
+<li><a href="groundwork.html">Groundwork</a></li>
+<li><a href="demos.html">Demo Center</a></li>
+<li><a href="pricing.html">Pricing</a></li>
+<li><a href="https://getfirststep.org" target="_blank" rel="noopener">FirstStep</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-label">Federal Registrations</div>
+      <div class="footer-reg-row"><span class="footer-reg-label">EIN</span><span class="footer-reg-value">42-2269436</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">CAGE Code</span><span class="footer-reg-value">21D84</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">UEI</span><span class="footer-reg-value">FN7DXBSUVHN7</span></div>
+      <div class="footer-reg-row"><span class="footer-reg-label">SAM.gov</span><span class="footer-reg-value">Active</span></div>
+      <div class="footer-cta-box">
+        <div class="footer-cta-title">Ready to build?</div>
+        <div class="footer-cta-sub">Start with the $500 discovery call. Credited in full.</div>
+        <a href="book.html" class="footer-cta-link">Book Discovery &rarr;</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>&copy; 2026 Rudolph CX LLC. All rights reserved. Durham, NC.</div>
+    <div class="footer-tagline-v2">Every moment has a right move.&#8480;</div>
   </div>
 </footer>
 
+<!-- ═══════════════════════════════════════════════════
+     PWA INSTALL BANNER — generalized markup
+     ═══════════════════════════════════════════════════ -->
+<div id="pwa-install-banner" role="complementary" aria-label="Install guide for offline use">
+  <div class="pwa-text">
+    <strong>Save for offline use</strong>
+    Install this guide to your device &mdash; works without internet.
+  </div>
+  <button id="pwa-install-btn">Install</button>
+</div>
+
 <script>
-function toggleSit(header) {
-  const body = header.nextElementSibling;
-  const isOpen = header.classList.contains('open');
-  document.querySelectorAll('.sit-card-header.open').forEach(h => {
-    h.classList.remove('open'); h.setAttribute('aria-expanded','false'); h.nextElementSibling.classList.remove('open');
+/* ── Mobile nav ── */
+(function() {
+  var toggle = document.getElementById('nav-toggle');
+  var links = document.getElementById('primary-nav-links') || document.querySelector('.nav-links');
+  if (!toggle || !links) return;
+
+  function closeMenu() {
+    links.classList.remove('mobile-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.nav-dd.mobile-dd-open').forEach(function(dd) { dd.classList.remove('mobile-dd-open'); });
+  }
+
+  toggle.addEventListener('click', function() {
+    var open = links.classList.toggle('mobile-open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
-  if (!isOpen) { header.classList.add('open'); header.setAttribute('aria-expanded','true'); body.classList.add('open'); }
-}
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.sit-card-header').forEach(function(h) {
-    h.addEventListener('keydown', function(e) { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); toggleSit(h); } });
+
+  /* On mobile, tapping "Our Guides" opens the submenu instead of relying on hover (touch has no hover) */
+  document.querySelectorAll('.nav-dd > a').forEach(function(ddLink) {
+    ddLink.addEventListener('click', function(e) {
+      if (window.innerWidth > 900) return; /* desktop keeps real hover behavior */
+      e.preventDefault();
+      ddLink.closest('.nav-dd').classList.toggle('mobile-dd-open');
+    });
   });
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
+  document.addEventListener('click', function(e) {
+    if (window.innerWidth > 900) return;
+    if (!e.target.closest('nav')) closeMenu();
+  });
+  window.addEventListener('resize', function() { if (window.innerWidth > 900) closeMenu(); });
+})();
+
+/* ── FAQ accordion ── */
+document.querySelectorAll('.faq-q').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(i) { i.classList.remove('open'); i.querySelector('.faq-icon').textContent = '+'; });
+    if (!wasOpen) { item.classList.add('open'); btn.querySelector('.faq-icon').textContent = '−'; }
+  });
 });
-async function handleSubmit(e) {
-  e.preventDefault();
-  const btn = e.target.querySelector('button');
-  btn.textContent = 'Sending...'; btn.disabled = true;
-  const data = Object.fromEntries(new FormData(e.target));
-  try {
-    await fetch('https://script.google.com/macros/s/AKfycbxbjH4789HDt-9w5zlPsKSiw8G0kPSco3hdm36V1hQcOcly6LgFP-nnXtStywHR2qIlHw/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({
-        token:   'RCX-WEBHOOK-2026-SECURE',
-        method:  'crm_intake',
-        name:    data.name || '',
-        org:     data.org || '',
-        email:   data.email || '',
-        message: `Industry: ${data.industry || 'Not specified'}\n\n${data.message || ''}`,
-        source:  'Peopleline discovery form'
-      })
+
+/* ── Scroll reveal ── */
+if ('IntersectionObserver' in window) {
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+} else {
+  document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('is-visible'); });
+}
+
+/* ── PWA: service worker registration + install prompt ──
+   Pattern extracted from Aidline's existing code (read live this
+   session). Structurally coherent; not confirmed by an actual
+   install test — flag this if it doesn't work in practice. ── */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw-peopleline.js');
+  });
+
+  var deferredPrompt;
+  var banner = document.getElementById('pwa-install-banner');
+  var installBtn = document.getElementById('pwa-install-btn');
+
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (banner) banner.classList.add('visible');
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', function() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(result) {
+        console.log('PWA install result:', result.outcome);
+        deferredPrompt = null;
+        if (banner) banner.classList.remove('visible');
+      });
     });
-  } catch(err) {}
-  try {
-    await fetch('https://api.hsforms.com/submissions/v3/integration/submit/246357764/5ddf1969-82d1-417f-9ab3-b93ec8c37d8a', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ fields: [{name:'firstname',value:data.name},{name:'email',value:data.email},{name:'company',value:data.org},{name:'message',value:`Industry: ${data.industry||'Not specified'}\n\n${data.message||''}`}], context:{pageUri:window.location.href,pageName:'Peopleline\u2120'}})
-    });
-  } catch(err) {}
-  try {
-    emailjs.init({ publicKey: 'Jfp77vZSmSOgvthIG' });
-    await emailjs.send('service_u94nvbm','template_875pqb4',{from_name:data.name,from_email:data.email,organization:data.org,industry:data.industry||'Not specified',message:data.message||'',guide:'Peopleline\u2120'});
-  } catch(err) {}
-  btn.textContent = "Sent \u2014 we'll be in touch.";
-  e.target.reset();
+  }
+
+  window.addEventListener('appinstalled', function() {
+    if (banner) banner.classList.remove('visible');
+    console.log('PWA installed successfully');
+  });
 }
 </script>
+
 </body>
 </html>
