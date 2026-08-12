@@ -266,6 +266,13 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
 @media (max-width: 500px) { #pwa-install-banner { bottom: 16px; right: 16px; left: 16px; max-width: none; } }
 
 </style>
+<style>
+.sit-list-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--cream3); border: 1px solid var(--cream3); margin-top: 40px; }
+.sit-list-item { background: var(--cream); padding: 18px 24px; display: flex; align-items: baseline; gap: 12px; }
+.sit-list-code { font-family: var(--mono); font-size: 10px; color: var(--red); font-weight: 600; letter-spacing: 0.02em; flex-shrink: 0; }
+.sit-list-title { font-size: 14px; color: var(--ink2); line-height: 1.5; font-weight: 400; }
+@media (max-width: 700px) { .sit-list-grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 
@@ -342,6 +349,16 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
   <div class="section-inner">
     <div class="section-eyebrow reveal">What It Covers</div>
     <h2 class="section-title reveal">Situations Chartline&#8480; handles.</h2>
+    <div class="sit-list-grid">
+      <div class="sit-list-item reveal"><span class="sit-list-code">C-01</span><span class="sit-list-title">Request Status Inquiry</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">C-02</span><span class="sit-list-title">New Records Request</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">C-03</span><span class="sit-list-title">HIPAA Verification Failure</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">C-04</span><span class="sit-list-title">Rush / Court Deadline</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">C-05</span><span class="sit-list-title">Records Incomplete or Wrong</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">C-06</span><span class="sit-list-title">Unauthorized Requester</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">C-07</span><span class="sit-list-title">Invoice / Billing Question</span></div>
+      <div class="sit-list-item reveal"><span class="sit-list-code">C-08</span><span class="sit-list-title">Medical Canvassing Request</span></div>
+    </div>
     <p style="font-size:15px;color:var(--ink3);line-height:1.8;font-weight:300;max-width:640px;" class="reveal">8 real situations, built from official source material and live role experience. Full situation-by-situation detail is available on request during your discovery call.</p>
   </div>
 </section>
