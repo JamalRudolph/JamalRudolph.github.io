@@ -1,21 +1,34 @@
 # guide-hashes-baseline.sha256
 # Rudolph CX - File Integrity Baseline
-# Generated: Session 177 - 2026-07-09
+# Generated: Session 211 - 2026-08-12
 # REGENERATE ONLY after an authorized update. Never after a suspected tamper.
-# Previous baseline: Session 141 - 2026-06-15
-# Reason for regeneration: Baseline was stale since June 15; legitimate updates since then
-# (Lendline, Caseline content updates; Session 176/177 Supervisorline/Peopleline pricing,
-# methodology.html nav + Foundation Utterance) triggered false-positive integrity alert
-# on 2026-07-08 05:17 ET. Verified via direct hash computation that current file state
-# is stable (matches the "Actual" hashes reported in that alert) and authorship on all
-# recent commits is JamalRudolph -- confirmed false positive, not tampering.
+# Previous baseline: Session 177 - 2026-07-09
+# Reason for regeneration: Baseline was stale since before the Session 209-211
+# full site rebuild (canonical template, all 8 guide pages, homepage, demos.html,
+# legal pages) merged to main. Scheduled integrity check had failed every day
+# 2026-08-07 through 2026-08-11 as a direct result -- confirmed false positive,
+# not tampering: all recent main-branch commits verified as JamalRudolph/Cee
+# authored, matching this session's own documented, AUTH//EXECUTE-authorized work.
+# Coverage expanded this regeneration: supervisorline.html and peopleline.html
+# added (previously untracked by either integrity mechanism despite being real,
+# live, paid guide pages); demos.html, groundwork.html, terms.html, privacy.html,
+# and pricing.html added (business-critical and legal content, previously
+# untracked). situation-library.html hash is unchanged from the prior baseline,
+# confirming that file was correctly left untouched this session as intended.
 # FORMAT: <sha256hash>  <filename>
 
-80c8bef52537aee5e55d1816e36d88bd51db4130ba01acd3a66f55aba0a5b109  index.html
-7f9547b029fe6e3c27f470d17a056ede02ce3913655d830d7797b4805ddb5207  aidline.html
-810fba53014efc05fe522b4423ae52d93929854180859b1827d90c303cdc8fc9  caseline.html
-21087afb4a09fd0ef99e3396412488a8cd3ada35f3340d01fddd37845dbe11c6  lendline.html
-76ecfa44f33855b68285ef4ba0ba47abba387b9f8c5d9058e0907659416317ae  chartline.html
-7291930bd87bae913b3dee70b821a5b26ac28ce97be15cd874f43698b49562f4  workline.html
-88e3f55cc716e09fca2cd6aece96ed85272d5fff59b8db001e3478c06d5483dd  reentryline.html
+9d45847318fbc823ab92de67888e50ba598657e7096127b7ee0fee78ceb6e0b0  index.html
+89046803694d3b7edc0439e0d8537539bd1564ef5b601a9c3ccb47ce84e6632d  aidline.html
+1bd672f918d8a7cff5342d917e8d4fa8e218a816351f882c7bbef9198e8e9a81  caseline.html
+d77117d17abbf422386732a984695d1d23c58e11731de7fa3df599d5de7148f5  lendline.html
+6d58ab68990a9d86e4b5b0e096849e5b3466205aa7b013f9a7eafccb5fdb1e82  chartline.html
+8451bf7ccb470184aa239a54dad0a31b062570defa66be62ba2f8d8e4379b0ee  workline.html
+2f884a1bc6385935218635cf1c2dbda1b0189a7a9c05401a008ff9faa4eef722  reentryline.html
+67e4bf78b6787444bcb80db7083fbfee1a125ca984a52fa00cd8d1d27338c314  supervisorline.html
+51f046b1732b6fe2d05ff1655b3f476302352462cc71d02252f8aac22abb126e  peopleline.html
 3f8514204eec9801e1a25717895222e9460d28a9b7727842147cbf3ddb33056b  situation-library.html
+f7242417ce1dbeecff464545a817524ca5394edfb0f9d1e21f2a9549b60f5361  demos.html
+4d7994150b1c921874cd080697a01025acc30289697a20fd3f9a56c86d01e449  groundwork.html
+e979c8d509b617d133a63a9ceada5a7ccad411554bbafa60d3b184a5fec8a53d  terms.html
+679bfa404c7eb14f9a507bc951f825749d948e4b1a6952fed8bc114764ad0cb4  privacy.html
+268310ef84896cc2d23e5e549a909824bce6e450a8c652d68280561c2270bd78  pricing.html
