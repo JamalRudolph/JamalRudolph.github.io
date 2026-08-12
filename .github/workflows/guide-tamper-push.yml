@@ -6,6 +6,14 @@ name: Guide Tamper Alert — Push
 # SETUP REQUIRED (one-time — already done):
 #   SMTP_USERNAME   →  jamal@rudolphcx.com
 #   SMTP_PASSWORD   →  Namecheap Private Email password
+#
+# Fixed Session 211: 'chartline_guide.html' never existed on this repo (real
+# file is 'chartline.html') -- this workflow never fired on real Chartline
+# edits since it was written. Also added supervisorline.html and
+# peopleline.html (previously untracked by either integrity mechanism despite
+# being real, live, paid guide pages), plus demos.html, groundwork.html,
+# terms.html, privacy.html, and pricing.html -- matching the same coverage
+# expansion applied to guide-hashes-baseline.sha256 this session.
 
 on:
   push:
@@ -15,8 +23,17 @@ on:
       - 'index.html'
       - 'aidline.html'
       - 'caseline.html'
-      - 'chartline_guide.html'
+      - 'chartline.html'
       - 'lendline.html'
+      - 'workline.html'
+      - 'reentryline.html'
+      - 'supervisorline.html'
+      - 'peopleline.html'
+      - 'demos.html'
+      - 'groundwork.html'
+      - 'terms.html'
+      - 'privacy.html'
+      - 'pricing.html'
 
 jobs:
   tamper-alert:
@@ -30,7 +47,7 @@ jobs:
       - name: Identify changed files
         id: changed
         run: |
-          CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^(index|aidline|caseline|chartline_guide|lendline)\.html$' | tr '\n' ', ' | sed 's/,$//')
+          CHANGED=$(git diff --name-only HEAD~1 HEAD | grep -E '^(index|aidline|caseline|chartline|lendline|workline|reentryline|supervisorline|peopleline|demos|groundwork|terms|privacy|pricing)\.html$' | tr '\n' ', ' | sed 's/,$//')
           echo "files=$CHANGED" >> $GITHUB_OUTPUT
           echo "Changed files: $CHANGED"
 
@@ -38,7 +55,7 @@ jobs:
         id: hashes
         run: |
           HASH_REPORT=""
-          for f in index.html aidline.html caseline.html chartline_guide.html lendline.html; do
+          for f in index.html aidline.html caseline.html chartline.html lendline.html workline.html reentryline.html supervisorline.html peopleline.html demos.html groundwork.html terms.html privacy.html pricing.html; do
             if [ -f "$f" ]; then
               H=$(sha256sum "$f" | awk '{print $1}')
               HASH_REPORT="$HASH_REPORT$f: $H\n"
