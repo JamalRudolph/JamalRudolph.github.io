@@ -5,7 +5,7 @@
     <meta name="theme-color" content="#8a6d1a">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIDLINE MISSION CONTROL — Rudolph CX</title>
+    <title>Aidline Console — Rudolph CX</title>
     
     <!-- Google Fonts for Tactical Visual Identity -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1354,15 +1354,15 @@
                     <path d="M50,10 L90,30 L90,70 L50,90 L10,70 L10,30 Z" fill="none" stroke="currentColor" stroke-width="8"/>
                     <path d="M50,28 L72,41 L72,59 L50,72 L28,59 L28,41 Z" fill="currentColor"/>
                 </svg>
-                AIDLINE MISSION CONTROL
+                AIDLINE CONSOLE
             </h1>
-            <span>Federal Benefits Specialist Decisive Environment</span>
+            <span>Federal Benefits Support Console</span>
         </div>
 
         <div class="header-telemetry">
             <div class="telemetry-node">
                 <div class="led-indicator" id="relayLed"></div>
-                <span>RELAY: NOMINAL</span>
+                <span>STATUS: READY</span>
             </div>
             <div class="telemetry-node">
                 <div class="led-indicator led-amber" id="warningLed" style="animation: none;"></div>
@@ -1386,7 +1386,7 @@
 
     <!-- PERSISTENT UNIVERSAL SCRIPTS RIBBON (Top Horizontal Command Bar, Unattached) -->
     <div class="universal-scripts-ribbon" id="scriptsRibbonContainer">
-        <div class="ribbon-label">TACTICAL SCRIPTS (CLICK TO OPEN)</div>
+        <div class="ribbon-label">SCRIPTS (CLICK TO OPEN)</div>
         
         <div class="script-pill" id="scriptPill-GREET" onclick="toggleScriptDisplay('GREET', this)">
             <div class="script-pill-header">GREET <span class="pill-toggle-icon">▾</span></div>
@@ -1553,9 +1553,9 @@
                     <!-- RIGHT COLUMN: ACTION HUD -->
                     <div class="action-hub" id="actionHubPane">
                         <div class="hub-tabs">
-                            <div class="hub-tab active" onclick="switchHubTab('guidance')">Verbatim Dispatch</div>
+                            <div class="hub-tab active" onclick="switchHubTab('guidance')">Script</div>
                             <div class="hub-tab" id="emailTabButton" onclick="switchHubTab('email')">Follow-Up Email</div>
-                            <div class="hub-tab" onclick="switchHubTab('escalation')">Relay Escalation</div>
+                            <div class="hub-tab" onclick="switchHubTab('escalation')">Escalation</div>
                             <div class="hub-tab" onclick="switchHubTab('notes')" id="step-case-notes">Case Notes</div>
                         </div>
 
@@ -1612,9 +1612,9 @@
                     <path d="M50,15 L85,35 L85,65 L50,85 L15,65 L15,35 Z" fill="none" stroke="currentColor" stroke-width="4"/>
                     <path d="M50,30 L70,42 L70,58 L50,70 L30,58 L30,42 Z" fill="currentColor"/>
                 </svg>
-                <h2>Decisive Deck Offline</h2>
+                <h2>No Situation Selected</h2>
                 <p>
-                    Select an active compliance scenario from the left-hand navigation list. Monitor the telemetry rules and ensure all verified safeguards are cleared during live interactions.
+                    Select a situation from the list on the left to begin.
                 </p>
             </div>
 
@@ -1715,7 +1715,7 @@
     <div class="console-log-tray">
         <span class="console-log-prefix">&gt; SYS.LOG_TRX:</span>
         <div class="console-log-scroller" id="systemLogText">
-            [SYS.SEC.00] COMPLIANCE GRID IS SECURED AND CALIBRATED FOR THE CURRENT CYCLE... INITIALIZING TELEMETRY...
+            Console ready.
         </div>
     </div>
 
@@ -1724,7 +1724,7 @@
         <svg style="width: 12px; height: 12px; fill: currentColor;" viewBox="0 0 24 24">
             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
         </svg>
-        <span id="toastMessage">Secure Telemetry Copied</span>
+        <span id="toastMessage">Copied</span>
     </div>
 
     <!-- Splash Screen Onboarding -->
@@ -1734,14 +1734,12 @@
                 <path d="M50,10 L90,30 L90,70 L50,90 L10,70 L10,30 Z" fill="none" stroke="currentColor" stroke-width="6"/>
                 <path d="M50,25 L75,40 L75,60 L50,75 L25,60 L25,40 Z" fill="currentColor"/>
             </svg>
-            <h2 class="splash-title">AIDLINE DECK ONLINE</h2>
-            <div class="splash-subtitle">Rudolph CX Mission Control Support System</div>
+            <h2 class="splash-title">AIDLINE CONSOLE</h2>
+            <div class="splash-subtitle">Rudolph CX Federal Benefits Support System</div>
             <div class="splash-body">
-                Welcome to the high-stakes Federal Employee benefits navigation interface. This terminal integrates real-time OPM timeline analytics, persistent checklist systems, and active security compliance markers.
-                <br><br>
-                <strong>Acoustic Transceiver Feedback Enabled:</strong> Native tactical synth chimes are active. Click below to initialize console components and establish database link.
+                Welcome to the Federal Employee benefits navigation interface. This console walks through a real, live situation from the Aidline&#8480; guide.
             </div>
-            <button class="splash-btn" onclick="initializeAudioAndCloseSplash()">Initialize Audio &amp; Run Console</button>
+            <button class="splash-btn" onclick="enterConsole()">Enter Console</button>
         </div>
     </div>
 
@@ -1761,7 +1759,7 @@
     </div>
 
     <div id="coachmark-setup" class="coachmark coachmark-top">
-        <div style="font-weight: bold; margin-bottom: 2px;">3. Telemetry Parameter Setup</div>
+        <div style="font-weight: bold; margin-bottom: 2px;">3. Case Reference Setup</div>
         Map identity, plan baseline, and enrollment profiles here to auto-compile accurate client transaction logs.
         <div class="coachmark-footer"><button class="coachmark-next" onclick="advanceCoachmark()">Next →</button></div>
         <div class="coachmark-arrow"></div>
@@ -1848,15 +1846,8 @@ Federal Benefits Service Desk`,
         // Star Trek LCARS & Air Traffic Control sound synthesizer using native Web Audio API
         let audioCtx = null;
 
-        function initializeAudioAndCloseSplash() {
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                appState.audioEnabled = true;
-                playBootUpChime();
-                pushSystemLog("TRANSCIEVER NOMINAL: SYNTHESIZER AND GRAPHICS ENGAGED.");
-            } catch(e) {
-                console.warn("Web Audio Context blocked or unavailable.", e);
-            }
+        function enterConsole() {
+            pushSystemLog("CONSOLE ONLINE.");
 
             // Close splash overlay
             const overlay = document.getElementById('splashScreen');
@@ -1879,21 +1870,11 @@ Federal Benefits Service Desk`,
 
         // Native Synth Audio Instruments (Star Trek LCARS Style Synth Chimes)
         function playNativeTone(freq, type, duration, volume = 0.04) {
-            if (!appState.audioEnabled || !audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                osc.type = type || 'sine';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch(e) {
-                console.warn(e);
-            }
+            // Sound removed from this console entirely, per founder direction.
+            // Left as a no-op (rather than deleting every call site) so nothing
+            // else in the console breaks; every UI interaction that used to
+            // trigger a tone now simply does nothing here.
+            return;
         }
 
         function playMechanicalTick() { playNativeTone(120, 'triangle', 0.03, 0.03); }
@@ -2077,7 +2058,7 @@ Federal Benefits Service Desk`,
             if (coachmarkStep >= coachmarkSequence.length) {
                 coachmarksActive = false;
                 coachmarkSequence.forEach(m => document.getElementById(m.id).classList.remove('active'));
-                pushSystemLog("TACTICAL INTERFACE DIAGNOSTICS TOUR COMPLETE.");
+                pushSystemLog("Interface tour complete.");
                 return;
             }
             showCoachmarkStep(coachmarkStep);
@@ -2090,10 +2071,10 @@ Federal Benefits Service Desk`,
             if (coachmarksActive) {
                 coachmarkStep = 0;
                 showCoachmarkStep(0);
-                pushSystemLog("TACTICAL INTERFACE DIAGNOSTICS DISPLAYED.");
+                pushSystemLog("Interface guide displayed.");
             } else {
                 coachmarkSequence.forEach(m => document.getElementById(m.id).classList.remove('active'));
-                pushSystemLog("TACTICAL INTERFACE DIAGNOSTICS CLOSED.");
+                pushSystemLog("Interface guide closed.");
             }
         }
 
@@ -2207,7 +2188,7 @@ Federal Benefits Service Desk`,
             updateUI();
             switchHubTab('guidance');
             startSpeedTimer();
-            pushSystemLog(`ACTIVE SCENARIO SET: ${SITUATIONS[index].id} -- ${SITUATIONS[index].title}.`);
+            pushSystemLog(`Situation opened: ${SITUATIONS[index].id} — ${SITUATIONS[index].title}.`);
         }
 
         function handlePlanYearDependency() {
@@ -2473,7 +2454,7 @@ Federal Benefits Service Desk`,
                 warningLed.classList.add('led-halt');
                 warningLed.style.animation = 'blink 0.5s infinite';
                 startRedAlertKlaxon();
-                pushSystemLog("HARD STOP PROTOCOL TRIGGERED! SECURE CASE METRIC IMMEDIATELY.");
+                pushSystemLog("Hard stop reached — review before continuing.");
             } else {
                 appState.activeAlertPulse = false;
                 warningLed.classList.remove('led-halt');
@@ -2535,7 +2516,7 @@ Federal Benefits Service Desk`,
                 }
             }
             updateCaseNotes();
-            pushSystemLog(`MISSION RULE CHECKPOINT ${index} INITIALIZED.`);
+            pushSystemLog(`Standing rule ${index} reviewed.`);
         }
 
         function switchHubTab(tabName) {
@@ -2655,7 +2636,7 @@ Outcome / Notes: [FILL IN]
             
             element.classList.add('copied');
             setTimeout(() => { element.classList.remove('copied'); }, 2000);
-            pushSystemLog(`COPIED UNIVERSAL SCRIPT: ${key}.`);
+            pushSystemLog(`Script copied: ${key}.`);
         }
 
         // Full verbatim text for each universal script — read on screen, not
@@ -2692,10 +2673,10 @@ Outcome / Notes: [FILL IN]
                 snippet.innerText = UNIVERSAL_SCRIPT_TEXT[key];
                 if (icon) icon.innerText = '▴';
                 openScriptKey = key;
-                pushSystemLog(`SCRIPT OPENED FOR READING: ${key}.`);
+                pushSystemLog(`Script opened: ${key}.`);
             } else {
                 openScriptKey = null;
-                pushSystemLog(`SCRIPT CLOSED: ${key}.`);
+                pushSystemLog(`Script closed: ${key}.`);
             }
         }
 
@@ -2711,7 +2692,7 @@ Outcome / Notes: [FILL IN]
             copyTextToClipboard(codeText);
             element.classList.add('copied');
             setTimeout(() => { element.classList.remove('copied'); }, 2000);
-            pushSystemLog(`ROUTING CODE EXTRACTED: ${codeText}.`);
+            pushSystemLog(`Routing code copied: ${codeText}.`);
         }
 
         function copyEmailTemplate() {
@@ -2768,7 +2749,7 @@ Outcome / Notes: [FILL IN]
             renderSituations();
             updateUI();
             showToast("Console Baseline Reset Successful");
-            pushSystemLog("CONSOLE HARD RESET EXECUTED. BALANCING CORES.");
+            pushSystemLog("Console reset.");
         }
     </script>
 
