@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Everyline&#8480; — Illustrative Demonstration | Rudolph CX</title>
-<meta name="description" content="A fictional company, run through the real Rudolph CX consolidation method. Illustrative, not a real client — see how any frontline team's scattered job aids become a built guide.">
+<meta name="description" content="A fictional company, run through the real Rudolph CX consolidation method. Illustrative, not a real client — 40 situations across four sectors.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -14,7 +14,6 @@
   --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
   --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
   --red: #b83224; --red2: #d94030; --gold: #c49a3c;
-  --green: #2a6e4a;
   --serif: 'Cormorant Garamond', Georgia, serif;
   --mono: 'DM Mono', monospace;
   --sans: 'DM Sans', system-ui, sans-serif;
@@ -30,7 +29,7 @@ a { color: inherit; }
 #rcx-exit-link span { color: var(--red); }
 @media (max-width: 500px) { #rcx-exit-link { top: 10px; left: 10px; font-size: 11px; padding: 7px 12px; } }
 
-.illustrative-banner { background: var(--ink); color: var(--gold); font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-align: center; padding: 12px 60px 12px 60px; margin-top: 0; border-bottom: 2px solid var(--gold); }
+.illustrative-banner { background: var(--ink); color: var(--gold); font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-align: center; padding: 12px 60px; border-bottom: 2px solid var(--gold); }
 .illustrative-banner strong { color: #fff; text-transform: uppercase; letter-spacing: 0.08em; }
 .illustrative-banner .sub { display: block; color: var(--muted); font-size: 10.5px; margin-top: 4px; font-weight: 300; letter-spacing: 0.02em; }
 
@@ -39,11 +38,12 @@ a { color: inherit; }
 .eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
 .eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
 
-.hero { padding: 120px 60px 80px; text-align: center; }
+.hero { padding: 120px 60px 60px; text-align: center; }
 .hero-inner { max-width: 820px; margin: 0 auto; }
 .hero-title { font-family: var(--serif); font-size: clamp(38px,5vw,62px); font-weight: 500; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 26px; }
 .hero-title em { font-style: italic; color: var(--red); }
 .hero-sub { font-size: 17px; color: var(--ink3); line-height: 1.75; max-width: 620px; margin: 0 auto 20px; font-weight: 300; }
+.hero-stat { font-family: var(--mono); font-size: 13px; color: var(--gold); letter-spacing: 0.04em; margin-top: 8px; }
 .hero-tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
 .hero-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; background: var(--cream2); border: 1px solid var(--cream3); padding: 7px 14px; border-radius: 20px; color: var(--ink3); }
 
@@ -61,37 +61,46 @@ a { color: inherit; }
 .meet-div-sector { font-family: var(--mono); font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.04em; }
 @media (max-width: 900px) { .meet-grid { grid-template-columns: 1fr; gap: 32px; } }
 
-.pair-section { padding: 90px 60px; }
-.pair-header { text-align: center; max-width: 720px; margin: 0 auto 64px; }
+.jump-nav { position: sticky; top: 0; z-index: 90; background: var(--cream); border-bottom: 1px solid var(--cream3); padding: 14px 60px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.jump-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; background: #fff; border: 1px solid var(--cream3); color: var(--ink3); padding: 8px 16px; border-radius: 20px; text-decoration: none; cursor: pointer; transition: all 0.15s; }
+.jump-btn:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+.pair-section { padding: 70px 60px; }
+.pair-header { text-align: center; max-width: 720px; margin: 0 auto 56px; }
 .pair-header h2 { font-family: var(--serif); font-size: clamp(30px,3.4vw,42px); font-weight: 500; margin-bottom: 16px; letter-spacing: -0.02em; }
 .pair-header h2 em { font-style: italic; color: var(--red); }
 .pair-header p { color: var(--ink3); font-size: 15px; font-weight: 300; line-height: 1.7; }
 
-.pair-block { margin-bottom: 70px; }
-.pair-block:last-child { margin-bottom: 0; }
-.pair-block-label { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
-.pair-block-num { font-family: var(--mono); font-size: 11px; color: var(--dim); }
-.pair-block-title { font-family: var(--serif); font-size: 22px; font-weight: 600; }
-.pair-block-sector { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--gold); color: var(--ink); padding: 4px 10px; border-radius: 3px; }
+.sector-group { margin-bottom: 90px; scroll-margin-top: 70px; }
+.sector-group:last-child { margin-bottom: 0; }
+.sector-group-header { display: flex; align-items: center; gap: 16px; margin-bottom: 36px; padding-bottom: 16px; border-bottom: 2px solid var(--ink); flex-wrap: wrap; }
+.sector-group-title { font-family: var(--serif); font-size: 30px; font-weight: 600; }
+.sector-group-count { font-family: var(--mono); font-size: 11px; color: var(--dim); background: var(--cream2); padding: 5px 12px; border-radius: 20px; }
 
-.pair-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.pair-block { margin-bottom: 44px; }
+.pair-block:last-child { margin-bottom: 0; }
+.pair-block-label { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.pair-block-num { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.pair-block-title { font-family: var(--serif); font-size: 19px; font-weight: 600; }
+
+.pair-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 @media (max-width: 900px) { .pair-cols { grid-template-columns: 1fr; } }
 
-.before-card { background: #fff; border: 1px solid var(--cream3); border-left: 4px solid var(--dim); border-radius: 4px; padding: 24px; }
-.before-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-.before-artifact { background: var(--cream2); border: 1px dashed var(--cream3); border-radius: 4px; padding: 16px; font-size: 13px; color: var(--ink2); line-height: 1.6; font-family: var(--sans); position: relative; }
-.before-artifact.sticky { background: #fdf3c7; border: 1px solid #e6d68a; transform: rotate(-0.6deg); font-family: 'Comic Sans MS', var(--sans); }
-.before-artifact.pdf { background: #f3f2ee; border: 1px solid var(--cream3); font-family: var(--mono); font-size: 11.5px; }
-.before-artifact.chat { background: #eef4f0; border: 1px solid #cfe0d5; font-family: var(--sans); }
+.before-card { background: #fff; border: 1px solid var(--cream3); border-left: 4px solid var(--dim); border-radius: 4px; padding: 20px; }
+.before-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 12px; }
+.before-artifact { background: var(--cream2); border: 1px dashed var(--cream3); border-radius: 4px; padding: 14px; font-size: 12.5px; color: var(--ink2); line-height: 1.6; }
+.before-artifact.sticky { background: #fdf3c7; border: 1px solid #e6d68a; transform: rotate(-0.5deg); }
+.before-artifact.pdf { background: #f3f2ee; border: 1px solid var(--cream3); font-family: var(--mono); font-size: 11px; }
+.before-artifact.chat { background: #eef4f0; border: 1px solid #cfe0d5; }
 .before-artifact.tribal { background: var(--cream2); border: 1px solid var(--cream3); font-style: italic; color: var(--ink3); }
-.before-meta { font-family: var(--mono); font-size: 10px; color: var(--dim); margin-top: 12px; }
+.before-meta { font-family: var(--mono); font-size: 9.5px; color: var(--dim); margin-top: 10px; }
 
-.after-card { background: var(--ink); color: var(--cream); border-radius: 4px; padding: 24px; }
-.after-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-.after-op { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.after-card { background: var(--ink); color: var(--cream); border-radius: 4px; padding: 20px; }
+.after-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+.after-op { margin-bottom: 11px; padding-bottom: 11px; border-bottom: 1px solid rgba(255,255,255,0.1); }
 .after-op:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.after-op-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
-.after-op-value { font-size: 13.5px; line-height: 1.6; color: var(--cream); }
+.after-op-label { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.after-op-value { font-size: 12.5px; line-height: 1.55; color: var(--cream); }
 .after-op.hardstop .after-op-label { color: var(--red2); }
 .after-op.hardstop .after-op-value { color: #f0d0cc; }
 .after-op.escalation .after-op-label { color: var(--gold); }
@@ -134,6 +143,7 @@ footer.demo-footer { padding: 40px 60px; text-align: center; font-family: var(--
     <div class="eyebrow" style="justify-content:center;">Everyline&#8480;</div>
     <h1 class="hero-title">The guide for <em>any</em> frontline room.</h1>
     <p class="hero-sub">Every Rudolph CX guide is built for one sector. Everyline&#8480; is built for the method itself — proof that the same consolidation discipline holds up whether the room is a call center, a store floor, a hotel desk, or a claims queue.</p>
+    <div class="hero-stat">40 situations shown below &middot; 4 sectors &middot; 10 each</div>
     <div class="hero-tags">
       <span class="hero-tag">Contact Centers</span>
       <span class="hero-tag">Retail</span>
@@ -164,110 +174,21 @@ footer.demo-footer { padding: 40px 60px; text-align: center; font-family: var(--
   </div>
 </section>
 
+<nav class="jump-nav">
+  <a href="#sec-contact" class="jump-btn">Contact Center (10)</a>
+  <a href="#sec-retail" class="jump-btn">Retail (10)</a>
+  <a href="#sec-hospitality" class="jump-btn">Hospitality (10)</a>
+  <a href="#sec-claims" class="jump-btn">Claims (10)</a>
+</nav>
+
 <section class="pair-section">
   <div class="section-inner">
     <div class="pair-header">
       <div class="eyebrow" style="justify-content:center;">The consolidation, side by side</div>
       <h2>From scattered <em>to built.</em></h2>
-      <p>Four situations, four divisions, one method. Left: what the team actually has today. Right: the same situation after Rudolph CX consolidation.</p>
+      <p>Forty situations, four divisions, one method. Left: what the team actually has today. Right: the same situation after Rudolph CX consolidation.</p>
     </div>
-
-    <!-- 1. CONTACT CENTER -->
-    <div class="pair-block">
-      <div class="pair-block-label">
-        <span class="pair-block-num">01</span>
-        <span class="pair-block-title">Thornfield Direct</span>
-        <span class="pair-block-sector">Contact Center</span>
-      </div>
-      <div class="pair-cols">
-        <div class="before-card">
-          <div class="before-tag">&#9993; Before — sticky note on the monitor</div>
-          <div class="before-artifact sticky">"if someone wants to CANCEL — do NOT just cancel!! read them the retention thing first, it's in the folder somewhere. ask Denise if u can't find it"</div>
-          <div class="before-meta">Source: handwritten, taped to Agent #14's monitor, undated</div>
-        </div>
-        <div class="after-card">
-          <div class="after-tag">&#10003; After — Everyline&#8480; Console</div>
-          <div class="after-op"><div class="after-op-label">Case Type Identification</div><div class="after-op-value">Cancellation Request — Retention Offer Required</div></div>
-          <div class="after-op"><div class="after-op-label">Step Sequence</div><div class="after-op-value">1. Confirm the request. 2. Deliver the retention disclosure verbatim. 3. Log the customer's response. 4. Process cancellation only after disclosure is complete.</div></div>
-          <div class="after-op"><div class="after-op-label">Agent Script</div><div class="after-op-value">"Before I process that, I'm required to walk you through your account options first — it'll take one minute."</div></div>
-          <div class="after-op hardstop"><div class="after-op-label">Hard Stop</div><div class="after-op-value">Do not cancel before the retention disclosure is delivered and logged.</div></div>
-          <div class="after-op escalation"><div class="after-op-label">Escalation Trigger</div><div class="after-op-value">Customer disputes being charged after a stated cancellation date — route to Billing Resolution.</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. RETAIL -->
-    <div class="pair-block">
-      <div class="pair-block-label">
-        <span class="pair-block-num">02</span>
-        <span class="pair-block-title">Thornfield Retail</span>
-        <span class="pair-block-sector">Retail</span>
-      </div>
-      <div class="pair-cols">
-        <div class="before-card">
-          <div class="before-tag">&#128196; Before — outdated PDF, page 14 of 40</div>
-          <div class="before-artifact pdf">"...associates should exercise discretion regarding returns without proof of purchase, subject to store manager approval when applicable, per policy dated [illegible]..."</div>
-          <div class="before-meta">Source: "Store_Handbook_FINAL_v3_USE THIS ONE.pdf", last edited 4 years ago</div>
-        </div>
-        <div class="after-card">
-          <div class="after-tag">&#10003; After — Everyline&#8480; Console</div>
-          <div class="after-op"><div class="after-op-label">Case Type Identification</div><div class="after-op-value">Return — No Proof of Purchase</div></div>
-          <div class="after-op"><div class="after-op-label">Step Sequence</div><div class="after-op-value">1. Check for a receipt or digital purchase record. 2. If none exists, offer store-credit-only exchange per posted policy. 3. Document the transaction, including any manager override.</div></div>
-          <div class="after-op"><div class="after-op-label">Agent Script</div><div class="after-op-value">"Without a receipt, I can offer store credit at today's price — would that work for you?"</div></div>
-          <div class="after-op hardstop"><div class="after-op-label">Hard Stop</div><div class="after-op-value">No cash refund without a verifiable proof of purchase.</div></div>
-          <div class="after-op escalation"><div class="after-op-label">Escalation Trigger</div><div class="after-op-value">Customer requests exception above posted return policy limits — route to Store Manager for override authority.</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. HOSPITALITY -->
-    <div class="pair-block">
-      <div class="pair-block-label">
-        <span class="pair-block-num">03</span>
-        <span class="pair-block-title">The Thornfield Inn</span>
-        <span class="pair-block-sector">Hospitality</span>
-      </div>
-      <div class="pair-cols">
-        <div class="before-card">
-          <div class="before-tag">&#128172; Before — front-desk group chat</div>
-          <div class="before-artifact chat">"hey does anyone know the actual rule for service animals at check in?? guest is asking and I don't wanna say the wrong thing 😅"<br><br>"lol just don't ask for papers, I think that's the main thing"</div>
-          <div class="before-meta">Source: team messaging app, front-desk channel</div>
-        </div>
-        <div class="after-card">
-          <div class="after-tag">&#10003; After — Everyline&#8480; Console</div>
-          <div class="after-op"><div class="after-op-label">Case Type Identification</div><div class="after-op-value">Guest Service Animal Accommodation — Check-In</div></div>
-          <div class="after-op"><div class="after-op-label">Step Sequence</div><div class="after-op-value">1. Ask only the two permitted questions. 2. Do not request documentation or a demonstration. 3. Confirm the room assignment accommodates the animal. 4. Log the accommodation, not the guest's disability.</div></div>
-          <div class="after-op"><div class="after-op-label">Agent Script</div><div class="after-op-value">"Is that a service animal required because of a disability, and what work or task is it trained to perform?"</div></div>
-          <div class="after-op hardstop"><div class="after-op-label">Hard Stop</div><div class="after-op-value">Do not ask for documentation, certification, or a demonstration of the animal's training (ADA Title III).</div></div>
-          <div class="after-op escalation"><div class="after-op-label">Escalation Trigger</div><div class="after-op-value">Guest is denied accommodation by any staff member — route immediately to Property Manager, same shift.</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. CLAIMS -->
-    <div class="pair-block">
-      <div class="pair-block-label">
-        <span class="pair-block-num">04</span>
-        <span class="pair-block-title">Thornfield Claims</span>
-        <span class="pair-block-sector">Insurance Claims</span>
-      </div>
-      <div class="pair-cols">
-        <div class="before-card">
-          <div class="before-tag">&#128172; Before — "just ask someone who's been here"</div>
-          <div class="before-artifact tribal">New adjusters are told: "if a claimant pushes back on a denial, just document it and let it sit — someone will get back to it eventually." No one has ever mentioned a required response window.</div>
-          <div class="before-meta">Source: informal onboarding, no written record</div>
-        </div>
-        <div class="after-card">
-          <div class="after-tag">&#10003; After — Everyline&#8480; Console</div>
-          <div class="after-op"><div class="after-op-label">Case Type Identification</div><div class="after-op-value">Claim Denial Disputed by Claimant</div></div>
-          <div class="after-op"><div class="after-op-label">Step Sequence</div><div class="after-op-value">1. Log the dispute with date and time received. 2. Acknowledge receipt to the claimant in writing within the required window. 3. Route the file for review. 4. Track the response deadline — do not let it lapse.</div></div>
-          <div class="after-op"><div class="after-op-label">Agent Script</div><div class="after-op-value">"I've logged your dispute today. You'll receive a written response within the timeframe required by state regulation."</div></div>
-          <div class="after-op hardstop"><div class="after-op-label">Hard Stop</div><div class="after-op-value">A disputed claim cannot sit without a logged acknowledgment date — required response windows are regulatory, not discretionary (state Unfair Claims Settlement Practices Act / NAIC Model #900).</div></div>
-          <div class="after-op escalation"><div class="after-op-label">Escalation Trigger</div><div class="after-op-value">Response deadline is within 48 hours and file review is incomplete — escalate to Claims Supervisor immediately.</div></div>
-        </div>
-      </div>
-    </div>
-
+    <div id="sector-groups"></div>
   </div>
 </section>
 
@@ -296,6 +217,137 @@ footer.demo-footer { padding: 40px 60px; text-align: center; font-family: var(--
 <footer class="demo-footer">
   Everyline&#8480; is a service mark of Rudolph CX LLC. Thornfield Holdings and all situations on this page are fictional and illustrative only.
 </footer>
+
+<script>
+const SECTORS = [
+{ id:"sec-contact", name:"Thornfield Direct", tag:"Contact Center", situations:[
+  { title:"Retention Offer Before Cancellation", artifactType:"sticky", artifactTag:"Before — sticky note on the monitor", artifact:"\"if someone wants to CANCEL — do NOT just cancel!! read them the retention thing first, it's in the folder somewhere. ask Denise if u can't find it\"", meta:"Source: handwritten, taped to Agent #14's monitor, undated",
+    caseType:"Cancellation Request — Retention Offer Required", steps:"1. Confirm the request. 2. Deliver the retention disclosure verbatim. 3. Log the customer's response. 4. Process cancellation only after disclosure is complete.", script:"\"Before I process that, I'm required to walk you through your account options first — it'll take one minute.\"", hardstop:"Do not cancel before the retention disclosure is delivered and logged.", escalation:"Customer disputes being charged after a stated cancellation date — route to Billing Resolution." },
+  { title:"TCPA Do-Not-Call Request", artifactType:"pdf", artifactTag:"Before — forwarded email chain, 47 replies deep", artifact:"\"...per Frank's email from before I started here, I think if someone says stop calling we're supposed to note it in the system, but I've also heard some people say you can call back after 31 days? Not sure which is right anymore — see thread below...\"", meta:"Source: internal email thread, no clear resolution",
+    caseType:"Do-Not-Call Request — Live Call", steps:"1. Confirm the number to be suppressed. 2. Add to the internal do-not-call list before ending the call. 3. Confirm no further outbound marketing contact to that number, ever. 4. Log the date/time of the request.", script:"\"I've noted your number for our do-not-call list — you won't receive further marketing calls from us.\"", hardstop:"No further outbound marketing call to that number, ever, regardless of any internal \"cool-down\" timeline (TCPA / Telemarketing Sales Rule).", escalation:"Customer says they've made this request before and were called again — route to Compliance for a documented pattern review." },
+  { title:"Card Number Given Verbally", artifactType:"tribal", artifactTag:"Before — nothing written, \"just type it in like normal\"", artifact:"No documented handling process for spoken card numbers exists; some agents jot digits on a notepad \"just in case the system lags.\"", meta:"Source: informal practice, undocumented",
+    caseType:"Payment Card Number Provided Verbally", steps:"1. Direct the customer to the secure DTMF/IVR payment line, don't key it in manually. 2. Never write, type into chat/notes, or repeat the full card number aloud. 3. Confirm payment status only through the secure system.", script:"\"For your security, I'm going to transfer you to our secure automated payment line — you'll enter your card details there, not with me.\"", hardstop:"Full card numbers are never written down, stored in call notes, or read back in full (PCI-DSS v4.0.1).", escalation:"Customer insists on giving the number verbally and refuses the secure line — route to Supervisor for an alternate compliant path." },
+  { title:"Suspected Financial Exploitation of a Vulnerable Caller", artifactType:"tribal", artifactTag:"Before — mentioned once in a team meeting, never written down", artifact:"\"if grandma sounds confused just help whoever's on the phone, family's probably just helping her out\"", meta:"Source: verbal-only team guidance",
+    caseType:"Suspected Financial Exploitation — Vulnerable Adult", steps:"1. Do not process any account change that seems inconsistent with the account holder's own wishes. 2. Ask to speak directly and privately with the account holder. 3. Document specific concerning indicators. 4. Route to Compliance/Trust & Safety, not just the requesting party.", script:"\"I need to confirm this directly with the account holder before I can make any changes.\"", hardstop:"Do not process account or payment changes based solely on a third party's representation when exploitation indicators are present.", escalation:"Account holder cannot be reached or seems coached/pressured on the call — immediate Compliance escalation, same call." },
+  { title:"Non-English-Speaking Caller, No Interpreter Used", artifactType:"pdf", artifactTag:"Before — outdated PDF, one vague line", artifact:"\"...staff should make reasonable efforts to assist all callers...\"", meta:"Source: \"Agent_Handbook_2021.pdf\"",
+    caseType:"Language Access — Caller Requires Interpretation", steps:"1. Offer the interpreter line before proceeding with any substantive discussion. 2. Do not rely on a family member (especially a minor) as the interpreter for account or sensitive matters. 3. Document that language access was offered.", script:"\"I want to make sure I get this right for you — let me connect an interpreter so we can go through this together.\"", hardstop:"Do not use a caller's minor child as the interpreter for account, medical, or financial matters.", escalation:"No interpreter available for the needed language in real time — route to Supervisor for callback scheduling with interpreter confirmed." },
+  { title:"Abusive or Threatening Caller", artifactType:"sticky", artifactTag:"Before — sticky note, different handwriting, added later", artifact:"\"3 strikes then hang up?? or is it 2? ask whoever's lead today\"", meta:"Source: handwritten, monitor edge",
+    caseType:"Abusive/Threatening Caller Behavior", steps:"1. Give one calm, clear warning that the call will end if the behavior continues. 2. If it continues, give a second, final warning. 3. If it continues again, end the call and document verbatim what was said. 4. Immediate escalation for any safety threat — skip the warning sequence entirely.", script:"\"I want to help you, but I need our conversation to stay respectful, or I'll need to end this call.\"", hardstop:"Any direct threat of violence ends the call immediately and routes to Security/Trust & Safety — no warning sequence required.", escalation:"Caller references knowing an employee's personal information or location — immediate Security escalation." },
+  { title:"Immediate Supervisor Request", artifactType:"tribal", artifactTag:"Before — depends entirely on who's on shift", artifact:"Some agents transfer immediately, others say \"I can help you with that\" and don't transfer at all.", meta:"Source: no documented policy, varies by agent",
+    caseType:"Immediate Supervisor Request", steps:"1. Acknowledge the request without arguing or trying to talk them out of it. 2. Provide a warm handoff with full context. 3. If no supervisor is immediately available, offer a specific callback window, not an open-ended \"someone will call you.\"", script:"\"Absolutely — let me get you to a supervisor and make sure they have the full picture before you're transferred.\"", hardstop:"Never tell a customer a supervisor \"isn't available\" as a way to avoid the transfer.", escalation:"No supervisor reachable within a reasonable hold time — route to shift lead for a documented callback commitment." },
+  { title:"Price/Promotion Dispute", artifactType:"chat", artifactTag:"Before — screenshot of an old internal Slack message", artifact:"\"@here just fyi that promo email had the wrong price in it, don't honor it if ppl call about it\"", meta:"Source: internal Slack, no follow-up posted",
+    caseType:"Advertised Price Discrepancy Dispute", steps:"1. Confirm what the customer was shown. 2. Check the current, corrected offer. 3. Escalate pricing-error disputes rather than unilaterally denying them.", script:"\"I want to get this right for you — let me confirm what our records show and follow up.\"", hardstop:"Do not tell a customer an advertised price \"doesn't count\" without a documented correction and manager sign-off (FTC Act §5).", escalation:"Multiple customers report the same pricing discrepancy same day — route to Marketing/Compliance as a possible systemic error." },
+  { title:"Customer Data Deletion Request", artifactType:"tribal", artifactTag:"Before — nothing written down, verbal only", artifact:"New hires are told \"we don't really get those\" by whoever's training them that week.", meta:"Source: informal onboarding",
+    caseType:"Customer Request to Delete Personal Data", steps:"1. Verify the requester's identity. 2. Log the request with date received. 3. Route to Privacy/Data team within the required response window — do not attempt to process directly.", script:"\"I've logged your request and it's being routed to our privacy team, who'll confirm with you directly.\"", hardstop:"Agent cannot deny or ignore the request — a logged, routed record must exist regardless of what happens next.", escalation:"Customer says this is a repeat request — route to Privacy team as a compliance-timeline issue." },
+  { title:"Call Recording Consent", artifactType:"pdf", artifactTag:"Before — laminated card, half the words rubbed off", artifact:"\"...say the thing about recording... [rest illegible] ...if they say no just... [illegible]\"", meta:"Source: laminated desk card, years old",
+    caseType:"Call Recording Disclosure — Two-Party Consent State", steps:"1. Deliver the recording disclosure before any substantive discussion. 2. If the customer objects, disable recording or offer a non-recorded line. 3. Log consent status on the account.", script:"\"This call may be recorded for quality purposes — is that alright with you?\"", hardstop:"Cannot continue recording after an objection in a two-party consent state (state wiretapping statutes).", escalation:"Customer alleges they were recorded without consent on a prior call — route to Compliance, do not investigate yourself." }
+]},
+{ id:"sec-retail", name:"Thornfield Retail", tag:"Retail", situations:[
+  { title:"Return Without Proof of Purchase", artifactType:"pdf", artifactTag:"Before — outdated PDF, page 14 of 40", artifact:"\"...associates should exercise discretion regarding returns without proof of purchase, subject to store manager approval when applicable, per policy dated [illegible]...\"", meta:"Source: \"Store_Handbook_FINAL_v3_USE THIS ONE.pdf\", 4 years old",
+    caseType:"Return — No Proof of Purchase", steps:"1. Check for a receipt or digital purchase record. 2. If none exists, offer store-credit-only exchange per posted policy. 3. Document the transaction, including any manager override.", script:"\"Without a receipt, I can offer store credit at today's price — would that work for you?\"", hardstop:"No cash refund without a verifiable proof of purchase.", escalation:"Customer requests exception above posted return policy limits — route to Store Manager for override authority." },
+  { title:"Suspected Shoplifting", artifactType:"chat", artifactTag:"Before — text between two employees", artifact:"\"if u see someone acting shady just follow them around til they leave lol or block the door if u have to, don't let them just walk out\"", meta:"Source: personal text message, not company policy",
+    caseType:"Suspected Shoplifting — In Progress", steps:"1. Do not physically block, touch, or detain the individual. 2. Observe and document specific, factual behavior only. 3. Notify a manager or loss prevention if present. 4. If the person leaves, do not pursue outside the store.", script:"\"Welcome in — let me know if you need help finding anything today.\"", hardstop:"Never physically block, touch, chase, or detain a customer — floor staff cannot invoke shopkeeper's privilege.", escalation:"Concealment is directly witnessed by trained loss-prevention staff — routes to Loss Prevention, not floor staff." },
+  { title:"Price-Match Dispute", artifactType:"tribal", artifactTag:"Before — whiteboard in the break room, half erased", artifact:"\"price match = manager only... unless it's [smudged]... ask [smudged]\"", meta:"Source: break room whiteboard, unreadable in parts",
+    caseType:"Competitor Price-Match Request", steps:"1. Verify the competitor's current, in-stock price. 2. Apply match per posted policy terms. 3. Document the match and source.", script:"\"Can you show me that price? If it's current and in stock there, I can match it.\"", hardstop:"Do not promise a match without verifying the competitor's price is current, identical, and in stock.", escalation:"Customer disputes a denied match — route to Manager, not a repeated no from floor staff." },
+  { title:"ADA Accessibility Complaint", artifactType:"tribal", artifactTag:"Before — no written process, floor staff \"figure it out\"", artifact:"No documented process exists for accessibility barrier complaints.", meta:"Source: none — confirmed gap",
+    caseType:"Physical Accessibility Barrier Reported", steps:"1. Thank the customer for reporting it. 2. Document the specific barrier and location. 3. Route to Store Manager same-shift, not next-week maintenance queue.", script:"\"Thank you for letting us know — I'm documenting this right now and getting it to my manager today.\"", hardstop:"An accessibility barrier report cannot sit undocumented or be verbally \"passed along\" only (ADA Title III).", escalation:"Same barrier reported more than once — route to Store Manager as a pattern, not a fresh one-off each time." },
+  { title:"Suspected Recalled Product on Shelf", artifactType:"sticky", artifactTag:"Before — sticky note on the back-room door, curling", artifact:"\"check recalls sometimes idk how often, ask corporate I guess\"", meta:"Source: handwritten, back-room door",
+    caseType:"Suspected Recalled Product Found On Shelf", steps:"1. Pull the item from the shelf immediately. 2. Confirm the recall against the current CPSC listing. 3. Quarantine the item; do not sell or restock. 4. Log the pull with date, item, and lot/batch if visible.", script:"", hardstop:"A suspected recalled item is never sold or returned to the shelf pending confirmation (CPSC recall protocol).", escalation:"Customer reports having already purchased a suspected recalled item — route to Store Manager for recall-notice/refund process, same day." },
+  { title:"Employee Theft Suspicion", artifactType:"tribal", artifactTag:"Before — \"handled quietly, don't make it weird\"", artifact:"No documented process; varies entirely by manager.", meta:"Source: none — confirmed gap",
+    caseType:"Suspected Employee Theft", steps:"1. Do not confront the employee directly or accuse them. 2. Document specific observed facts only. 3. Route to Store Manager/HR — never handled peer-to-peer.", script:"", hardstop:"Never search an employee's bag, locker, or person without HR/Loss Prevention present and policy followed.", escalation:"Suspected theft involves cash handling or register access — same-day HR/Loss Prevention notification." },
+  { title:"Underage Age-Restricted Sale Attempt", artifactType:"pdf", artifactTag:"Before — outdated PDF", artifact:"\"...check ID for anyone who appears under 30, per store discretion...\"", meta:"Source: \"Store_Handbook_FINAL_v3.pdf\"",
+    caseType:"Age-Restricted Sale — ID Verification", steps:"1. Request ID for any purchase of age-restricted product. 2. Verify the ID is valid and matches the purchaser. 3. Refuse the sale if verification fails or ID is absent.", script:"\"I'll need to see ID for that, please.\"", hardstop:"No age-restricted sale proceeds without valid ID verification — this is a licensing requirement, not a judgment call.", escalation:"Customer becomes aggressive after refusal — de-escalate and involve Manager, do not complete the sale under pressure." },
+  { title:"Payment Card Skimmer Found on Terminal", artifactType:"tribal", artifactTag:"Before — tribal knowledge only", artifact:"\"if the card reader looks weird just unplug it I guess\"", meta:"Source: informal, undocumented",
+    caseType:"Suspected Card Skimming Device Found", steps:"1. Do not use or let customers use the affected terminal. 2. Photograph the device in place before touching it. 3. Notify Store Manager and IT/Security immediately. 4. Preserve the device for law enforcement — do not discard it.", script:"", hardstop:"Terminal stays offline until confirmed clear — do not simply remove the device and resume use (PCI-DSS incident response).", escalation:"Any customer reports fraudulent charges after using that terminal — route to Security/Legal for formal breach assessment." },
+  { title:"Workplace Violence Threat", artifactType:"tribal", artifactTag:"Before — assumed \"common sense\" covers it", artifact:"No documented protocol exists.", meta:"Source: none — confirmed gap",
+    caseType:"Workplace Violence Threat — Customer or Employee", steps:"1. Prioritize safety — remove yourself and others from immediate danger. 2. Call emergency services if there's an active threat. 3. Do not attempt to physically intervene. 4. Document afterward, not during.", script:"", hardstop:"No employee is expected or permitted to physically intervene in a violent situation.", escalation:"Any weapon is displayed or mentioned — immediate 911, immediate store lockdown per posted procedure." },
+  { title:"Counterfeit Currency Received", artifactType:"sticky", artifactTag:"Before — sticky note, curling, tape mostly gone", artifact:"\"pen test bills over $20 I think? keep it if it fails??\"", meta:"Source: handwritten, register area",
+    caseType:"Suspected Counterfeit Currency Received", steps:"1. Do not return the suspected bill to the customer. 2. Inform the customer calmly that it's being held for verification. 3. Notify Manager; contact law enforcement per policy. 4. Document denomination, time, and customer description.", script:"\"I'm going to need to hold onto this for verification — let me get my manager.\"", hardstop:"Suspected counterfeit currency is never knowingly returned to circulation.", escalation:"Customer refuses to wait or becomes confrontational — de-escalate, do not physically restrain; document and involve Manager/Security." }
+]},
+{ id:"sec-hospitality", name:"The Thornfield Inn", tag:"Hospitality", situations:[
+  { title:"Service Animal Accommodation at Check-In", artifactType:"chat", artifactTag:"Before — front-desk group chat", artifact:"\"hey does anyone know the actual rule for service animals at check in?? guest is asking and I don't wanna say the wrong thing\"<br><br>\"lol just don't ask for papers, I think that's the main thing\"", meta:"Source: team messaging app, front-desk channel",
+    caseType:"Guest Service Animal Accommodation — Check-In", steps:"1. Ask only the two permitted questions. 2. Do not request documentation or a demonstration. 3. Confirm the room assignment accommodates the animal. 4. Log the accommodation, not the guest's disability.", script:"\"Is that a service animal required because of a disability, and what work or task is it trained to perform?\"", hardstop:"Do not ask for documentation, certification, or a demonstration of the animal's training (ADA Title III).", escalation:"Guest is denied accommodation by any staff member — route immediately to Property Manager, same shift." },
+  { title:"Trafficking Indicator Recognition", artifactType:"pdf", artifactTag:"Before — outdated PDF, page 22", artifact:"\"...staff should remain vigilant for any concerning activity and use good judgment when interacting with guests...\"", meta:"Source: \"Front_Desk_Manual.pdf\", undated",
+    caseType:"Potential Trafficking Indicator — Guest Interaction", steps:"1. Do not confront or attempt to intervene directly. 2. Note specific, observable indicators only. 3. Notify a manager immediately, in person or by phone — not by note. 4. Manager contacts the National Human Trafficking Hotline per state-mandated protocol.", script:"\"I need you for a second — I want to flag something I noticed at the front desk.\" (internal only)", hardstop:"Do not personally intervene, confront, or investigate — this is a mandated training requirement, not front-line judgment.", escalation:"Any indicator involving a minor — immediate escalation, no delay for shift change or manager availability." },
+  { title:"Accessible Room Request", artifactType:"pdf", artifactTag:"Before — one line buried in a 60-page manual", artifact:"\"...accessible rooms subject to availability at time of check-in...\"", meta:"Source: \"Property_Operations_Manual.pdf\"",
+    caseType:"Accessible Room Requested — Reservation or Walk-In", steps:"1. Confirm the specific accessibility need. 2. Check accessible-room inventory first, before general inventory. 3. If unavailable, offer the closest genuine alternative and document why.", script:"\"Let me check our accessible rooms first — can you tell me a bit about what you need?\"", hardstop:"Do not treat an accessible-room request as lower priority than a standard request, or bump an accessible reservation for a non-accessible guest.", escalation:"No accessible room is available for a confirmed reservation — route to Property Manager immediately, not day-of scramble." },
+  { title:"Guest Injury on Property", artifactType:"tribal", artifactTag:"Before — \"whoever's on shift handles it\"", artifact:"No consistent documentation process; varies by who's working.", meta:"Source: none — confirmed gap",
+    caseType:"Guest Injury Reported On-Property", steps:"1. Do not admit fault or speculate on cause. 2. Offer first aid or call emergency services if needed. 3. Document facts only — time, location, what was observed. 4. Notify Property Manager same-shift.", script:"\"Are you okay — do you need me to call for medical help? I'm going to document what happened right now.\"", hardstop:"Never state or imply fault (\"that mat's always been an issue\") — factual documentation only.", escalation:"Guest requests to file a formal claim — route to Property Manager/Risk immediately, do not attempt to resolve financially yourself." },
+  { title:"Discrimination Complaint in Service", artifactType:"tribal", artifactTag:"Before — \"just be nice to everyone\"", artifact:"No documented complaint-handling process exists.", meta:"Source: none — confirmed gap",
+    caseType:"Guest Alleges Discriminatory Treatment", steps:"1. Do not argue or explain away the guest's experience in the moment. 2. Document the complaint factually. 3. Route to Property Manager same-shift, regardless of severity.", script:"\"I hear you, and I'm taking this seriously — I'm getting my manager involved right now.\"", hardstop:"A discrimination complaint is never resolved or dismissed by front-line staff alone.", escalation:"Any complaint involving a protected class — immediate same-shift escalation, no exceptions for \"slow night.\"" },
+  { title:"Noise Complaint Escalating to Guest Conflict", artifactType:"tribal", artifactTag:"Before — \"use your judgment\"", artifact:"No de-escalation guidance exists anywhere.", meta:"Source: none — confirmed gap",
+    caseType:"Noise Complaint — Guest-to-Guest Conflict", steps:"1. Address the complaint discreetly, room to room. 2. Do not disclose one guest's complaint or identity to the other. 3. Document if the issue recurs same night.", script:"\"We've had a request for quieter hours in this area — I appreciate your help with that.\"", hardstop:"Never reveal which guest filed the complaint.", escalation:"Conflict escalates to shouting, threats, or a room confrontation — route to Security/Manager immediately." },
+  { title:"Suspected Underage Guest Checking In Alone", artifactType:"pdf", artifactTag:"Before — outdated PDF", artifact:"\"...minors may not check in without adult supervision, exceptions per manager discretion...\"", meta:"Source: \"Property_Operations_Manual.pdf\"",
+    caseType:"Suspected Underage Guest — Solo Check-In", steps:"1. Verify age via ID before issuing a room key. 2. If underage and unaccompanied, do not complete check-in. 3. Route to Manager for the property's documented exception process, if any.", script:"\"I'll need to see ID to complete check-in, please.\"", hardstop:"No room key issued to a confirmed unaccompanied minor absent a documented, manager-approved exception.", escalation:"Guest becomes evasive about age or ID — route to Manager before proceeding." },
+  { title:"Room Access for Someone Not on Reservation", artifactType:"tribal", artifactTag:"Before — tribal knowledge", artifact:"\"if they say it's their partner/family just give them a key, don't be difficult about it\"", meta:"Source: informal front-desk habit",
+    caseType:"Room Access Request — Non-Registered Individual", steps:"1. Do not issue a key or access to anyone not on the reservation. 2. Offer to call the registered guest to add the person or grant access directly. 3. Document any refused request.", script:"\"I'm not able to issue access without the reservation holder's confirmation — let me try reaching them for you.\"", hardstop:"Never issue room access based solely on a requester's claimed relationship to the guest.", escalation:"Requester becomes insistent or claims emergency — route to Manager/Security, verify independently before any access is granted." },
+  { title:"Fire Alarm During Active Guest Complaint", artifactType:"tribal", artifactTag:"Before — no written guidance", artifact:"Staff report being unsure whether to finish a guest interaction or evacuate first.", meta:"Source: none — confirmed gap",
+    caseType:"Fire Alarm / Evacuation — Mid-Interaction", steps:"1. Evacuation takes priority over any in-progress task, without exception. 2. Direct the guest toward the nearest exit per posted evacuation route. 3. Resume the original interaction only after all-clear is given.", script:"", hardstop:"No task, complaint, or transaction is completed during an active alarm — evacuation is immediate and unconditional.", escalation:"Any guest refuses to evacuate — note their location/room for first responders, do not physically force compliance." },
+  { title:"Guest Alleges Theft From Room", artifactType:"tribal", artifactTag:"Before — \"just apologize and comp something\"", artifact:"No documented investigation or reporting process exists.", meta:"Source: none — confirmed gap",
+    caseType:"Guest-Reported Theft From Room", steps:"1. Do not admit fault or promise compensation on the spot. 2. Document the reported items and timeline factually. 3. Notify Manager/Security same-shift; offer to involve local police if guest wants to file a report.", script:"\"I'm sorry this happened — I'm documenting everything right now and looping in my manager immediately.\"", hardstop:"Never offer a specific compensation amount without Manager/Risk sign-off.", escalation:"Alleged item value is significant or guest wants to involve police — Manager/Security escalation before any resolution offer." }
+]},
+{ id:"sec-claims", name:"Thornfield Claims", tag:"Insurance Claims", situations:[
+  { title:"Claim Denial Disputed by Claimant", artifactType:"tribal", artifactTag:"Before — \"just ask someone who's been here\"", artifact:"New adjusters are told: \"if a claimant pushes back on a denial, just document it and let it sit — someone will get back to it eventually.\" No mention of a required response window.", meta:"Source: informal onboarding, no written record",
+    caseType:"Claim Denial Disputed by Claimant", steps:"1. Log the dispute with date and time received. 2. Acknowledge receipt to the claimant in writing within the required window. 3. Route the file for review. 4. Track the response deadline — do not let it lapse.", script:"\"I've logged your dispute today. You'll receive a written response within the timeframe required by state regulation.\"", hardstop:"A disputed claim cannot sit without a logged acknowledgment date (state Unfair Claims Settlement Practices Act / NAIC Model #900).", escalation:"Response deadline is within 48 hours and file review is incomplete — escalate to Claims Supervisor immediately." },
+  { title:"Suspected Fraud Referral", artifactType:"tribal", artifactTag:"Before — tribal knowledge only", artifact:"\"if something feels off just process it anyway, we're not detectives\"", meta:"Source: informal, undocumented",
+    caseType:"Suspected Fraudulent Claim Indicator", steps:"1. Continue standard processing — do not confront the claimant. 2. Document the specific indicator observed. 3. Refer to the Special Investigations Unit; do not deny or delay the claim unilaterally.", script:"", hardstop:"An adjuster cannot deny a claim solely on suspicion without SIU referral and review.", escalation:"Indicator involves a pattern across multiple claims — route to SIU as a potential ring, not isolated cases." },
+  { title:"Delayed Investigation Risk", artifactType:"pdf", artifactTag:"Before — outdated PDF, contradicts itself", artifact:"Page 4 says \"respond within 15 days,\" page 31 says \"no strict deadline, use judgment.\"", meta:"Source: \"Claims_Handling_Guide.pdf\", internally inconsistent",
+    caseType:"Claim Investigation Approaching Statutory Deadline", steps:"1. Check the file's statutory response deadline. 2. If investigation is incomplete, document why. 3. Send a required status update to the claimant before the deadline lapses.", script:"\"I want to update you before your claim reaches its next milestone — here's where things stand.\"", hardstop:"A file cannot pass a statutory deadline without a logged status communication.", escalation:"Deadline will lapse within 24 hours and file is not ready — immediate Supervisor escalation." },
+  { title:"Third-Party Liability / Subrogation", artifactType:"pdf", artifactTag:"Before — email from a manager who left years ago", artifact:"\"...just handle these on a case by case basis for now, we'll formalize a process eventually...\"", meta:"Source: buried email chain",
+    caseType:"Third-Party Liability / Subrogation Potential Identified", steps:"1. Flag the claim for subrogation review, don't decide it yourself. 2. Preserve any evidence of third-party fault. 3. Notify the claimant that subrogation may apply, in plain language.", script:"\"Because another party may be responsible here, this claim may also go through a recovery process — I'll explain what that means for you.\"", hardstop:"An adjuster does not unilaterally waive subrogation rights on a file.", escalation:"Third party is a commercial entity or government body — route to Legal, not standard subrogation queue." },
+  { title:"Third-Party Information Request", artifactType:"tribal", artifactTag:"Before — tribal knowledge", artifact:"\"if someone calls asking about someone else's claim, just help them out if they sound legit — we're not the DMV.\"", meta:"Source: informal onboarding",
+    caseType:"Third-Party Request for Claimant File Information", steps:"1. Confirm the caller's identity and relationship to the claimant. 2. Confirm a valid, on-file authorization for this specific requester. 3. If none exists, disclose nothing. 4. Log the request and outcome either way.", script:"\"I'm not able to share details on this claim without the claimant's written authorization on file — I can log your request and follow up with them directly.\"", hardstop:"No claim status, amounts, or details to any party without verified, on-file claimant authorization.", escalation:"Requester claims legal authority (attorney, subpoena, court order) — route to Legal/Compliance." },
+  { title:"Recorded Statement Request", artifactType:"pdf", artifactTag:"Before — outdated PDF, contradicts current practice", artifact:"\"...recorded statements are standard procedure for all claims...\" (no longer accurate — now consent-based)", meta:"Source: \"Claims_Handling_Guide.pdf\", superseded practice",
+    caseType:"Recorded Statement Requested From Claimant", steps:"1. Explain the purpose and that participation is the claimant's choice where state law allows. 2. Obtain clear consent before recording begins. 3. Never imply the claim will be denied for declining.", script:"\"I'd like to record a statement about the incident — this is voluntary, and it won't affect your claim if you'd rather not.\"", hardstop:"Never state or imply that declining a recorded statement will result in denial, where state law makes it voluntary.", escalation:"Claimant asks whether they need an attorney present — do not advise either way; document and route uncertainty to Legal." },
+  { title:"Claimant Requests Copy of Own File", artifactType:"tribal", artifactTag:"Before — \"we don't really do that\"", artifact:"No documented access process exists.", meta:"Source: none — confirmed gap",
+    caseType:"Claimant Requests Own Claim File", steps:"1. Verify identity. 2. Determine what portions are releasable under state access rules (some internal materials, like reserve estimates, are typically exempt). 3. Log and route the request; don't deny outright.", script:"\"I can help get you a copy of your file — let me confirm what's included and get that started.\"", hardstop:"A claimant's request for their own file is never simply refused without a documented, policy-based reason.", escalation:"Request comes through an attorney or is contested — route to Legal for the release determination." },
+  { title:"Total Loss Valuation Dispute", artifactType:"tribal", artifactTag:"Before — tribal knowledge", artifact:"\"if they push back on the payout just tell them that's what the system says\"", meta:"Source: informal, undocumented",
+    caseType:"Total Loss Valuation Disputed by Claimant", steps:"1. Provide the specific basis for the valuation (comparable listings, condition adjustments). 2. Explain the claimant's right to submit their own comparables. 3. Log the dispute and route for supervisor review if unresolved.", script:"\"I can walk you through exactly how we arrived at this number, and you're welcome to submit comparable vehicles too.\"", hardstop:"Never tell a claimant a valuation is non-negotiable without offering the documented basis and dispute path.", escalation:"Claimant submits their own comparables — mandatory re-review, not automatic denial." },
+  { title:"Claim Involves a Minor Claimant", artifactType:"tribal", artifactTag:"Before — no written guidance", artifact:"Adjusters report being unsure who can legally authorize settlement.", meta:"Source: none — confirmed gap",
+    caseType:"Claim Involving a Minor as Claimant", steps:"1. Confirm the parent/guardian's legal authority to act on the minor's behalf. 2. Flag the file — many states require court approval for minor settlements. 3. Route to Legal before any settlement offer is finalized.", script:"", hardstop:"No settlement is finalized with a minor claimant without confirming the state's required approval process.", escalation:"Any settlement offer involving a minor — mandatory Legal review before communication to the family, no exceptions." },
+  { title:"Post-Settlement Reopening Request", artifactType:"pdf", artifactTag:"Before — outdated PDF, overstated", artifact:"\"...settled claims are final...\" (no exceptions listed, though exceptions do exist)", meta:"Source: \"Claims_Handling_Guide.pdf\"",
+    caseType:"Request to Reopen a Settled Claim", steps:"1. Determine the basis for reopening (new evidence, fraud, mutual mistake). 2. Do not state settlements are automatically unreopenable. 3. Route to Supervisor/Legal for a real determination.", script:"\"I can't reopen this myself, but I'm logging your request and getting it in front of the right person to review.\"", hardstop:"Never tell a claimant a settled claim \"can never\" be reopened — the honest answer is that it requires review.", escalation:"Claimant alleges fraud or material misrepresentation by the company — immediate Legal escalation." }
+]}
+];
+
+function esc(s){ return s || ""; }
+
+function renderSectors(){
+  const root = document.getElementById('sector-groups');
+  root.innerHTML = SECTORS.map(sec => `
+    <div class="sector-group" id="${sec.id}">
+      <div class="sector-group-header">
+        <div class="sector-group-title">${sec.name}</div>
+        <div class="sector-group-count">${sec.tag} &middot; ${sec.situations.length} situations</div>
+      </div>
+      ${sec.situations.map((s,i) => `
+        <div class="pair-block">
+          <div class="pair-block-label">
+            <span class="pair-block-num">${String(i+1).padStart(2,'0')}</span>
+            <span class="pair-block-title">${s.title}</span>
+          </div>
+          <div class="pair-cols">
+            <div class="before-card">
+              <div class="before-tag">${esc(s.artifactTag)}</div>
+              <div class="before-artifact ${s.artifactType}">${esc(s.artifact)}</div>
+              <div class="before-meta">${esc(s.meta)}</div>
+            </div>
+            <div class="after-card">
+              <div class="after-tag">After — Everyline&#8480; Console</div>
+              <div class="after-op"><div class="after-op-label">Case Type Identification</div><div class="after-op-value">${esc(s.caseType)}</div></div>
+              <div class="after-op"><div class="after-op-label">Step Sequence</div><div class="after-op-value">${esc(s.steps)}</div></div>
+              ${s.script ? `<div class="after-op"><div class="after-op-label">Agent Script</div><div class="after-op-value">${esc(s.script)}</div></div>` : ''}
+              <div class="after-op hardstop"><div class="after-op-label">Hard Stop</div><div class="after-op-value">${esc(s.hardstop)}</div></div>
+              <div class="after-op escalation"><div class="after-op-label">Escalation Trigger</div><div class="after-op-value">${esc(s.escalation)}</div></div>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+renderSectors();
+</script>
 
 </body>
 </html>
