@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Everyline&#8480; — Illustrative Demonstration | Rudolph CX</title>
+<meta name="description" content="A fictional company, run through the real Rudolph CX consolidation method. Illustrative, not a real client — see how any frontline team's scattered job aids become a built guide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0f0e0c; --ink2: #2a2620; --ink3: #4a453e; --dim: #8a8278; --muted: #b5afa6;
+  --cream: #f7f4ee; --cream2: #ede9e0; --cream3: #e2ddd3;
+  --red: #b83224; --red2: #d94030; --gold: #c49a3c;
+  --green: #2a6e4a;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', system-ui, sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--cream); color: var(--ink); overflow-x: hidden; line-height: 1.6; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+
+#rcx-exit-link { position: fixed; top: 16px; left: 16px; z-index: 999; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink); background: rgba(247,244,238,0.92); backdrop-filter: blur(6px); padding: 8px 14px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.08); text-decoration: none; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: transform 0.15s; }
+#rcx-exit-link:hover { transform: translateY(-1px); }
+#rcx-exit-link span { color: var(--red); }
+@media (max-width: 500px) { #rcx-exit-link { top: 10px; left: 10px; font-size: 11px; padding: 7px 12px; } }
+
+.illustrative-banner { background: var(--ink); color: var(--gold); font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-align: center; padding: 12px 60px 12px 60px; margin-top: 0; border-bottom: 2px solid var(--gold); }
+.illustrative-banner strong { color: #fff; text-transform: uppercase; letter-spacing: 0.08em; }
+.illustrative-banner .sub { display: block; color: var(--muted); font-size: 10.5px; margin-top: 4px; font-weight: 300; letter-spacing: 0.02em; }
+
+.section { padding: 90px 60px; position: relative; }
+.section-inner { max-width: 1180px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+
+.hero { padding: 120px 60px 80px; text-align: center; }
+.hero-inner { max-width: 820px; margin: 0 auto; }
+.hero-title { font-family: var(--serif); font-size: clamp(38px,5vw,62px); font-weight: 500; line-height: 1.08; letter-spacing: -0.025em; margin-bottom: 26px; }
+.hero-title em { font-style: italic; color: var(--red); }
+.hero-sub { font-size: 17px; color: var(--ink3); line-height: 1.75; max-width: 620px; margin: 0 auto 20px; font-weight: 300; }
+.hero-tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+.hero-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; background: var(--cream2); border: 1px solid var(--cream3); padding: 7px 14px; border-radius: 20px; color: var(--ink3); }
+
+.meet-section { background: #fff; }
+.meet-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
+.meet-title { font-family: var(--serif); font-size: clamp(30px,3.4vw,42px); font-weight: 500; margin-bottom: 20px; letter-spacing: -0.02em; }
+.meet-title em { font-style: italic; color: var(--red); }
+.meet-body p { color: var(--ink3); font-size: 15.5px; line-height: 1.8; margin-bottom: 16px; font-weight: 300; }
+.meet-fine { font-family: var(--mono); font-size: 11px; color: var(--dim); border-top: 1px solid var(--cream3); padding-top: 16px; margin-top: 16px; line-height: 1.7; }
+.meet-card { background: var(--cream); border: 1px solid var(--cream3); padding: 30px; border-radius: 4px; }
+.meet-card-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 16px; }
+.meet-div-row { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--cream3); }
+.meet-div-row:last-child { border-bottom: none; }
+.meet-div-name { font-size: 14px; font-weight: 500; }
+.meet-div-sector { font-family: var(--mono); font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.04em; }
+@media (max-width: 900px) { .meet-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+.pair-section { padding: 90px 60px; }
+.pair-header { text-align: center; max-width: 720px; margin: 0 auto 64px; }
+.pair-header h2 { font-family: var(--serif); font-size: clamp(30px,3.4vw,42px); font-weight: 500; margin-bottom: 16px; letter-spacing: -0.02em; }
+.pair-header h2 em { font-style: italic; color: var(--red); }
+.pair-header p { color: var(--ink3); font-size: 15px; font-weight: 300; line-height: 1.7; }
+
+.pair-block { margin-bottom: 70px; }
+.pair-block:last-child { margin-bottom: 0; }
+.pair-block-label { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.pair-block-num { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.pair-block-title { font-family: var(--serif); font-size: 22px; font-weight: 600; }
+.pair-block-sector { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; background: var(--gold); color: var(--ink); padding: 4px 10px; border-radius: 3px; }
+
+.pair-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 900px) { .pair-cols { grid-template-columns: 1fr; } }
+
+.before-card { background: #fff; border: 1px solid var(--cream3); border-left: 4px solid var(--dim); border-radius: 4px; padding: 24px; }
+.before-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.before-artifact { background: var(--cream2); border: 1px dashed var(--cream3); border-radius: 4px; padding: 16px; font-size: 13px; color: var(--ink2); line-height: 1.6; font-family: var(--sans); position: relative; }
+.before-artifact.sticky { background: #fdf3c7; border: 1px solid #e6d68a; transform: rotate(-0.6deg); font-family: 'Comic Sans MS', var(--sans); }
+.before-artifact.pdf { background: #f3f2ee; border: 1px solid var(--cream3); font-family: var(--mono); font-size: 11.5px; }
+.before-artifact.chat { background: #eef4f0; border: 1px solid #cfe0d5; font-family: var(--sans); }
+.before-artifact.tribal { background: var(--cream2); border: 1px solid var(--cream3); font-style: italic; color: var(--ink3); }
+.before-meta { font-family: var(--mono); font-size: 10px; color: var(--dim); margin-top: 12px; }
+
+.after-card { background: var(--ink); color: var(--cream); border-radius: 4px; padding: 24px; }
+.after-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.after-op { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.after-op:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.after-op-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+.after-op-value { font-size: 13.5px; line-height: 1.6; color: var(--cream); }
+.after-op.hardstop .after-op-label { color: var(--red2); }
+.after-op.hardstop .after-op-value { color: #f0d0cc; }
+.after-op.escalation .after-op-label { color: var(--gold); }
+
+.routing-section { background: #fff; text-align: center; }
+.routing-inner { max-width: 900px; margin: 0 auto; }
+.routing-title { font-family: var(--serif); font-size: clamp(28px,3.2vw,38px); font-weight: 500; margin-bottom: 14px; letter-spacing: -0.02em; }
+.routing-title em { font-style: italic; color: var(--red); }
+.routing-sub { color: var(--ink3); font-size: 15px; margin-bottom: 44px; font-weight: 300; }
+.routing-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--cream3); border: 1px solid var(--cream3); }
+.routing-item { background: #fff; padding: 22px 16px; text-decoration: none; display: flex; flex-direction: column; gap: 6px; transition: background 0.15s; }
+.routing-item:hover { background: var(--cream); }
+.routing-item-name { font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--ink); }
+.routing-item-name span { color: var(--red); }
+.routing-item-desc { font-family: var(--sans); font-size: 11px; color: var(--dim); line-height: 1.5; }
+@media (max-width: 900px) { .routing-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 560px) { .routing-grid { grid-template-columns: 1fr; } }
+
+.cta-row { margin-top: 48px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-primary, .btn-outline { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 14px 32px; border: none; text-decoration: none; display: inline-block; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: var(--ink); color: var(--cream); }
+.btn-primary:hover { background: var(--red); }
+.btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+.btn-outline:hover { background: var(--ink); color: var(--cream); }
+
+footer.demo-footer { padding: 40px 60px; text-align: center; font-family: var(--mono); font-size: 10px; color: var(--dim); border-top: 1px solid var(--cream3); }
+</style>
+</head>
+<body>
+
+<a href="demos.html" id="rcx-exit-link" aria-label="Back to Rudolph CX">&larr; Rudolph<span>CX</span></a>
+
+<div class="illustrative-banner">
+  <strong>Illustrative demonstration</strong> — Thornfield Holdings is a fictional company, invented for this page.
+  <span class="sub">This shows the Rudolph CX consolidation method applied to realistic, everyday frontline chaos — not a real client, not a real build. Your actual guide is built from your own material, your own situations, your own team.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" style="justify-content:center;">Everyline&#8480;</div>
+    <h1 class="hero-title">The guide for <em>any</em> frontline room.</h1>
+    <p class="hero-sub">Every Rudolph CX guide is built for one sector. Everyline&#8480; is built for the method itself — proof that the same consolidation discipline holds up whether the room is a call center, a store floor, a hotel desk, or a claims queue.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Contact Centers</span>
+      <span class="hero-tag">Retail</span>
+      <span class="hero-tag">Hospitality</span>
+      <span class="hero-tag">Insurance Claims</span>
+    </div>
+  </div>
+</section>
+
+<section class="section meet-section">
+  <div class="section-inner meet-grid">
+    <div>
+      <div class="eyebrow">Meet the fictional company</div>
+      <h2 class="meet-title">Thornfield <em>Holdings</em></h2>
+      <div class="meet-body">
+        <p>Thornfield Holdings is an invented regional company with four frontline divisions — the kind of multi-line operator that exists in real life but doesn't exist under this name. We built it to show one thing clearly: the same scattered-job-aid problem shows up everywhere, and the same method fixes it everywhere.</p>
+        <p>Below, each division's real-shaped mess — a sticky note, an outdated PDF, a group-chat screenshot, a "just ask someone who's been here longer" habit — gets run through the same consolidation Rudolph CX used to build every guide in this portfolio: <strong>Case Type Identification, Step Sequence, Agent Script, Hard Stops, Escalation Triggers.</strong></p>
+      </div>
+      <div class="meet-fine">Thornfield Holdings, its divisions, and every situation shown below are fictional and illustrative only. No real company, employee, or incident is depicted.</div>
+    </div>
+    <div class="meet-card">
+      <div class="meet-card-label">Four Divisions</div>
+      <div class="meet-div-row"><span class="meet-div-name">Thornfield Direct</span><span class="meet-div-sector">Contact Center</span></div>
+      <div class="meet-div-row"><span class="meet-div-name">Thornfield Retail</span><span class="meet-div-sector">Retail</span></div>
+      <div class="meet-div-row"><span class="meet-div-name">The Thornfield Inn</span><span class="meet-div-sector">Hospitality</span></div>
+      <div class="meet-div-row"><span class="meet-div-name">Thornfield Claims</span><span class="meet-div-sector">Insurance Claims</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="pair-section">
+  <div class="section-inner">
+    <div class="pair-header">
+      <div class="eyebrow" style="justify-content:center;">The consolidation, side by side</div>
+      <h2>From scattered <em>to built.</em></h2>
+      <p>Four situations, four divisions, one method. Left: what the team actually has today. Right: the same situation after Rudolph CX consolidation.</p>
+    </div>
+
+    <!-- 1. CONTACT CENTER -->
+    <div class="pair-block">
+      <div class="pair-block-label">
+        <span class="pair-block-num">01</span>
+        <span class="pair-block-title">Thornfield Direct</span>
+        <span class="pair-block-sector">Contact Center</span>
+      </div>
+      <div class="pair-cols">
+        <div class="before-card">
+          <div class="before-tag">&#9993; Before — sticky note on the monitor</div>
+          <div class="before-artifact sticky">"if someone wants to CANCEL — do NOT just cancel!! read them the retention thing first, it's in the folder somewhere. ask Denise if u can't find it"</div>
+          <div class="before-meta">Source: handwritten, taped to Agent #14's monitor, undated</div>
+        </div>
+        <div class="after-card">
+          <div class="after-tag">&#10003; After — Everyline&#8480; Console</div>
+          <div class="after-op"><div class="after-op-label">Case Type Identification</div><div class="after-op-value">Cancellation Request — Retention Offer Required</div></div>
+          <div class="after-op"><div class="after-op-label">Step Sequence</div><div class="after-op-value">1. Confirm the request. 2. Deliver the retention disclosure verbatim. 3. Log the customer's response. 4. Process cancellation only after disclosure is complete.</div></div>
+          <div class="after-op"><div class="after-op-label">Agent Script</div><div class="after-op-value">"Before I process that, I'm required to walk you through your account options first — it'll take one minute."</div></div>
+          <div class="after-op hardstop"><div class="after-op-label">Hard Stop</div><div class="after-op-value">Do not cancel before the retention disclosure is delivered and logged.</div></div>
+          <div class="after-op escalation"><div class="after-op-label">Escalation Trigger</div><div class="after-op-value">Customer disputes being charged after a stated cancellation date — route to Billing Resolution.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. RETAIL -->
+    <div class="pair-block">
+      <div class="pair-block-label">
+        <span class="pair-block-num">02</span>
+        <span class="pair-block-title">Thornfield Retail</span>
+        <span class="pair-block-sector">Retail</span>
+      </div>
+      <div class="pair-cols">
+        <div class="before-card">
+          <div class="before-tag">&#128196; Before — outdated PDF, page 14 of 40</div>
+          <div class="before-artifact pdf">"...associates should exercise discretion regarding returns without proof of purchase, subject to store manager approval when applicable, per policy dated [illegible]..."</div>
+          <div class="before-meta">Source: "Store_Handbook_FINAL_v3_USE THIS ONE.pdf", last edited 4 years ago</div>
+        </div>
+        <div class="after-card">
+          <div class="after-tag">&#10003; After — Everyline&#8480; Console</div>
+          <div class="after-op"><div class="after-op-label">Case Type Identification</div><div class="after-op-value">Return — No Proof of Purchase</div></div>
+          <div class="after-op"><div class="after-op-label">Step Sequence</div><div class="after-op-value">1. Check for a receipt or digital purchase record. 2. If none exists, offer store-credit-only exchange per posted policy. 3. Document the transaction, including any manager override.</div></div>
+          <div class="after-op"><div class="after-op-label">Agent Script</div><div class="after-op-value">"Without a receipt, I can offer store credit at today's price — would that work for you?"</div></div>
+          <div class="after-op hardstop"><div class="after-op-label">Hard Stop</div><div class="after-op-value">No cash refund without a verifiable proof of purchase.</div></div>
+          <div class="after-op escalation"><div class="after-op-label">Escalation Trigger</div><div class="after-op-value">Customer requests exception above posted return policy limits — route to Store Manager for override authority.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. HOSPITALITY -->
+    <div class="pair-block">
+      <div class="pair-block-label">
+        <span class="pair-block-num">03</span>
+        <span class="pair-block-title">The Thornfield Inn</span>
+        <span class="pair-block-sector">Hospitality</span>
+      </div>
+      <div class="pair-cols">
+        <div class="before-card">
+          <div class="before-tag">&#128172; Before — front-desk group chat</div>
+          <div class="before-artifact chat">"hey does anyone know the actual rule for service animals at check in?? guest is asking and I don't wanna say the wrong thing 😅"<br><br>"lol just don't ask for papers, I think that's the main thing"</div>
+          <div class="before-meta">Source: team messaging app, front-desk channel</div>
+        </div>
+        <div class="after-card">
+          <div class="after-tag">&#10003; After — Everyline&#8480; Console</div>
+          <div class="after-op"><div class="after-op-label">Case Type Identification</div><div class="after-op-value">Guest Service Animal Accommodation — Check-In</div></div>
+          <div class="after-op"><div class="after-op-label">Step Sequence</div><div class="after-op-value">1. Ask only the two permitted questions. 2. Do not request documentation or a demonstration. 3. Confirm the room assignment accommodates the animal. 4. Log the accommodation, not the guest's disability.</div></div>
+          <div class="after-op"><div class="after-op-label">Agent Script</div><div class="after-op-value">"Is that a service animal required because of a disability, and what work or task is it trained to perform?"</div></div>
+          <div class="after-op hardstop"><div class="after-op-label">Hard Stop</div><div class="after-op-value">Do not ask for documentation, certification, or a demonstration of the animal's training (ADA Title III).</div></div>
+          <div class="after-op escalation"><div class="after-op-label">Escalation Trigger</div><div class="after-op-value">Guest is denied accommodation by any staff member — route immediately to Property Manager, same shift.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. CLAIMS -->
+    <div class="pair-block">
+      <div class="pair-block-label">
+        <span class="pair-block-num">04</span>
+        <span class="pair-block-title">Thornfield Claims</span>
+        <span class="pair-block-sector">Insurance Claims</span>
+      </div>
+      <div class="pair-cols">
+        <div class="before-card">
+          <div class="before-tag">&#128172; Before — "just ask someone who's been here"</div>
+          <div class="before-artifact tribal">New adjusters are told: "if a claimant pushes back on a denial, just document it and let it sit — someone will get back to it eventually." No one has ever mentioned a required response window.</div>
+          <div class="before-meta">Source: informal onboarding, no written record</div>
+        </div>
+        <div class="after-card">
+          <div class="after-tag">&#10003; After — Everyline&#8480; Console</div>
+          <div class="after-op"><div class="after-op-label">Case Type Identification</div><div class="after-op-value">Claim Denial Disputed by Claimant</div></div>
+          <div class="after-op"><div class="after-op-label">Step Sequence</div><div class="after-op-value">1. Log the dispute with date and time received. 2. Acknowledge receipt to the claimant in writing within the required window. 3. Route the file for review. 4. Track the response deadline — do not let it lapse.</div></div>
+          <div class="after-op"><div class="after-op-label">Agent Script</div><div class="after-op-value">"I've logged your dispute today. You'll receive a written response within the timeframe required by state regulation."</div></div>
+          <div class="after-op hardstop"><div class="after-op-label">Hard Stop</div><div class="after-op-value">A disputed claim cannot sit without a logged acknowledgment date — required response windows are regulatory, not discretionary (state Unfair Claims Settlement Practices Act / NAIC Model #900).</div></div>
+          <div class="after-op escalation"><div class="after-op-label">Escalation Trigger</div><div class="after-op-value">Response deadline is within 48 hours and file review is incomplete — escalate to Claims Supervisor immediately.</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section routing-section">
+  <div class="routing-inner">
+    <div class="eyebrow" style="justify-content:center;">Find your fit</div>
+    <h2 class="routing-title">Everyline&#8480; is the <em>front door.</em></h2>
+    <p class="routing-sub">If your team looks more like one of these, there's a guide already built for exactly that sector.</p>
+    <div class="routing-grid">
+      <a href="aidline.html" class="routing-item"><span class="routing-item-name">Aid<span>line</span>&#8480;</span><span class="routing-item-desc">Federal benefits contact center (FEHB/PSHB)</span></a>
+      <a href="caseline.html" class="routing-item"><span class="routing-item-name">Case<span>line</span>&#8480;</span><span class="routing-item-desc">Child welfare &amp; elder protective services</span></a>
+      <a href="chartline.html" class="routing-item"><span class="routing-item-name">Chart<span>line</span>&#8480;</span><span class="routing-item-desc">HIPAA-governed medical records desks</span></a>
+      <a href="lendline.html" class="routing-item"><span class="routing-item-name">Lend<span>line</span>&#8480;</span><span class="routing-item-desc">Lending &amp; loan servicing compliance</span></a>
+      <a href="workline.html" class="routing-item"><span class="routing-item-name">Work<span>line</span>&#8480;</span><span class="routing-item-desc">Workforce &amp; employment services</span></a>
+      <a href="reentryline.html" class="routing-item"><span class="routing-item-name">Reentry<span>line</span>&#8480;</span><span class="routing-item-desc">Reentry &amp; reintegration navigation</span></a>
+      <a href="supervisorline.html" class="routing-item"><span class="routing-item-name">Supervisor<span>line</span>&#8480;</span><span class="routing-item-desc">Frontline supervisor employment-law duties</span></a>
+      <a href="peopleline.html" class="routing-item"><span class="routing-item-name">People<span>line</span>&#8480;</span><span class="routing-item-desc">HR case management &amp; investigations</span></a>
+    </div>
+    <div class="cta-row">
+      <a href="book.html" class="btn-primary"><span>Book a discovery call</span></a>
+      <a href="demos.html" class="btn-outline">See the other demos</a>
+    </div>
+  </div>
+</section>
+
+<footer class="demo-footer">
+  Everyline&#8480; is a service mark of Rudolph CX LLC. Thornfield Holdings and all situations on this page are fictional and illustrative only.
+</footer>
+
+</body>
+</html>
