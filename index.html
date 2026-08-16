@@ -154,6 +154,19 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
 .showcase-section .section-eyebrow { color: var(--gold); }
 .showcase-section .section-eyebrow::before { background: var(--gold); }
 .showcase-frame { margin-top: 56px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); min-height: 320px; display: flex; align-items: center; justify-content: center; color: rgba(247,244,238,0.35); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; padding: 40px; }
+.sector-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; margin-top: 32px; }
+.demo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 12px; }
+.before-card, .after-card { border-radius: 8px; padding: 22px; }
+.before-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+.after-card { background: rgba(196,154,60,0.06); border: 1px solid rgba(196,154,60,0.25); }
+.card-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.before-card .card-label { color: rgba(247,244,238,0.4); }
+.after-card .card-label { color: var(--gold); }
+.card-body { color: rgba(247,244,238,0.85); font-size: 13.5px; line-height: 1.6; }
+.op-row { display: flex; gap: 8px; margin-bottom: 8px; font-size: 12.5px; }
+.op-label { color: var(--gold); font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; min-width: 90px; flex-shrink: 0; padding-top: 1px; }
+.op-value { color: rgba(247,244,238,0.85); }
+@media (max-width: 700px) { .demo-pair { grid-template-columns: 1fr; } }
 
 /* ============================================================
    FAQ — accordion. Structural pattern adopted from prototype;
@@ -311,20 +324,19 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
 <!-- HERO -->
 <section class="home-hero">
   <div class="home-hero-inner">
-    <div class="home-badge">Built for the Live Moment &middot; 8 Guides &middot; Every Sector</div>
-    <h1 class="home-title">Built for the moment. <em>Ready before it arrives.</em></h1>
-    <p class="home-sub">Performance support consoles that give frontline workers exactly what they need &mdash; in the exact moment the person in front of them needs it most.</p>
+    <div class="home-badge">Built for the Live Moment &middot; Any Sector &middot; One Method</div>
+    <h1 class="home-title">Any sector. <em>Any room.</em></h1>
+    <p class="home-sub">One method for the live moment a frontline worker needs exactly what to do &mdash; proven across four sectors below, built for regulated industries like yours.</p>
     <div class="sector-pills">
-      <span class="sector-pill">Government Agencies</span>
-      <span class="sector-pill">Call Centers</span>
-      <span class="sector-pill">Lending &amp; Financial</span>
-      <span class="sector-pill">Social Caseworkers</span>
-      <span class="sector-pill">Reentry Services</span>
-      <span class="sector-pill">Healthcare Navigation</span>
+      <span class="sector-pill">Contact Centers</span>
+      <span class="sector-pill">Retail</span>
+      <span class="sector-pill">Hospitality</span>
+      <span class="sector-pill">Insurance Claims</span>
+      <span class="sector-pill">+ 8 Built Guides</span>
     </div>
     <div class="hero-actions" style="justify-content:center;">
       <a href="book.html" class="btn-primary"><span>Book Discovery &mdash; $500</span></a>
-      <a href="guides.html" class="btn-outline">See Our Guides</a>
+      <a href="everyline-demo.html" class="btn-outline">See Everyline&#8480; Live</a>
     </div>
     <div class="trust-bar">
       <span class="trust-item">SAM.gov Active &middot; CAGE Code 21D84</span>
@@ -400,12 +412,44 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
 <!-- PRODUCT SHOWCASE -->
 <section class="showcase-section section">
   <div class="section-inner">
-    <div class="section-eyebrow reveal">See It Work</div>
-    <h2 class="section-title reveal">The real console, not a mockup.</h2>
-    <div class="showcase-frame reveal" style="flex-direction:column;gap:20px;padding:32px;">
-      <img src="aidline-console.png" alt="Real screenshot of the Aidline guide console showing a live situation" style="max-width:100%;height:auto;border-radius:8px;">
-      <p style="font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:rgba(247,244,238,0.4);text-align:center;max-width:600px;">The real Aidline console, mid-call. Every guide works this way &mdash; live during your discovery call, or in the Demo Center.</p>
+    <div class="section-eyebrow reveal">See The Method Work</div>
+    <h2 class="section-title reveal">One real mess. <em>One real fix.</em></h2>
+    <p style="text-align:center;color:rgba(247,244,238,0.6);font-size:15px;max-width:640px;margin:0 auto 40px;font-weight:300;line-height:1.7;" class="reveal">Everyline&#8480; runs a fictional company&mdash;Thornfield Holdings&mdash;through the same consolidation method behind every guide in this portfolio: real scattered job aids, turned into five operations every frontline worker can actually use live.</p>
+
+    <div class="sector-label reveal">Contact Center</div>
+    <div class="demo-pair reveal">
+      <div class="before-card">
+        <div class="card-label">Before &mdash; Forwarded Email Chain, 47 Replies Deep</div>
+        <div class="card-body">"...per Frank's email from before I started here, I think if someone says stop calling we're supposed to note it in the system, but I've also heard some people say you can call back after 31 days? Not sure which is right anymore &mdash; see thread below..."</div>
+      </div>
+      <div class="after-card">
+        <div class="card-label">After &mdash; TCPA Do-Not-Call Request</div>
+        <div class="card-body">
+          <div class="op-row"><span class="op-label">Case Type</span><span class="op-value">Do-Not-Call Request &mdash; Live Call</span></div>
+          <div class="op-row"><span class="op-label">Script</span><span class="op-value">"I've noted your number for our do-not-call list &mdash; you won't receive further marketing calls from us."</span></div>
+          <div class="op-row"><span class="op-label">Hard Stop</span><span class="op-value">No further outbound marketing call, ever &mdash; regardless of any "cool-down" period (TCPA)</span></div>
+        </div>
+      </div>
     </div>
+
+    <div class="sector-label reveal">Retail</div>
+    <div class="demo-pair reveal">
+      <div class="before-card">
+        <div class="card-label">Before &mdash; Outdated PDF, Page 14 of 40</div>
+        <div class="card-body">"...associates should exercise discretion regarding returns without proof of purchase, subject to store manager approval when applicable, per policy dated [illegible]..." &mdash; Store_Handbook_FINAL_v3_USE THIS ONE.pdf, 4 years old</div>
+      </div>
+      <div class="after-card">
+        <div class="card-label">After &mdash; Return, No Proof of Purchase</div>
+        <div class="card-body">
+          <div class="op-row"><span class="op-label">Case Type</span><span class="op-value">Return &mdash; No Proof of Purchase</span></div>
+          <div class="op-row"><span class="op-label">Script</span><span class="op-value">"Without a receipt, I can offer store credit at today's price &mdash; would that work for you?"</span></div>
+          <div class="op-row"><span class="op-label">Hard Stop</span><span class="op-value">No cash refund without a verifiable proof of purchase</span></div>
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align:center;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:rgba(247,244,238,0.4);margin-top:24px;max-width:620px;margin-left:auto;margin-right:auto;" class="reveal">Thornfield Holdings is fictional &mdash; illustrative of the method, not a real client. Shown here: Contact Center and Retail. Hospitality and Insurance Claims work the same way inside Everyline&#8480; &mdash; 40 situations across four sectors in total.</p>
+    <div style="text-align:center;margin-top:32px;" class="reveal"><a href="demos.html" style="color:var(--gold);font-size:13px;text-decoration:underline;">See a real guide console, live &rarr;</a></div>
   </div>
 </section>
 
@@ -413,8 +457,8 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
 <section class="guides-section">
   <div class="section-inner">
     <div class="section-eyebrow reveal">Our Guides</div>
-    <h2 class="section-title reveal">Eight guides. Eight sectors. <em>One standard.</em></h2>
-    <p style="font-size:15px;color:var(--ink3);line-height:1.8;font-weight:300;max-width:640px;" class="reveal">Each guide is custom-built for a specific role and industry. Situation-first design. Built from inside the role.</p>
+    <h2 class="section-title reveal">Eight guides. <em>One method.</em></h2>
+    <p style="font-size:15px;color:var(--ink3);line-height:1.8;font-weight:300;max-width:640px;" class="reveal">Each guide demonstrates the same situation-first method, illustrative of the work &mdash; built from public regulatory research, the same way we'd build yours from your frontline's real material.</p>
     <div class="home-guides-grid">
 <a href="aidline.html" class="home-guide-card reveal">
   <div class="hgc-top">
@@ -525,6 +569,20 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(
   <p class="hgc-desc">Investigations, termination review, accommodation escalation, sensitive conflict, and wage situations — with legal routing gates.</p>
   <div class="hgc-bottom">
     <div class="hgc-sit">28 situations</div>
+    <div class="hgc-explore">Explore &rarr;</div>
+  </div>
+</a>
+<a href="everyline-demo.html" class="home-guide-card reveal">
+  <div class="hgc-top">
+    <div class="hgc-icon" style="background:#4a453e">E</div>
+    <div class="hgc-pill">Live</div>
+  </div>
+  <div class="hgc-tag">Any Sector &middot; Universal Method</div>
+  <div class="hgc-name">Everyline&#8480;</div>
+  <div class="hgc-role">Any Frontline Role &middot; Any Industry</div>
+  <p class="hgc-desc">The universal proof: the same method applied to contact centers, retail, hospitality, and general insurance claims &mdash; illustrating that this works in any room, not just the seven built for specific regulated sectors.</p>
+  <div class="hgc-bottom">
+    <div class="hgc-sit">40 situations</div>
     <div class="hgc-explore">Explore &rarr;</div>
   </div>
 </a>
