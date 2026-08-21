@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="manifest" href="manifest-tendline-demo.json">
+<meta name="theme-color" content="#9c4820">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tendline Console — Rudolph CX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Epilogue:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #2c2416; --paper: #f5f0e8; --rust: #c05a2a; --rust-light: #f5e8de;
+    --rust-border: #e0bda2; --rust-deep: #9c4820; --amber: #c8780a; --amber-light: #fdf6ec;
+    --halt: #b83020; --rule: #e4dac8; --muted: #8a7e6e; --card: #faf7f0; --card-border: #e4dac8;
+    --header-bg: #9c4820; --header-border: #7a3818; --sidebar-bg: #f0e8d8;
+    --t1: #2d7d6e; --t1-bg: #eaf5f2; --t2: #c8780a; --t2-bg: #fdf6ec; --t3: #b83020; --t3-bg: #fdf0ee;
+  }
+  * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Epilogue', sans-serif; background: var(--paper); color: var(--ink); font-size: 14.5px; line-height: 1.55; display: flex; flex-direction: column; min-height: 100vh; }
+
+  header.console-header { background: var(--header-bg); border-bottom: 1px solid var(--header-border); padding: 0.75rem 1.4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; flex-shrink: 0; }
+  .wordmark { font-family: 'Instrument Serif', serif; font-size: 1.4rem; color: #faf3ea; }
+  .wordmark span { color: #f0c8a8; }
+  .ref-notice { font-family: 'DM Mono', monospace; font-size: 0.64rem; color: #f0d8a8; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.15); padding: 0.32rem 0.65rem; border-radius: 3px; }
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  .gate-badge { font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 700; padding: 0.4rem 0.7rem; border-radius: 3px; display: flex; align-items: center; gap: 6px; }
+  .gate-badge.locked { background: rgba(184,48,32,0.18); color: #ffb3a8; }
+  .gate-badge.verified { background: rgba(45,125,110,0.25); color: #a8e0d0; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot.locked { background: #e05040; } .dot.verified { background: #4dd0a8; }
+  button.reset-btn { font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 4px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; cursor: pointer; }
+
+  .workspace { flex: 1; display: flex; overflow: hidden; }
+  aside.sidebar { width: 305px; flex-shrink: 0; background: var(--sidebar-bg); border-right: 1px solid var(--card-border); display: flex; flex-direction: column; overflow-y: auto; }
+  .sb-search { padding: 12px; border-bottom: 1px solid var(--card-border); }
+  .sb-search input { width: 100%; background: #fff; border: 1px solid var(--card-border); border-radius: 5px; padding: 7px 10px; color: var(--ink); font-size: 12px; outline: none; }
+  .sb-search input:focus { border-color: var(--rust); }
+  .sb-section-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); padding: 12px 12px 6px; text-transform: uppercase; }
+
+  .sit-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 13px 14px; cursor: pointer; transition: transform .12s, box-shadow .12s; }
+  .sit-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+  .sit-card-tier { font-family: 'DM Mono', monospace; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.08em; padding: 2px 6px; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
+  .sit-card-title { font-size: 0.83rem; font-weight: 600; margin-bottom: 3px; line-height: 1.3; }
+  .sit-card-desc { font-size: 0.7rem; color: var(--muted); line-height: 1.5; }
+
+  .mrq-card { margin: 4px 10px 10px; padding: 10px; border-radius: 6px; background: rgba(184,48,32,0.06); border: 1px solid rgba(184,48,32,0.3); }
+  .mrq-header-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .mrq-toggle { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; color: var(--halt); background: none; border: none; cursor: pointer; padding: 2px 6px; }
+  .mrq-body.collapsed { display: none; }
+  .mrq-title { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; color: var(--halt); text-transform: uppercase; margin-bottom: 3px; }
+  .mrq-sub { font-size: 10px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
+  .mrq-row { font-size: 10.5px; padding: 6px 0; border-bottom: 1px dashed rgba(184,48,32,0.2); }
+  .mrq-row:last-child { border-bottom: none; }
+  .mrq-q { color: var(--ink); margin-bottom: 3px; }
+  .mrq-cite { font-family: 'DM Mono', monospace; font-size: 8.5px; color: var(--muted); margin-bottom: 4px; }
+  .mrq-radios { display: flex; gap: 12px; }
+  .mrq-radios label { font-size: 10px; display: flex; align-items: center; gap: 3px; cursor: pointer; }
+
+  .mission-rules-card { margin: 4px 10px 10px; padding: 10px; border-radius: 6px; background: var(--amber-light); border: 1px solid #e0c888; }
+  .mission-rules-title { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; color: var(--amber); text-transform: uppercase; margin-bottom: 3px; }
+  .mission-rules-sub { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+  .mr-row { font-size: 10.5px; padding: 3px 0; color: var(--ink); line-height: 1.4; }
+
+  main.main-panel { flex: 1; overflow-y: auto; padding: 20px 24px; }
+  .panel-inner { max-width: 800px; margin: 0 auto; }
+
+  .home-hdr { margin-bottom: 22px; }
+  .home-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; color: var(--rust); text-transform: uppercase; margin-bottom: 6px; }
+  .home-title { font-family: 'Instrument Serif', serif; font-size: 1.9rem; font-weight: 400; margin-bottom: 6px; }
+  .home-sub { font-size: 0.85rem; color: var(--muted); max-width: 620px; line-height: 1.6; }
+  .tier-divider { display: flex; align-items: center; gap: 10px; margin: 22px 0 12px; }
+  .tier-divider .line { height: 1px; flex: 1; background: var(--rule); }
+  .tier-divider .label { font-family: 'DM Mono', monospace; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; white-space: nowrap; }
+  .sit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+
+  .reg-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .reg-table th { font-family: 'DM Mono', monospace; font-size: 9px; text-transform: uppercase; color: var(--muted); text-align: left; padding: 6px 8px; border-bottom: 2px solid var(--rule); }
+  .reg-table td { font-size: 11.5px; padding: 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+
+  aside.right-sidebar { width: 250px; flex-shrink: 0; background: var(--sidebar-bg); border-left: 1px solid var(--card-border); padding: 14px; overflow-y: auto; }
+  .tb-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--amber); text-transform: uppercase; margin-bottom: 10px; }
+  .tb-row { background: var(--card); border: 1px solid var(--card-border); border-radius: 6px; padding: 9px 10px; margin-bottom: 7px; }
+  .tb-name { font-size: 11px; font-weight: 700; }
+  .tb-sub { font-size: 9px; color: var(--muted); margin-top: 1px; }
+
+  .script-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .script-card-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; color: var(--rust-deep); margin-bottom: 4px; }
+  .script-card-text { font-size: 0.84rem; line-height: 1.55; font-style: italic; }
+  .script-copy-btn { font-family: 'DM Mono', monospace; font-size: 0.6rem; font-weight: 600; padding: 4px 9px; border-radius: 4px; border: 1px solid var(--card-border); background: none; color: var(--muted); cursor: pointer; flex-shrink: 0; }
+  .synth-flag { background: #fff3d0; border: 1px solid #e0c888; border-radius: 5px; padding: 9px 12px; font-size: 0.76rem; color: #7a4810; margin-bottom: 14px; line-height: 1.5; }
+
+  #toast-zone { position: fixed; bottom: 18px; right: 18px; z-index: 999; }
+  .toast { background: var(--rust-deep); border: 1px solid var(--rust); border-radius: 6px; padding: 9px 14px; font-size: 11px; color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+  .sit-hdr { margin-bottom: 14px; }
+  .sit-hdr-title { font-family: 'Instrument Serif', serif; font-size: 24px; font-weight: 400; }
+  .sit-hdr-code { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .view-tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--rule); }
+  .view-tab { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; padding: 9px 16px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; }
+  .view-tab.active { color: var(--rust-deep); border-bottom-color: var(--rust); }
+  .esc-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--halt); margin-left: 4px; }
+
+  .warn-banner { background: #fdf0ee; border: 1px solid #e0b0a8; border-radius: 6px; padding: 11px 14px; margin-bottom: 14px; font-size: 12.5px; color: #7a2018; }
+  .warn-banner strong { display: block; font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--halt); margin-bottom: 3px; }
+
+  .setup-block { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .setup-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+  .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .setup-field label { font-size: 9.5px; color: var(--muted); display: block; margin-bottom: 3px; }
+  .setup-field-value { background: var(--sidebar-bg); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px 9px; font-size: 11.5px; color: var(--ink); }
+
+  .steps-block { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .steps-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .steps-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+  .step-row { display: flex; gap: 12px; padding: 10px; border-radius: 5px; margin-bottom: 6px; background: var(--sidebar-bg); border: 1px solid var(--card-border); }
+  .step-num { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; color: var(--rust-deep); background: var(--rust-light); border-radius: 3px; padding: 1px 5px; margin-right: 6px; }
+  .step-text { font-size: 12.5px; flex: 1; line-height: 1.5; }
+
+  .esc-panel { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 16px; }
+  .esc-route-box { background: var(--rust-light); border: 1px solid var(--rust-border); border-radius: 6px; padding: 12px 14px; margin-bottom: 12px; }
+  .esc-route-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; color: var(--rust-deep); text-transform: uppercase; margin-bottom: 4px; }
+  .esc-route-dest { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+  .esc-route-contact { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .esc-detail { font-size: 0.9rem; line-height: 1.65; }
+
+  .doc-block { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .doc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .doc-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+  .doc-sub { font-size: 10.5px; color: var(--muted); margin-bottom: 10px; }
+  .doc-copy { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; background: var(--rust); border: none; color: #fff; padding: 5px 11px; border-radius: 4px; cursor: pointer; }
+  .note-output, .email-preview { background: var(--sidebar-bg); border: 1px solid var(--card-border); border-radius: 5px; padding: 12px; font-family: 'DM Mono', monospace; font-size: 10.5px; line-height: 1.65; white-space: pre-wrap; color: var(--ink); min-height: 140px; }
+  .email-preview { font-family: 'Epilogue', sans-serif; font-size: 11.5px; }
+
+  ::-webkit-scrollbar { width: 7px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<header class="console-header">
+  <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <div class="wordmark" style="cursor:pointer;" onclick="goHome()">Tend<span>line</span>&#8480;</div>
+    <span class="ref-notice">Reference tool only — not legal advice. Verify current regulatory guidance and your agency's own policy.</span>
+  </div>
+  <div class="header-right">
+    <div class="gate-badge locked" id="gate-badge"><span class="dot locked" id="gate-dot"></span><span id="gate-badge-text">CHECK: NOT RUN</span></div>
+    <button class="reset-btn" onclick="openReset()">Reset for Next Visit</button>
+  </div>
+</header>
+
+<div class="workspace">
+  <aside class="sidebar">
+    <div class="sb-search"><input type="text" id="search-input" placeholder="Search situations..." oninput="renderMain()"></div>
+
+    <div class="mrq-card" style="margin-top:10px;">
+      <div class="mrq-header-row" onclick="toggleMrqCollapse()">
+        <div class="mrq-title" style="margin-bottom:0;">&#9888; Standing Trigger Check</div>
+        <button type="button" class="mrq-toggle" id="mrq-toggle-btn">HIDE</button>
+      </div>
+      <div class="mrq-body" id="mrq-body">
+        <div class="mrq-sub">Always reachable, no scrolling — selecting YES takes you straight into that situation's protocol. Check any time during a visit, not just at the start.</div>
+        <div id="mrq-list"></div>
+      </div>
+    </div>
+
+    <div class="sb-section-label">Every Visit, Always</div>
+    <div class="mission-rules-card">
+      <div class="mission-rules-title">Mission Rules</div>
+      <div class="mission-rules-sub">Standing rules — reference only, not this situation's steps</div>
+      <div id="mission-rules-list"></div>
+    </div>
+
+    <div class="sb-section-label">Tools</div>
+    <div style="padding: 0 10px 14px;">
+      <button type="button" style="width:100%; text-align:left; cursor:pointer; border:1px solid var(--card-border); background:var(--card); border-radius:6px; padding:9px 10px; margin-bottom:7px; font-size:11px; font-weight:600;" onclick="switchView('regs')">&#128220; Regulatory Reference Table</button>
+      <button type="button" style="width:100%; text-align:left; cursor:pointer; border:1px solid var(--card-border); background:var(--card); border-radius:6px; padding:9px 10px; font-size:11px; font-weight:600;" onclick="switchView('scripts')">&#128172; Scripts Panel</button>
+    </div>
+  </aside>
+
+  <main class="main-panel"><div class="panel-inner" id="panel-inner"></div></main>
+
+  <aside class="right-sidebar">
+    <div class="tb-title">Transfer Board</div>
+    <div id="transfer-board-list"></div>
+  </aside>
+</div>
+<div id="toast-zone"></div>
+
+<script>
+/* ============================================================
+   Tendline — real console build, Session 215.
+   Ten situations (T-01 through T-05, T-07 through T-11) drafted
+   this session, all sourced to real citations, built in the
+   Caseline-style schema (id/tier/citation/doNot/escalation/
+   escRoute/steps) — the better structural fit given Tendline's
+   content is dominated by hard "must not" boundaries and mandated
+   duties, not multi-branch reference lookups.
+
+   T-01 through T-05 are locked in DECISIONS.md §19. T-07 through
+   T-11 are drafted and held in this file and in Session 215
+   conversation, not yet locked to DECISIONS.md.
+
+   Standing Trigger Check holds T-01, T-05, T-07, and T-10 — the
+   four situations that are genuinely non-discretionary duties a
+   worker needs reachable mid-visit. T-02/T-03/T-04/T-08/T-09/T-11
+   are request- or circumstance-driven situations a worker
+   searches for, not self-triggers.
+
+   T-06 (hospice) intentionally excluded — locked as its own
+   separate line per DECISIONS.md §18, held separately as
+   groundwork for a future hospice-specific guide.
+
+   A sixth research candidate, suicidal ideation risk, was
+   researched and found to lack a distinct mandatory-duty
+   citation of its own; it substantially overlaps T-05's existing
+   emergency-response logic and was not drafted as a separate
+   situation.
+
+   Fictional agency: Fernhollow In-Home Services (Wake
+   County), illustrative only, per Rudolph CX's standard
+   fictional-company demo pairing convention.
+
+   Not yet done: live click-through verification, Scripts panel
+   content is newly authored (flagged below, not extracted from
+   any audited source), founder review of T-05's and T-11's Tier
+   II assignments specifically.
+   ============================================================ */
+
+const MANDATORY_QUESTIONS = [
+  { id: "mq1", text: "Did you observe signs of possible abuse or neglect of the client?", citation: "N.C. Gen. Stat. § 108A-102", route: "T01" },
+  { id: "mq2", text: "Is the client showing signs of a medical emergency — unresponsive, difficulty breathing, sudden slurred speech, chest pain?", citation: "42 CFR § 484.80(g)(4)", route: "T05" },
+  { id: "mq3", text: "Did you observe signs of possible financial exploitation of the client?", citation: "N.C. Gen. Stat. § 108A-102 / § 108A-101(j)", route: "T07" },
+  { id: "mq4", text: "Have you found the client unresponsive with no signs of life, or deceased?", citation: "N.C. Gen. Stat. § 130A-383", route: "T10" }
+];
+
+const MISSION_RULES = [
+  "Confirm which care setting you're in before assuming any authorization carries from another setting.",
+  "Suspected abuse or neglect: your duty to report to county DSS applies to you personally, regardless of role.",
+  "Never administer medication without confirming your Medication Aide Registry status for this specific setting.",
+  "A client's right to refuse care belongs to the client, not a family member, unless a court has adjudged incapacity.",
+  "Life-threatening signs: call 911 before contacting your agency, always, no exceptions."
+];
+
+const TRANSFER_BOARD = [
+  { name: "County DSS (Adult Protective Services)", sub: "N.C. Gen. Stat. § 108A-102 — suspected neglect, abuse, or exploitation reports" },
+  { name: "Supervising RN / Agency", sub: "Scope-of-practice questions, medication delegation, condition changes, care-info requests" },
+  { name: "911 / Emergency Medical Services", sub: "Any life-threatening sign or unattended death — always first" },
+  { name: "NC Medication Aide Registry (NC Board of Nursing)", sub: "Verify current setting-specific authorization" },
+  { name: "NC Medicaid Fraud Control Unit", sub: "If pressure to falsify records comes from your own agency" }
+];
+
+const CITATIONS = [
+  { citation: "N.C. Gen. Stat. § 108A-102", sub: "Protection of the Abused, Neglected, or Exploited Disabled Adult Act", governs: "Mandatory reporting duty — applies to any person, not just licensed staff" },
+  { citation: "10A NCAC 13F .0403 / 13G .0403", sub: "NC Medication Aide Registry — Adult Care Homes", governs: "Medication administration authorization, adult care home setting" },
+  { citation: "N.C. Gen. Stat. § 131E-114.2(b), § 131E-270", sub: "NC Medication Aide Registry — Nursing Homes", governs: "Medication administration authorization, nursing home setting" },
+  { citation: "42 CFR § 484.50(b)", sub: "Condition of Participation — Patient Rights", governs: "Client's right to refuse care; capacity and representative rights" },
+  { citation: "42 CFR § 484.80(g)", sub: "Condition of Participation — Home Health Aide Services", governs: "Scope of assignments and duties; evaluated competency boundary" },
+  { citation: "42 CFR § 484.80(g)(4)", sub: "Condition of Participation — Home Health Aide Services", governs: "Duty to report changes in patient condition to the RN" },
+  { citation: "N.C. Gen. Stat. § 108A-101(j)", sub: "Definition of Exploitation", governs: "Financial exploitation, same reporting duty as neglect under § 108A-102" },
+  { citation: "45 CFR § 164.510(b); § 164.502(g)", sub: "HIPAA Privacy Rule", governs: "Disclosure boundaries to family and others involved in care" },
+  { citation: "31 U.S.C. §§ 3729-3733; 21st Century Cures Act § 12006", sub: "False Claims Act; EVV Mandate", governs: "Falsified visit records, billing fraud" },
+  { citation: "N.C. Gen. Stat. § 130A-383; § 130A-115(e)", sub: "Medical Examiner Jurisdiction", governs: "Unattended or unexpected death notification duty" },
+  { citation: "29 U.S.C. § 654(a)(1); Section 11(c)(1)", sub: "OSHA General Duty Clause", governs: "Worker safety, unsafe environment, anti-retaliation for reporting" }
+];
+
+const SCRIPTS = [
+  { label: "Declining an out-of-scope task", text: "I'm not able to do that today — it's outside what I'm trained and authorized to do. I'll let the nurse know right away so we can get this handled properly." },
+  { label: "Responding to a refusal-override request", text: "I hear you, but it's their choice today. I'll note it, and we can try again a little later, or let the nurse know if this keeps happening." },
+  { label: "Explaining a possible report, without disclosing details", text: "I want to check on a few things I noticed today — I may need to let someone at the county know, just so everyone stays safe." },
+  { label: "Declining medication administration", text: "I'm not authorized to give that here today. I can help you get it ready, but I can't give it to you directly." }
+];
+
+const SITUATIONS = [
+  { id: "T01", title: "Suspected Neglect During a Home Visit", tier: "tier3",
+    citation: "N.C. Gen. Stat. § 108A-102 (Protection of the Abused, Neglected, or Exploited Disabled Adult Act)",
+    doNot: "You are not required to determine whether abuse or neglect actually occurred — that determination belongs to DSS. The duty to report is yours personally, regardless of role, and the client's denial does not remove it.",
+    escalation: "Report to the director of the county Department of Social Services where the client resides. Oral or written, no statutory deadline — report as soon as practicable. Reporting in good faith carries civil and criminal immunity absent bad faith or malicious purpose.",
+    escRoute: ["County DSS (Adult Protective Services)"],
+    steps: [
+      "Note what is directly observed: physical condition, environment, and the client's own words. Do not interpret or diagnose the cause.",
+      "Recognize that the duty to report applies to you personally, not just licensed staff.",
+      "The client's denial does not remove this duty. Reasonable cause to believe, not proof, is the legal standard.",
+      "Report to the director of the county DSS where the client resides. The report may be made orally or in writing.",
+      "Document what was observed, the date, time, and which county DSS office the report was made to."
+    ] },
+  { id: "T02", title: "Family Requests Medication Be Given Directly", tier: "tier1",
+    citation: "10A NCAC 13F .0403 / 13G .0403; N.C. Gen. Stat. § 131E-114.2(b), § 131E-270 (NC Medication Aide Registry)",
+    doNot: "Do not administer medication without confirming your Medication Aide Registry status for this specific care setting. Authorization does not transfer between settings — a nursing home listing does not authorize you in an adult care home or private in-home setting.",
+    escalation: "If unauthorized for this setting, decline and do not administer. If this is a recurring need rather than a one-time request, notify the supervising RN so delegation can be formally established.",
+    escRoute: ["Supervising RN / Agency"],
+    steps: [
+      "Determine whether you hold a current NC Medication Aide Registry listing for the specific care setting you're working in today.",
+      "Recognize that registry listing does not transfer between settings.",
+      "If unauthorized for this setting, decline to administer the medication directly.",
+      "Offer to assist with self-administration instead: hand over the pre-organized dose, open the container, provide water — without placing it in the client's mouth.",
+      "If this is a recurring need, notify the supervising RN so delegation can be formally established."
+    ] },
+  { id: "T03", title: "Client Refuses Care, Family Requests Override", tier: "tier1",
+    citation: "42 CFR § 484.50(b) (Condition of Participation: Patient Rights — Exercise of Rights)",
+    doNot: "Do not perform a refused task based on a family member's opinion that the client \"doesn't know what they're saying.\" Only a state court adjudication of incapacity shifts the right to refuse to a representative.",
+    escalation: "Per CMS guidance on this exact scenario, the agency's job is to educate on the risks of refusing care, not to proceed over objection. Notify the supervising nurse if this is a new pattern or reflects a change from baseline.",
+    escRoute: ["Supervising RN / Agency"],
+    steps: [
+      "Confirm the client's refusal directly, in their own words if possible.",
+      "Check whether the client has been adjudged by a state court to lack legal capacity. This is a formal legal determination, not a family member's opinion.",
+      "If no such court adjudication exists, the client's refusal governs, not the family member's instruction.",
+      "Do not perform the refused task.",
+      "Gently explain what the visit was for and offer to try again later, or note it for follow-up."
+    ] },
+  { id: "T04", title: "Family Requests a Task Outside Your Training", tier: "tier1",
+    citation: "42 CFR § 484.80(g) (Condition of Participation: Home Health Aide Services — Assignments and Duties)",
+    doNot: "Do not perform any task for which you have not been evaluated as competent, regardless of prior informal experience with other clients. Sterile wound care and similar skilled nursing tasks are outside standard aide scope.",
+    escalation: "Contact the supervising RN or agency immediately if there's a genuine time-sensitive need before the next scheduled visit. You may observe and describe what you see without performing the task itself.",
+    escRoute: ["Supervising RN / Agency"],
+    steps: [
+      "Confirm what task is being requested and compare it against your written care instructions and evaluated competencies.",
+      "Recognize that sterile wound care and similar skilled nursing tasks fall outside standard aide scope.",
+      "Decline to perform any task for which you have not been evaluated as competent.",
+      "Observe and note what you can see — redness, drainage, odor — without performing the clinical task itself.",
+      "Contact the supervising RN or agency immediately if there's a genuine time-sensitive need."
+    ] },
+  { id: "T05", title: "Fall Mid-Visit with a Change in Condition", tier: "tier2",
+    citation: "42 CFR § 484.80(g)(4) (Condition of Participation: Home Health Aide Services — Duty to Report Changes in Condition)",
+    doNot: "Do not delay calling 911 to first contact your agency when signs are consistent with a medical emergency. Your duty is to report changes in condition to the RN — not to independently diagnose the cause.",
+    escalation: "Call 911 first for any emergency sign. Notify the supervising RN or agency of the fall and any observed change, whether or not 911 was called. Stay with the patient until EMS arrives or the RN provides direction.",
+    escRoute: ["911 / Emergency Medical Services", "Supervising RN / Agency"],
+    steps: [
+      "Assess immediate safety: is the client responsive, breathing normally, showing any visible injury?",
+      "For any sign consistent with a medical emergency, call 911 first, before anything else.",
+      "After calling 911 (or immediately, if no emergency signs are present), notify the supervising RN or agency.",
+      "Stay with the patient until EMS arrives or the RN provides direction. Do not leave.",
+      "Note the exact time of the fall, the change observed, and the sequence of who was contacted."
+    ] },
+  { id: "T07", title: "Suspected Financial Exploitation", tier: "tier3",
+    citation: "N.C. Gen. Stat. § 108A-102 (same reporting duty as T-01); § 108A-101(j) (definition of exploitation)",
+    doNot: "You are not required to determine whether exploitation actually occurred — that determination belongs to DSS. This runs under the exact same reporting duty as suspected neglect, since the Act covers disabled adults who are abused, neglected, or exploited.",
+    escalation: "Report to the director of the county DSS where the client resides, the same as any other trigger under G.S. § 108A-102. Oral or written, no statutory deadline. Reporting in good faith carries the same civil and criminal immunity.",
+    escRoute: ["County DSS (Adult Protective Services)"],
+    steps: [
+      "Note what is directly observed: a new person suddenly on the client's accounts, missing funds or valuables, unusual bank activity mentioned by the client, or pressure around a will or power of attorney.",
+      "Recognize this falls under the same reporting duty as suspected neglect — it does not need a separate legal basis.",
+      "Do not confront the suspected person directly or attempt to investigate further yourself.",
+      "Report to the director of the county DSS where the client resides.",
+      "Document exactly what was observed or said, in as much factual detail as possible, without speculating about intent."
+    ] },
+  { id: "T08", title: "Someone Not Involved in Care Asks About the Client's Condition", tier: "tier1",
+    citation: "45 CFR § 164.510(b) (disclosure to persons involved in care); § 164.502(g) (personal representative)",
+    doNot: "Do not discuss the client's health information with anyone whose involvement in the client's care or payment for care isn't clear to you — a neighbor, a distant relative, or anyone just asking out of concern does not automatically qualify, even if they seem to know the client well.",
+    escalation: "If you're unsure whether someone is actually involved in the client's care, decline to discuss specifics and direct them to the client (if the client is willing) or to the agency office.",
+    escRoute: ["Supervising RN / Agency"],
+    steps: [
+      "Confirm who is asking and what their actual role in the client's care or payment for care is, not just their relationship to the client.",
+      "If the person is directly involved in care, share only what's directly relevant to their involvement, not the full picture.",
+      "If the client is present and able, let the client decide what gets shared, when possible.",
+      "If you're unsure whether someone qualifies, don't guess. Decline and redirect to the agency.",
+      "Note who asked, what was or wasn't shared, and why, if anything about the exchange felt unclear."
+    ] },
+  { id: "T09", title: "Pressure to Falsify a Visit Record or Clock In Without Being Present", tier: "tier3",
+    citation: "31 U.S.C. §§ 3729-3733 (False Claims Act); 21st Century Cures Act § 12006 (Electronic Visit Verification mandate)",
+    doNot: "Do not sign, clock in for, or document a visit that didn't happen, or didn't happen the way it's being recorded, even if a supervisor, coworker, or client asks you to. This is the exact pattern federal and state Medicaid fraud units are actively prosecuting right now.",
+    escalation: "Decline, regardless of who's asking. If the pressure continues, this goes beyond your individual decision. Document it and report it through your agency's compliance channel, or directly to your state's Medicaid Fraud Control Unit if the agency itself is the source of the pressure.",
+    escRoute: ["Supervising RN / Agency", "NC Medicaid Fraud Control Unit"],
+    steps: [
+      "Recognize the request for what it is: being asked to clock in without being present, backdate a note, or sign off on a visit that didn't happen as recorded.",
+      "Decline. This isn't a small favor, it's the exact fact pattern behind real, current federal fraud prosecutions.",
+      "Do not alter or backdate any documentation, even if told it will be corrected later.",
+      "If the pressure is coming from your agency itself, know that whistleblower protections exist under the False Claims Act.",
+      "Document the request, who made it, and when, separately from the client's own visit record."
+    ] },
+  { id: "T10", title: "Client Found Deceased, Unattended", tier: "tier3",
+    citation: "N.C. Gen. Stat. § 130A-383 (medical examiner jurisdiction); § 130A-115(e) (notification duty, death without medical attendance)",
+    doNot: "Do not move the body, alter anything at the scene, or clean up before the medical examiner authorizes it, even if your instinct is to make things look more peaceful for the family.",
+    escalation: "Call 911 immediately. North Carolina law names any person with knowledge of an unattended or unexpected death as someone who must notify the medical examiner. This includes you.",
+    escRoute: ["911 / Emergency Medical Services"],
+    steps: [
+      "Call 911 immediately. Do not delay to call your agency first.",
+      "Do not move the body or disturb anything at the scene.",
+      "Do not clean up, alter, or remove anything until EMS, law enforcement, or the medical examiner has authorized it.",
+      "Stay at the scene until released by responding personnel.",
+      "Notify your supervising RN or agency once emergency responders are present, and document the exact time you found the client and the time 911 was called."
+    ] },
+  { id: "T11", title: "Unsafe Environment or Aggressive Person Present", tier: "tier2",
+    citation: "OSHA General Duty Clause, 29 U.S.C. § 654(a)(1); Section 11(c)(1) (anti-retaliation for reporting)",
+    doNot: "Do not stay in a situation that feels physically unsafe to try to finish the visit. Leaving is not abandoning the client, it's the correct response, and your agency is legally required to protect you from this exact risk.",
+    escalation: "If you feel physically threatened, leave and call 911 if there's immediate danger. Report the incident to your agency regardless of whether you were harmed. You're protected from retaliation for reporting it.",
+    escRoute: ["911 / Emergency Medical Services", "Supervising RN / Agency"],
+    steps: [
+      "If you feel physically unsafe, leave the home. You do not need to finish the visit first.",
+      "Call 911 if there is immediate danger to you or the client.",
+      "Once safe, notify your supervising RN or agency of what happened, regardless of whether you were physically harmed.",
+      "Report the incident formally, even for verbal threats or a close call. Your agency is required to track this, and you're protected from retaliation for reporting.",
+      "Document what happened in as much factual detail as you can: what was said or done, and by whom."
+    ] }
+];
+
+const NOTE_TEMPLATES = {};
+SITUATIONS.forEach(s => {
+  NOTE_TEMPLATES[s.id] = `=== FERNHOLLOW IN-HOME SERVICES — VISIT LOG ===
+Date: [DATE]
+Aide Name/ID: [SPECIALIST]
+----------------------------------------
+Situation: ${s.id} — ${s.title}
+Regulatory Basis: ${s.citation}
+----------------------------------------
+Client Name/ID: [FILL IN]
+Care Setting (Home Health Agency / Adult Care Home / Private In-Home): [FILL IN]
+Supervising RN / Agency Contact: [FILL IN]
+----------------------------------------
+Steps Completed (check on your own system):
+${s.steps.map(st => `  [ ] ${st}`).join('\n')}
+----------------------------------------
+Escalation (if applicable): [FILL IN — see this situation's Escalation tab]
+----------------------------------------
+Outcome / Notes: [FILL IN]
+=== END ===`;
+});
+
+const EMAIL_TEMPLATES = {};
+SITUATIONS.forEach(s => {
+  EMAIL_TEMPLATES[s.id] = `Subject: Follow-Up — ${s.title}\n\nDear [SUPERVISING RN / AGENCY CONTACT],\n\n[FILL IN — visit-specific detail from your own system]\n\nNext step: [FILL IN]\nFollow-up needed by: [FILL IN]\n\n[AIDE NAME]\nFernhollow In-Home Services`;
+});
+
+let state = { activeId: null, mainView: 'live', mrqAnswers: {} };
+let toastTimer = null;
+function showToast(msg) {
+  const zone = document.getElementById('toast-zone');
+  zone.innerHTML = `<div class="toast">${msg}</div>`;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { zone.innerHTML = ''; }, 2200);
+}
+function copyText(text, msg) {
+  const d = document.createElement('textarea'); d.value = text; document.body.appendChild(d); d.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(d);
+  showToast(msg || 'Copied.');
+}
+
+let mrqCollapsed = false;
+function toggleMrqCollapse() {
+  mrqCollapsed = !mrqCollapsed;
+  document.getElementById('mrq-body').classList.toggle('collapsed', mrqCollapsed);
+  document.getElementById('mrq-toggle-btn').textContent = mrqCollapsed ? 'SHOW' : 'HIDE';
+}
+function renderMandatoryQuestions() {
+  document.getElementById('mrq-list').innerHTML = MANDATORY_QUESTIONS.map(q => `
+    <div class="mrq-row">
+      <div class="mrq-q">${q.text}</div>
+      <div class="mrq-cite">${q.citation}</div>
+      <div class="mrq-radios">
+        <label><input type="radio" name="${q.id}" value="yes" onchange="setMrq('${q.id}','yes')"> YES</label>
+        <label><input type="radio" name="${q.id}" value="no" onchange="setMrq('${q.id}','no')"> NO</label>
+      </div>
+    </div>`).join('');
+}
+function setMrq(id, val) {
+  state.mrqAnswers[id] = val;
+  const badge = document.getElementById('gate-badge');
+  const text = document.getElementById('gate-badge-text');
+  const dot = document.getElementById('gate-dot');
+  const answeredCount = Object.keys(state.mrqAnswers).length;
+  const yesCount = Object.values(state.mrqAnswers).filter(v => v === 'yes').length;
+  if (yesCount > 0) {
+    badge.className = 'gate-badge locked'; dot.className = 'dot locked';
+    text.textContent = 'TRIGGER: ' + yesCount + ' YES';
+    if (val === 'yes') {
+      const q = MANDATORY_QUESTIONS.find(x => x.id === id);
+      showToast('Standing trigger — taking you to ' + q.route + ' now.');
+      openSituation(q.route);
+    }
+  } else if (answeredCount >= MANDATORY_QUESTIONS.length) {
+    badge.className = 'gate-badge verified'; dot.className = 'dot verified';
+    text.textContent = 'CHECK: CLEAR';
+  } else {
+    badge.className = 'gate-badge locked'; dot.className = 'dot locked';
+    text.textContent = 'CHECK: ' + answeredCount + ' OF ' + MANDATORY_QUESTIONS.length + ' ANSWERED';
+  }
+}
+
+function renderMissionRules() { document.getElementById('mission-rules-list').innerHTML = MISSION_RULES.map(r => `<div class="mr-row">&#8226; ${r}</div>`).join(''); }
+function renderTransferBoard() { document.getElementById('transfer-board-list').innerHTML = TRANSFER_BOARD.map(t => `<div class="tb-row"><div class="tb-name">${t.name}</div><div class="tb-sub">${t.sub}</div></div>`).join(''); }
+
+function openSituation(id) { state.activeId = id; state.mainView = 'live'; renderMain(); }
+function goHome() { state.activeId = null; state.mainView = 'live'; renderMain(); }
+
+function renderHome(el) {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  let html = `<div class="home-hdr"><div class="home-eyebrow">Live Visit Navigation</div><div class="home-title">Which situation is this?</div>
+    <div class="home-sub">Type a keyword, or click a situation below. The Standing Trigger Check stays reachable in the sidebar the whole time.</div></div>`;
+
+  ['tier1', 'tier2', 'tier3'].forEach(tier => {
+    const items = SITUATIONS.filter(s => s.tier === tier && (s.title.toLowerCase().includes(search) || s.citation.toLowerCase().includes(search)));
+    if (!items.length) return;
+    const label = tier === 'tier1' ? 'TIER I — SELF RESOLVE' : tier === 'tier2' ? 'TIER II — MULTI-PATH' : 'TIER III — ESCALATE';
+    const color = tier === 'tier3' ? 'var(--t3)' : tier === 'tier2' ? 'var(--t2)' : 'var(--t1)';
+    const bg = tier === 'tier3' ? 'var(--t3-bg)' : tier === 'tier2' ? 'var(--t2-bg)' : 'var(--t1-bg)';
+    html += `<div class="tier-divider"><div class="line"></div><span class="label" style="color:${color}">${label}</span><div class="line"></div></div><div class="sit-grid">`;
+    items.forEach(s => {
+      html += `<div class="sit-card" style="border-left:3px solid ${color}" onclick="openSituation('${s.id}')">
+        <div class="sit-card-tier" style="background:${bg};color:${color}">${s.id} &middot; ${label.split(' —')[0]}</div>
+        <div class="sit-card-title">${s.title}</div><div class="sit-card-desc">${s.doNot}</div></div>`;
+    });
+    html += `</div>`;
+  });
+
+  if (SITUATIONS.every(s => !(s.title.toLowerCase().includes(search) || s.citation.toLowerCase().includes(search)))) {
+    html += `<div style="padding:30px;color:var(--muted);font-size:12px;">No matching situations for "${search}".</div>`;
+  }
+  el.innerHTML = html;
+}
+function switchView(v) { state.mainView = v; state.activeId = null; renderMain(); }
+function switchSitView(v) { state.mainView = v; renderMain(); }
+
+function renderMain() {
+  const el = document.getElementById('panel-inner');
+
+  if (state.mainView === 'regs') {
+    let rows = CITATIONS.map(c => `<tr><td><strong>${c.citation}</strong>${c.sub ? '<br><small style="color:var(--muted);">' + c.sub + '</small>' : ''}</td><td>${c.governs}</td></tr>`).join('');
+    el.innerHTML = `<div class="sit-hdr"><div class="sit-hdr-title">Regulatory Quick Reference</div></div><table class="reg-table"><thead><tr><th>Citation</th><th>What It Governs</th></tr></thead><tbody>${rows}</tbody></table>`;
+    return;
+  }
+  if (state.mainView === 'scripts') {
+    el.innerHTML = `<div class="sit-hdr"><div class="sit-hdr-title">Scripts Panel</div></div>
+      <div class="synth-flag"><strong>Note:</strong> this panel is newly authored language, not extracted from an audited real guide — review before live use.</div>
+      ${SCRIPTS.map(sc => `<div class="script-card"><div><div class="script-card-label">${sc.label}</div><div class="script-card-text">"${sc.text}"</div></div><button class="script-copy-btn" onclick='copyText(${JSON.stringify(sc.text)},"Script copied.")'>Copy</button></div>`).join('')}`;
+    return;
+  }
+
+  if (!state.activeId) {
+    renderHome(el);
+    return;
+  }
+
+  const s = SITUATIONS.find(x => x.id === state.activeId);
+  const esc = { route: s.escRoute, detail: s.escalation };
+
+  let html = `
+    <div class="sit-hdr"><button onclick="goHome()" style="background:none;border:none;color:var(--rust-deep);font-family:'DM Mono',monospace;font-size:0.72rem;font-weight:600;cursor:pointer;margin-bottom:8px;padding:0;">&larr; All Situations</button><div class="sit-hdr-title">${s.title}</div><div class="sit-hdr-code">${s.id} &middot; ${s.tier === 'tier3' ? 'TIER III — ESCALATE' : s.tier === 'tier2' ? 'TIER II — MULTI-PATH' : 'TIER I — SELF RESOLVE'}</div></div>
+    <div class="view-tabs">
+      <button class="view-tab ${state.mainView === 'live' ? 'active' : ''}" onclick="switchSitView('live')">Guide</button>
+      <button class="view-tab ${state.mainView === 'escalation' ? 'active' : ''}" onclick="switchSitView('escalation')">Escalation${esc.route.length ? ' <span class="esc-dot"></span>' : ''}</button>
+      <button class="view-tab ${state.mainView === 'doc' ? 'active' : ''}" onclick="switchSitView('doc')">Documentation Templates</button>
+    </div>`;
+
+  if (state.mainView === 'escalation') {
+    html += `<div class="esc-panel">
+      ${esc.route.length ? esc.route.map(r => {
+        const tb = TRANSFER_BOARD.find(t => t.name === r);
+        return `<div class="esc-route-box"><div class="esc-route-label">Route To</div><div class="esc-route-dest">${r}</div><div class="esc-route-contact">${tb ? tb.sub : ''}</div></div>`;
+      }).join('') : `<div class="esc-route-box"><div class="esc-route-label">Route To</div><div class="esc-route-dest">No external escalation</div><div class="esc-route-contact">Documentation only for this situation</div></div>`}
+      <div class="esc-detail">${esc.detail}</div>
+    </div>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  if (state.mainView === 'doc') {
+    html += `
+      <div class="doc-block">
+        <div class="doc-header"><div class="doc-title">Case Note Template</div><button class="doc-copy" onclick='copyText(document.getElementById("note-out").textContent,"Case note template copied.")'>Copy Template</button></div>
+        <div class="doc-sub">Generic and blank, identical every time. Copy into your own system of record — nothing here is pre-filled.</div>
+        <div class="note-output" id="note-out">${NOTE_TEMPLATES[s.id]}</div>
+      </div>
+      <div class="doc-block">
+        <div class="doc-header"><div class="doc-title">Email Template</div><button class="doc-copy" onclick='copyText(document.getElementById("email-out").textContent,"Email template copied.")'>Copy Template</button></div>
+        <div class="doc-sub">Blank template — fill in the bracketed fields on your own system before sending.</div>
+        <div class="email-preview" id="email-out">${EMAIL_TEMPLATES[s.id]}</div>
+      </div>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  html += `
+    <div class="warn-banner"><strong>Do Not</strong>${s.doNot}</div>
+    <div class="setup-block">
+      <div class="setup-title">Situation Reference</div>
+      <div class="setup-grid">
+        <div class="setup-field"><label>Situation</label><div class="setup-field-value">${s.id} — ${s.title}</div></div>
+        <div class="setup-field"><label>Regulatory Basis</label><div class="setup-field-value">${s.citation}</div></div>
+      </div>
+    </div>
+    <div class="steps-block">
+      <div class="steps-header"><div class="steps-title">Step-By-Step Instructions</div></div>
+      ${s.steps.map((text, i) => `<div class="step-row"><span class="step-num">${i + 1}</span><span class="step-text">${text}</span></div>`).join('')}
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function openReset() {
+  if (!confirm('Reset for next visit? This clears the Standing Trigger Check answers and returns to the home view.')) return;
+  state = { activeId: null, mainView: 'live', mrqAnswers: {} };
+  document.getElementById('search-input').value = '';
+  document.querySelectorAll('.mrq-radios input[type="radio"]').forEach(r => r.checked = false);
+  const badge = document.getElementById('gate-badge'), dot = document.getElementById('gate-dot'), text = document.getElementById('gate-badge-text');
+  badge.className = 'gate-badge locked'; dot.className = 'dot locked'; text.textContent = 'CHECK: NOT RUN';
+  renderMain();
+  showToast('Console reset for next visit.');
+}
+
+window.onload = function () { renderMandatoryQuestions(); renderMissionRules(); renderTransferBoard(); renderMain(); };
+</script>
+
+<style id="demo-sim-style">
+  #demo-sim-panel { position: fixed; bottom: 16px; right: 16px; width: 340px; max-width: calc(100vw - 32px);
+    background: var(--card, #faf7f0); border: 1px solid var(--card-border, #e4dac8); border-radius: 8px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.18); z-index: 500; font-family: 'Epilogue', sans-serif; }
+  #demo-sim-header { background: var(--header-bg, #9c4820); color: #faf3ea; padding: 10px 14px; border-radius: 8px 8px 0 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #demo-sim-header .dsh-title { font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; display:flex; align-items:center; gap:6px; }
+  #demo-sim-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #e05040; flex-shrink: 0; }
+  #demo-sim-toggle { background: none; border: none; color: #f0d8a8; cursor: pointer; font-size: 0.9rem; padding: 2px 6px; }
+  #demo-sim-body { padding: 10px 14px 14px; }
+  #demo-sim-body.collapsed { display: none; }
+  #demo-sim-transcript { height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 7px;
+    padding: 8px; background: rgba(0,0,0,0.03); border: 1px solid var(--card-border, #e4dac8); border-radius: 4px;
+    font-family: 'DM Mono', monospace; font-size: 10.5px; line-height: 1.5; margin-bottom: 10px; }
+  #demo-sim-transcript .dsl { padding: 5px 7px; border-left: 2px solid #9c4820; background: rgba(255,255,255,0.6); border-radius: 2px; }
+  #demo-sim-transcript .dsl .dsl-speaker { font-size: 8px; letter-spacing: 0.05em; margin-bottom: 2px; font-weight: 700; }
+  #demo-sim-controls { display: flex; align-items: center; gap: 8px; }
+  #demo-sim-play { background: var(--header-bg, #9c4820); color: #fff; border: none; border-radius: 4px; padding: 6px 12px;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; cursor: pointer; }
+  #demo-sim-speed { font-family: 'DM Mono', monospace; font-size: 0.66rem; padding: 4px; border-radius: 4px; border: 1px solid var(--card-border, #e4dac8); }
+  #demo-sim-timer { font-family: 'DM Mono', monospace; font-size: 0.66rem; color: var(--muted, #8a7e6e); margin-left: auto; }
+  #demo-sim-reset { background: none; border: 1px solid var(--card-border, #e4dac8); border-radius: 4px; padding: 6px 10px;
+    font-family: 'DM Mono', monospace; font-size: 0.66rem; cursor: pointer; color: var(--ink, #2c2416); }
+  #demo-sim-note { font-size: 9.5px; color: var(--muted, #8a7e6e); margin-top: 8px; line-height: 1.5; }
+  @media (max-width: 700px) { #demo-sim-panel { width: calc(100vw - 24px); right: 12px; bottom: 12px; } #demo-sim-transcript { height: 150px; } }
+</style>
+<div id="demo-sim-panel">
+  <div id="demo-sim-header">
+    <div class="dsh-title"><span id="demo-sim-live-dot"></span>DEMO — Live Visit Simulation</div>
+    <button id="demo-sim-toggle" onclick="document.getElementById('demo-sim-body').classList.toggle('collapsed')">&minus;</button>
+  </div>
+  <div id="demo-sim-body">
+    <div id="demo-sim-transcript"></div>
+    <div id="demo-sim-controls">
+      <button id="demo-sim-play" onclick="toggleDemoSim()">&#9654; Play</button>
+      <select id="demo-sim-speed">
+        <option value="1">Slow</option>
+        <option value="2" selected>Normal</option>
+        <option value="3">Fast</option>
+      </select>
+      <button id="demo-sim-reset" onclick="resetDemoSim()">Reset</button>
+      <span id="demo-sim-timer">00:00</span>
+    </div>
+    <div id="demo-sim-note">Fernhollow In-Home Services and this client visit are fictional. This panel drives the real console alongside it — every click below is the actual Tendline/Rosterline product, not a mockup.</div>
+  </div>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw-tendline-demo.js').catch(err => {
+      console.warn('Service worker registration failed:', err);
+    });
+  });
+}
+</script>
+<script>
+const DEMO_SIM_SCRIPT = [
+  {
+    "speaker": "SCENE",
+    "text": "You arrive for a scheduled visit at a Fernhollow client's home. It's colder inside than it should be, there's no food visible, and the client seems more withdrawn than last visit."
+  },
+  {
+    "speaker": "AIDE",
+    "text": "Something feels off. Let me check Tendline before I do anything else.",
+    "action": "open:T01"
+  },
+  {
+    "speaker": "SYSTEM",
+    "text": "T-01 loaded \u2014 Suspected Neglect During a Home Visit. Tier III \u2014 Escalate."
+  },
+  {
+    "speaker": "AIDE",
+    "text": "The console is clear: I don't have to determine whether neglect actually occurred \u2014 that's DSS's call. The duty to report is mine personally, no matter my role."
+  },
+  {
+    "speaker": "SCENE",
+    "text": "The client insists everything is fine and asks you to drop it."
+  },
+  {
+    "speaker": "AIDE",
+    "text": "The guide already covers this \u2014 the client's denial doesn't remove the reporting duty. \u201cReasonable cause to believe,\u201d not proof, is the standard."
+  },
+  {
+    "speaker": "AIDE",
+    "text": "Checking where this actually gets reported.",
+    "action": "view:escalation"
+  },
+  {
+    "speaker": "SYSTEM",
+    "text": "Escalation path: County DSS, Adult Protective Services. No statutory deadline \u2014 report as soon as practicable. Good-faith reports carry civil and criminal immunity."
+  },
+  {
+    "speaker": "AIDE",
+    "text": "I'll make the report today, then log it on my own system.",
+    "action": "view:doc"
+  },
+  {
+    "speaker": "SYSTEM",
+    "text": "Documentation templates ready \u2014 blank, Fernhollow-formatted. Nothing here is pre-filled or stored."
+  },
+  {
+    "speaker": "SYSTEM",
+    "text": "Simulation complete."
+  }
+];
+let dsIndex = 0, dsPlaying = false, dsInterval = null, dsSeconds = 0, dsTimerInterval = null;
+
+function dsAppendLine(speaker, text) {
+  const colors = { SCENE: '#8a7e6e', AIDE: '#0d5c4a', RECRUITER: '#0d5c4a', CANDIDATE: '#3a3a3a', SYSTEM: '#9c4820' };
+  const box = document.getElementById('demo-sim-transcript');
+  const line = document.createElement('div');
+  line.className = 'dsl';
+  line.style.borderLeftColor = colors[speaker] || '#888';
+  line.innerHTML = '<div class="dsl-speaker" style="color:' + (colors[speaker]||'#888') + '">' + speaker + '</div><div>' + text + '</div>';
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+function dsRunAction(action) {
+  try {
+    if (action && action.startsWith('open:')) {
+      const id = action.split(':')[1];
+      if (typeof openSituation === 'function') openSituation(id);
+    } else if (action && action.startsWith('view:')) {
+      const v = action.split(':')[1];
+      if (typeof switchSitView === 'function') switchSitView(v);
+    } else if (action === 'home') {
+      if (typeof goHome === 'function') goHome();
+    }
+  } catch (e) { console.warn('Demo sim action failed:', action, e); }
+}
+
+function dsStepOnce() {
+  if (dsIndex >= DEMO_SIM_SCRIPT.length) return;
+  const beat = DEMO_SIM_SCRIPT[dsIndex];
+  dsAppendLine(beat.speaker, beat.text);
+  if (beat.action) dsRunAction(beat.action);
+  dsIndex++;
+  if (dsIndex >= DEMO_SIM_SCRIPT.length) {
+    dsPause();
+    document.getElementById('demo-sim-live-dot').style.background = '#4a7c4a';
+  }
+}
+
+function toggleDemoSim() { if (dsPlaying) dsPause(); else dsPlay(); }
+
+function dsPlay() {
+  dsPlaying = true;
+  document.getElementById('demo-sim-play').innerHTML = '&#9208; Pause';
+  const speedEl = document.getElementById('demo-sim-speed');
+  const delay = { '1': 4200, '2': 2800, '3': 1600 }[speedEl.value] || 2800;
+  dsInterval = setInterval(() => {
+    if (dsIndex >= DEMO_SIM_SCRIPT.length) { dsPause(); return; }
+    dsStepOnce();
+  }, delay);
+  if (!dsTimerInterval) {
+    dsTimerInterval = setInterval(() => {
+      dsSeconds++;
+      const m = String(Math.floor(dsSeconds/60)).padStart(2,'0');
+      const s = String(dsSeconds%60).padStart(2,'0');
+      document.getElementById('demo-sim-timer').textContent = m + ':' + s;
+    }, 1000);
+  }
+}
+
+function dsPause() {
+  dsPlaying = false;
+  document.getElementById('demo-sim-play').innerHTML = '&#9654; Play';
+  if (dsInterval) { clearInterval(dsInterval); dsInterval = null; }
+}
+
+function resetDemoSim() {
+  dsPause();
+  dsIndex = 0; dsSeconds = 0;
+  document.getElementById('demo-sim-timer').textContent = '00:00';
+  document.getElementById('demo-sim-transcript').innerHTML = '';
+  document.getElementById('demo-sim-live-dot').style.background = '#e05040';
+  if (dsTimerInterval) { clearInterval(dsTimerInterval); dsTimerInterval = null; }
+  if (typeof goHome === 'function') goHome();
+}
+
+window.addEventListener('load', () => { setTimeout(() => { dsPlay(); }, 2200); });
+</script>
+</body>
+</html>
