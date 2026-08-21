@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="manifest" href="manifest-rosterline-demo.json">
+<meta name="theme-color" content="#9c4820">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rosterline Console — Rudolph CX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Epilogue:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #2c2416; --paper: #f5f0e8; --rust: #c05a2a; --rust-light: #f5e8de;
+    --rust-border: #e0bda2; --rust-deep: #9c4820; --amber: #c8780a; --amber-light: #fdf6ec;
+    --halt: #b83020; --rule: #e4dac8; --muted: #8a7e6e; --card: #faf7f0; --card-border: #e4dac8;
+    --header-bg: #9c4820; --header-border: #7a3818; --sidebar-bg: #f0e8d8;
+    --t1: #2d7d6e; --t1-bg: #eaf5f2; --t2: #c8780a; --t2-bg: #fdf6ec; --t3: #b83020; --t3-bg: #fdf0ee;
+  }
+  * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Epilogue', sans-serif; background: var(--paper); color: var(--ink); font-size: 14.5px; line-height: 1.55; display: flex; flex-direction: column; min-height: 100vh; }
+
+  header.console-header { background: var(--header-bg); border-bottom: 1px solid var(--header-border); padding: 0.75rem 1.4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; flex-shrink: 0; }
+  .wordmark { font-family: 'Instrument Serif', serif; font-size: 1.4rem; color: #faf3ea; }
+  .wordmark span { color: #f0c8a8; }
+  .ref-notice { font-family: 'DM Mono', monospace; font-size: 0.64rem; color: #f0d8a8; background: rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.15); padding: 0.32rem 0.65rem; border-radius: 3px; }
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  .gate-badge { font-family: 'DM Mono', monospace; font-size: 0.68rem; font-weight: 700; padding: 0.4rem 0.7rem; border-radius: 3px; display: flex; align-items: center; gap: 6px; }
+  .gate-badge.locked { background: rgba(184,48,32,0.18); color: #ffb3a8; }
+  .gate-badge.verified { background: rgba(45,125,110,0.25); color: #a8e0d0; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot.locked { background: #e05040; } .dot.verified { background: #4dd0a8; }
+  button.reset-btn { font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 700; padding: 0.45rem 0.85rem; border-radius: 4px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; cursor: pointer; }
+
+  .workspace { flex: 1; display: flex; overflow: hidden; }
+  aside.sidebar { width: 305px; flex-shrink: 0; background: var(--sidebar-bg); border-right: 1px solid var(--card-border); display: flex; flex-direction: column; overflow-y: auto; }
+  .sb-search { padding: 12px; border-bottom: 1px solid var(--card-border); }
+  .sb-search input { width: 100%; background: #fff; border: 1px solid var(--card-border); border-radius: 5px; padding: 7px 10px; color: var(--ink); font-size: 12px; outline: none; }
+  .sb-search input:focus { border-color: var(--rust); }
+  .sb-section-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); padding: 12px 12px 6px; text-transform: uppercase; }
+
+  .sit-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 13px 14px; cursor: pointer; transition: transform .12s, box-shadow .12s; }
+  .sit-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+  .sit-card-tier { font-family: 'DM Mono', monospace; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.08em; padding: 2px 6px; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
+  .sit-card-title { font-size: 0.83rem; font-weight: 600; margin-bottom: 3px; line-height: 1.3; }
+  .sit-card-desc { font-size: 0.7rem; color: var(--muted); line-height: 1.5; }
+
+  .mrq-card { margin: 4px 10px 10px; padding: 10px; border-radius: 6px; background: rgba(184,48,32,0.06); border: 1px solid rgba(184,48,32,0.3); }
+  .mrq-header-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .mrq-toggle { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; color: var(--halt); background: none; border: none; cursor: pointer; padding: 2px 6px; }
+  .mrq-body.collapsed { display: none; }
+  .mrq-title { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; color: var(--halt); text-transform: uppercase; margin-bottom: 3px; }
+  .mrq-sub { font-size: 10px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
+  .mrq-row { font-size: 10.5px; padding: 6px 0; border-bottom: 1px dashed rgba(184,48,32,0.2); }
+  .mrq-row:last-child { border-bottom: none; }
+  .mrq-q { color: var(--ink); margin-bottom: 3px; }
+  .mrq-cite { font-family: 'DM Mono', monospace; font-size: 8.5px; color: var(--muted); margin-bottom: 4px; }
+  .mrq-radios { display: flex; gap: 12px; }
+  .mrq-radios label { font-size: 10px; display: flex; align-items: center; gap: 3px; cursor: pointer; }
+
+  .mission-rules-card { margin: 4px 10px 10px; padding: 10px; border-radius: 6px; background: var(--amber-light); border: 1px solid #e0c888; }
+  .mission-rules-title { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; color: var(--amber); text-transform: uppercase; margin-bottom: 3px; }
+  .mission-rules-sub { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+  .mr-row { font-size: 10.5px; padding: 3px 0; color: var(--ink); line-height: 1.4; }
+
+  main.main-panel { flex: 1; overflow-y: auto; padding: 20px 24px; }
+  .panel-inner { max-width: 800px; margin: 0 auto; }
+
+  .home-hdr { margin-bottom: 22px; }
+  .home-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; color: var(--rust); text-transform: uppercase; margin-bottom: 6px; }
+  .home-title { font-family: 'Instrument Serif', serif; font-size: 1.9rem; font-weight: 400; margin-bottom: 6px; }
+  .home-sub { font-size: 0.85rem; color: var(--muted); max-width: 620px; line-height: 1.6; }
+  .tier-divider { display: flex; align-items: center; gap: 10px; margin: 22px 0 12px; }
+  .tier-divider .line { height: 1px; flex: 1; background: var(--rule); }
+  .tier-divider .label { font-family: 'DM Mono', monospace; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; white-space: nowrap; }
+  .sit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+
+  .reg-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .reg-table th { font-family: 'DM Mono', monospace; font-size: 9px; text-transform: uppercase; color: var(--muted); text-align: left; padding: 6px 8px; border-bottom: 2px solid var(--rule); }
+  .reg-table td { font-size: 11.5px; padding: 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+
+  aside.right-sidebar { width: 250px; flex-shrink: 0; background: var(--sidebar-bg); border-left: 1px solid var(--card-border); padding: 14px; overflow-y: auto; }
+  .tb-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--amber); text-transform: uppercase; margin-bottom: 10px; }
+  .tb-row { background: var(--card); border: 1px solid var(--card-border); border-radius: 6px; padding: 9px 10px; margin-bottom: 7px; }
+  .tb-name { font-size: 11px; font-weight: 700; }
+  .tb-sub { font-size: 9px; color: var(--muted); margin-top: 1px; }
+
+  .script-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .script-card-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; color: var(--rust-deep); margin-bottom: 4px; }
+  .script-card-text { font-size: 0.84rem; line-height: 1.55; font-style: italic; }
+  .script-copy-btn { font-family: 'DM Mono', monospace; font-size: 0.6rem; font-weight: 600; padding: 4px 9px; border-radius: 4px; border: 1px solid var(--card-border); background: none; color: var(--muted); cursor: pointer; flex-shrink: 0; }
+  .synth-flag { background: #fff3d0; border: 1px solid #e0c888; border-radius: 5px; padding: 9px 12px; font-size: 0.76rem; color: #7a4810; margin-bottom: 14px; line-height: 1.5; }
+
+  #toast-zone { position: fixed; bottom: 18px; right: 18px; z-index: 999; }
+  .toast { background: var(--rust-deep); border: 1px solid var(--rust); border-radius: 6px; padding: 9px 14px; font-size: 11px; color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+  .sit-hdr { margin-bottom: 14px; }
+  .sit-hdr-title { font-family: 'Instrument Serif', serif; font-size: 24px; font-weight: 400; }
+  .sit-hdr-code { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .view-tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--rule); }
+  .view-tab { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; padding: 9px 16px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; }
+  .view-tab.active { color: var(--rust-deep); border-bottom-color: var(--rust); }
+  .esc-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--halt); margin-left: 4px; }
+
+  .warn-banner { background: #fdf0ee; border: 1px solid #e0b0a8; border-radius: 6px; padding: 11px 14px; margin-bottom: 14px; font-size: 12.5px; color: #7a2018; }
+  .warn-banner strong { display: block; font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--halt); margin-bottom: 3px; }
+
+  .setup-block { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .setup-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+  .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .setup-field label { font-size: 9.5px; color: var(--muted); display: block; margin-bottom: 3px; }
+  .setup-field-value { background: var(--sidebar-bg); border: 1px solid var(--card-border); border-radius: 4px; padding: 6px 9px; font-size: 11.5px; color: var(--ink); }
+
+  .steps-block { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .steps-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .steps-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+  .step-row { display: flex; gap: 12px; padding: 10px; border-radius: 5px; margin-bottom: 6px; background: var(--sidebar-bg); border: 1px solid var(--card-border); }
+  .step-num { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; color: var(--rust-deep); background: var(--rust-light); border-radius: 3px; padding: 1px 5px; margin-right: 6px; }
+  .step-text { font-size: 12.5px; flex: 1; line-height: 1.5; }
+
+  .esc-panel { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 16px; }
+  .esc-route-box { background: var(--rust-light); border: 1px solid var(--rust-border); border-radius: 6px; padding: 12px 14px; margin-bottom: 12px; }
+  .esc-route-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; color: var(--rust-deep); text-transform: uppercase; margin-bottom: 4px; }
+  .esc-route-dest { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+  .esc-route-contact { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .esc-detail { font-size: 0.9rem; line-height: 1.65; }
+
+  .doc-block { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  .doc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .doc-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+  .doc-sub { font-size: 10.5px; color: var(--muted); margin-bottom: 10px; }
+  .doc-copy { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; background: var(--rust); border: none; color: #fff; padding: 5px 11px; border-radius: 4px; cursor: pointer; }
+  .note-output, .email-preview { background: var(--sidebar-bg); border: 1px solid var(--card-border); border-radius: 5px; padding: 12px; font-family: 'DM Mono', monospace; font-size: 10.5px; line-height: 1.65; white-space: pre-wrap; color: var(--ink); min-height: 140px; }
+  .email-preview { font-family: 'Epilogue', sans-serif; font-size: 11.5px; }
+
+  ::-webkit-scrollbar { width: 7px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<header class="console-header">
+  <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <div class="wordmark" style="cursor:pointer;" onclick="goHome()">Roster<span>line</span>&#8480;</div>
+    <span class="ref-notice">Reference tool only — not legal advice. Verify current regulatory guidance and your agency's own policy.</span>
+  </div>
+  <div class="header-right">
+    <div class="gate-badge locked" id="gate-badge"><span class="dot locked" id="gate-dot"></span><span id="gate-badge-text">CHECK: NOT RUN</span></div>
+    <button class="reset-btn" onclick="openReset()">Reset for Next Candidate</button>
+  </div>
+</header>
+
+<div class="workspace">
+  <aside class="sidebar">
+    <div class="sb-search"><input type="text" id="search-input" placeholder="Search situations..." oninput="renderMain()"></div>
+
+    <div class="mrq-card" style="margin-top:10px;">
+      <div class="mrq-header-row" onclick="toggleMrqCollapse()">
+        <div class="mrq-title" style="margin-bottom:0;">&#9888; Standing Trigger Check</div>
+        <button type="button" class="mrq-toggle" id="mrq-toggle-btn">HIDE</button>
+      </div>
+      <div class="mrq-body" id="mrq-body">
+        <div class="mrq-sub">Always reachable, no scrolling — selecting YES takes you straight into that situation's protocol. Check any time during a visit, not just at the start.</div>
+        <div id="mrq-list"></div>
+      </div>
+    </div>
+
+    <div class="sb-section-label">Every Hire, Always</div>
+    <div class="mission-rules-card">
+      <div class="mission-rules-title">Mission Rules</div>
+      <div class="mission-rules-sub">Standing rules — reference only, not this situation's steps</div>
+      <div id="mission-rules-list"></div>
+    </div>
+
+    <div class="sb-section-label">Tools</div>
+    <div style="padding: 0 10px 14px;">
+      <button type="button" style="width:100%; text-align:left; cursor:pointer; border:1px solid var(--card-border); background:var(--card); border-radius:6px; padding:9px 10px; margin-bottom:7px; font-size:11px; font-weight:600;" onclick="switchView('regs')">&#128220; Regulatory Reference Table</button>
+      <button type="button" style="width:100%; text-align:left; cursor:pointer; border:1px solid var(--card-border); background:var(--card); border-radius:6px; padding:9px 10px; font-size:11px; font-weight:600;" onclick="switchView('scripts')">&#128172; Scripts Panel</button>
+    </div>
+  </aside>
+
+  <main class="main-panel"><div class="panel-inner" id="panel-inner"></div></main>
+
+  <aside class="right-sidebar">
+    <div class="tb-title">Transfer Board</div>
+    <div id="transfer-board-list"></div>
+  </aside>
+</div>
+<div id="toast-zone"></div>
+
+<script>
+/* ============================================================
+   Rosterline — real console build, Session 215.
+   Six situations (R-01 through R-06) drafted this session, all
+   sourced to real citations, built in the Caseline/Tendline-style
+   schema (id/tier/citation/doNot/escalation/escRoute/steps).
+
+   Six distinct legal frameworks underlie the six situations:
+   FCRA adverse action, NC's criminal-history/ban-the-box
+   patchwork under EEOC guidance, NC's E-Verify mandate on the
+   federal IRCA/I-9 floor, ADA's three-stage medical-inquiry
+   restriction, salary history/pay transparency's sharp
+   multi-state variance, and Section 503's federal-contractor
+   disability self-ID exception.
+
+   Standing Trigger Check holds R-04 and R-05 — the two situations
+   that can arise unexpectedly mid-interview and need instant
+   recognition ("is this question crossing a line right now"),
+   the same pattern Tendline used for in-the-moment recognition
+   duties. R-01/R-02/R-03/R-06 are workflow-driven steps a
+   recruiter navigates deliberately, not self-triggers. This tier
+   assignment is a judgment call, not verified against a real
+   precedent, flagged for founder review specifically.
+
+   Fictional agency: Thistlewood Workforce Partners, illustrative
+   only, per Rudolph CX's standard fictional-company demo pairing
+   convention. Name checked individually and cleared, following
+   four real conflicts found and rejected for the product name
+   itself: Talentline, Hireline, Clearline, Offerline.
+
+   Not yet done: live click-through verification, Scripts panel
+   content is newly authored (flagged below, not extracted from
+   any audited source), not yet locked to DECISIONS.md, this
+   build happens before that write, not after.
+   ============================================================ */
+
+const MANDATORY_QUESTIONS = [
+  { id: "mq1", text: "Is this question drifting into asking about a disability, medical condition, or medication before an offer has been made?", citation: "ADA Title I; EEOC Pre-Employment Guidance", route: "R04" },
+  { id: "mq2", text: "Are you about to ask about the candidate's current or prior salary, or have they raised the topic themselves?", citation: "State salary-history/pay-transparency law — governed by where the candidate works", route: "R05" }
+];
+
+const MISSION_RULES = [
+  "Confirm which stage of the process you're in, pre-offer or post-offer, before asking anything that depends on it.",
+  "A blanket policy is never the answer. Individualized assessment applies to criminal history, and uniform application applies to post-offer medical questions.",
+  "Salary questions follow the candidate's actual work location, not the employer's headquarters, when in doubt, default to the more restrictive state's rule.",
+  "Never send a final rejection based on a background check without the pre-adverse notice and waiting period completed first.",
+  "Section 503's disability self-ID form is the one narrow exception to the ADA's pre-offer rule, and only in the exact prescribed form, for a covered contractor."
+];
+
+const TRANSFER_BOARD = [
+  { name: "Hiring Manager / Compliance", sub: "General escalation for any situation requiring judgment beyond the immediate step" },
+  { name: "Background Screening Vendor (CRA)", sub: "FCRA report disputes, accuracy questions, re-investigation requests" },
+  { name: "E-Verify Program Administrator", sub: "Work-authorization mismatches, Tentative Nonconfirmation resolution" },
+  { name: "Legal Counsel", sub: "Multi-state salary/pay-transparency questions, ambiguous contractor-coverage calls" }
+];
+
+const CITATIONS = [
+  { citation: "FCRA 15 U.S.C. § 1681b(b)", sub: "Fair Credit Reporting Act", governs: "Two-step adverse action process for background-check-based rejections" },
+  { citation: "EEOC 2012 Enforcement Guidance", sub: "Arrest and Conviction Records", governs: "Individualized assessment standard, applies regardless of state ban-the-box status" },
+  { citation: "N.C. Executive Order 158", sub: "Ban-the-Box, State Agencies Only", governs: "No private-sector NC restriction exists; local county/city ordinances may still apply" },
+  { citation: "Local County/City Ban-the-Box Ordinances", sub: "Durham, Wake, Buncombe, Cumberland, Forsyth, Mecklenburg, others", governs: "Applies only to positions within that specific city or county government, not private employers generally" },
+  { citation: "N.C. Equal Employment Practices Act", sub: "State Anti-Discrimination Law", governs: "Additional protected categories beyond federal Title VII" },
+  { citation: "N.C. Gen. Stat. § 64-25 et seq.", sub: "NC E-Verify Law", governs: "25-employee threshold, 3-business-day verification window after I-9" },
+  { citation: "8 U.S.C. § 1324a (IRCA)", sub: "Federal Form I-9 Requirement", governs: "Universal floor, applies regardless of employer size" },
+  { citation: "ADA Title I; EEOC Pre-Employment Guidance", sub: "Disability-Related Inquiry Restrictions", governs: "Three-stage medical-inquiry framework, pre-offer/post-offer/employment" },
+  { citation: "N.C. Executive Order 93", sub: "Salary History, State Agencies Only", governs: "No private-sector NC restriction; binds state agencies only, same structural shape as EO 158" },
+  { citation: "State Salary History / Pay Transparency Laws", sub: "Varies by State", governs: "Governed by candidate's work location, not employer headquarters" },
+  { citation: "Section 503, 41 CFR Part 60-741", sub: "Rehabilitation Act — Federal Contractors", governs: "Voluntary disability self-ID, Form CC-305, covered contractors only" }
+];
+
+const SCRIPTS = [
+  { label: "Declining a pre-offer medical question", text: "That's something we're not able to ask about at this stage. Once there's an offer in place, HR can revisit anything related to accommodations." },
+  { label: "Responding to a salary-range question from a candidate", text: "The range for this role is [X to Y]. Where it lands within that depends on experience and what we go over in the process." },
+  { label: "Declining to ask about salary history", text: "I'm not able to ask about your current or past pay for this role. What I can share is the target range we're working with." },
+  { label: "Explaining a background-check pre-adverse notice", text: "Before anything is finalized, you'll get a full copy of your report and a real chance to review it. Nothing happens until that window has passed." }
+];
+
+const SITUATIONS = [
+  { id: "R01", title: "Background Check Reveals a Disqualifying Concern", tier: "tier2",
+    citation: "FCRA 15 U.S.C. § 1681b(b); FTC employer guidance on adverse action",
+    doNot: "Do not send a final rejection based on a background check without first sending a pre-adverse action notice, a copy of the report, and the Summary of Rights, and waiting a reasonable period, at least 5 business days is the accepted standard, before finalizing anything.",
+    escalation: "If the candidate disputes the report's accuracy during the waiting period, pause the process until the dispute is resolved with the reporting agency before proceeding.",
+    escRoute: ["Hiring Manager / Compliance", "Background Screening Vendor (CRA)"],
+    steps: [
+      "Confirm what specifically in the report raises a concern before taking any action.",
+      "Send the pre-adverse action notice, including a copy of the full report and the Summary of Your Rights Under the FCRA.",
+      "Wait at least 5 business days before proceeding, longer if state or local law requires it.",
+      "If the candidate disputes the report, pause and wait for resolution before finalizing anything.",
+      "If proceeding with rejection, send the final adverse action notice with the reporting agency's contact information."
+    ] },
+  { id: "R02", title: "Criminal History Comes Up During Screening", tier: "tier2",
+    citation: "EEOC 2012 Enforcement Guidance on Arrest and Conviction Records; N.C. Executive Order 158 (state agencies only); local county/city ban-the-box ordinances; N.C. Equal Employment Practices Act",
+    doNot: "Do not apply a blanket policy automatically disqualifying anyone with any criminal record. North Carolina has no statewide private-sector ban-the-box law, so don't assume a state restriction exists where none does, but a blanket exclusion still risks real Title VII disparate-impact exposure under EEOC guidance regardless.",
+    escalation: "Confirm which rules actually apply first: state agency (EO 158 restricts timing), a covered county or city government position (check the specific local ordinance), or a private employer (no NC-specific restriction, but EEOC individualized-assessment guidance still applies).",
+    escRoute: ["Hiring Manager / Compliance"],
+    steps: [
+      "Identify which type of employer this actually is before assuming what rule applies, state agency, local government, or private.",
+      "If a private NC employer, recognize there is no statewide restriction on timing, but blanket disqualification policies remain a real discrimination risk.",
+      "Conduct an individualized assessment: the nature of the offense, how much time has passed, and whether it's actually relevant to this specific job.",
+      "Never use a blanket exclusion policy as the sole basis for rejection.",
+      "Document the individualized assessment, not just the existence of a record."
+    ] },
+  { id: "R03", title: "New Hire's Work Authorization Needs Verification", tier: "tier1",
+    citation: "N.C. Gen. Stat. § 64-25 et seq. (NC E-Verify law); 8 U.S.C. § 1324a (federal IRCA, Form I-9)",
+    doNot: "Do not use E-Verify before the candidate has accepted the job offer. It is explicitly prohibited for pre-employment screening. It runs only after hire, tied to the completed Form I-9.",
+    escalation: "Confirm whether the employer meets NC's 25-employee threshold before assuming E-Verify is required; if not met, only the federal I-9 process applies.",
+    escRoute: ["Hiring Manager / Compliance", "E-Verify Program Administrator"],
+    steps: [
+      "Complete Form I-9 within 3 business days of the employee's start date, every hire, regardless of employer size.",
+      "If the employer has 25 or more employees in North Carolina, submit the new hire's information through E-Verify within 3 business days of completing the I-9.",
+      "If the employer has fewer than 25 NC employees, no E-Verify obligation exists, only the federal I-9 applies.",
+      "Never run E-Verify before the hire is finalized.",
+      "Retain the I-9 for 3 years from the hire date or 1 year after termination, whichever is later."
+    ] },
+  { id: "R04", title: "Interview Question Veers Into Medical or Disability Territory", tier: "tier2",
+    citation: "ADA Title I; EEOC Enforcement Guidance on Pre-Employment Disability-Related Questions",
+    doNot: "Do not ask about a disability, medical history, medications, or workers' compensation claims before a conditional job offer has been made, even if it comes up casually or the candidate brings it up first.",
+    escalation: "If a candidate voluntarily discloses a disability and requests an interview accommodation, you may ask narrowly what accommodation is needed, but not about the nature or severity of the disability itself.",
+    escRoute: ["Hiring Manager / Compliance"],
+    steps: [
+      "Stick to job-function questions: whether the candidate can perform specific job duties, with or without accommodation.",
+      "Never ask directly or indirectly about disability status, medical history, or past workers' comp claims before an offer is made.",
+      "If asked about an obvious or disclosed disability by the candidate themselves, limit questions to what accommodation would help them complete the interview process.",
+      "After a conditional offer is made, disability-related questions and medical exams are permitted only if applied uniformly to everyone entering that same job category.",
+      "Document only job-function responses, never disability-related detail, in any pre-offer notes."
+    ] },
+  { id: "R05", title: "Candidate Asks About Salary Range, or Employer Asks About Salary History", tier: "tier2",
+    citation: "No single citation — genuinely state-by-state; N.C. has no private-sector salary history ban or pay transparency law (Executive Order 93 covers state agencies only); 18+ states plus D.C. require salary-range disclosure; 20+ states ban salary-history questions",
+    doNot: "Do not assume North Carolina's permissive rules apply just because the employer is based here. If the candidate will actually perform the work from another state, that state's law governs, regardless of where the employer sits.",
+    escalation: "Confirm where the candidate will physically perform the work, not just where the job posting originated, before deciding what disclosure or salary-history rules apply.",
+    escRoute: ["Hiring Manager / Compliance", "Legal Counsel"],
+    steps: [
+      "Identify the state where the candidate will actually work, this determines the applicable law, not the employer's headquarters.",
+      "If that state has a salary-history ban, do not ask about current or prior compensation, ask only about pay expectations.",
+      "If that state requires salary-range disclosure, provide the good-faith range at the required point in the process, some require it in the posting itself, others only on request or before an offer.",
+      "If the role is North Carolina-only with no remote component, recognize there is currently no state restriction either way for a private employer.",
+      "When in doubt on a multi-state or remote role, default to the most restrictive applicable state's rule."
+    ] },
+  { id: "R06", title: "Federal Contractor Employer Wants to Ask About Disability Status", tier: "tier2",
+    citation: "Section 503, Rehabilitation Act of 1973 (41 CFR Part 60-741); OFCCP Form CC-305",
+    doNot: "Do not ask about disability status in any form or wording other than the exact prescribed federal Form CC-305, and only if the employer is an actual covered federal contractor. Asking this any other way, even with good intentions, is the same ADA violation R-04 covers.",
+    escalation: "Confirm the employer is a covered federal contractor, generally a $15,000+ contract for the anti-discrimination protection, $50,000+ and 50+ employees for the self-identification and affirmative action requirement, before presenting this form at all.",
+    escRoute: ["Hiring Manager / Compliance"],
+    steps: [
+      "Confirm the employer is actually a covered federal contractor before presenting any disability self-ID request.",
+      "If covered, present Form CC-305 exactly as prescribed, separate from other application materials, never in your own reworded version.",
+      "Present the invitation at the pre-offer stage, and again after the offer is made.",
+      "Make clear the response is voluntary and confidential, and will not be seen by anyone making the hiring decision.",
+      "If the employer is not a covered contractor, this form has no basis to be presented at all, follow R-04's ADA restriction instead."
+    ] }
+];
+
+const NOTE_TEMPLATES = {};
+SITUATIONS.forEach(s => {
+  NOTE_TEMPLATES[s.id] = `=== THISTLEWOOD WORKFORCE PARTNERS — HIRING LOG ===
+Date: [DATE]
+Recruiter Name/ID: [SPECIALIST]
+----------------------------------------
+Situation: ${s.id} — ${s.title}
+Regulatory Basis: ${s.citation}
+----------------------------------------
+Candidate Name/ID: [FILL IN]
+Position / Requisition #: [FILL IN]
+Candidate Work Location (state): [FILL IN]
+----------------------------------------
+Steps Completed (check on your own system):
+${s.steps.map(st => `  [ ] ${st}`).join('\\n')}
+----------------------------------------
+Escalation (if applicable): [FILL IN — see this situation's Escalation tab]
+----------------------------------------
+Outcome / Notes: [FILL IN]
+=== END ===`;
+});
+
+const EMAIL_TEMPLATES = {};
+SITUATIONS.forEach(s => {
+  EMAIL_TEMPLATES[s.id] = `Subject: Follow-Up — ${s.title}\n\nDear [HIRING MANAGER / COMPLIANCE CONTACT],\n\n[FILL IN — candidate-specific detail from your own system]\n\nNext step: [FILL IN]\nFollow-up needed by: [FILL IN]\n\n[RECRUITER NAME]\nThistlewood Workforce Partners`;
+});
+
+let state = { activeId: null, mainView: 'live', mrqAnswers: {} };
+let toastTimer = null;
+function showToast(msg) {
+  const zone = document.getElementById('toast-zone');
+  zone.innerHTML = `<div class="toast">${msg}</div>`;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { zone.innerHTML = ''; }, 2200);
+}
+function copyText(text, msg) {
+  const d = document.createElement('textarea'); d.value = text; document.body.appendChild(d); d.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(d);
+  showToast(msg || 'Copied.');
+}
+
+let mrqCollapsed = false;
+function toggleMrqCollapse() {
+  mrqCollapsed = !mrqCollapsed;
+  document.getElementById('mrq-body').classList.toggle('collapsed', mrqCollapsed);
+  document.getElementById('mrq-toggle-btn').textContent = mrqCollapsed ? 'SHOW' : 'HIDE';
+}
+function renderMandatoryQuestions() {
+  document.getElementById('mrq-list').innerHTML = MANDATORY_QUESTIONS.map(q => `
+    <div class="mrq-row">
+      <div class="mrq-q">${q.text}</div>
+      <div class="mrq-cite">${q.citation}</div>
+      <div class="mrq-radios">
+        <label><input type="radio" name="${q.id}" value="yes" onchange="setMrq('${q.id}','yes')"> YES</label>
+        <label><input type="radio" name="${q.id}" value="no" onchange="setMrq('${q.id}','no')"> NO</label>
+      </div>
+    </div>`).join('');
+}
+function setMrq(id, val) {
+  state.mrqAnswers[id] = val;
+  const badge = document.getElementById('gate-badge');
+  const text = document.getElementById('gate-badge-text');
+  const dot = document.getElementById('gate-dot');
+  const answeredCount = Object.keys(state.mrqAnswers).length;
+  const yesCount = Object.values(state.mrqAnswers).filter(v => v === 'yes').length;
+  if (yesCount > 0) {
+    badge.className = 'gate-badge locked'; dot.className = 'dot locked';
+    text.textContent = 'TRIGGER: ' + yesCount + ' YES';
+    if (val === 'yes') {
+      const q = MANDATORY_QUESTIONS.find(x => x.id === id);
+      showToast('Standing trigger — taking you to ' + q.route + ' now.');
+      openSituation(q.route);
+    }
+  } else if (answeredCount >= MANDATORY_QUESTIONS.length) {
+    badge.className = 'gate-badge verified'; dot.className = 'dot verified';
+    text.textContent = 'CHECK: CLEAR';
+  } else {
+    badge.className = 'gate-badge locked'; dot.className = 'dot locked';
+    text.textContent = 'CHECK: ' + answeredCount + ' OF ' + MANDATORY_QUESTIONS.length + ' ANSWERED';
+  }
+}
+
+function renderMissionRules() { document.getElementById('mission-rules-list').innerHTML = MISSION_RULES.map(r => `<div class="mr-row">&#8226; ${r}</div>`).join(''); }
+function renderTransferBoard() { document.getElementById('transfer-board-list').innerHTML = TRANSFER_BOARD.map(t => `<div class="tb-row"><div class="tb-name">${t.name}</div><div class="tb-sub">${t.sub}</div></div>`).join(''); }
+
+function openSituation(id) { state.activeId = id; state.mainView = 'live'; renderMain(); }
+function goHome() { state.activeId = null; state.mainView = 'live'; renderMain(); }
+
+function renderHome(el) {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  let html = `<div class="home-hdr"><div class="home-eyebrow">Live Screening Navigation</div><div class="home-title">Which situation is this?</div>
+    <div class="home-sub">Type a keyword, or click a situation below. The Standing Trigger Check stays reachable in the sidebar the whole time.</div></div>`;
+
+  ['tier1', 'tier2', 'tier3'].forEach(tier => {
+    const items = SITUATIONS.filter(s => s.tier === tier && (s.title.toLowerCase().includes(search) || s.citation.toLowerCase().includes(search)));
+    if (!items.length) return;
+    const label = tier === 'tier1' ? 'TIER I — SELF RESOLVE' : tier === 'tier2' ? 'TIER II — MULTI-PATH' : 'TIER III — ESCALATE';
+    const color = tier === 'tier3' ? 'var(--t3)' : tier === 'tier2' ? 'var(--t2)' : 'var(--t1)';
+    const bg = tier === 'tier3' ? 'var(--t3-bg)' : tier === 'tier2' ? 'var(--t2-bg)' : 'var(--t1-bg)';
+    html += `<div class="tier-divider"><div class="line"></div><span class="label" style="color:${color}">${label}</span><div class="line"></div></div><div class="sit-grid">`;
+    items.forEach(s => {
+      html += `<div class="sit-card" style="border-left:3px solid ${color}" onclick="openSituation('${s.id}')">
+        <div class="sit-card-tier" style="background:${bg};color:${color}">${s.id} &middot; ${label.split(' —')[0]}</div>
+        <div class="sit-card-title">${s.title}</div><div class="sit-card-desc">${s.doNot}</div></div>`;
+    });
+    html += `</div>`;
+  });
+
+  if (SITUATIONS.every(s => !(s.title.toLowerCase().includes(search) || s.citation.toLowerCase().includes(search)))) {
+    html += `<div style="padding:30px;color:var(--muted);font-size:12px;">No matching situations for "${search}".</div>`;
+  }
+  el.innerHTML = html;
+}
+function switchView(v) { state.mainView = v; state.activeId = null; renderMain(); }
+function switchSitView(v) { state.mainView = v; renderMain(); }
+
+function renderMain() {
+  const el = document.getElementById('panel-inner');
+
+  if (state.mainView === 'regs') {
+    let rows = CITATIONS.map(c => `<tr><td><strong>${c.citation}</strong>${c.sub ? '<br><small style="color:var(--muted);">' + c.sub + '</small>' : ''}</td><td>${c.governs}</td></tr>`).join('');
+    el.innerHTML = `<div class="sit-hdr"><div class="sit-hdr-title">Regulatory Quick Reference</div></div><table class="reg-table"><thead><tr><th>Citation</th><th>What It Governs</th></tr></thead><tbody>${rows}</tbody></table>`;
+    return;
+  }
+  if (state.mainView === 'scripts') {
+    el.innerHTML = `<div class="sit-hdr"><div class="sit-hdr-title">Scripts Panel</div></div>
+      <div class="synth-flag"><strong>Note:</strong> this panel is newly authored language, not extracted from an audited real guide — review before live use.</div>
+      ${SCRIPTS.map(sc => `<div class="script-card"><div><div class="script-card-label">${sc.label}</div><div class="script-card-text">"${sc.text}"</div></div><button class="script-copy-btn" onclick='copyText(${JSON.stringify(sc.text)},"Script copied.")'>Copy</button></div>`).join('')}`;
+    return;
+  }
+
+  if (!state.activeId) {
+    renderHome(el);
+    return;
+  }
+
+  const s = SITUATIONS.find(x => x.id === state.activeId);
+  const esc = { route: s.escRoute, detail: s.escalation };
+
+  let html = `
+    <div class="sit-hdr"><button onclick="goHome()" style="background:none;border:none;color:var(--rust-deep);font-family:'DM Mono',monospace;font-size:0.72rem;font-weight:600;cursor:pointer;margin-bottom:8px;padding:0;">&larr; All Situations</button><div class="sit-hdr-title">${s.title}</div><div class="sit-hdr-code">${s.id} &middot; ${s.tier === 'tier3' ? 'TIER III — ESCALATE' : s.tier === 'tier2' ? 'TIER II — MULTI-PATH' : 'TIER I — SELF RESOLVE'}</div></div>
+    <div class="view-tabs">
+      <button class="view-tab ${state.mainView === 'live' ? 'active' : ''}" onclick="switchSitView('live')">Guide</button>
+      <button class="view-tab ${state.mainView === 'escalation' ? 'active' : ''}" onclick="switchSitView('escalation')">Escalation${esc.route.length ? ' <span class="esc-dot"></span>' : ''}</button>
+      <button class="view-tab ${state.mainView === 'doc' ? 'active' : ''}" onclick="switchSitView('doc')">Documentation Templates</button>
+    </div>`;
+
+  if (state.mainView === 'escalation') {
+    html += `<div class="esc-panel">
+      ${esc.route.length ? esc.route.map(r => {
+        const tb = TRANSFER_BOARD.find(t => t.name === r);
+        return `<div class="esc-route-box"><div class="esc-route-label">Route To</div><div class="esc-route-dest">${r}</div><div class="esc-route-contact">${tb ? tb.sub : ''}</div></div>`;
+      }).join('') : `<div class="esc-route-box"><div class="esc-route-label">Route To</div><div class="esc-route-dest">No external escalation</div><div class="esc-route-contact">Documentation only for this situation</div></div>`}
+      <div class="esc-detail">${esc.detail}</div>
+    </div>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  if (state.mainView === 'doc') {
+    html += `
+      <div class="doc-block">
+        <div class="doc-header"><div class="doc-title">Case Note Template</div><button class="doc-copy" onclick='copyText(document.getElementById("note-out").textContent,"Case note template copied.")'>Copy Template</button></div>
+        <div class="doc-sub">Generic and blank, identical every time. Copy into your own system of record — nothing here is pre-filled.</div>
+        <div class="note-output" id="note-out">${NOTE_TEMPLATES[s.id]}</div>
+      </div>
+      <div class="doc-block">
+        <div class="doc-header"><div class="doc-title">Email Template</div><button class="doc-copy" onclick='copyText(document.getElementById("email-out").textContent,"Email template copied.")'>Copy Template</button></div>
+        <div class="doc-sub">Blank template — fill in the bracketed fields on your own system before sending.</div>
+        <div class="email-preview" id="email-out">${EMAIL_TEMPLATES[s.id]}</div>
+      </div>`;
+    el.innerHTML = html;
+    return;
+  }
+
+  html += `
+    <div class="warn-banner"><strong>Do Not</strong>${s.doNot}</div>
+    <div class="setup-block">
+      <div class="setup-title">Situation Reference</div>
+      <div class="setup-grid">
+        <div class="setup-field"><label>Situation</label><div class="setup-field-value">${s.id} — ${s.title}</div></div>
+        <div class="setup-field"><label>Regulatory Basis</label><div class="setup-field-value">${s.citation}</div></div>
+      </div>
+    </div>
+    <div class="steps-block">
+      <div class="steps-header"><div class="steps-title">Step-By-Step Instructions</div></div>
+      ${s.steps.map((text, i) => `<div class="step-row"><span class="step-num">${i + 1}</span><span class="step-text">${text}</span></div>`).join('')}
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function openReset() {
+  if (!confirm('Reset for next candidate? This clears the Standing Trigger Check answers and returns to the home view.')) return;
+  state = { activeId: null, mainView: 'live', mrqAnswers: {} };
+  document.getElementById('search-input').value = '';
+  document.querySelectorAll('.mrq-radios input[type="radio"]').forEach(r => r.checked = false);
+  const badge = document.getElementById('gate-badge'), dot = document.getElementById('gate-dot'), text = document.getElementById('gate-badge-text');
+  badge.className = 'gate-badge locked'; dot.className = 'dot locked'; text.textContent = 'CHECK: NOT RUN';
+  renderMain();
+  showToast('Console reset for next candidate.');
+}
+
+window.onload = function () { renderMandatoryQuestions(); renderMissionRules(); renderTransferBoard(); renderMain(); };
+</script>
+
+<style id="demo-sim-style">
+  #demo-sim-panel { position: fixed; bottom: 16px; right: 16px; width: 340px; max-width: calc(100vw - 32px);
+    background: var(--card, #faf7f0); border: 1px solid var(--card-border, #e4dac8); border-radius: 8px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.18); z-index: 500; font-family: 'Epilogue', sans-serif; }
+  #demo-sim-header { background: var(--header-bg, #9c4820); color: #faf3ea; padding: 10px 14px; border-radius: 8px 8px 0 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #demo-sim-header .dsh-title { font-family: 'DM Mono', monospace; font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; display:flex; align-items:center; gap:6px; }
+  #demo-sim-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #e05040; flex-shrink: 0; }
+  #demo-sim-toggle { background: none; border: none; color: #f0d8a8; cursor: pointer; font-size: 0.9rem; padding: 2px 6px; }
+  #demo-sim-body { padding: 10px 14px 14px; }
+  #demo-sim-body.collapsed { display: none; }
+  #demo-sim-transcript { height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 7px;
+    padding: 8px; background: rgba(0,0,0,0.03); border: 1px solid var(--card-border, #e4dac8); border-radius: 4px;
+    font-family: 'DM Mono', monospace; font-size: 10.5px; line-height: 1.5; margin-bottom: 10px; }
+  #demo-sim-transcript .dsl { padding: 5px 7px; border-left: 2px solid #9c4820; background: rgba(255,255,255,0.6); border-radius: 2px; }
+  #demo-sim-transcript .dsl .dsl-speaker { font-size: 8px; letter-spacing: 0.05em; margin-bottom: 2px; font-weight: 700; }
+  #demo-sim-controls { display: flex; align-items: center; gap: 8px; }
+  #demo-sim-play { background: var(--header-bg, #9c4820); color: #fff; border: none; border-radius: 4px; padding: 6px 12px;
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; cursor: pointer; }
+  #demo-sim-speed { font-family: 'DM Mono', monospace; font-size: 0.66rem; padding: 4px; border-radius: 4px; border: 1px solid var(--card-border, #e4dac8); }
+  #demo-sim-timer { font-family: 'DM Mono', monospace; font-size: 0.66rem; color: var(--muted, #8a7e6e); margin-left: auto; }
+  #demo-sim-reset { background: none; border: 1px solid var(--card-border, #e4dac8); border-radius: 4px; padding: 6px 10px;
+    font-family: 'DM Mono', monospace; font-size: 0.66rem; cursor: pointer; color: var(--ink, #2c2416); }
+  #demo-sim-note { font-size: 9.5px; color: var(--muted, #8a7e6e); margin-top: 8px; line-height: 1.5; }
+  @media (max-width: 700px) { #demo-sim-panel { width: calc(100vw - 24px); right: 12px; bottom: 12px; } #demo-sim-transcript { height: 150px; } }
+</style>
+<div id="demo-sim-panel">
+  <div id="demo-sim-header">
+    <div class="dsh-title"><span id="demo-sim-live-dot"></span>DEMO — Live Visit Simulation</div>
+    <button id="demo-sim-toggle" onclick="document.getElementById('demo-sim-body').classList.toggle('collapsed')">&minus;</button>
+  </div>
+  <div id="demo-sim-body">
+    <div id="demo-sim-transcript"></div>
+    <div id="demo-sim-controls">
+      <button id="demo-sim-play" onclick="toggleDemoSim()">&#9654; Play</button>
+      <select id="demo-sim-speed">
+        <option value="1">Slow</option>
+        <option value="2" selected>Normal</option>
+        <option value="3">Fast</option>
+      </select>
+      <button id="demo-sim-reset" onclick="resetDemoSim()">Reset</button>
+      <span id="demo-sim-timer">00:00</span>
+    </div>
+    <div id="demo-sim-note">Thistlewood Workforce Partners and this candidate are fictional. This panel drives the real console alongside it — every click below is the actual Tendline/Rosterline product, not a mockup.</div>
+  </div>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw-rosterline-demo.js').catch(err => {
+      console.warn('Service worker registration failed:', err);
+    });
+  });
+}
+</script>
+<script>
+const DEMO_SIM_SCRIPT = [
+  {
+    "speaker": "CANDIDATE",
+    "text": "Sorry if I seem a little off today \u2014 I've been dealing with some ongoing health stuff. It doesn't affect my ability to do the job, though."
+  },
+  {
+    "speaker": "RECRUITER",
+    "text": "That came out of nowhere. Let me check Rosterline before I respond.",
+    "action": "open:R04"
+  },
+  {
+    "speaker": "SYSTEM",
+    "text": "R-04 loaded \u2014 Interview Question Veers Into Medical or Disability Territory. Tier II \u2014 Multi-Path."
+  },
+  {
+    "speaker": "RECRUITER",
+    "text": "Clear guidance: I'm not supposed to ask about disability, medical history, or medications before a conditional offer \u2014 even if the candidate brings it up first."
+  },
+  {
+    "speaker": "RECRUITER",
+    "text": "Thanks for sharing that. Let's stay focused on the role \u2014 can you walk me through how you'd handle a high-volume intake day?"
+  },
+  {
+    "speaker": "RECRUITER",
+    "text": "Checking what happens if they ask for an accommodation later.",
+    "action": "view:escalation"
+  },
+  {
+    "speaker": "SYSTEM",
+    "text": "Escalation path: Hiring Manager / Compliance. If the candidate requests an accommodation, ask narrowly what's needed \u2014 never about the disability itself."
+  },
+  {
+    "speaker": "RECRUITER",
+    "text": "Now the notes \u2014 I want to make sure nothing about the health disclosure ends up on file.",
+    "action": "view:doc"
+  },
+  {
+    "speaker": "SYSTEM",
+    "text": "Documentation templates ready \u2014 job-function responses only. Thistlewood-formatted, nothing pre-filled or stored."
+  },
+  {
+    "speaker": "SYSTEM",
+    "text": "Simulation complete."
+  }
+];
+let dsIndex = 0, dsPlaying = false, dsInterval = null, dsSeconds = 0, dsTimerInterval = null;
+
+function dsAppendLine(speaker, text) {
+  const colors = { SCENE: '#8a7e6e', AIDE: '#0d5c4a', RECRUITER: '#0d5c4a', CANDIDATE: '#3a3a3a', SYSTEM: '#9c4820' };
+  const box = document.getElementById('demo-sim-transcript');
+  const line = document.createElement('div');
+  line.className = 'dsl';
+  line.style.borderLeftColor = colors[speaker] || '#888';
+  line.innerHTML = '<div class="dsl-speaker" style="color:' + (colors[speaker]||'#888') + '">' + speaker + '</div><div>' + text + '</div>';
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+function dsRunAction(action) {
+  try {
+    if (action && action.startsWith('open:')) {
+      const id = action.split(':')[1];
+      if (typeof openSituation === 'function') openSituation(id);
+    } else if (action && action.startsWith('view:')) {
+      const v = action.split(':')[1];
+      if (typeof switchSitView === 'function') switchSitView(v);
+    } else if (action === 'home') {
+      if (typeof goHome === 'function') goHome();
+    }
+  } catch (e) { console.warn('Demo sim action failed:', action, e); }
+}
+
+function dsStepOnce() {
+  if (dsIndex >= DEMO_SIM_SCRIPT.length) return;
+  const beat = DEMO_SIM_SCRIPT[dsIndex];
+  dsAppendLine(beat.speaker, beat.text);
+  if (beat.action) dsRunAction(beat.action);
+  dsIndex++;
+  if (dsIndex >= DEMO_SIM_SCRIPT.length) {
+    dsPause();
+    document.getElementById('demo-sim-live-dot').style.background = '#4a7c4a';
+  }
+}
+
+function toggleDemoSim() { if (dsPlaying) dsPause(); else dsPlay(); }
+
+function dsPlay() {
+  dsPlaying = true;
+  document.getElementById('demo-sim-play').innerHTML = '&#9208; Pause';
+  const speedEl = document.getElementById('demo-sim-speed');
+  const delay = { '1': 4200, '2': 2800, '3': 1600 }[speedEl.value] || 2800;
+  dsInterval = setInterval(() => {
+    if (dsIndex >= DEMO_SIM_SCRIPT.length) { dsPause(); return; }
+    dsStepOnce();
+  }, delay);
+  if (!dsTimerInterval) {
+    dsTimerInterval = setInterval(() => {
+      dsSeconds++;
+      const m = String(Math.floor(dsSeconds/60)).padStart(2,'0');
+      const s = String(dsSeconds%60).padStart(2,'0');
+      document.getElementById('demo-sim-timer').textContent = m + ':' + s;
+    }, 1000);
+  }
+}
+
+function dsPause() {
+  dsPlaying = false;
+  document.getElementById('demo-sim-play').innerHTML = '&#9654; Play';
+  if (dsInterval) { clearInterval(dsInterval); dsInterval = null; }
+}
+
+function resetDemoSim() {
+  dsPause();
+  dsIndex = 0; dsSeconds = 0;
+  document.getElementById('demo-sim-timer').textContent = '00:00';
+  document.getElementById('demo-sim-transcript').innerHTML = '';
+  document.getElementById('demo-sim-live-dot').style.background = '#e05040';
+  if (dsTimerInterval) { clearInterval(dsTimerInterval); dsTimerInterval = null; }
+  if (typeof goHome === 'function') goHome();
+}
+
+window.addEventListener('load', () => { setTimeout(() => { dsPlay(); }, 2200); });
+</script>
+</body>
+</html>
