@@ -1,0 +1,14 @@
+{
+  "name": "Tendline\u2120 \u2014 Performance Support Guide",
+  "short_name": "Tendline",
+  "description": "Rudolph CX LLC \u2014 Tendline Performance Support Guide. Built for the moment the situation is live.",
+  "start_url": "/tendline.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f0e8",
+  "theme_color": "#b83020",
+  "icons": [
+    { "src": "/tendline-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/tendline-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
