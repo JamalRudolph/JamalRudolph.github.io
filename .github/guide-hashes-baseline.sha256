@@ -1,35 +1,35 @@
 # guide-hashes-baseline.sha256
 # Rudolph CX - File Integrity Baseline
-# Generated: Session 214 - 2026-08-16
+# Generated: Session 216 - 2026-08-22
 # REGENERATE ONLY after an authorized update. Never after a suspected tamper.
-# Previous baseline: Session 211 - 2026-08-12
+# Previous baseline: Session 214 - 2026-08-16
 # Reason for regeneration: Baseline was stale against this session's real,
-# AUTH//EXECUTE-authorized work (demo pairings, homepage/demos.html rebuild
-# around Everyline, illustrative-demo disambiguator added to all 8 guide
-# pages, RCX-LEGAL-005 correction, email-verification fix across 4 guides).
-# Scheduled integrity check correctly fired on the resulting hash mismatch;
-# confirmed false positive, not tampering -- every changed file's current
-# hash was independently recomputed by fetching live content fresh this
-# session and matches the alert email's own reported "Actual" value exactly.
-# Founder flagged the alert directly and required this verification before
-# any baseline update, per standing "source?" discipline.
-# Unchanged this regeneration (confirmed untouched, hash matches Session 211
-# baseline exactly): situation-library.html, groundwork.html, terms.html,
-# privacy.html, pricing.html.
+# AUTH//EXECUTE-authorized work -- Tendline/Rosterline full-scope buildout
+# (two new landing pages, demo bundle, guides.html catalog, demos.html cards,
+# sitewide footer added to all 20 other live pages) plus a separate
+# pricing.html update adding Tendline/Rosterline pricing blocks.
+# Scheduled integrity check correctly fired on the resulting hash mismatch
+# (2026-08-21 and 2026-08-22 runs, both failure); confirmed false positive,
+# not tampering -- every one of the 14 changed files' current hash was
+# independently recomputed by fetching live content fresh this session, and
+# the mismatch set exactly matches the 14 baseline-tracked files touched by
+# tonight's authorized writes -- no unexpected file changed alongside them.
+# Unchanged this regeneration (confirmed untouched, hash matches Session 214
+# baseline exactly): situation-library.html.
 # FORMAT: <sha256hash>  <filename>
 
-ac2c88161a154c5df217ec382d7d77301e997a3d13cd7711026597c0f40f7dc0  index.html
-467531255b1dba6916916e458c4185424b8eaf149ba13eaea02b8c619d4bce77  aidline.html
-1ce967741a4324be65950993cacb933b4b466c8eae4ddef8e0a130f3cc6b66a1  caseline.html
-564afb3393b30f98d83243fdb83ea35859dee39a9c847e58660adbec416a98bf  lendline.html
-8d8142c1cd2a81f8d8e897fee53979d3127b89093697fcbbcdb2f6a5a7ea2f4d  chartline.html
-46af0d3bcfa211058fe496c6d9e1b3dd4fecea14498deaf57edb229cb05a1f06  workline.html
-383469a3912d7e65a7d8aa189ab656454b0d036851d59f7aa66c8d3f15f6e47a  reentryline.html
-f48f8640dad01cf65f91674297940ad98c7671956d3dc92c06cc00125d16431c  supervisorline.html
-cd10f74d1f4b8cd7ba6278a44eab92fa82c5cea919d8edd86b61a1234fc461b4  peopleline.html
+8e3e4ff3d1942d759c74ac899000dffe5d7b4cb2b86adc9ca0462a9ff2db1e21  index.html
+2069ef0b3bce3cefcf66c1aa86f20d7351d3784d90248eba6fa5f01c50a1f351  aidline.html
+6165b69672ca9b1df684d153176eaff4a8180d8cc18f3a0d83ed854eefcda34d  caseline.html
+55972ad3e4b5cc87122918708bfb633ee3977eb5f3c7b85d8cda0e053205fd5e  lendline.html
+263f8744971c8f2cbfd571fa989fe269fcbc88c059d922e87c4013cee63210bb  chartline.html
+89544284e13fa3a07b2813fd6d409f12ffeb6f54fcdaefdbb5d0aadf8bb24d69  workline.html
+65196532540ad7258ec8a4b59f1655472c479aca79cc684cdce685e7afec7f3a  reentryline.html
+eb3e6773b45ecb378bb662c80a107ca46ae8300e2be012f71b41af95f5896f86  supervisorline.html
+f82a2e03712db9633a5b490ed9cc3bb8e805fb148e8e53b5f1890234ef3bad3d  peopleline.html
 3f8514204eec9801e1a25717895222e9460d28a9b7727842147cbf3ddb33056b  situation-library.html
-0746c3e4a42d4da89fb1e50fb9fb38333e129b1398f121f3d804cbe91d2fcba8  demos.html
-4d7994150b1c921874cd080697a01025acc30289697a20fd3f9a56c86d01e449  groundwork.html
-e979c8d509b617d133a63a9ceada5a7ccad411554bbafa60d3b184a5fec8a53d  terms.html
-679bfa404c7eb14f9a507bc951f825749d948e4b1a6952fed8bc114764ad0cb4  privacy.html
-268310ef84896cc2d23e5e549a909824bce6e450a8c652d68280561c2270bd78  pricing.html
+53938da8df6e711442d346467ae5c94ff6ac3ca0d033a0e4316b785ad4f041b9  demos.html
+ea88ec570e7d08341d3d89f495fc047ddd039b01f6bd0fbb8c898acd4416c622  groundwork.html
+bbb106f30d53a19989704ece82d65424671bb1799b54be80dfddcc7e41aefccc  terms.html
+bd5ced5584521f72b2c9f1fb5713aef57050869ca155cf9c91cb472d6728aefa  privacy.html
+8d6a7d37c1d07c3c384264d7c55581eeee2a7d5b570ac1ed7ab49cd433dec3d9  pricing.html
